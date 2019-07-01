@@ -1,11 +1,16 @@
-#ifndef TEXTUREDATABLOCK_H
-#define TEXTUREDATABLOCK_H
+#pragma once
+
+#include "model/data/basedatablock.h"
 
 
-class TextureDataBlock
+
+
+class TextureDataBlock : public BaseDataBlock
 {
-public:
-    TextureDataBlock();
-};
 
-#endif // TEXTUREDATABLOCK_H
+public:
+
+    TextureDataBlock();
+
+
+};

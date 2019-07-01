@@ -1,7 +1,7 @@
 #include "view/programview.h"
 #include "view/operatorview.h"
 
-#include "operator/basetop.h"
+#include "model/operator/baseoperator.h"
 
 #include <QPointer>
 #include <QKeyEvent>
@@ -28,7 +28,7 @@ void ProgramView::set_model(ProgramModel *model)
 }
 
 
-void ProgramView::on_operator_added(BaseTOP* pointer, qint64 id)
+void ProgramView::on_operator_added(BaseOperator* pointer, qint64 id)
 {
     OperatorView* op = new OperatorView(*data_model, pointer, id);
     operator_views.insert(id, op);

@@ -1,11 +1,11 @@
-#include "connectorview.h"
-#include "operatorview.h"
+#include "view/connectorview.h"
+#include "view/operatorview.h"
 
 #include <QPainter>
 
 
 
-ConnectorView::ConnectorView(OperatorView& parent, BaseTOP* op_model, int i, bool input)
+ConnectorView::ConnectorView(OperatorView& parent, BaseOperator* op_model, int i, bool input)
     : QGraphicsItem(&parent), operator_model(op_model), index(i), is_input(input)
 { }
 

@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 
-class BaseTOP;
+class BaseOperator;
 class OperatorView;
 
 
@@ -16,7 +16,7 @@ class ConnectorView : public QObject,
 
 public:
 
-    ConnectorView(OperatorView& parent, BaseTOP* operator_model, int index, bool is_input);
+    ConnectorView(OperatorView& parent, BaseOperator* operator_model, int index, bool is_input);
 
     QRectF boundingRect() const override;
 
@@ -29,7 +29,7 @@ public slots:
 
 private:
 
-    BaseTOP* operator_model;
+    BaseOperator* operator_model;
     int index;
     bool is_input;
 

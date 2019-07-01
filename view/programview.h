@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QGraphicsScene>
 
-#include "programmodel.h"
+#include "model/programmodel.h"
 
 
-class BaseTOP;
+class BaseOperator;
 class OperatorView;
 
 
@@ -24,7 +24,7 @@ public:
 
 public slots:
 
-    void on_operator_added(BaseTOP* pointer, qint64 id);
+    void on_operator_added(BaseOperator* pointer, qint64 id);
 
     void on_operator_deleted(qint64 id);
 

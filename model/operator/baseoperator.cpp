@@ -1,11 +1,11 @@
-#include "operator/basetop.h"
-#include "programmodel.h"
+#include "model/operator/baseoperator.h"
+#include "model/programmodel.h"
 
 #include <QPointer>
 
 
 
-BaseTOP::BaseTOP(ProgramModel& model_)
+BaseOperator::BaseOperator(ProgramModel& model_)
     : QObject(&model_), model(model_)
 {
     initializeOpenGLFunctions();
@@ -34,21 +34,21 @@ BaseTOP::BaseTOP(ProgramModel& model_)
 }
 
 
-BaseTOP::~BaseTOP()
+BaseOperator::~BaseOperator()
 {
     glDeleteFramebuffers(1, &frame_buffer_object);
     glDeleteTextures(1, &output_texture);
 }
 
 
-void BaseTOP::prepare_render()
+void BaseOperator::prepare_render()
 {
     // Bind inputs to texture targets
     glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_object);
 }
 
 
-BaseTOP * BaseTOP::get_input(int index)
+BaseOperator * BaseOperator::get_input(int index)
 {
     if (index >= 0 && index < inputs.size())
     {
@@ -60,12 +60,12 @@ BaseTOP * BaseTOP::get_input(int index)
     }
 }
 
-int BaseTOP::get_num_inputs() const
+int BaseOperator::get_num_inputs() const
 {
     return inputs.size();
 }
 
-int BaseTOP::get_num_used_inputs() const
+int BaseOperator::get_num_used_inputs() const
 {
     /*
     int count = 0;
@@ -81,7 +81,7 @@ int BaseTOP::get_num_used_inputs() const
     return inputs.size();
 }
 
-int BaseTOP::get_num_output_users() const
+int BaseOperator::get_num_output_users() const
 {
     int count = 0;
     for (auto& o : output_users)
@@ -91,45 +91,46 @@ int BaseTOP::get_num_output_users() const
     return count;
 }
 
-int BaseTOP::get_resolution_x() const
+int BaseOperator::get_resolution_x() const
 {
     return resolution_x;
 }
 
-int BaseTOP::get_resolution_y() const
+int BaseOperator::get_resolution_y() const
 {
     return resolution_y;
 }
 
-int BaseTOP::get_position_x() const
+int BaseOperator::get_position_x() const
 {
     return position_x;
 }
 
-int BaseTOP::get_position_y() const
+int BaseOperator::get_position_y() const
 {
     return position_y;
 }
 
-PixelType BaseTOP::get_pixel_type() const
+PixelType BaseOperator::get_pixel_type() const
 {
     return pixel_type;
 }
 
-Policy BaseTOP::get_resolution_policy() const
+/*
+Policy BaseOperator::get_resolution_policy() const
 {
     return resolution_policy;
 }
 
-Policy BaseTOP::get_pixel_type_policy() const
+Policy BaseOperator::get_pixel_type_policy() const
 {
     return pixel_type_policy;
 }
-
+*/
 
 // SLOTS
 
-void BaseTOP::set_input(int index, BaseTOP* operator_)
+void BaseOperator::set_input(int index, BaseOperator* operator_)
 {
     /*
     if (index >= 0 && index != static_cast<int>(inputs.size()))
@@ -153,7 +154,7 @@ void BaseTOP::set_input(int index, BaseTOP* operator_)
     */
 }
 
-void BaseTOP::set_num_inputs(int new_num_inputs)
+void BaseOperator::set_num_inputs(int new_num_inputs)
 {
     if (new_num_inputs >= 0 && new_num_inputs != inputs.size())
     {
@@ -162,7 +163,7 @@ void BaseTOP::set_num_inputs(int new_num_inputs)
     }
 }
 
-void BaseTOP::set_resolution(int res_x, int res_y)
+void BaseOperator::set_resolution(int res_x, int res_y)
 {
     if (resolution_x != res_x || resolution_y != res_y)
     {
@@ -179,7 +180,7 @@ void BaseTOP::set_resolution(int res_x, int res_y)
     }
 }
 
-void BaseTOP::set_position(int pos_x, int pos_y)
+void BaseOperator::set_position(int pos_x, int pos_y)
 {
     if (position_x != pos_x || position_y != pos_y)
     {
@@ -190,7 +191,7 @@ void BaseTOP::set_position(int pos_x, int pos_y)
     }
 }
 
-void BaseTOP::set_pixel_type(PixelType new_type)
+void BaseOperator::set_pixel_type(PixelType new_type)
 {
     if (pixel_type != new_type)
     {
@@ -203,7 +204,8 @@ void BaseTOP::set_pixel_type(PixelType new_type)
     }
 }
 
-void BaseTOP::set_resolution_policy(Policy new_policy)
+/*
+void BaseOperator::set_resolution_policy(Policy new_policy)
 {
     if (resolution_policy != new_policy)
     {
@@ -212,7 +214,7 @@ void BaseTOP::set_resolution_policy(Policy new_policy)
     }
 }
 
-void BaseTOP::set_pixel_type_policy(Policy new_policy)
+void BaseOperator::set_pixel_type_policy(Policy new_policy)
 {
     if (pixel_type_policy != new_policy)
     {
@@ -220,5 +222,5 @@ void BaseTOP::set_pixel_type_policy(Policy new_policy)
         emit pixel_type_policy_changed(new_policy);
     }
 }
-
+*/
 

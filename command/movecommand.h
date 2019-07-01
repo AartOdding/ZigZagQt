@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "programmodel.h"
+#include "model/programmodel.h"
 
 
 

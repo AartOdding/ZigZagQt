@@ -1,5 +1,5 @@
-#include "operator/shadertop.h"
-#include "programmodel.h"
+#include "model/operator/shadertop.h"
+#include "model/programmodel.h"
 
 #include <iostream>
 #include <QOpenGLShader>
@@ -34,7 +34,7 @@ ShaderTOP::ShaderTOP(ProgramModel& model)
 
 
 ShaderTOP::ShaderTOP(ProgramModel& model, int num_inputs, const QString& source)
-    : BaseTOP(model), fragment_shader_source(source)
+    : BaseOperator(model), fragment_shader_source(source)
 {
     //set_num_inputs(num_inputs);
 

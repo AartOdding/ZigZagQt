@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <QGraphicsView>
 
-#include "programview.h"
+#include "view/programview.h"
 
 
 

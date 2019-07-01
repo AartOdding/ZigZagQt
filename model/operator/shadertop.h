@@ -1,12 +1,12 @@
 #pragma once
 
-#include "operator/basetop.h"
+#include "model/operator/baseoperator.h"
 
 class ProgramModel;
 
 
 
-class ShaderTOP : public BaseTOP
+class ShaderTOP : public BaseOperator
 {
 
 public:

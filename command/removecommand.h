@@ -3,8 +3,8 @@
 #include <QPointer>
 #include <QUndoCommand>
 
-#include "programmodel.h"
-#include "operator/shadertop.h"
+#include "model/programmodel.h"
+#include "model/operator/shadertop.h"
 
 
 
@@ -30,7 +30,7 @@ class RemoveCommand : public QUndoCommand
 
 public:
 
-    RemoveCommand(ProgramModel& model_, QPointer<BaseTOP> op)
+    RemoveCommand(ProgramModel& model_, QPointer<BaseOperator> op)
         : model(model_), operator_(op)
     {
         // All connections have to be removed first with disconnect command!
@@ -63,7 +63,7 @@ public:
 private:
 
     ProgramModel& model;
-    const QPointer<BaseTOP> operator_;
-    QScopedPointer<BaseTOP> operator_owner;
+    const QPointer<BaseOperator> operator_;
+    QScopedPointer<BaseOperator> operator_owner;
 
 };

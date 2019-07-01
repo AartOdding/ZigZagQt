@@ -1,6 +1,7 @@
-#include "model/data/abstractdatablock.h"
+#include "model/data/basedatablock.h"
 
-AbstractDataBlock::AbstractDataBlock()
+
+BaseDataBlock::BaseDataBlock()
 {
 
 }

@@ -3,8 +3,8 @@
 #include <QPointer>
 #include <QUndoCommand>
 
-#include "programmodel.h"
-#include "operator/shadertop.h"
+#include "model/programmodel.h"
+#include "model/operator/shadertop.h"
 
 
 
@@ -13,7 +13,7 @@ class ConnectCommand : public QUndoCommand
 
 public:
 
-    ConnectCommand(QPointer<BaseTOP> op_a, QPointer<BaseTOP> op_b, int b_input_index_)
+    ConnectCommand(QPointer<BaseOperator> op_a, QPointer<BaseOperator> op_b, int b_input_index_)
         : operator_a(op_a), operator_b(op_b), b_input_index(b_input_index_)
     { }
 
@@ -35,8 +35,8 @@ public:
 
 private:
 
-    QPointer<BaseTOP> operator_a;
-    QPointer<BaseTOP> operator_b;
-    QPointer<BaseTOP> initial_connection;
+    QPointer<BaseOperator> operator_a;
+    QPointer<BaseOperator> operator_b;
+    QPointer<BaseOperator> initial_connection;
     int b_input_index;
 };

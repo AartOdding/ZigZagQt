@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "programmodel.h"
-#include "operator/basetop.h"
+#include "model/programmodel.h"
+#include "model/operator/baseoperator.h"
 
 #include <QThread>
 #include <QApplication>
@@ -55,7 +55,7 @@ void Renderer::render_frame()
 
     int node_count = model->get_all_nodes().size();
     auto open_list = model->get_entry_nodes();
-    std::unordered_set<BaseTOP*> rendered;
+    std::unordered_set<BaseOperator*> rendered;
     /*
     while(static_cast<int>(rendered.size()) < node_count)
     {

@@ -4,18 +4,18 @@
 
 #include <iostream>
 
-#include "operatorview.h"
-#include "programmodel.h"
-#include "operator/basetop.h"
+#include "view/operatorview.h"
+#include "model/programmodel.h"
+#include "model/operator/baseoperator.h"
 
 
 
-OperatorView::OperatorView(ProgramModel& m, BaseTOP* pointer, qint64 id)
+OperatorView::OperatorView(ProgramModel& m, BaseOperator* pointer, qint64 id)
     : model(m), operator_pointer(pointer), operator_id(id), output_connector(*this, pointer, 0, false)
 {
     output_connector.setPos(width / 2 - 2, 0);
-    connect(pointer, &BaseTOP::position_changed, this, &OperatorView::on_operator_moved);
-    connect(pointer, &BaseTOP::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
+    connect(pointer, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
+    connect(pointer, &BaseOperator::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
 }
 
 

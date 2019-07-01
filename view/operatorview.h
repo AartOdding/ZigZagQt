@@ -5,10 +5,10 @@
 #include <QPointer>
 #include <QGraphicsItem>
 
-#include "connectorview.h"
+#include "view/connectorview.h"
 
 
-class BaseTOP;
+class BaseOperator;
 class ProgramModel;
 
 
@@ -20,7 +20,7 @@ class OperatorView : public QObject,
 
 public:
 
-    OperatorView(ProgramModel& m, BaseTOP* pointer, qint64 id);
+    OperatorView(ProgramModel& m, BaseOperator* pointer, qint64 id);
 
     QRectF boundingRect() const override;
 
@@ -51,7 +51,7 @@ private:
     bool was_dragged = false;
 
     ProgramModel& model;
-    QPointer<BaseTOP> operator_pointer;
+    QPointer<BaseOperator> operator_pointer;
     qint64 operator_id;
 
     int position_x, position_y;

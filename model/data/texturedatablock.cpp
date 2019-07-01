@@ -1,4 +1,5 @@
-#include "texturedatablock.h"
+#include "model/data/texturedatablock.h"
+
 
 TextureDataBlock::TextureDataBlock()
 {

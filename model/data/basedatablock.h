@@ -1,11 +1,12 @@
-#ifndef ABSTRACTDATABLOCK_H
-#define ABSTRACTDATABLOCK_H
+#pragma once
 
 
-class AbstractDataBlock
+class BaseDataBlock
 {
-public:
-    AbstractDataBlock();
-};
 
-#endif // ABSTRACTDATABLOCK_H
+public:
+
+    BaseDataBlock();
+
+
+};

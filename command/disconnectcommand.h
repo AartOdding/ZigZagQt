@@ -3,8 +3,8 @@
 #include <QPointer>
 #include <QUndoCommand>
 
-#include "programmodel.h"
-#include "operator/shadertop.h"
+#include "model/programmodel.h"
+#include "model/operator/shadertop.h"
 
 
 class DisconnectCommand : public QUndoCommand
@@ -12,7 +12,7 @@ class DisconnectCommand : public QUndoCommand
 
 public:
 
-    DisconnectCommand(QPointer<BaseTOP> op_a, QPointer<BaseTOP> op_b, int b_input_index_)
+    DisconnectCommand(QPointer<BaseOperator> op_a, QPointer<BaseOperator> op_b, int b_input_index_)
         : operator_a(op_a), operator_b(op_b), b_input_index(b_input_index_)
     { }
 
@@ -31,8 +31,8 @@ public:
 
 private:
 
-    QPointer<BaseTOP> operator_a;
-    QPointer<BaseTOP> operator_b;
+    QPointer<BaseOperator> operator_a;
+    QPointer<BaseOperator> operator_b;
     int b_input_index;
 
 };
