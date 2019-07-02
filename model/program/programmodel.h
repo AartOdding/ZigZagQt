@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/namemanager.h"
+#include "model/program/namemanager.h"
 
 
 class BaseOperator;

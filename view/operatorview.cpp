@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "view/operatorview.h"
-#include "model/programmodel.h"
+#include "model/program/programmodel.h"
 #include "model/operator/baseoperator.h"
 
 

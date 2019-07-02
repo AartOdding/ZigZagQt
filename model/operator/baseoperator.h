@@ -35,6 +35,7 @@ public:
     BaseOperator(ProgramModel& model);
 
     virtual ~BaseOperator();
+
     virtual void render() = 0;
     virtual bool can_render() = 0;
 

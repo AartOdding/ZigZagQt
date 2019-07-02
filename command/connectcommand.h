@@ -3,7 +3,7 @@
 #include <QPointer>
 #include <QUndoCommand>
 
-#include "model/programmodel.h"
+#include "model/program/programmodel.h"
 #include "model/operator/shadertop.h"
 
 
