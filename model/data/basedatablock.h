@@ -1,22 +1,40 @@
 #pragma once
 
-#include <string>
+#include <vector>
+#include <QStringView>
+#include <QObject>
 
 
-class BaseDataBlock
+
+class BaseParameter;
+
+
+
+class BaseDataBlock : public QObject
 {
+    Q_OBJECT
 
 public:
 
-    BaseDataBlock(const std::string& data_type_name);
+    BaseDataBlock(QStringView data_type_name);
 
     virtual ~BaseDataBlock() { }
 
-    virtual BaseDataBlock * create() = 0;
+    virtual std::vector<BaseParameter*> get_parameters() = 0;
+
+
+protected:
+
+    void parameters_changed();
+
 
 private:
 
-    std::string data_type_name;
+    QStringView data_type_name;
+
+signals:
+
+    void parameters_modified();
 
 
 };

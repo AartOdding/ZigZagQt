@@ -38,6 +38,8 @@ ShaderTOP::ShaderTOP(ProgramModel& model, int num_inputs, const QString& source)
 {
     //set_num_inputs(num_inputs);
 
+    initializeOpenGLFunctions();
+
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 

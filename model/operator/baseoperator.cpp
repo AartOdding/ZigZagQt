@@ -8,20 +8,8 @@
 BaseOperator::BaseOperator(ProgramModel& model_)
     : QObject(&model_), model(model_)
 {
-    initializeOpenGLFunctions();
 
-    glGenTextures(1, &output_texture);  // exception happens here
-    glBindTexture(GL_TEXTURE_2D, output_texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, static_cast<int>(pixel_type), resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glGenFramebuffers(1, &frame_buffer_object);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_object);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, output_texture, 0);
 
     //input = nullptr;
 
@@ -36,16 +24,9 @@ BaseOperator::BaseOperator(ProgramModel& model_)
 
 BaseOperator::~BaseOperator()
 {
-    glDeleteFramebuffers(1, &frame_buffer_object);
-    glDeleteTextures(1, &output_texture);
+
 }
 
-
-void BaseOperator::prepare_render()
-{
-    // Bind inputs to texture targets
-    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_object);
-}
 
 
 BaseOperator * BaseOperator::get_input(int index)
@@ -91,15 +72,7 @@ int BaseOperator::get_num_output_users() const
     return count;
 }
 
-int BaseOperator::get_resolution_x() const
-{
-    return resolution_x;
-}
 
-int BaseOperator::get_resolution_y() const
-{
-    return resolution_y;
-}
 
 int BaseOperator::get_position_x() const
 {
@@ -109,11 +82,6 @@ int BaseOperator::get_position_x() const
 int BaseOperator::get_position_y() const
 {
     return position_y;
-}
-
-PixelType BaseOperator::get_pixel_type() const
-{
-    return pixel_type;
 }
 
 /*
@@ -163,22 +131,6 @@ void BaseOperator::set_num_inputs(int new_num_inputs)
     }
 }
 
-void BaseOperator::set_resolution(int res_x, int res_y)
-{
-    if (resolution_x != res_x || resolution_y != res_y)
-    {
-        if (res_x > 0 && res_y > 0)
-        {
-            resolution_x = res_x;
-            resolution_y = res_y;
-
-            glBindTexture(GL_TEXTURE_2D, output_texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, static_cast<int>(pixel_type), resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
-            emit resolution_changed(res_x, res_y);
-        }
-    }
-}
 
 void BaseOperator::set_position(int pos_x, int pos_y)
 {
@@ -191,18 +143,7 @@ void BaseOperator::set_position(int pos_x, int pos_y)
     }
 }
 
-void BaseOperator::set_pixel_type(PixelType new_type)
-{
-    if (pixel_type != new_type)
-    {
-        pixel_type = new_type;
 
-        glBindTexture(GL_TEXTURE_2D, output_texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, static_cast<int>(pixel_type), resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
-        emit pixel_type_changed(new_type);
-    }
-}
 
 /*
 void BaseOperator::set_resolution_policy(Policy new_policy)

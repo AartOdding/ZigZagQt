@@ -27,7 +27,8 @@ CONFIG += c++11 console
 SOURCES += \
         main.cpp \
         model/data/basedatablock.cpp \
-        model/data/datablockuse.cpp \
+        model/data/baseparameter.cpp \
+        model/data/integerparameter.cpp \
         model/data/texturedatablock.cpp \
         model/operator/baseoperator.cpp \
         model/operator/operatorlibrary.cpp \
@@ -42,13 +43,14 @@ SOURCES += \
 HEADERS += \
         command/addcommand.h \
         command/connectcommand.h \
+        command/connectparameterscommand.h \
         command/disconnectcommand.h \
         command/movecommand.h \
         command/removecommand.h \
         model/data/basedatablock.h \
-        model/data/datablockuse.h \
+        model/data/baseparameter.h \
+        model/data/integerparameter.h \
         model/data/texturedatablock.h \
-        model/namemanager.h \
         model/operator/baseoperator.h \
         model/operator/operatorlibrary.h \
         model/operator/shadertop.h \
