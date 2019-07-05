@@ -3,14 +3,14 @@
 #include "model/operator/baseoperator.h"
 
 
-#include <QOpenGLFunctions_4_5_Core>
+#include <QOpenGLFunctions_3_2_Core>
 
 class ProgramModel;
 
 
 
 class ShaderTOP : public BaseOperator,
-                  protected QOpenGLFunctions_4_5_Core
+                  protected QOpenGLFunctions_3_2_Core
 {
 
 public:
