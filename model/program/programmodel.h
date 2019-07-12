@@ -5,6 +5,8 @@
 #include <QUndoStack>
 
 #include "model/program/namemanager.h"
+#include "model/operator/operatorlibrary.h"
+
 
 
 class BaseOperator;
@@ -17,13 +19,12 @@ class ProgramModel : public QObject
 
     friend class AddCommand;
     friend class RemoveCommand;
-    friend class MoveCommand;
     friend class ConnectCommand;
     friend class DisconnectCommand;
 
 public:
 
-    ProgramModel();
+    ProgramModel(OperatorLibrary& operator_library);
 
     QList<BaseOperator*> get_entry_nodes();
 
@@ -39,11 +40,12 @@ public slots:
     void undo();
 
 
-    void add_operator_undoable(const QString& operator_class, int x, int y);
+    void add_operator_undoable(const char* operator_class, int x, int y);
 
-    void remove_operator_undoable(QPointer<BaseOperator> operator_);
+    void remove_operator_undoable(BaseOperator* operator_ptr);
 
-    void move_operator_undoable(qint64 id, int x, int y);
+    void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);
+
 
     void connect_operators_undoable(QPointer<BaseOperator> operator_a, QPointer<BaseOperator> operator_b, int b_input);
 
@@ -54,27 +56,27 @@ public slots:
 
 signals:
 
-    void operator_added(BaseOperator* pointer, qint64 id);
+    void operator_added(BaseOperator* operator_ptr);
 
-    // only use id not pointer, cause the actual operator will already be deleted
-    void operator_deleted(qint64 id);
+    void operator_removed(BaseOperator* operator_ptr);
 
 
 
 private:
-    /*
-     * These functions are all provided with id's instead of pointers, because they are meant for
-     * usage by commands. Commands cannot store pointers, because a remove command could
-     * potentially change memory addresses.
-     */
-    void add_operator(const QString& operator_class, int x, int y, qint64 id);
-    void delete_operator(qint64 id);
-    void move_operator(qint64 id, int to_x, int to_y);
+
+
+    BaseOperator* create_operator(const char* operator_class, int x, int y);
+
+    void add_operator(BaseOperator * operator_ptr);
+    void remove_operator(BaseOperator * operator_ptr);
+
+
     void connect_operators(qint64 id_op_a, qint64 id_op_b, int op_b_input);
     void disconnect_operators(qint64 id_op_a, qint64 id_op_b, int op_b_input);
 
     QUndoStack undo_stack;
 
+    OperatorLibrary& operator_library;
     QMap<qint64, BaseOperator*> operators;
 
 

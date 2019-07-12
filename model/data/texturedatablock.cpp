@@ -1,11 +1,10 @@
 #include "model/data/texturedatablock.h"
 
-const QString TextureDataBlock::data_type_name{ "texture" };
 
 
 
 TextureDataBlock::TextureDataBlock()
-    : BaseDataBlock(data_type_name)
+    : BaseDataBlock("texture")
 {
     initializeOpenGLFunctions();
 

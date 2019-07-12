@@ -28,6 +28,7 @@ SOURCES += \
         main.cpp \
         model/data/basedatablock.cpp \
         model/data/baseparameter.cpp \
+        model/data/datablockinput.cpp \
         model/data/integerparameter.cpp \
         model/data/texturedatablock.cpp \
         model/operator/baseoperator.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
         command/removecommand.h \
         model/data/basedatablock.h \
         model/data/baseparameter.h \
+        model/data/datablockinput.h \
         model/data/integerparameter.h \
         model/data/texturedatablock.h \
         model/operator/baseoperator.h \

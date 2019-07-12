@@ -24,24 +24,24 @@ void ProgramView::set_model(ProgramModel *model)
     connect(this, &ProgramView::undo_signal, data_model, &ProgramModel::undo);
 
     connect(data_model, &ProgramModel::operator_added, this, &ProgramView::on_operator_added);
-    connect(data_model, &ProgramModel::operator_deleted, this, &ProgramView::on_operator_deleted);
+    connect(data_model, &ProgramModel::operator_removed, this, &ProgramView::on_operator_deleted);
 }
 
 
-void ProgramView::on_operator_added(BaseOperator* pointer, qint64 id)
+void ProgramView::on_operator_added(BaseOperator* operator_ptr)
 {
-    OperatorView* op = new OperatorView(*data_model, pointer, id);
-    operator_views.insert(id, op);
-    addItem(op);
+    OperatorView* op_view = new OperatorView(*data_model, *operator_ptr);
+    operator_views.insert(operator_ptr, op_view);
+    addItem(op_view);
 }
 
 
-void ProgramView::on_operator_deleted(qint64 id)
+void ProgramView::on_operator_deleted(BaseOperator* operator_ptr)
 {
-    if (operator_views.contains(id))
+    if (operator_views.contains(operator_ptr))
     {
-        OperatorView* op = operator_views[id];
-        operator_views.remove(id);
+        OperatorView* op = operator_views[operator_ptr];
+        operator_views.remove(operator_ptr);
         removeItem(op);
         delete op;
     }

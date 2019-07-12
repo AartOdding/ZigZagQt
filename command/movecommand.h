@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/program/programmodel.h"
+#include "model/operator/baseoperator.h"
 
 
 
@@ -11,25 +11,27 @@ class MoveCommand : public QUndoCommand
 
 public:
 
-    MoveCommand(ProgramModel& model_, qint64 id, int from_x_, int from_y_, int to_x_, int to_y_)
-        : model(model_), operator_id(id), from_x(from_x_), from_y(from_y_), to_x(to_x_), to_y(to_y_)
-    { }
+    MoveCommand(BaseOperator& op, int to_x_, int to_y_)
+        : operator_(op), to_x(to_x_), to_y(to_y_)
+    {
+        from_x = op.get_position_x();
+        from_y = op.get_position_y();
+    }
 
     void redo() override
     {
-        model.move_operator(operator_id, to_x, to_y);
+        operator_.set_position(to_x, to_y);
     }
 
     void undo() override
     {
-        model.move_operator(operator_id, from_x, from_y);
+        operator_.set_position(from_x, from_y);
     }
 
 
 private:
 
-    ProgramModel& model;
-    qint64 operator_id;
+    BaseOperator& operator_;
     int from_x, from_y;
     int to_x, to_y;
 

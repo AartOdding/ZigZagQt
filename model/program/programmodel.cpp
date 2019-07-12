@@ -1,5 +1,6 @@
 #include "model/program/programmodel.h"
 #include "model/operator/baseoperator.h"
+#include "model/data/basedatablock.h"
 
 #include "command/addcommand.h"
 #include "command/removecommand.h"
@@ -15,7 +16,8 @@
 
 
 
-ProgramModel::ProgramModel()
+ProgramModel::ProgramModel(OperatorLibrary& library)
+    : operator_library(library)
 { }
 
 
@@ -25,6 +27,7 @@ void ProgramModel::redo()
     undo_stack.redo();
 }
 
+
 void ProgramModel::undo()
 {
     std::cout << "undo\n";
@@ -32,31 +35,34 @@ void ProgramModel::undo()
 }
 
 
-void ProgramModel::add_operator_undoable(const QString& operator_class, int x, int y)
+void ProgramModel::add_operator_undoable(const char * operator_class, int x, int y)
 {
-    // TODO: check if class exists, else do not push command on stack
-    undo_stack.push(new AddCommand(*this, operator_class, x, y));
-}
-
-
-void ProgramModel::remove_operator_undoable(QPointer<BaseOperator> operator_)
-{
-    std::cout << "Remove command not yet supported\n";
-    //undo_stack.push(new RemoveCommand(*this, operator_));
-}
-
-
-void ProgramModel::move_operator_undoable(qint64 id, int x, int y)
-{
-    if (operators.contains(id))
+    if (operator_library.contains_operator_type(operator_class))
     {
-        auto op = operators[id];
-        int start_x = op->get_position_x();
-        int start_y = op->get_position_y();
+        undo_stack.push(new AddCommand(*this, operator_class, x, y));
+    }
+}
+
+
+void ProgramModel::remove_operator_undoable(BaseOperator * operator_ptr)
+{
+    if (operator_ptr) // TODO: check if active
+    {
+        undo_stack.push(new RemoveCommand(*this, operator_ptr));
+    }
+}
+
+
+void ProgramModel::move_operator_undoable(BaseOperator * operator_ptr, int x, int y)
+{
+    if (operator_ptr)
+    {
+        int start_x = operator_ptr->get_position_x();
+        int start_y = operator_ptr->get_position_y();
 
         if (x != start_x || y != start_y)
         {
-            undo_stack.push(new MoveCommand(*this, id, start_x, start_y, x, y));
+            undo_stack.push(new MoveCommand(*operator_ptr, x, y));
         }
     }
 }
@@ -74,47 +80,61 @@ void ProgramModel::disconnect_operators_undoable(QPointer<BaseOperator> operator
 }
 
 
-void ProgramModel::add_operator(const QString& operator_class, int x, int y, qint64 id)
+BaseOperator* ProgramModel::create_operator(const char* operator_class, int x, int y)
 {
-    if (name_manager.is_valid(id) && !operators.contains(id))
+    auto op = operator_library.create_operator(operator_class);
+
+    if (op)
     {
-        QPointer<BaseOperator> new_operator = new ShaderTOP(*this);
-        operators.insert(id, new_operator);
-        emit operator_added(new_operator, id);
-        new_operator->set_position(x, y);
-        new_operator->set_num_inputs(qrand() % 6);
+        op->set_position(x, y);
     }
+    return op;
 }
 
-void ProgramModel::delete_operator(qint64 id)
-{
-    if (operators.contains(id))
-    {
-        auto op = operators[id];
-        operators.remove(id);
-        delete op;
-        emit operator_deleted(id);
-    }
-}
 
-void ProgramModel::move_operator(qint64 id, int to_x, int to_y)
+void ProgramModel::add_operator(BaseOperator * operator_ptr)
 {
-    if (operators.contains(id))
+    if (operator_ptr)
     {
-        auto op = operators[id];
-        int start_x = op->get_position_x();
-        int start_y = op->get_position_y();
+        auto blocks = operator_ptr->get_outputs();
 
-        if (to_x != start_x || to_y != start_y)
+        for (auto& block : blocks)
         {
-            operators[id]->set_position(to_x, to_y);
+            if (block)
+            {
+                block->acquire_resources();
+            }
         }
+        operator_ptr->acquire_resources();
+
+        emit operator_added(operator_ptr);
+    }
+}
+
+
+void ProgramModel::remove_operator(BaseOperator * operator_ptr)
+{
+    if (operator_ptr)
+    {
+        operator_ptr->release_resources();
+
+        auto blocks = operator_ptr->get_outputs();
+
+        for (auto& block : blocks)
+        {
+            if (block)
+            {
+                block->release_resources();
+            }
+        }
+        emit operator_removed(operator_ptr);
     }
 }
 
 
 QList<BaseOperator*> ProgramModel::get_entry_nodes()
 {
+    /*
     auto all_children = findChildren<BaseOperator*>();
     QList<BaseOperator*> entry_points;
 
@@ -126,6 +146,8 @@ QList<BaseOperator*> ProgramModel::get_entry_nodes()
         }
     }
     return entry_points;
+    */
+    return QList<BaseOperator*>();
 }
 
 

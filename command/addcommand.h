@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QString>
 #include <QUndoCommand>
 
 #include "model/program/programmodel.h"
+
 
 
 
@@ -12,29 +12,46 @@ class AddCommand : public QUndoCommand
 
 public:
 
-    AddCommand(ProgramModel& model_, const QString& operator_class_, int x, int y)
-        : model(model_), operator_class(operator_class_), position_x(x), position_y(y)
+    AddCommand(ProgramModel& model_, const char * operator_class, int x, int y)
+        : model(model_)
     {
-        operator_id = model.name_manager.unique_id();
+        operator_ptr = model.create_operator(operator_class, x, y);
+    }
+
+    ~AddCommand() override
+    {
+        if (has_ownership)
+        {
+            delete operator_ptr;
+        }
     }
 
     void redo() override
     {
-        model.add_operator(operator_class, position_x, position_y, operator_id);
+        if (operator_ptr)
+        {
+            model.add_operator(operator_ptr);
+            has_ownership = false;
+        }
     }
 
     void undo() override
     {
-        model.delete_operator(operator_id);
+        if (operator_ptr)
+        {
+            model.remove_operator(operator_ptr);
+            has_ownership = true;
+        }
     }
 
 
 private:
 
     ProgramModel& model;
-    QString operator_class;
-    qint64 operator_id;
-    int position_x;
-    int position_y;
+
+    BaseOperator* operator_ptr;
+
+    bool has_ownership = true;
+
 
 };

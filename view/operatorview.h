@@ -20,7 +20,7 @@ class OperatorView : public QObject,
 
 public:
 
-    OperatorView(ProgramModel& m, BaseOperator* pointer, qint64 id);
+    OperatorView(ProgramModel& model, BaseOperator& operator_);
 
     QRectF boundingRect() const override;
 
@@ -51,13 +51,13 @@ private:
     bool was_dragged = false;
 
     ProgramModel& model;
-    QPointer<BaseOperator> operator_pointer;
-    qint64 operator_id;
+    BaseOperator& operator_;
 
-    int position_x, position_y;
+    int position_x;
+    int position_y;
 
-    QVector<ConnectorView*> input_connectors;
-    ConnectorView output_connector;
+    //QVector<ConnectorView*> input_connectors;
+    //ConnectorView output_connector;
 
 
 };

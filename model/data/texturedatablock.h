@@ -4,7 +4,7 @@
 #include "model/data/integerparameter.h"
 
 #include <QObject>
-#include <QOpenGLFunctions_4_5_Core>
+#include <QOpenGLFunctions_3_2_Core>
 
 
 
@@ -23,11 +23,9 @@ enum class PixelType : int
 
 
 class TextureDataBlock : public BaseDataBlock,
-                         protected QOpenGLFunctions_4_5_Core
+                         protected QOpenGLFunctions_3_2_Core
 {
     Q_OBJECT
-
-    static const QString data_type_name;
 
 public:
 

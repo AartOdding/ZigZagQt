@@ -23,11 +23,8 @@ public:
     ~ShaderTOP() override;
 
 
-    void render() override;
+    void run() override;
 
-    // Whether the TOP is in any state to render: Shaders compiled succesfully,
-    // Proper inputs connected etc.
-    bool can_render() override;
 
 
 public slots:

@@ -10,12 +10,12 @@
 
 
 
-OperatorView::OperatorView(ProgramModel& m, BaseOperator* pointer, qint64 id)
-    : model(m), operator_pointer(pointer), operator_id(id), output_connector(*this, pointer, 0, false)
+OperatorView::OperatorView(ProgramModel& m, BaseOperator& o)
+    : model(m), operator_(o)
 {
-    output_connector.setPos(width / 2 - 2, 0);
-    connect(pointer, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
-    connect(pointer, &BaseOperator::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
+    //output_connector.setPos(width / 2 - 2, 0);
+    connect(&operator_, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
+    //connect(pointer, &BaseOperator::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
 }
 
 
@@ -47,9 +47,9 @@ void OperatorView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (was_dragged && operator_pointer)
+    if (was_dragged)
     {
-        model.move_operator_undoable(operator_id, position_x, position_y);
+        model.move_operator_undoable(&operator_, position_x, position_y);
     }
     was_dragged = false;
 }
@@ -67,6 +67,7 @@ void OperatorView::on_operator_moved(int to_x, int to_y)
 
 void OperatorView::on_num_inputs_changed(int new_num_inputs)
 {
+    /*
     std::cout << "num inputs changed\n";
 
     float spacing = width / (new_num_inputs + 3.0f);
@@ -81,5 +82,6 @@ void OperatorView::on_num_inputs_changed(int new_num_inputs)
         input_connectors.push_back(new ConnectorView(*this, operator_pointer, i, true));
         input_connectors.back()->setPos(-width/ 2 + 2, y);
     }
+    */
 }
 

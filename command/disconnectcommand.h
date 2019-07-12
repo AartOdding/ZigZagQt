@@ -18,15 +18,17 @@ public:
 
     void redo() override
     {
+        /*
         Q_ASSERT(operator_a && operator_b);
         Q_ASSERT(operator_b->get_input(b_input_index) == operator_a);
 
         operator_b->set_input(b_input_index, nullptr);
+        */
     }
 
     void undo() override
     {
-        operator_b->set_input(b_input_index, operator_a);
+        //operator_b->set_input(b_input_index, operator_a);
     }
 
 private:

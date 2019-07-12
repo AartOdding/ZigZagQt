@@ -8,7 +8,7 @@
 #include "renderer.h"
 #include "view/viewport.h"
 #include "view/programview.h"
-
+#include "model/operator/operatorlibrary.h"
 
 
 int main(int argc, char *argv[])
@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
 
     // -----------------
 
-    ProgramModel model;
+    OperatorLibrary library;
+    ProgramModel model{ library };
     Renderer renderer;
     renderer.set_model(&model);
 

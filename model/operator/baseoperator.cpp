@@ -5,30 +5,17 @@
 
 
 
-BaseOperator::BaseOperator(ProgramModel& model_)
-    : QObject(&model_), model(model_)
+BaseOperator::BaseOperator()
 {
-
-
-
-    //input = nullptr;
-
-    //inputs = QVector<QPointer<BaseTOP>>(6);
-
-    for (int i = 0; i < 4; ++i)
-    {
-        //inputs.append(nullptr);
-    }
 }
 
 
 BaseOperator::~BaseOperator()
 {
-
 }
 
 
-
+/*
 BaseOperator * BaseOperator::get_input(int index)
 {
     if (index >= 0 && index < inputs.size())
@@ -48,7 +35,7 @@ int BaseOperator::get_num_inputs() const
 
 int BaseOperator::get_num_used_inputs() const
 {
-    /*
+
     int count = 0;
 
     for (auto& input : inputs)
@@ -58,7 +45,7 @@ int BaseOperator::get_num_used_inputs() const
             ++count;
         }
     }
-    */
+
     return inputs.size();
 }
 
@@ -71,7 +58,7 @@ int BaseOperator::get_num_output_users() const
     }
     return count;
 }
-
+*/
 
 
 int BaseOperator::get_position_x() const
@@ -98,9 +85,10 @@ Policy BaseOperator::get_pixel_type_policy() const
 
 // SLOTS
 
+/*
 void BaseOperator::set_input(int index, BaseOperator* operator_)
 {
-    /*
+
     if (index >= 0 && index != static_cast<int>(inputs.size()))
     {
         if (inputs[index] != operator_)
@@ -119,7 +107,7 @@ void BaseOperator::set_input(int index, BaseOperator* operator_)
             emit input_changed(index);
         }
     }
-    */
+
 }
 
 void BaseOperator::set_num_inputs(int new_num_inputs)
@@ -130,7 +118,7 @@ void BaseOperator::set_num_inputs(int new_num_inputs)
         emit num_inputs_changed(new_num_inputs);
     }
 }
-
+*/
 
 void BaseOperator::set_position(int pos_x, int pos_y)
 {

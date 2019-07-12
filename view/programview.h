@@ -24,9 +24,9 @@ public:
 
 public slots:
 
-    void on_operator_added(BaseOperator* pointer, qint64 id);
+    void on_operator_added(BaseOperator* operator_ptr);
 
-    void on_operator_deleted(qint64 id);
+    void on_operator_deleted(BaseOperator* operator_ptr);
 
 
 protected:
@@ -40,7 +40,7 @@ private:
     ProgramModel* data_model;
     // need to have a separate scene for every scope, we can then switch scenes, when viewing different scopes
     // HashMap<Scope, Scene> scenes
-    QMap<qint64, OperatorView*> operator_views;
+    QMap<BaseOperator*, OperatorView*> operator_views;
 
 
 signals:

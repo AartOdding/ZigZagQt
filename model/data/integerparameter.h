@@ -9,37 +9,17 @@ class IntegerParameter : public BaseParameter
 
 public:
 
-    IntegerParameter() = default;
+    IntegerParameter(ParameterMode mode_ = ParameterMode::PASSTHROUGH);
 
-    IntegerParameter(int initial_value, ParameterMode mode_ = ParameterMode::PASSTHROUGH)
-        : BaseParameter(mode_)
-    {
-        set(initial_value);
-    }
+    IntegerParameter(int initial_value, ParameterMode mode_ = ParameterMode::PASSTHROUGH);
 
-    void set(int new_value)
-    {
-        if (value != new_value)
-        {
-            value = new_value;
-            apply_change();
-        }
-    }
+    void set(int new_value);
 
-    int get() const
-    {
-        return value;
-    }
+    int get() const;
 
-    void operator=(int new_value)
-    {
-        set(new_value);
-    }
+    void operator=(int new_value);
 
-    operator int() const
-    {
-        return value;
-    }
+    operator int() const;
 
 private:
 

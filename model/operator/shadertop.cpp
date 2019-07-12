@@ -34,7 +34,7 @@ ShaderTOP::ShaderTOP(ProgramModel& model)
 
 
 ShaderTOP::ShaderTOP(ProgramModel& model, int num_inputs, const QString& source)
-    : BaseOperator(model), fragment_shader_source(source)
+    : fragment_shader_source(source)
 {
     //set_num_inputs(num_inputs);
 
@@ -103,7 +103,7 @@ ShaderTOP::~ShaderTOP()
 }
 
 
-void ShaderTOP::render()
+void ShaderTOP::run()
 {
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -113,11 +113,6 @@ void ShaderTOP::render()
     //std::cout << "render\n";
 }
 
-
-bool ShaderTOP::can_render()
-{
-    return true;
-}
 
 
 void ShaderTOP::recompile()

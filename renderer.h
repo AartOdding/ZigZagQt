@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QOpenGLContext>
 #include <QOffscreenSurface>
-#include <QOpenGLFunctions_4_5_Core>
+#include <QOpenGLFunctions_3_2_Core>
 
 class ProgramModel;
 
 
 
 class Renderer : public QObject,
-                 protected QOpenGLFunctions_4_5_Core
+                 protected QOpenGLFunctions_3_2_Core
 {
     Q_OBJECT
 
@@ -26,8 +26,8 @@ public:
 
 public slots:
 
-
     void render_frame();
+
 
 private:
 

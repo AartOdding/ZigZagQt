@@ -1,17 +1,42 @@
 #include "model/data/basedatablock.h"
+#include "model/data/datablockinput.h"
 
-#include <functional>
 
 
-BaseDataBlock::BaseDataBlock(QStringView data_type_name_)
-    : data_type_name(data_type_name_)
+BaseDataBlock::BaseDataBlock(const char * data_type_name)
+    : type_name(data_type_name)
 {
 
 }
 
 
+BaseDataBlock::~BaseDataBlock()
+{
 
-void BaseDataBlock::parameters_changed()
+}
+
+
+void BaseDataBlock::refresh_parameters()
 {
     emit parameters_modified();
+}
+
+
+bool BaseDataBlock::connect_with(DataBlockInput* input)
+{
+    if (input && !connections.contains(input) && input->compatible_with(this))
+    {
+
+    }
+    return false;
+}
+
+
+bool BaseDataBlock::disconnect_from(DataBlockInput* input)
+{
+    if (input && connections.contains(input))
+    {
+
+    }
+    return false;
 }

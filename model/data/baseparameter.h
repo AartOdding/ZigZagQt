@@ -20,19 +20,15 @@ class BaseParameter : public QObject
 
 public:
 
-    BaseParameter(ParameterMode mode_ = ParameterMode::PASSTHROUGH)
-        : mode(mode_)
-    { }
+    BaseParameter(const char * parameter_name, ParameterMode mode = ParameterMode::PASSTHROUGH);
 
-    ParameterMode get_mode() const
-    {
-        return mode;
-    }
+    ParameterMode get_mode() const;
 
+    const char * const name;
 
 protected:
 
-    void apply_change()
+    void propagate_changes()
     {
         emit has_changed();
     }
