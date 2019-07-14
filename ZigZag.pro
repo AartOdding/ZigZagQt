@@ -22,13 +22,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++11 console
+CONFIG += c++17 console
 
 SOURCES += \
         main.cpp \
         model/data/basedatablock.cpp \
         model/data/baseparameter.cpp \
         model/data/datablockinput.cpp \
+        model/data/enumdefinition.cpp \
+        model/data/enumparameter.cpp \
         model/data/integerparameter.cpp \
         model/data/texturedatablock.cpp \
         model/operator/baseoperator.cpp \
@@ -51,6 +53,8 @@ HEADERS += \
         model/data/basedatablock.h \
         model/data/baseparameter.h \
         model/data/datablockinput.h \
+        model/data/enumdefinition.h \
+        model/data/enumparameter.h \
         model/data/integerparameter.h \
         model/data/texturedatablock.h \
         model/operator/baseoperator.h \

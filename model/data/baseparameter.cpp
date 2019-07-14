@@ -1,8 +1,8 @@
 #include "baseparameter.h"
 
 
-BaseParameter::BaseParameter(const char * parameter_name, ParameterMode mode_)
-    : name(parameter_name), mode(mode_)
+BaseParameter::BaseParameter(const char * parameter_type, ParameterMode mode_)
+    : type_name(parameter_type), mode(mode_)
 {
 
 }
