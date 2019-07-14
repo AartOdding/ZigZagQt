@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QGraphicsScene>
 
-#include "model/program/programmodel.h"
+#include "model/programmodel.h"
 
 
 class BaseOperator;

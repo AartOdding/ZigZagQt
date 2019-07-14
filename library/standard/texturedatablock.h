@@ -1,9 +1,9 @@
 #pragma once
 
-#include "model/data/basedatablock.h"
-#include "model/data/enumdefinition.h"
-#include "model/data/enumparameter.h"
-#include "model/data/integerparameter.h"
+#include "model/basedatablock.h"
+#include "model/enumdefinition.h"
+#include "model/parameter/enumparameter.h"
+#include "model/parameter/integerparameter.h"
 
 #include <QObject>
 #include <QOpenGLFunctions_3_2_Core>

@@ -4,9 +4,9 @@
 
 #include <iostream>
 
-#include "view/operatorview.h"
-#include "model/program/programmodel.h"
-#include "model/operator/baseoperator.h"
+#include "operatorview.h"
+#include "model/programmodel.h"
+#include "model/baseoperator.h"
 
 
 
@@ -14,6 +14,7 @@ OperatorView::OperatorView(ProgramModel& m, BaseOperator& o)
     : model(m), operator_(o)
 {
     //output_connector.setPos(width / 2 - 2, 0);
+    setPos(o.get_position_x(), o.get_position_y());
     connect(&operator_, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
     //connect(pointer, &BaseOperator::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
 }

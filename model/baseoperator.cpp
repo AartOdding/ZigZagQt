@@ -1,5 +1,6 @@
-#include "model/operator/baseoperator.h"
-#include "model/program/programmodel.h"
+#include "baseoperator.h"
+
+#include "model/programmodel.h"
 
 #include <QPointer>
 

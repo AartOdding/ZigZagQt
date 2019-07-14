@@ -1,5 +1,6 @@
-#include "model/operator/shadertop.h"
-#include "model/program/programmodel.h"
+#include "shadertop.h"
+
+#include "model/programmodel.h"
 
 #include <iostream>
 #include <QOpenGLShader>

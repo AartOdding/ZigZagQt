@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/program/namemanager.h"
-#include "model/operator/operatorlibrary.h"
+#include "model/namemanager.h"
+#include "model/operatorlibrary.h"
 
 
 

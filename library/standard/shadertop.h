@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/operator/baseoperator.h"
+#include "model/baseoperator.h"
 
 
 #include <QOpenGLFunctions_3_2_Core>

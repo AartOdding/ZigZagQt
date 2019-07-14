@@ -1,4 +1,4 @@
-#include "view/connectorview.h"
+#include "connectorview.h"
 #include "view/operatorview.h"
 
 #include <QPainter>

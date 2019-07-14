@@ -6,9 +6,13 @@
 #include "ui_mainwindow.h"
 
 #include "renderer.h"
+
 #include "view/viewport.h"
 #include "view/programview.h"
-#include "model/operator/operatorlibrary.h"
+
+#include "model/operatorlibrary.h"
+
+#include "library/standard/testoperator.h"
 
 
 int main(int argc, char *argv[])
@@ -34,6 +38,9 @@ int main(int argc, char *argv[])
     // -----------------
 
     OperatorLibrary library;
+    library.add_operator_type("test", &create_test_operator);
+
+
     ProgramModel model{ library };
     Renderer renderer;
     renderer.set_model(&model);

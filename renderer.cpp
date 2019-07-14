@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "model/program/programmodel.h"
-#include "model/operator/baseoperator.h"
+#include "model/programmodel.h"
+#include "model/baseoperator.h"
 
 #include <QThread>
 #include <QApplication>

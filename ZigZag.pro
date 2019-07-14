@@ -25,23 +25,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17 console
 
 SOURCES += \
-        main.cpp \
-        model/data/basedatablock.cpp \
-        model/data/baseparameter.cpp \
-        model/data/datablockinput.cpp \
-        model/data/enumdefinition.cpp \
-        model/data/enumparameter.cpp \
-        model/data/integerparameter.cpp \
-        model/data/texturedatablock.cpp \
-        model/operator/baseoperator.cpp \
-        model/operator/operatorlibrary.cpp \
-        model/operator/shadertop.cpp \
-        model/program/programmodel.cpp \
-        renderer.cpp \
+        library/standard/shadertop.cpp \
+        library/standard/testdatablock.cpp \
+        library/standard/testoperator.cpp \
+        library/standard/texturedatablock.cpp \
+        model/parameter/baseparameter.cpp \
+        model/parameter/enumparameter.cpp \
+        model/parameter/integerparameter.cpp \
+        model/basedatablock.cpp \
+        model/baseoperator.cpp \
+        model/datablockinput.cpp \
+        model/enumdefinition.cpp \
+        model/operatorlibrary.cpp \
+        model/programmodel.cpp \
         view/connectorview.cpp \
         view/operatorview.cpp \
         view/programview.cpp \
-        view/viewport.cpp
+        view/viewport.cpp \
+        main.cpp \
+        renderer.cpp
 
 HEADERS += \
         command/addcommand.h \
@@ -50,23 +52,25 @@ HEADERS += \
         command/disconnectcommand.h \
         command/movecommand.h \
         command/removecommand.h \
-        model/data/basedatablock.h \
-        model/data/baseparameter.h \
-        model/data/datablockinput.h \
-        model/data/enumdefinition.h \
-        model/data/enumparameter.h \
-        model/data/integerparameter.h \
-        model/data/texturedatablock.h \
-        model/operator/baseoperator.h \
-        model/operator/operatorlibrary.h \
-        model/operator/shadertop.h \
-        model/program/namemanager.h \
-        model/program/programmodel.h \
-        renderer.h \
+        library/standard/shadertop.h \
+        library/standard/testdatablock.h \
+        library/standard/testoperator.h \
+        library/standard/texturedatablock.h \
+        model/parameter/baseparameter.h \
+        model/parameter/enumparameter.h \
+        model/parameter/integerparameter.h \
+        model/basedatablock.h \
+        model/baseoperator.h \
+        model/datablockinput.h \
+        model/enumdefinition.h \
+        model/namemanager.h \
+        model/operatorlibrary.h \
+        model/programmodel.h \
         view/connectorview.h \
         view/operatorview.h \
         view/programview.h \
-        view/viewport.h
+        view/viewport.h \
+        renderer.h
 
 FORMS += \
         mainwindow.ui

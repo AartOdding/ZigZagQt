@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/data/baseparameter.h"
+#include "model/parameter/baseparameter.h"
 
 
 

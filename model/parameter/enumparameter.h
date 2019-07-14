@@ -1,7 +1,7 @@
 #pragma once
 
-#include "model/data/baseparameter.h"
-#include "model/data/enumdefinition.h"
+#include "model/enumdefinition.h"
+#include "model/parameter/baseparameter.h"
 
 
 class EnumParameter : public BaseParameter

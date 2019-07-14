@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/operator/baseoperator.h"
+#include "model/baseoperator.h"
 
 
 

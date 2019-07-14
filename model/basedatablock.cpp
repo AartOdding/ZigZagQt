@@ -1,5 +1,5 @@
-#include "model/data/basedatablock.h"
-#include "model/data/datablockinput.h"
+#include "basedatablock.h"
+#include "model/datablockinput.h"
 
 
 

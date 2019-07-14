@@ -1,6 +1,7 @@
-#include "model/program/programmodel.h"
-#include "model/operator/baseoperator.h"
-#include "model/data/basedatablock.h"
+#include "programmodel.h"
+
+#include "model/baseoperator.h"
+#include "model/basedatablock.h"
 
 #include "command/addcommand.h"
 #include "command/removecommand.h"
