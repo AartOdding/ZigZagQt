@@ -33,10 +33,6 @@ public:
     void refresh_parameters();
 
 
-    bool connect_with(DataBlockInput* input);
-    bool disconnect_from(DataBlockInput* input);
-
-
     const char * const type_name;
 
 
@@ -50,14 +46,43 @@ public:
     virtual void release_resources() { }
 
 
-private:
 
-    QList<DataBlockInput*> connections;
+    bool is_connected() const;
+
+    bool is_connected_to(const DataBlockInput* data_input) const;
+
+    std::vector<DataBlockInput*> get_connections() const;
+
+
+public slots:
+
+    // Undoable action
+    void connect_to(const DataBlockInput* data_input);
+
+    // Undoable action
+    void disconnect_from(const DataBlockInput* data_input);
+
+    // Undoable action
+    void disconnect_all();
 
 
 signals:
 
     void parameters_modified();
+
+    void connected_to(DataBlockInput* data_block);
+
+    void disconnected_from(DataBlockInput* data_block);
+
+
+private:
+
+    // Non action version of connect_to
+    bool set_connected_to(const DataBlockInput* data_input);
+
+
+
+    std::vector<const DataBlockInput*> connections;
 
 
 };

@@ -30,7 +30,7 @@ public:
     {
         if (operator_ptr)
         {
-            model.remove_operator(operator_ptr);
+            model.remove_operator_from_model(operator_ptr);
             has_ownership = true;
         }
     }
@@ -39,7 +39,7 @@ public:
     {
         if (operator_ptr)
         {
-            model.add_operator(operator_ptr);
+            model.add_operator_to_model(operator_ptr);
             has_ownership = false;
         }
     }

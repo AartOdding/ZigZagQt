@@ -12,6 +12,10 @@
 class BaseOperator;
 
 
+// Implemented in main.cpp
+ProgramModel * get_main_model();
+
+
 
 class ProgramModel : public QObject
 {
@@ -19,18 +23,16 @@ class ProgramModel : public QObject
 
     friend class AddCommand;
     friend class RemoveCommand;
-    friend class ConnectCommand;
-    friend class DisconnectCommand;
 
 public:
 
     ProgramModel(OperatorLibrary& operator_library);
 
+    QUndoStack* get_undo_stack();
+
     QList<BaseOperator*> get_entry_nodes();
 
     QList<BaseOperator*> get_all_nodes();
-
-    NameManager name_manager;
 
 
 public slots:
@@ -39,19 +41,16 @@ public slots:
 
     void undo();
 
+    // Undoable action
+    void add_operator(const char* operator_class, int x, int y);
 
-    void add_operator_undoable(const char* operator_class, int x, int y);
-
-    void remove_operator_undoable(BaseOperator* operator_ptr);
-
-    void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);
-
-
-    void connect_operators_undoable(QPointer<BaseOperator> operator_a, QPointer<BaseOperator> operator_b, int b_input);
-
-    void disconnect_operators_undoable(QPointer<BaseOperator> operator_a, QPointer<BaseOperator> operator_b, int b_input);
+    // Undoable action
+    void remove_operator(BaseOperator* operator_ptr);
 
 
+    //void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);
+    //void connect_data_undoable(BaseDataBlock* output, DataBlockInput* input);
+    //void disconnect_data_undoable(BaseDataBlock* output, DataBlockInput* input);
 
 
 signals:
@@ -67,12 +66,9 @@ private:
 
     BaseOperator* create_operator(const char* operator_class, int x, int y);
 
-    void add_operator(BaseOperator * operator_ptr);
-    void remove_operator(BaseOperator * operator_ptr);
+    void add_operator_to_model(BaseOperator * operator_ptr);
+    void remove_operator_from_model(BaseOperator * operator_ptr);
 
-
-    void connect_operators(qint64 id_op_a, qint64 id_op_b, int op_b_input);
-    void disconnect_operators(qint64 id_op_a, qint64 id_op_b, int op_b_input);
 
     QUndoStack undo_stack;
 

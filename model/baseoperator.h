@@ -20,6 +20,9 @@ class BaseOperator : public QObject
 {
     Q_OBJECT
 
+    friend class MoveCommand;
+    friend class ProgramModel;
+
 public:
 
     BaseOperator();
@@ -61,7 +64,7 @@ public slots:
     void set_num_inputs(int num_accepted_inputs);
     */
 
-    void set_position(int pos_x, int pos_y);
+    void move_to(int x, int y);
 
 
 signals:
@@ -80,6 +83,7 @@ protected:
 
 private:
 
+    void set_position(int pos_x, int pos_y);
 
     std::vector<DataBlockInput*> inputs;
     std::vector<BaseDataBlock*> outputs;

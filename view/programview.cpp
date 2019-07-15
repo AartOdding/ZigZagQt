@@ -51,7 +51,7 @@ void ProgramView::on_operator_deleted(BaseOperator* operator_ptr)
 void ProgramView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     //emit add_operator_signal("shader", mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
-    data_model->add_operator_undoable("test", mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+    data_model->add_operator("test", mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
 }
 
 

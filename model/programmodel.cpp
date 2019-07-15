@@ -2,6 +2,7 @@
 
 #include "model/baseoperator.h"
 #include "model/basedatablock.h"
+#include "model/datablockinput.h"
 
 #include "command/addcommand.h"
 #include "command/removecommand.h"
@@ -22,21 +23,25 @@ ProgramModel::ProgramModel(OperatorLibrary& library)
 { }
 
 
+QUndoStack* ProgramModel::get_undo_stack()
+{
+    return &undo_stack;
+}
+
+
 void ProgramModel::redo()
 {
-    std::cout << "redo\n";
     undo_stack.redo();
 }
 
 
 void ProgramModel::undo()
 {
-    std::cout << "undo\n";
     undo_stack.undo();
 }
 
 
-void ProgramModel::add_operator_undoable(const char * operator_class, int x, int y)
+void ProgramModel::add_operator(const char * operator_class, int x, int y)
 {
     if (operator_library.contains_operator_type(operator_class))
     {
@@ -45,40 +50,43 @@ void ProgramModel::add_operator_undoable(const char * operator_class, int x, int
 }
 
 
-void ProgramModel::remove_operator_undoable(BaseOperator * operator_ptr)
+void ProgramModel::remove_operator(BaseOperator * operator_ptr)
 {
-    if (operator_ptr) // TODO: check if active
+    if (operator_ptr)
     {
+        // Maybe five BaseOperator a remove function?
+        //undo_stack.beginMacro("remove command");
+        //operator_ptr->
         undo_stack.push(new RemoveCommand(*this, operator_ptr));
     }
 }
 
-
-void ProgramModel::move_operator_undoable(BaseOperator * operator_ptr, int x, int y)
+/*
+void ProgramModel::move_operator_undoable(BaseOperator * op, int x, int y)
 {
-    if (operator_ptr)
+    if (op && (x != op->get_position_x() || y != op->get_position_y()))
     {
-        int start_x = operator_ptr->get_position_x();
-        int start_y = operator_ptr->get_position_y();
-
-        if (x != start_x || y != start_y)
-        {
-            undo_stack.push(new MoveCommand(*operator_ptr, x, y));
-        }
+        undo_stack.push(new MoveCommand(*op, x, y));
     }
 }
 
 
-void ProgramModel::connect_operators_undoable(QPointer<BaseOperator> operator_a, QPointer<BaseOperator> operator_b, int b_input)
+void ProgramModel::connect_data_undoable(BaseDataBlock* output, DataBlockInput* input)
 {
-
+    if (output && input && input->compatible_with(output))
+    {
+        undo_stack.push(new ConnectCommand(output, input));
+    }
 }
 
 
-void ProgramModel::disconnect_operators_undoable(QPointer<BaseOperator> operator_a, QPointer<BaseOperator> operator_b, int b_input)
+void ProgramModel::disconnect_data_undoable(BaseDataBlock* output, DataBlockInput* input)
 {
+    if (output && input)
+    {
 
-}
+    }
+}*/
 
 
 BaseOperator* ProgramModel::create_operator(const char* operator_class, int x, int y)
@@ -93,7 +101,7 @@ BaseOperator* ProgramModel::create_operator(const char* operator_class, int x, i
 }
 
 
-void ProgramModel::add_operator(BaseOperator * operator_ptr)
+void ProgramModel::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -113,7 +121,7 @@ void ProgramModel::add_operator(BaseOperator * operator_ptr)
 }
 
 
-void ProgramModel::remove_operator(BaseOperator * operator_ptr)
+void ProgramModel::remove_operator_from_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {

@@ -50,7 +50,8 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (was_dragged)
     {
-        model.move_operator_undoable(&operator_, position_x, position_y);
+        operator_.move_to(position_x, position_y);
+        //model.move_operator_undoable(&operator_, position_x, position_y);
     }
     was_dragged = false;
 }

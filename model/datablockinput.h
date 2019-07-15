@@ -32,15 +32,34 @@ public:
 
     virtual bool compatible_with(const BaseDataBlock* data_block);
 
-    bool connect_with(BaseDataBlock* data_block);
-    bool disconnect_from(BaseDataBlock* data_block);
+
+    bool is_connected() const;
+
+    bool is_connected_to(const BaseDataBlock* data_block) const;
+
+    BaseDataBlock* get_connection() const;
 
 
     const char * const type_name;
 
+
+public slots:
+
+    // Undoable action
+    void connect_to(BaseDataBlock* data_block);
+
+    // Undoable action
+    void disconnect();
+
+
 signals:
 
     void parameters_modified();
+
+    void connected_to(BaseDataBlock* data_block);
+
+    void disconnected_from(BaseDataBlock* data_block);
+
 
 private:
 

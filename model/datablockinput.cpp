@@ -17,6 +17,18 @@ DataBlockInput::~DataBlockInput()
 }
 
 
+std::vector<BaseParameter*> DataBlockInput::get_parameters()
+{
+    return {};
+}
+
+
+void DataBlockInput::refresh_parameters()
+{
+    emit parameters_modified();
+}
+
+
 bool DataBlockInput::compatible_with(const BaseDataBlock* data_block)
 {
     if (data_block)
@@ -27,13 +39,46 @@ bool DataBlockInput::compatible_with(const BaseDataBlock* data_block)
 }
 
 
-std::vector<BaseParameter*> DataBlockInput::get_parameters()
+bool DataBlockInput::connect_to(BaseDataBlock* data_block)
 {
-    return {};
+    if (data_block && connection != data_block && compatible_with(data_block))
+    {
+        if (connection)
+        {
+
+        }
+
+        connection = data_block; // Now is_connected() will return true, important for next lines
+
+        if (!data_block->is_connected_to(this))
+        {
+            data_block->connect_to(this);
+        }
+
+        emit connected_to()
+    }
 }
 
 
-void DataBlockInput::refresh_parameters()
+bool DataBlockInput::disconnect()
 {
-    emit parameters_modified();
+
+}
+
+
+bool DataBlockInput::is_connected() const
+{
+
+}
+
+
+bool DataBlockInput::is_connected_to(BaseDataBlock* data_block) const
+{
+
+}
+
+
+BaseDataBlock* DataBlockInput::get_connection() const
+{
+
 }

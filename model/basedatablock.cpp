@@ -21,7 +21,7 @@ void BaseDataBlock::refresh_parameters()
     emit parameters_modified();
 }
 
-
+/*
 bool BaseDataBlock::connect_with(DataBlockInput* input)
 {
     if (input && !connections.contains(input) && input->compatible_with(this))
@@ -40,3 +40,4 @@ bool BaseDataBlock::disconnect_from(DataBlockInput* input)
     }
     return false;
 }
+*/

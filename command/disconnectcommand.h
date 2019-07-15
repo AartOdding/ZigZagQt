@@ -12,9 +12,11 @@ class DisconnectCommand : public QUndoCommand
 
 public:
 
-    DisconnectCommand(QPointer<BaseOperator> op_a, QPointer<BaseOperator> op_b, int b_input_index_)
-        : operator_a(op_a), operator_b(op_b), b_input_index(b_input_index_)
-    { }
+    DisconnectCommand(BaseDataBlock* output_, DataBlockInput* input_)
+        : output(output_), input(input_)
+    {
+
+    }
 
     void redo() override
     {
@@ -33,8 +35,7 @@ public:
 
 private:
 
-    QPointer<BaseOperator> operator_a;
-    QPointer<BaseOperator> operator_b;
-    int b_input_index;
+    BaseDataBlock* output;
+    DataBlockInput* input;
 
 };

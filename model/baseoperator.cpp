@@ -1,5 +1,6 @@
 #include "baseoperator.h"
 
+#include "command/movecommand.h"
 #include "model/programmodel.h"
 
 #include <QPointer>
@@ -120,6 +121,15 @@ void BaseOperator::set_num_inputs(int new_num_inputs)
     }
 }
 */
+
+void BaseOperator::move_to(int pos_x, int pos_y)
+{
+    if (position_x != pos_x || position_y != pos_y)
+    {
+        get_main_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
+    }
+}
+
 
 void BaseOperator::set_position(int pos_x, int pos_y)
 {
