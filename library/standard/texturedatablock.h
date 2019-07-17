@@ -63,7 +63,7 @@ public slots:
 
 private:
 
-    boolean currently_allocated = false;
+    bool currently_allocated = false;
     GLuint fbo_handle;
     GLuint texture_handle;
 

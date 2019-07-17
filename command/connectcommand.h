@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QPointer>
 #include <QUndoCommand>
 
-#include "model/programmodel.h"
+#include "model/basedatablock.h"
+#include "model/datablockinput.h"
 
 
 
@@ -20,22 +20,14 @@ public:
 
     void redo() override
     {
-        /*
-        Q_ASSERT(operator_a && operator_b);
-
-        initial_connection = operator_b->get_input(b_input_index);
-        operator_b->set_input(b_input_index, operator_a);
-        */
+        // set output
+        input->set_connection(output);
     }
 
     void undo() override
     {
-        /*
-        Q_ASSERT(operator_a && operator_b);
-        Q_ASSERT(operator_b->get_input(b_input_index) == operator_a);
-
-        operator_b->set_input(b_input_index, initial_connection);
-        */
+        // set output
+        input->set_connection(initial_output);
     }
 
 private:

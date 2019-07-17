@@ -51,16 +51,16 @@ public:
 
     bool is_connected_to(const DataBlockInput* data_input) const;
 
-    std::vector<DataBlockInput*> get_connections() const;
+    std::vector<const DataBlockInput*> get_connections() const;
 
 
 public slots:
 
     // Undoable action
-    void connect_to(const DataBlockInput* data_input);
+    void connect_to(DataBlockInput* data_input);
 
     // Undoable action
-    void disconnect_from(const DataBlockInput* data_input);
+    void disconnect_from(DataBlockInput* data_input);
 
     // Undoable action
     void disconnect_all();
@@ -77,12 +77,16 @@ signals:
 
 private:
 
+    friend class ConnectCommand;
+    friend class DisconnectCommand;
+
     // Non action version of connect_to
-    bool set_connected_to(const DataBlockInput* data_input);
+    bool add_connection(DataBlockInput* data_input);
 
+    // Non action version of connect_to
+    bool remove_connection(DataBlockInput* data_input);
 
-
-    std::vector<const DataBlockInput*> connections;
+    std::vector<DataBlockInput*> connections;
 
 
 };

@@ -30,14 +30,14 @@ public:
     void refresh_parameters();
 
 
-    virtual bool compatible_with(const BaseDataBlock* data_block);
+    virtual bool compatible_with(const BaseDataBlock* data_block) const;
 
 
     bool is_connected() const;
 
     bool is_connected_to(const BaseDataBlock* data_block) const;
 
-    BaseDataBlock* get_connection() const;
+    const BaseDataBlock* get_connection() const;
 
 
     const char * const type_name;
@@ -62,6 +62,12 @@ signals:
 
 
 private:
+
+    friend class ConnectCommand;
+    friend class DisconnectCommand;
+
+    // Non action version of connect_to and disconnect_from
+    bool set_connection(BaseDataBlock* data_block);
 
     BaseDataBlock* connection;
 

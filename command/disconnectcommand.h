@@ -1,10 +1,9 @@
 #pragma once
 
-#include <QPointer>
 #include <QUndoCommand>
 
-#include "model/programmodel.h"
-#include "model/baseoperator.h"
+#include "model/basedatablock.h"
+#include "model/datablockinput.h"
 
 
 class DisconnectCommand : public QUndoCommand
@@ -20,17 +19,13 @@ public:
 
     void redo() override
     {
-        /*
-        Q_ASSERT(operator_a && operator_b);
-        Q_ASSERT(operator_b->get_input(b_input_index) == operator_a);
-
-        operator_b->set_input(b_input_index, nullptr);
-        */
+        input->set_connection(nullptr);
     }
 
     void undo() override
     {
         //operator_b->set_input(b_input_index, operator_a);
+        input->set_connection(output);
     }
 
 private:
