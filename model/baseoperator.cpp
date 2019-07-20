@@ -17,6 +17,92 @@ BaseOperator::~BaseOperator()
 }
 
 
+const std::vector<DataBlockInput*>& BaseOperator::inputs()
+{
+    if (!inputs_cached)
+    {
+        cached_inputs = provide_inputs();
+        inputs_cached = true;
+    }
+    return cached_inputs;
+}
+
+
+const std::vector<BaseDataBlock*>& BaseOperator::outputs()
+{
+    if (!outputs_cached)
+    {
+        cached_outputs = provide_outputs();
+        outputs_cached = true;
+    }
+    return cached_outputs;
+}
+
+
+const std::vector<BaseParameter*>& BaseOperator::parameters()
+{
+    if (!parameters_cached)
+    {
+        cached_parameters = provide_parameters();
+        parameters_cached = true;
+    }
+    return cached_parameters;
+}
+
+
+int BaseOperator::get_position_x() const
+{
+    return position_x;
+}
+
+
+int BaseOperator::get_position_y() const
+{
+    return position_y;
+}
+
+
+void BaseOperator::refresh_inputs()
+{
+    cached_inputs = provide_inputs();
+    emit inputs_modified();
+}
+
+
+void BaseOperator::refresh_outputs()
+{
+    cached_outputs = provide_outputs();
+    emit outputs_modified();
+}
+
+
+void BaseOperator::refresh_parameters()
+{
+    cached_parameters = provide_parameters();
+    emit parameters_modified();
+}
+
+
+void BaseOperator::move_to(int pos_x, int pos_y)
+{
+    if (position_x != pos_x || position_y != pos_y)
+    {
+        get_main_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
+    }
+}
+
+
+void BaseOperator::set_position(int pos_x, int pos_y)
+{
+    if (position_x != pos_x || position_y != pos_y)
+    {
+        position_x = pos_x;
+        position_y = pos_y;
+
+        emit position_changed(pos_x, pos_y);
+    }
+}
+
 /*
 BaseOperator * BaseOperator::get_input(int index)
 {
@@ -62,16 +148,6 @@ int BaseOperator::get_num_output_users() const
 }
 */
 
-
-int BaseOperator::get_position_x() const
-{
-    return position_x;
-}
-
-int BaseOperator::get_position_y() const
-{
-    return position_y;
-}
 
 /*
 Policy BaseOperator::get_resolution_policy() const
@@ -121,26 +197,6 @@ void BaseOperator::set_num_inputs(int new_num_inputs)
     }
 }
 */
-
-void BaseOperator::move_to(int pos_x, int pos_y)
-{
-    if (position_x != pos_x || position_y != pos_y)
-    {
-        get_main_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
-    }
-}
-
-
-void BaseOperator::set_position(int pos_x, int pos_y)
-{
-    if (position_x != pos_x || position_y != pos_y)
-    {
-        position_x = pos_x;
-        position_y = pos_y;
-
-        emit position_changed(pos_x, pos_y);
-    }
-}
 
 
 

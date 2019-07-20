@@ -45,16 +45,16 @@ protected:
 
 private:
 
-    static constexpr int width = 120;
-    static constexpr int height = 80;
-
-    bool was_dragged = false;
+    static constexpr int width = 200;
+    static constexpr int height = 160;
 
     ProgramModel& model;
     BaseOperator& operator_;
 
     int position_x;
     int position_y;
+
+    bool was_dragged = false;
 
     //QVector<ConnectorView*> input_connectors;
     //ConnectorView output_connector;

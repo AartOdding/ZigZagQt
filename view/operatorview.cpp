@@ -28,8 +28,12 @@ QRectF OperatorView::boundingRect() const
 
 void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    auto brush = QBrush(QColor(200, 50, 50));
+    auto brush = QBrush(QColor(55, 55, 55));
+    auto pen = QPen(QColor(255, 255, 255));
+    pen.setWidth(2);
     painter->fillRect(-width / 2, -height / 2, width, height, brush);
+    painter->setPen(pen);
+    painter->drawRoundedRect(-width / 2 + 1, -height / 2 + 1, width -2, height -2, 4, 4);
 }
 
 

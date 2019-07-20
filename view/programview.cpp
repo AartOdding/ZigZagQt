@@ -13,7 +13,7 @@
 ProgramView::ProgramView(QObject *parent)
     : QGraphicsScene(-20000, -20000, 40000, 40000, parent)
 {
-    setBackgroundBrush(QBrush(QColor(30, 30, 30)));
+    setBackgroundBrush(QBrush(QColor(55, 55, 55)));
 }
 
 

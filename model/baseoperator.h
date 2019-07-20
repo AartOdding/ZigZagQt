@@ -31,20 +31,37 @@ public:
 
     virtual void run() = 0;
 
-    virtual std::vector<DataBlockInput*> get_inputs() = 0;
-    virtual std::vector<BaseDataBlock*> get_outputs() = 0;
-    virtual std::vector<BaseParameter*> get_parameters() = 0;
-
-    /*
-    BaseOperator * get_input(int index);
-    int get_num_inputs() const;
-    int get_num_used_inputs() const;
-    int get_num_output_users() const;
-    */
+    const std::vector<DataBlockInput*>& inputs();
+    const std::vector<BaseDataBlock*>& outputs();
+    const std::vector<BaseParameter*>& parameters();
 
     int get_position_x() const;
     int get_position_y() const;
 
+
+public slots:
+
+    void refresh_inputs();
+    void refresh_outputs();
+    void refresh_parameters();
+
+    void move_to(int x, int y);
+
+
+signals:
+
+    void inputs_modified();
+    void outputs_modified();
+    void parameters_modified();
+
+    void position_changed(int pos_x, int pos_y);
+
+
+protected:
+
+    virtual std::vector<DataBlockInput*> provide_inputs() = 0;
+    virtual std::vector<BaseDataBlock*>  provide_outputs() = 0;
+    virtual std::vector<BaseParameter*>  provide_parameters() = 0;
 
     // Should be overriden to acquire resources.
     // Never call this function directly, this is done for you.
@@ -56,37 +73,17 @@ public:
     virtual void release_resources() { }
 
 
-
-public slots:
-
-    /*
-    void set_input(int index, BaseOperator* operator_);
-    void set_num_inputs(int num_accepted_inputs);
-    */
-
-    void move_to(int x, int y);
-
-
-signals:
-
-    //void input_changed(int index);
-    //void num_inputs_changed(int new_num_inputs);
-    void position_changed(int pos_x, int pos_y);
-
-protected:
-
-
-    void refresh_inputs();
-
-    void refresh_outputs();
-
-
 private:
 
     void set_position(int pos_x, int pos_y);
 
-    std::vector<DataBlockInput*> inputs;
-    std::vector<BaseDataBlock*> outputs;
+    std::vector<DataBlockInput*> cached_inputs;
+    std::vector<BaseDataBlock*> cached_outputs;
+    std::vector<BaseParameter*> cached_parameters;
+
+    bool inputs_cached = false;
+    bool outputs_cached = false;
+    bool parameters_cached = false;
 
     int position_x = 0;
     int position_y = 0;
