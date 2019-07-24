@@ -17,7 +17,7 @@ public:
 
     void set_view(ProgramView* view_model /* , ProgramScope scope */);
 
-    void wheelEvent(QWheelEvent *event) override { }
+    void wheelEvent(QWheelEvent *event) override;
 
     void enterEvent(QEvent *event) override;
 
@@ -36,6 +36,11 @@ public slots:
 
 private:
 
+    double zoom_exponent = 1.2;
+    bool zoom_inverted = false;
+
+    double current_zoom = 1.0;
+    double zoom_limit = 0.15;
 
     ProgramView* view_model;
 
