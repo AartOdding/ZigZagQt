@@ -63,9 +63,6 @@ signals:
 
 private:
 
-
-    BaseOperator* create_operator(const char* operator_class, int x, int y);
-
     void add_operator_to_model(BaseOperator * operator_ptr);
     void remove_operator_from_model(BaseOperator * operator_ptr);
 

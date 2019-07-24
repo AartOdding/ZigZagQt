@@ -20,6 +20,18 @@ BaseDataBlock::~BaseDataBlock()
 }
 
 
+BaseOperator* BaseDataBlock::get_parent_operator()
+{
+    return parent_operator;
+}
+
+
+const BaseOperator* BaseDataBlock::get_parent_operator() const
+{
+    return parent_operator;
+}
+
+
 void BaseDataBlock::refresh_parameters()
 {
     emit parameters_modified();
@@ -68,7 +80,7 @@ void BaseDataBlock::disconnect_all()
 {
     if (!connections.empty())
     {
-        get_main_model()->get_undo_stack()->beginMacro("disconnect all");
+        get_main_model()->get_undo_stack()->beginMacro("Disconnect All");
 
         while (!connections.empty())
         {
@@ -77,6 +89,12 @@ void BaseDataBlock::disconnect_all()
 
         get_main_model()->get_undo_stack()->endMacro();
     }
+}
+
+
+void BaseDataBlock::set_parent_operator(BaseOperator* op)
+{
+    parent_operator = op;
 }
 
 

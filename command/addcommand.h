@@ -12,10 +12,9 @@ class AddCommand : public QUndoCommand
 
 public:
 
-    AddCommand(ProgramModel& model_, const char * operator_class, int x, int y)
-        : model(model_)
+    AddCommand(ProgramModel& mdl, BaseOperator* op)
+        : model(mdl), operator_ptr(op)
     {
-        operator_ptr = model.create_operator(operator_class, x, y);
     }
 
     ~AddCommand() override
@@ -52,6 +51,5 @@ private:
     BaseOperator* operator_ptr;
 
     bool has_ownership = true;
-
 
 };

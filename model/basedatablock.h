@@ -7,6 +7,7 @@
 
 
 class QString;
+class BaseOperator;
 class BaseParameter;
 class DataBlockInput;
 
@@ -23,6 +24,11 @@ public:
     virtual ~BaseDataBlock();
 
 
+    BaseOperator* get_parent_operator();
+
+    const BaseOperator* get_parent_operator() const;
+
+
     // This method needs to be overriden by the inheriting class, so that the GUI
     // can query how many parameters to add to the operator.
     virtual std::vector<BaseParameter*> get_parameters() = 0;
@@ -32,8 +38,6 @@ public:
     // in the GUI. Call this function after adding or removing a parameter.
     void refresh_parameters();
 
-
-    const char * const type_name;
 
 
     // Should be overriden to acquire resources.
@@ -52,6 +56,9 @@ public:
     bool is_connected_to(const DataBlockInput* data_input) const;
 
     std::vector<const DataBlockInput*> get_connections() const;
+
+
+    const char * const type_name;
 
 
 public slots:
@@ -77,14 +84,21 @@ signals:
 
 private:
 
+    friend class BaseOperator;
     friend class ConnectCommand;
     friend class DisconnectCommand;
+
+    void set_parent_operator(BaseOperator* op);
+
 
     // Non action version of connect_to
     bool add_connection(DataBlockInput* data_input);
 
     // Non action version of connect_to
     bool remove_connection(DataBlockInput* data_input);
+
+
+    BaseOperator* parent_operator;
 
     std::vector<DataBlockInput*> connections;
 

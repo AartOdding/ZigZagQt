@@ -3,7 +3,9 @@
 #include <QObject>
 
 
+#include "model/basedatablock.h"
 
+class BaseOperator;
 class BaseParameter;
 class BaseDataBlock;
 
@@ -28,6 +30,12 @@ public:
     // Causes get_paramers() to be called again, to reevaluate what parameters appear
     // in the GUI. Call this function after adding or removing a parameter.
     void refresh_parameters();
+
+
+    BaseOperator* get_parent_operator();
+
+    const BaseOperator* get_parent_operator() const;
+
 
 
     virtual bool compatible_with(const BaseDataBlock* data_block) const;
@@ -56,19 +64,23 @@ signals:
 
     void parameters_modified();
 
-    void connected_to(BaseDataBlock* data_block);
+    void has_connected(BaseDataBlock* output, DataBlockInput* input);
 
-    void disconnected_from(BaseDataBlock* data_block);
+    void has_disconnected(BaseDataBlock* output, DataBlockInput* input);
 
 
 private:
 
+    friend class BaseOperator;
     friend class ConnectCommand;
     friend class DisconnectCommand;
+
+    void set_parent_operator(BaseOperator* op);
 
     // Non action version of connect_to and disconnect_from
     bool set_connection(BaseDataBlock* data_block);
 
-    BaseDataBlock* connection;
+    BaseOperator* parent_operator = nullptr;
+    BaseDataBlock* connection = nullptr;
 
 };

@@ -51,7 +51,7 @@ void Renderer::render_frame()
 {
     context.makeCurrent(&render_surface);
 
-    if (render_count % 120 == 0) std::cout <<"render " << QThread::currentThreadId() << "\n";
+    //if (render_count % 120 == 0) std::cout <<"render " << QThread::currentThreadId() << "\n";
 
     int node_count = model->get_all_nodes().size();
     auto open_list = model->get_entry_nodes();

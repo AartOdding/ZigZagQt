@@ -1,22 +1,40 @@
 #include <QPainter>
+#include <QFocusEvent>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsSceneMouseEvent>
 
 #include <iostream>
 
 #include "operatorview.h"
+#include "programview.h"
+
 #include "model/programmodel.h"
 #include "model/baseoperator.h"
+#include "model/basedatablock.h"
+#include "model/datablockinput.h"
+#include "view/dataconnectorview.h"
 
 
 
-OperatorView::OperatorView(ProgramModel& m, BaseOperator& o)
-    : model(m), operator_(o)
+OperatorView::OperatorView(BaseOperator& op)
+    : operator_model(op), name_tag("Test operator number x", this)
 {
-    //output_connector.setPos(width / 2 - 2, 0);
-    setPos(o.get_position_x(), o.get_position_y());
-    connect(&operator_, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
-    //connect(pointer, &BaseOperator::num_inputs_changed, this, &OperatorView::on_num_inputs_changed);
+    setZValue(1);
+    setPos(op.get_position_x(), op.get_position_y());
+
+    setFlag(QGraphicsItem::ItemIsFocusable);
+    setFlag(QGraphicsItem::ItemIsSelectable);
+
+    on_inputs_modified();
+    on_outputs_modified();
+    on_parameters_modified();
+
+    connect(&operator_model, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
+    connect(&operator_model, &BaseOperator::inputs_modified, this, &OperatorView::on_inputs_modified);
+    connect(&operator_model, &BaseOperator::outputs_modified, this, &OperatorView::on_outputs_modified);
+    connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
+
+    name_tag.setPos(-width / 2, -height / 2 - 33);
 }
 
 
@@ -28,12 +46,35 @@ QRectF OperatorView::boundingRect() const
 
 void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    painter->setRenderHint(QPainter::Antialiasing);
     auto brush = QBrush(QColor(55, 55, 55));
     auto pen = QPen(QColor(255, 255, 255));
+    if (isSelected()) pen.setColor(QColor(0, 128, 255));
     pen.setWidth(2);
     painter->fillRect(-width / 2, -height / 2, width, height, brush);
     painter->setPen(pen);
     painter->drawRoundedRect(-width / 2 + 1, -height / 2 + 1, width -2, height -2, 4, 4);
+}
+
+
+DataConnectorView* OperatorView::get_view_of(const DataBlockInput* input)
+{
+    return inputs[input];
+}
+
+
+DataConnectorView* OperatorView::get_view_of(const BaseDataBlock* output)
+{
+    return outputs[output];
+}
+
+
+void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
+{
+    auto v = dynamic_cast<ProgramView*>(scene());
+    v->bring_to_front(this);
+
+    QGraphicsItem::mousePressEvent(event);
 }
 
 
@@ -45,8 +86,11 @@ void OperatorView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         position_x = static_cast<int>(p.x());
         position_y = static_cast<int>(p.y());
         setPos(position_x, position_y);
+        emit has_moved();
         was_dragged = true;
     }
+
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
 
@@ -54,10 +98,42 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (was_dragged)
     {
-        operator_.move_to(position_x, position_y);
+        operator_model.move_to(position_x, position_y);
         //model.move_operator_undoable(&operator_, position_x, position_y);
     }
     was_dragged = false;
+
+    QGraphicsItem::mouseReleaseEvent(event);
+}
+
+
+void OperatorView::keyPressEvent(QKeyEvent *event)
+{
+    std::cout << "op key press\n";
+    event->setAccepted(false);
+}
+
+
+void OperatorView::keyReleaseEvent(QKeyEvent *event)
+{
+    std::cout << "op key rel\n";
+    event->setAccepted(false);
+}
+
+
+void OperatorView::focusInEvent(QFocusEvent *event)
+{
+    if (event->reason() == Qt::MouseFocusReason)
+    {
+        auto v = dynamic_cast<ProgramView*>(scene());
+        //v->
+    }
+}
+
+
+void OperatorView::focusOutEvent(QFocusEvent *event)
+{
+
 }
 
 
@@ -68,26 +144,80 @@ void OperatorView::on_operator_moved(int to_x, int to_y)
         position_x = to_x;
         position_y = to_y;
         setPos(position_x, position_y);
+        emit has_moved();
     }
 }
 
-void OperatorView::on_num_inputs_changed(int new_num_inputs)
+
+void OperatorView::on_inputs_modified()
 {
-    /*
-    std::cout << "num inputs changed\n";
+    const auto& new_inputs = operator_model.inputs();
+    float spacing = height / (new_inputs.size());
 
-    float spacing = width / (new_num_inputs + 3.0f);
-    float y = -width / 2 + spacing;
-
-    input_connectors.clear();
-    input_connectors.reserve(new_num_inputs);
-
-    for (int i = 0; i < new_num_inputs; ++i)
+    for (auto& [k, v] : inputs)
     {
-        y += spacing;
-        input_connectors.push_back(new ConnectorView(*this, operator_pointer, i, true));
-        input_connectors.back()->setPos(-width/ 2 + 2, y);
+        // If there are inputs in the view that are no longer in the model:
+        if (std::find(new_inputs.begin(), new_inputs.end(), k) == new_inputs.end())
+        {
+            delete inputs[k];
+            inputs.erase(k);
+        }
     }
-    */
+
+    for (int i = 0; i < new_inputs.size(); ++i)
+    {
+        int x = -width / 2;
+        int y = (-height / 2) + i * spacing + spacing / 2;
+
+        if(inputs.count(new_inputs[i]) > 0)
+        {
+            inputs[new_inputs[i]]->setPos(x, y);
+        }
+        else
+        {
+            auto new_input = new DataConnectorView(*this, *new_inputs[i], spacing);
+            new_input->setPos(x, y);
+            inputs[new_inputs[i]] = new_input;
+        }
+    }
 }
 
+
+void OperatorView::on_outputs_modified()
+{
+    const auto& new_outputs = operator_model.outputs();
+    float spacing = height / (new_outputs.size());
+
+    for (auto& [k, v] : outputs)
+    {
+        // If there are inputs in the view that are no longer in the model:
+        if (std::find(new_outputs.begin(), new_outputs.end(), k) == new_outputs.end())
+        {
+            delete outputs[k];
+            outputs.erase(k);
+        }
+    }
+
+    for (int i = 0; i < new_outputs.size(); ++i)
+    {
+        int x = width / 2;
+        int y = (-height / 2) + i * spacing + spacing / 2;
+
+        if(outputs.count(new_outputs[i]) > 0)
+        {
+            outputs[new_outputs[i]]->setPos(x, y);
+        }
+        else
+        {
+            auto new_output = new DataConnectorView(*this, *new_outputs[i], spacing);
+            new_output->setPos(x, y);
+            outputs[new_outputs[i]] = new_output;
+        }
+    }
+}
+
+
+void OperatorView::on_parameters_modified()
+{
+    std::cout << "on_parameters_modified() called\n";
+}

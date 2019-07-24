@@ -15,18 +15,29 @@ public:
     ConnectCommand(BaseDataBlock* output_, DataBlockInput* input_)
         : output(output_), input(input_)
     {
-        initial_output; // = input get connection whatever
+        initial_output = input->connection;
     }
 
     void redo() override
     {
-        // set output
-        input->set_connection(output);
+        if (initial_output)
+        {
+            initial_output->remove_connection(input);
+        }
+        output->add_connection(input);
+
+        input->set_connection(output);  // also removes its old connection;
     }
 
     void undo() override
     {
-        // set output
+        output->remove_connection(input);
+
+        if (initial_output)
+        {
+            initial_output->add_connection(input);
+        }
+
         input->set_connection(initial_output);
     }
 

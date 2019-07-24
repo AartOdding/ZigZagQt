@@ -19,12 +19,13 @@ public:
 
     void redo() override
     {
+        output->remove_connection(input);
         input->set_connection(nullptr);
     }
 
     void undo() override
     {
-        //operator_b->set_input(b_input_index, operator_a);
+        output->add_connection(input);
         input->set_connection(output);
     }
 

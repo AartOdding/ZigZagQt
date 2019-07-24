@@ -45,7 +45,11 @@ void ProgramModel::add_operator(const char * operator_class, int x, int y)
 {
     if (operator_library.contains_operator_type(operator_class))
     {
-        undo_stack.push(new AddCommand(*this, operator_class, x, y));
+        //undo_stack.beginMacro("Adding Operator");
+        auto op = operator_library.create_operator(operator_class);
+        op->set_position(x, y);
+        undo_stack.push(new AddCommand(*this, op));
+        //undo_stack.endMacro();
     }
 }
 
@@ -54,10 +58,23 @@ void ProgramModel::remove_operator(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
-        // Maybe five BaseOperator a remove function?
+        undo_stack.beginMacro("Remove Operator");
+
+        for (auto& ptr : operator_ptr->inputs())
+        {
+            ptr->disconnect();
+        }
+
+        for (auto& ptr : operator_ptr->outputs())
+        {
+            ptr->disconnect_all();
+        }
+        // Maybe give BaseOperator a remove function?
         //undo_stack.beginMacro("remove command");
         //operator_ptr->
         undo_stack.push(new RemoveCommand(*this, operator_ptr));
+
+        undo_stack.endMacro();
     }
 }
 
@@ -89,23 +106,13 @@ void ProgramModel::disconnect_data_undoable(BaseDataBlock* output, DataBlockInpu
 }*/
 
 
-BaseOperator* ProgramModel::create_operator(const char* operator_class, int x, int y)
-{
-    auto op = operator_library.create_operator(operator_class);
-
-    if (op)
-    {
-        op->set_position(x, y);
-    }
-    return op;
-}
 
 
 void ProgramModel::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
-        auto blocks = operator_ptr->get_outputs();
+        auto blocks = operator_ptr->outputs();
 
         for (auto& block : blocks)
         {
@@ -127,7 +134,7 @@ void ProgramModel::remove_operator_from_model(BaseOperator * operator_ptr)
     {
         operator_ptr->release_resources();
 
-        auto blocks = operator_ptr->get_outputs();
+        auto blocks = operator_ptr->outputs();
 
         for (auto& block : blocks)
         {

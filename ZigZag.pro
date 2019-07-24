@@ -38,7 +38,9 @@ SOURCES += \
         model/enumdefinition.cpp \
         model/operatorlibrary.cpp \
         model/programmodel.cpp \
-        view/connectorview.cpp \
+        view/datacableview.cpp \
+        view/dataconnectorview.cpp \
+        view/operatornametag.cpp \
         view/operatorview.cpp \
         view/programview.cpp \
         view/viewport.cpp \
@@ -66,7 +68,10 @@ HEADERS += \
         model/namemanager.h \
         model/operatorlibrary.h \
         model/programmodel.h \
-        view/connectorview.h \
+        view/connectionrequestmimedata.h \
+        view/datacableview.h \
+        view/dataconnectorview.h \
+        view/operatornametag.h \
         view/operatorview.h \
         view/programview.h \
         view/viewport.h \
@@ -81,4 +86,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    README.md
+    README.md \
+    bugs-todos

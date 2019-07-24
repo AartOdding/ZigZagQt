@@ -1,14 +1,9 @@
 #pragma once
 
-#include <array>
-
-#include <QList>
+#include <vector>
 #include <QObject>
-#include <QVector>
-#include <QPointer>
 
 
-class ProgramModel;
 class BaseDataBlock;
 class BaseParameter;
 class DataBlockInput;
@@ -31,6 +26,7 @@ public:
 
     virtual void run() = 0;
 
+    // Cannot be const because they might have to cache the data.
     const std::vector<DataBlockInput*>& inputs();
     const std::vector<BaseDataBlock*>& outputs();
     const std::vector<BaseParameter*>& parameters();
@@ -41,11 +37,15 @@ public:
 
 public slots:
 
+    // Undoable action.
+    void remove();
+
+    // Undoable action.
+    void move_to(int x, int y);
+
     void refresh_inputs();
     void refresh_outputs();
     void refresh_parameters();
-
-    void move_to(int x, int y);
 
 
 signals:
@@ -76,6 +76,8 @@ protected:
 private:
 
     void set_position(int pos_x, int pos_y);
+
+
 
     std::vector<DataBlockInput*> cached_inputs;
     std::vector<BaseDataBlock*> cached_outputs;

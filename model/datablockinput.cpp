@@ -19,6 +19,18 @@ DataBlockInput::~DataBlockInput()
 }
 
 
+BaseOperator* DataBlockInput::get_parent_operator()
+{
+    return parent_operator;
+}
+
+
+const BaseOperator* DataBlockInput::get_parent_operator() const
+{
+    return parent_operator;
+}
+
+
 std::vector<BaseParameter*> DataBlockInput::get_parameters()
 {
     return { };
@@ -88,7 +100,7 @@ bool DataBlockInput::set_connection(BaseDataBlock *new_connection)
             {
                 auto old_connection = connection;
                 connection = nullptr;
-                emit disconnected_from(old_connection);
+                emit has_disconnected(old_connection, this);
             }
 
             Q_ASSERT(connection == nullptr); // Just for good measure.
@@ -96,7 +108,7 @@ bool DataBlockInput::set_connection(BaseDataBlock *new_connection)
             if (new_connection)
             {
                 connection = new_connection;
-                emit connected_to(new_connection);
+                emit has_connected(new_connection, this);
             }
 
             return true;
@@ -115,6 +127,12 @@ bool DataBlockInput::is_connected() const
 bool DataBlockInput::is_connected_to(const BaseDataBlock* data_block) const
 {
     return connection == data_block;
+}
+
+
+void DataBlockInput::set_parent_operator(BaseOperator* op)
+{
+    parent_operator = op;
 }
 
 

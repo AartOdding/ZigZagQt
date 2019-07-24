@@ -1,4 +1,23 @@
-#ifndef CONNECTIONDRAGMIMEDATA_H
-#define CONNECTIONDRAGMIMEDATA_H
+#pragma once
 
-#endif // CONNECTIONDRAGMIMEDATA_H
+#include <QMimeData>
+
+class DataConnectorView;
+
+
+
+class ConnectionRequestMimeData : public QMimeData
+{
+    Q_OBJECT
+
+public:
+
+    ConnectionRequestMimeData(DataConnectorView* src)
+        : source(src)
+    { }
+
+
+    DataConnectorView* const source;
+
+
+};

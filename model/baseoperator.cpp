@@ -1,10 +1,27 @@
 #include "baseoperator.h"
 
 #include "command/movecommand.h"
+#include "command/removecommand.h"
 #include "model/programmodel.h"
+#include "model/datablockinput.h"
 
 #include <QPointer>
 
+
+
+// helper function to remove nullptrs from a vector
+template<typename T>
+static std::vector<T*> no_nullptr(std::vector<T*> vec)
+{
+    for (int i = vec.size() - 1; i >= 0; --i)
+    {
+        if (!vec[i])
+        {
+            vec.erase(vec.begin() + i);
+        }
+    }
+    return vec;
+}
 
 
 BaseOperator::BaseOperator()
@@ -21,7 +38,12 @@ const std::vector<DataBlockInput*>& BaseOperator::inputs()
 {
     if (!inputs_cached)
     {
-        cached_inputs = provide_inputs();
+        cached_inputs = no_nullptr(provide_inputs());
+
+        for (auto ptr : cached_inputs)
+        {
+            ptr->set_parent_operator(this);
+        }
         inputs_cached = true;
     }
     return cached_inputs;
@@ -32,7 +54,13 @@ const std::vector<BaseDataBlock*>& BaseOperator::outputs()
 {
     if (!outputs_cached)
     {
-        cached_outputs = provide_outputs();
+        cached_outputs = no_nullptr(provide_outputs());
+
+        for (auto ptr : cached_outputs)
+        {
+            ptr->set_parent_operator(this);
+        }
+
         outputs_cached = true;
     }
     return cached_outputs;
@@ -43,7 +71,7 @@ const std::vector<BaseParameter*>& BaseOperator::parameters()
 {
     if (!parameters_cached)
     {
-        cached_parameters = provide_parameters();
+        cached_parameters = no_nullptr(provide_parameters());
         parameters_cached = true;
     }
     return cached_parameters;
@@ -64,22 +92,75 @@ int BaseOperator::get_position_y() const
 
 void BaseOperator::refresh_inputs()
 {
-    cached_inputs = provide_inputs();
-    emit inputs_modified();
+    auto new_inputs = no_nullptr(provide_inputs());
+
+    if (cached_inputs != new_inputs)
+    {
+        std::swap(cached_inputs, new_inputs);
+
+        for (auto ptr : cached_inputs)
+        {
+            if (ptr)
+            {
+                ptr->set_parent_operator(this);
+            }
+        }
+        emit inputs_modified();
+    }
 }
 
 
 void BaseOperator::refresh_outputs()
 {
-    cached_outputs = provide_outputs();
-    emit outputs_modified();
+    auto new_outputs = no_nullptr(provide_outputs());
+
+    if (cached_outputs != new_outputs)
+    {
+        std::swap(cached_outputs, new_outputs);
+
+        for (auto ptr : cached_outputs)
+        {
+            if (ptr)
+            {
+                ptr->set_parent_operator(this);
+            }
+        }
+        emit outputs_modified();
+    }
 }
 
 
 void BaseOperator::refresh_parameters()
 {
-    cached_parameters = provide_parameters();
-    emit parameters_modified();
+    auto new_parameters = no_nullptr(provide_parameters());
+
+    if (cached_parameters != new_parameters)
+    {
+        std::swap(cached_parameters, new_parameters);
+        emit parameters_modified();
+    }
+}
+
+
+void BaseOperator::remove()
+{
+    auto model = get_main_model();
+    auto undo_stack = model->get_undo_stack();
+
+    undo_stack->beginMacro("Remove Operator");
+
+    for (auto ptr : cached_inputs)
+    {
+        ptr->disconnect();
+    }
+
+    for (auto ptr : cached_outputs)
+    {
+        ptr->disconnect_all();
+    }
+
+    undo_stack->push(new RemoveCommand(*model, this));
+    undo_stack->endMacro();
 }
 
 
@@ -102,121 +183,3 @@ void BaseOperator::set_position(int pos_x, int pos_y)
         emit position_changed(pos_x, pos_y);
     }
 }
-
-/*
-BaseOperator * BaseOperator::get_input(int index)
-{
-    if (index >= 0 && index < inputs.size())
-    {
-        return inputs[index];
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-int BaseOperator::get_num_inputs() const
-{
-    return inputs.size();
-}
-
-int BaseOperator::get_num_used_inputs() const
-{
-
-    int count = 0;
-
-    for (auto& input : inputs)
-    {
-        if (input)
-        {
-            ++count;
-        }
-    }
-
-    return inputs.size();
-}
-
-int BaseOperator::get_num_output_users() const
-{
-    int count = 0;
-    for (auto& o : output_users)
-    {
-        if (o) ++count;
-    }
-    return count;
-}
-*/
-
-
-/*
-Policy BaseOperator::get_resolution_policy() const
-{
-    return resolution_policy;
-}
-
-Policy BaseOperator::get_pixel_type_policy() const
-{
-    return pixel_type_policy;
-}
-*/
-
-// SLOTS
-
-/*
-void BaseOperator::set_input(int index, BaseOperator* operator_)
-{
-
-    if (index >= 0 && index != static_cast<int>(inputs.size()))
-    {
-        if (inputs[index] != operator_)
-        {
-            if (inputs[index]) // First properly remove old connection
-            {
-                inputs[index]->output_users.removeOne(this);
-            }
-
-            inputs[index] = operator_;
-
-            if (operator_)
-            {
-                operator_->output_users.append(this);
-            }
-            emit input_changed(index);
-        }
-    }
-
-}
-
-void BaseOperator::set_num_inputs(int new_num_inputs)
-{
-    if (new_num_inputs >= 0 && new_num_inputs != inputs.size())
-    {
-        inputs.resize(new_num_inputs);
-        emit num_inputs_changed(new_num_inputs);
-    }
-}
-*/
-
-
-
-/*
-void BaseOperator::set_resolution_policy(Policy new_policy)
-{
-    if (resolution_policy != new_policy)
-    {
-        resolution_policy = new_policy;
-        emit resolution_policy_changed(new_policy);
-    }
-}
-
-void BaseOperator::set_pixel_type_policy(Policy new_policy)
-{
-    if (pixel_type_policy != new_policy)
-    {
-        pixel_type_policy = new_policy;
-        emit pixel_type_policy_changed(new_policy);
-    }
-}
-*/
-
