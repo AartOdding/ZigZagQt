@@ -38,6 +38,8 @@ SOURCES += \
         model/enumdefinition.cpp \
         model/operatorlibrary.cpp \
         model/programmodel.cpp \
+        view/baseconnectable.cpp \
+        view/baseconnectablesurface.cpp \
         view/datacableview.cpp \
         view/dataconnectorview.cpp \
         view/operatornametag.cpp \
@@ -68,6 +70,8 @@ HEADERS += \
         model/namemanager.h \
         model/operatorlibrary.h \
         model/programmodel.h \
+        view/baseconnectable.h \
+        view/baseconnectablesurface.h \
         view/connectionrequestmimedata.h \
         view/datacableview.h \
         view/dataconnectorview.h \
