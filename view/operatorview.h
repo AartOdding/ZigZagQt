@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QGraphicsItem>
+#include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
 
 #include "operatornametag.h"
@@ -76,5 +77,6 @@ private:
     std::unordered_map<const BaseDataBlock*, DataConnectorView*> outputs;
 
     OperatorNameTag name_tag;
+    QGraphicsRectItem selection_rect{ this };
 
 };

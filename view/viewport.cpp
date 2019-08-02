@@ -13,6 +13,8 @@ Viewport::Viewport(QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeAnchor(QGraphicsView::AnchorViewCenter);
+
+    viewport()->setCursor(Qt::ArrowCursor);
 }
 
 
@@ -22,29 +24,40 @@ void Viewport::set_view(ProgramView* view_model /* , ProgramScope scope */)
 }
 
 
+void Viewport::zoom_in()
+{
+    current_zoom *= zoom_exponent;
+    scale(zoom_exponent, zoom_exponent);
+}
+
+void Viewport::zoom_out()
+{
+    double exponent = 1.0 / zoom_exponent;
+
+    if (current_zoom * exponent > zoom_limit)
+    {
+        current_zoom *= exponent;
+        scale(exponent, exponent);
+    }
+}
+
+
 void Viewport::wheelEvent(QWheelEvent *event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
     double inversion = zoom_inverted ? -1.0 : 1.0;
-    bool zoom_in = inversion * event->delta() > 0;
-    double zoom_multiplier = zoom_in ? zoom_exponent : 1.0 / zoom_exponent;
 
-    if (current_zoom * zoom_multiplier > zoom_limit)
+    if (inversion * event->delta() > 0)
     {
-        current_zoom *= zoom_multiplier;
-        scale(zoom_multiplier, zoom_multiplier);
+        zoom_in();
     }
-
-    std::cout << current_zoom << "\n";
+    else
+    {
+        zoom_out();
+    }
 }
 
-
-void Viewport::enterEvent(QEvent *event)
-{
-    QGraphicsView::enterEvent(event);
-    viewport()->setCursor(Qt::ArrowCursor);
-}
 
 void Viewport::mousePressEvent(QMouseEvent *event)
 {
@@ -62,4 +75,45 @@ void Viewport::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
     viewport()->setCursor(Qt::ArrowCursor);
+}
+
+void Viewport::keyPressEvent(QKeyEvent *event)
+{
+    QGraphicsView::keyPressEvent(event);
+
+    auto in = QKeySequence(Qt::CTRL + Qt::Key_Equal);
+
+
+    if (!event->isAccepted())
+    {
+        if (event->modifiers() & Qt::ControlModifier
+                && (event->key() == Qt::Key_Plus ||event->key() == Qt::Key_Equal))
+        {
+            setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+            zoom_in();
+        }
+        else if (event->matches(QKeySequence::ZoomOut))
+        {
+            setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+            zoom_out();
+        }
+        else if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_0)
+        {
+            setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+            setTransform(QTransform());
+            current_zoom = 1;
+            centerOn(0, 0);  // TODO: center on avarage operator position;
+        }
+    }
+}
+
+void Viewport::keyReleaseEvent(QKeyEvent *event)
+{
+    QGraphicsView::keyReleaseEvent(event);
+
+    if (!event->isAccepted())
+    {
+
+        std::cout << "view key rel\n";
+    }
 }

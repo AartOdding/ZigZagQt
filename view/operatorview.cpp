@@ -35,6 +35,11 @@ OperatorView::OperatorView(BaseOperator& op)
     connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
 
     name_tag.setPos(-width / 2, -height / 2 - 33);
+    selection_rect.setRect(0, 0, width + 50, height + 46);
+    selection_rect.setPos(- width / 2 - 25, -height / 2 - 35);
+    selection_rect.setPen(QPen(QBrush(QColor(51, 153, 255)), 2));
+    selection_rect.setBrush(QColor(51, 153, 255, 30));
+    selection_rect.setFlag(QGraphicsItem::ItemStacksBehindParent);
 }
 
 
@@ -46,11 +51,13 @@ QRectF OperatorView::boundingRect() const
 
 void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    selection_rect.setVisible(isSelected());
+    selection_rect.update();
+
     painter->setRenderHint(QPainter::Antialiasing);
     auto brush = QBrush(QColor(55, 55, 55));
-    auto pen = QPen(QColor(255, 255, 255));
-    if (isSelected()) pen.setColor(QColor(0, 128, 255));
-    pen.setWidth(2);
+    auto pen = QPen(QBrush(QColor(255, 255, 255)), 2);
+
     painter->fillRect(-width / 2, -height / 2, width, height, brush);
     painter->setPen(pen);
     painter->drawRoundedRect(-width / 2 + 1, -height / 2 + 1, width -2, height -2, 4, 4);

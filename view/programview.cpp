@@ -96,6 +96,7 @@ void ProgramView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
 {
+    keyEvent->setAccepted(false);
     QGraphicsScene::keyPressEvent(keyEvent);
 
     if (!keyEvent->isAccepted())
@@ -103,10 +104,12 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
         if (keyEvent->matches(QKeySequence::Undo))
         {
             emit undo_signal();
+            keyEvent->setAccepted(true);
         }
         else if (keyEvent->matches(QKeySequence::Redo))
         {
             emit redo_signal();
+            keyEvent->setAccepted(true);
         }
         else if (keyEvent->matches(QKeySequence::Delete))
         {
@@ -122,6 +125,7 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
                 }
             }
             get_main_model()->get_undo_stack()->endMacro();
+            keyEvent->setAccepted(true);
         }
         else if (keyEvent->matches(QKeySequence::SelectAll))
         {
@@ -129,6 +133,7 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
             {
                 op->setSelected(true);
             }
+            keyEvent->setAccepted(true);
         }
     }
 }
