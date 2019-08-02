@@ -8,7 +8,7 @@
 #include "model/operatorlibrary.h"
 
 
-
+class ProgramModel;
 class BaseOperator;
 
 

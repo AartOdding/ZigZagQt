@@ -25,7 +25,7 @@ OperatorNameTag::OperatorNameTag(const QString &text, OperatorView *parent)
 // static here means limited to this file
 static constexpr bool is_allowed(const char key)
 {
-    constexpr std::array not_allowed = { '"', ',', '.', '/', ';', '[', ']', '\\', '^', '`' };
+    constexpr std::array<char, 10> not_allowed = { '"', ',', '.', '/', ';', '[', ']', '\\', '^', '`' };
 
     for (const char c : not_allowed)
     {
