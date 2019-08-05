@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 
 
 
@@ -12,7 +12,7 @@ class AddCommand : public QUndoCommand
 
 public:
 
-    AddCommand(ProgramModel& mdl, BaseOperator* op)
+    AddCommand(ProjectModel& mdl, BaseOperator* op)
         : model(mdl), operator_ptr(op)
     {
     }
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    ProgramModel& model;
+    ProjectModel& model;
 
     BaseOperator* operator_ptr;
 

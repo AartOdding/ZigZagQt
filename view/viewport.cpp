@@ -18,7 +18,7 @@ Viewport::Viewport(QWidget* parent)
 }
 
 
-void Viewport::set_view(ProgramView* view_model /* , ProgramScope scope */)
+void Viewport::set_view(ProjectScopeView* view_model /* , ProgramScope scope */)
 {
     setScene(view_model);
 }
@@ -29,6 +29,7 @@ void Viewport::zoom_in()
     current_zoom *= zoom_exponent;
     scale(zoom_exponent, zoom_exponent);
 }
+
 
 void Viewport::zoom_out()
 {
@@ -65,17 +66,27 @@ void Viewport::mousePressEvent(QMouseEvent *event)
     viewport()->setCursor(Qt::ArrowCursor);
 }
 
+
 void Viewport::mouseMoveEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseMoveEvent(event);
     viewport()->setCursor(Qt::ArrowCursor);
+
+    auto surface = qobject_cast<ProjectSurface*>(scene());
+
+    if (surface && surface->is_making_connection())
+    {
+        surface->mouse_movement(mapToScene(event->pos()));
+    }
 }
+
 
 void Viewport::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
     viewport()->setCursor(Qt::ArrowCursor);
 }
+
 
 void Viewport::keyPressEvent(QKeyEvent *event)
 {
@@ -106,6 +117,7 @@ void Viewport::keyPressEvent(QKeyEvent *event)
         }
     }
 }
+
 
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {

@@ -6,13 +6,13 @@
 #include <iostream>
 
 #include "operatorview.h"
-#include "programview.h"
+#include "projectscopeview.h"
 
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 #include "model/baseoperator.h"
 #include "model/basedatablock.h"
 #include "model/datablockinput.h"
-#include "view/dataconnectorview.h"
+#include "view/datablockconnector.h"
 
 
 
@@ -64,13 +64,13 @@ void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 }
 
 
-DataConnectorView* OperatorView::get_view_of(const DataBlockInput* input)
+DataBlockConnector* OperatorView::get_view_of(const DataBlockInput* input)
 {
     return inputs[input];
 }
 
 
-DataConnectorView* OperatorView::get_view_of(const BaseDataBlock* output)
+DataBlockConnector* OperatorView::get_view_of(const BaseDataBlock* output)
 {
     return outputs[output];
 }
@@ -78,7 +78,7 @@ DataConnectorView* OperatorView::get_view_of(const BaseDataBlock* output)
 
 void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    auto v = dynamic_cast<ProgramView*>(scene());
+    auto v = dynamic_cast<ProjectScopeView*>(scene());
     v->bring_to_front(this);
 
     QGraphicsItem::mousePressEvent(event);
@@ -132,7 +132,7 @@ void OperatorView::focusInEvent(QFocusEvent *event)
 {
     if (event->reason() == Qt::MouseFocusReason)
     {
-        auto v = dynamic_cast<ProgramView*>(scene());
+        auto v = dynamic_cast<ProjectScopeView*>(scene());
         //v->
     }
 }
@@ -182,7 +182,7 @@ void OperatorView::on_inputs_modified()
         }
         else
         {
-            auto new_input = new DataConnectorView(*this, *new_inputs[i], spacing);
+            auto new_input = new DataBlockConnector(*this, *new_inputs[i], spacing);
             new_input->setPos(x, y);
             inputs[new_inputs[i]] = new_input;
         }
@@ -216,7 +216,7 @@ void OperatorView::on_outputs_modified()
         }
         else
         {
-            auto new_output = new DataConnectorView(*this, *new_outputs[i], spacing);
+            auto new_output = new DataBlockConnector(*this, *new_outputs[i], spacing);
             new_output->setPos(x, y);
             outputs[new_outputs[i]] = new_output;
         }

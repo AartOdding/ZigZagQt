@@ -1,5 +1,5 @@
-#include "datacableview.h"
-#include "dataconnectorview.h"
+#include "datablockcable.h"
+#include "datablockconnector.h"
 #include "operatorview.h"
 
 #include "model/baseoperator.h"
@@ -13,7 +13,7 @@
 
 
 
-DataCableView::DataCableView(ProgramView * p, DataConnectorView * i, DataConnectorView * o)
+DataBlockCable::DataBlockCable(ProjectScopeView * p, DataBlockConnector * i, DataBlockConnector * o)
     : program_view(p), input_view(i), output_view(o)
 {
     setZValue(0.5);
@@ -26,20 +26,20 @@ DataCableView::DataCableView(ProgramView * p, DataConnectorView * i, DataConnect
     auto op1 = i->parent_view;
     auto op2 = o->parent_view;
 
-    connect(op1, &OperatorView::has_moved, this, &DataCableView::on_movement);
-    connect(op2, &OperatorView::has_moved, this, &DataCableView::on_movement);
+    connect(op1, &OperatorView::has_moved, this, &DataBlockCable::on_movement);
+    connect(op2, &OperatorView::has_moved, this, &DataBlockCable::on_movement);
 
     build_path();
 }
 
 
-QRectF DataCableView::boundingRect() const
+QRectF DataBlockCable::boundingRect() const
 {
     return path.boundingRect().marginsAdded({ 3, 3, 3, 3 });
 }
 
 
-bool DataCableView::is_flipped() const
+bool DataBlockCable::is_flipped() const
 {
     QPointF out = output_view->scenePos() + QPointF(15, 0);
     QPointF in = input_view->scenePos() - QPointF(15, 0);
@@ -48,7 +48,7 @@ bool DataCableView::is_flipped() const
 }
 
 
-void DataCableView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void DataBlockCable::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -63,7 +63,7 @@ void DataCableView::paint(QPainter * painter, const QStyleOptionGraphicsItem * o
 }
 
 
-void DataCableView::on_movement()
+void DataBlockCable::on_movement()
 {
 
     QPointF out = output_view->scenePos() + QPointF(15, 0);
@@ -82,7 +82,7 @@ float map(float value, float inMin, float inMax, float outMin, float outMax) {
 }
 
 
-void DataCableView::build_path()
+void DataBlockCable::build_path()
 {
     QPointF out = output_view->scenePos() + QPointF(15, 0);
     QPointF in = input_view->scenePos() - QPointF(15, 0);

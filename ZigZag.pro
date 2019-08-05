@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17 console
 
 SOURCES += \
+        application.cpp \
         library/standard/shadertop.cpp \
         library/standard/testdatablock.cpp \
         library/standard/testoperator.cpp \
@@ -37,19 +38,22 @@ SOURCES += \
         model/datablockinput.cpp \
         model/enumdefinition.cpp \
         model/operatorlibrary.cpp \
-        model/programmodel.cpp \
-        view/baseconnectable.cpp \
-        view/baseconnectablesurface.cpp \
-        view/datacableview.cpp \
-        view/dataconnectorview.cpp \
+        model/projectmodel.cpp \
+        model/projectscope.cpp \
+        view/baseconnector.cpp \
+        view/datablockcable.cpp \
+        view/datablockconnector.cpp \
         view/operatornametag.cpp \
         view/operatorview.cpp \
-        view/programview.cpp \
+        view/projectscopeview.cpp \
+        view/projectsurface.cpp \
+        view/projectviewmodel.cpp \
         view/viewport.cpp \
         main.cpp \
         renderer.cpp
 
 HEADERS += \
+        application.h \
         command/addcommand.h \
         command/connectcommand.h \
         command/connectparameterscommand.h \
@@ -69,15 +73,16 @@ HEADERS += \
         model/enumdefinition.h \
         model/namemanager.h \
         model/operatorlibrary.h \
-        model/programmodel.h \
-        view/baseconnectable.h \
-        view/baseconnectablesurface.h \
-        view/connectionrequestmimedata.h \
-        view/datacableview.h \
-        view/dataconnectorview.h \
+        model/projectmodel.h \
+        model/projectscope.h \
+        view/baseconnector.h \
+        view/datablockcable.h \
+        view/datablockconnector.h \
         view/operatornametag.h \
         view/operatorview.h \
-        view/programview.h \
+        view/projectscopeview.h \
+        view/projectsurface.h \
+        view/projectviewmodel.h \
         view/viewport.h \
         renderer.h
 

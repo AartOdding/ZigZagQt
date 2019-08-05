@@ -16,7 +16,7 @@ class BaseOperator : public QObject
     Q_OBJECT
 
     friend class MoveCommand;
-    friend class ProgramModel;
+    friend class ProjectModel;
 
 public:
 

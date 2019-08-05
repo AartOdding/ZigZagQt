@@ -1,4 +1,4 @@
-#include "programmodel.h"
+#include "projectmodel.h"
 
 #include "model/baseoperator.h"
 #include "model/basedatablock.h"
@@ -18,30 +18,30 @@
 
 
 
-ProgramModel::ProgramModel(OperatorLibrary& library)
+ProjectModel::ProjectModel(OperatorLibrary& library)
     : operator_library(library)
 { }
 
 
-QUndoStack* ProgramModel::get_undo_stack()
+QUndoStack* ProjectModel::get_undo_stack()
 {
     return &undo_stack;
 }
 
 
-void ProgramModel::redo()
+void ProjectModel::redo()
 {
     undo_stack.redo();
 }
 
 
-void ProgramModel::undo()
+void ProjectModel::undo()
 {
     undo_stack.undo();
 }
 
 
-void ProgramModel::add_operator(const char * operator_class, int x, int y)
+void ProjectModel::add_operator(const char * operator_class, int x, int y)
 {
     if (operator_library.contains_operator_type(operator_class))
     {
@@ -54,7 +54,7 @@ void ProgramModel::add_operator(const char * operator_class, int x, int y)
 }
 
 
-void ProgramModel::remove_operator(BaseOperator * operator_ptr)
+void ProjectModel::remove_operator(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -108,7 +108,7 @@ void ProgramModel::disconnect_data_undoable(BaseDataBlock* output, DataBlockInpu
 
 
 
-void ProgramModel::add_operator_to_model(BaseOperator * operator_ptr)
+void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -128,7 +128,7 @@ void ProgramModel::add_operator_to_model(BaseOperator * operator_ptr)
 }
 
 
-void ProgramModel::remove_operator_from_model(BaseOperator * operator_ptr)
+void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -148,7 +148,7 @@ void ProgramModel::remove_operator_from_model(BaseOperator * operator_ptr)
 }
 
 
-QList<BaseOperator*> ProgramModel::get_entry_nodes()
+QList<BaseOperator*> ProjectModel::get_entry_nodes()
 {
     /*
     auto all_children = findChildren<BaseOperator*>();
@@ -167,7 +167,7 @@ QList<BaseOperator*> ProgramModel::get_entry_nodes()
 }
 
 
-QList<BaseOperator*> ProgramModel::get_all_nodes()
+QList<BaseOperator*> ProjectModel::get_all_nodes()
 {
     return findChildren<BaseOperator*>();
 }

@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 #include "model/baseoperator.h"
 
 #include <QThread>
@@ -30,7 +30,7 @@ Renderer::~Renderer()
 { }
 
 
-void Renderer::set_model(ProgramModel* model_)
+void Renderer::set_model(ProjectModel* model_)
 {
     if (model != nullptr)
     {

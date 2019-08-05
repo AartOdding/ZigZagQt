@@ -4,11 +4,11 @@
 #include <QGraphicsItem>
 
 
-class ProgramView;
-class DataConnectorView;
+class ProjectScopeView;
+class DataBlockConnector;
 
 
-class DataCableView : public QObject,
+class DataBlockCable : public QObject,
                       public QGraphicsItem
 {
     Q_OBJECT
@@ -18,7 +18,7 @@ public:
     static constexpr double tension = 0.6;
     static constexpr double flip_distance = 100;
 
-    DataCableView(ProgramView * program_view, DataConnectorView * input_view, DataConnectorView * output_view);
+    DataBlockCable(ProjectScopeView * program_view, DataBlockConnector * input_view, DataBlockConnector * output_view);
 
     QRectF boundingRect() const override;
 
@@ -37,9 +37,9 @@ private:
     void build_path();
 
 
-    ProgramView * program_view;
-    DataConnectorView * input_view;
-    DataConnectorView * output_view;
+    ProjectScopeView * program_view;
+    DataBlockConnector * input_view;
+    DataBlockConnector * output_view;
 
     QPainterPath path;
     QPainterPath path_in_scene;

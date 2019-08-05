@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 
 
 
@@ -12,7 +12,7 @@ class RemoveCommand : public QUndoCommand
 
 public:
 
-    RemoveCommand(ProgramModel& m, BaseOperator * op)
+    RemoveCommand(ProjectModel& m, BaseOperator * op)
         : model(m), operator_ptr(op)
     {
 
@@ -47,7 +47,7 @@ public:
 
 private:
 
-    ProgramModel& model;
+    ProjectModel& model;
 
     BaseOperator * operator_ptr;
 

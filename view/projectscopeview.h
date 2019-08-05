@@ -4,27 +4,28 @@
 #include <QObject>
 #include <QGraphicsScene>
 
-#include "model/programmodel.h"
+#include "projectsurface.h"
+#include "model/projectmodel.h"
 
 
 class BaseOperator;
 class DataBlockInput;
 class OperatorView;
-class DataConnectorView;
-class DataCableView;
+class DataBlockConnector;
+class DataBlockCable;
 
 
 
 
-class ProgramView : public QGraphicsScene
+class ProjectScopeView : public ProjectSurface
 {
     Q_OBJECT
 
 public:
 
-    explicit ProgramView(QObject *parent = nullptr);
+    ProjectScopeView(QObject *parent = nullptr);
 
-    void set_model(ProgramModel* program);
+    void set_model(ProjectModel* program);
 
     void bring_to_front(OperatorView* op);
 
@@ -52,12 +53,12 @@ protected:
 
 private:
 
-    ProgramModel* data_model;
+    ProjectModel* data_model;
     // need to have a separate scene for every scope, we can then switch scenes, when viewing different scopes
     // HashMap<Scope, Scene> scenes
     QHash<BaseOperator*, OperatorView*> operator_views;
 
-    QHash<DataConnectorView*, DataCableView*> cable_views;
+    QHash<DataBlockConnector*, DataBlockCable*> cable_views;
 
 
 signals:

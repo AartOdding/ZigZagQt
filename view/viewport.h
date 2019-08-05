@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <QGraphicsView>
 
-#include "view/programview.h"
+#include "view/projectscopeview.h"
 
 
 
@@ -15,7 +15,7 @@ public:
 
     Viewport(QWidget* parent = nullptr);
 
-    void set_view(ProgramView* view_model /* , ProgramScope scope */);
+    void set_view(ProjectScopeView* view_model /* , ProgramScope scope */);
 
 
     void mousePressEvent(QMouseEvent *event) override;
@@ -46,6 +46,6 @@ private:
     double current_zoom = 1.0;
     double zoom_limit = 0.12;
 
-    ProgramView* view_model;
+    ProjectScopeView* view_model;
 
 };

@@ -4,20 +4,15 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/namemanager.h"
 #include "model/operatorlibrary.h"
 
 
-class ProgramModel;
+class ProjectModel;
 class BaseOperator;
 
 
-// Implemented in main.cpp
-ProgramModel * get_main_model();
 
-
-
-class ProgramModel : public QObject
+class ProjectModel : public QObject
 {
     Q_OBJECT
 
@@ -26,7 +21,7 @@ class ProgramModel : public QObject
 
 public:
 
-    ProgramModel(OperatorLibrary& operator_library);
+    ProjectModel(OperatorLibrary& operator_library);
 
     QUndoStack* get_undo_stack();
 

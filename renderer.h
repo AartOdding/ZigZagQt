@@ -6,7 +6,7 @@
 #include <QOffscreenSurface>
 #include <QOpenGLFunctions_3_2_Core>
 
-class ProgramModel;
+class ProjectModel;
 
 
 
@@ -21,7 +21,7 @@ public:
 
     ~Renderer();
 
-    void set_model(ProgramModel* model);
+    void set_model(ProjectModel* model);
 
 
 public slots:
@@ -31,7 +31,7 @@ public slots:
 
 private:
 
-    ProgramModel* model;
+    ProjectModel* model;
     QOpenGLContext context;
     QOffscreenSurface render_surface;
 

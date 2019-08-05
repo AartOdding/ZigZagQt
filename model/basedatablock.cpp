@@ -1,9 +1,11 @@
 #include "basedatablock.h"
 #include "model/datablockinput.h"
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
+
+#include "application.h"
 
 
 
@@ -60,7 +62,7 @@ void BaseDataBlock::connect_to(DataBlockInput* data_input)
 {
     if (data_input && data_input->compatible_with(this))
     {
-        get_main_model()->get_undo_stack()->push(new ConnectCommand(this, data_input));
+        application::project_model()->get_undo_stack()->push(new ConnectCommand(this, data_input));
     }
 }
 
@@ -70,7 +72,7 @@ void BaseDataBlock::disconnect_from(DataBlockInput* data_input)
 {
     if (is_connected_to(data_input))
     {
-        get_main_model()->get_undo_stack()->push(new DisconnectCommand(this, data_input));
+        application::project_model()->get_undo_stack()->push(new DisconnectCommand(this, data_input));
     }
 }
 
@@ -80,14 +82,14 @@ void BaseDataBlock::disconnect_all()
 {
     if (!connections.empty())
     {
-        get_main_model()->get_undo_stack()->beginMacro("Disconnect All");
+        application::project_model()->get_undo_stack()->beginMacro("Disconnect All");
 
         while (!connections.empty())
         {
             disconnect_from(connections.back());
         }
 
-        get_main_model()->get_undo_stack()->endMacro();
+        application::project_model()->get_undo_stack()->endMacro();
     }
 }
 

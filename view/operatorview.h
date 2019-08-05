@@ -11,8 +11,8 @@
 
 
 class BaseOperator;
-class ProgramModel;
-class DataConnectorView;
+class ProjectModel;
+class DataBlockConnector;
 class BaseDataBlock;
 class DataBlockInput;
 
@@ -30,9 +30,9 @@ public:
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    DataConnectorView* get_view_of(const DataBlockInput* input);
+    DataBlockConnector* get_view_of(const DataBlockInput* input);
 
-    DataConnectorView* get_view_of(const BaseDataBlock* output);
+    DataBlockConnector* get_view_of(const BaseDataBlock* output);
 
 
     BaseOperator& operator_model;
@@ -73,8 +73,8 @@ private:
 
     bool was_dragged = false;
 
-    std::unordered_map<const DataBlockInput*, DataConnectorView*> inputs;
-    std::unordered_map<const BaseDataBlock*, DataConnectorView*> outputs;
+    std::unordered_map<const DataBlockInput*, DataBlockConnector*> inputs;
+    std::unordered_map<const BaseDataBlock*, DataBlockConnector*> outputs;
 
     OperatorNameTag name_tag;
     QGraphicsRectItem selection_rect{ this };

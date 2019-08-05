@@ -1,7 +1,9 @@
-#include "programview.h"
+#include "projectscopeview.h"
+#include "application.h"
 
+#include "view/baseconnector.h"
 #include "view/operatorview.h"
-#include "view/datacableview.h"
+#include "view/datablockcable.h"
 #include "model/baseoperator.h"
 #include "model/datablockinput.h"
 
@@ -12,26 +14,25 @@
 #include <iostream>
 
 
-ProgramView::ProgramView(QObject *parent)
-    : QGraphicsScene(-20000, -20000, 40000, 40000, parent)
+ProjectScopeView::ProjectScopeView(QObject *parent)
 {
     setBackgroundBrush(QBrush(QColor(55, 55, 55)));
 }
 
 
-void ProgramView::set_model(ProgramModel *model)
+void ProjectScopeView::set_model(ProjectModel *model)
 {
     data_model = model;
 
-    connect(this, &ProgramView::redo_signal, data_model, &ProgramModel::redo);
-    connect(this, &ProgramView::undo_signal, data_model, &ProgramModel::undo);
+    connect(this, &ProjectScopeView::redo_signal, data_model, &ProjectModel::redo);
+    connect(this, &ProjectScopeView::undo_signal, data_model, &ProjectModel::undo);
 
-    connect(data_model, &ProgramModel::operator_added, this, &ProgramView::on_operator_added);
-    connect(data_model, &ProgramModel::operator_removed, this, &ProgramView::on_operator_deleted);
+    connect(data_model, &ProjectModel::operator_added, this, &ProjectScopeView::on_operator_added);
+    connect(data_model, &ProjectModel::operator_removed, this, &ProjectScopeView::on_operator_deleted);
 }
 
 
-void ProgramView::bring_to_front(OperatorView* op)
+void ProjectScopeView::bring_to_front(OperatorView* op)
 {
     for (auto o : operator_views)
     {
@@ -43,8 +44,14 @@ void ProgramView::bring_to_front(OperatorView* op)
     op->setZValue(1);
 }
 
+/*
+BaseConnector * ProjectScopeView::connector_at(const QPointF& pos) const
+{
+    return dynamic_cast<BaseConnector *>(itemAt(pos, QTransform()));
+}*/
 
-void ProgramView::on_operator_added(BaseOperator* operator_ptr)
+
+void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
 {
     OperatorView* op_view = new OperatorView(*operator_ptr);
     operator_views.insert(operator_ptr, op_view);
@@ -53,8 +60,8 @@ void ProgramView::on_operator_added(BaseOperator* operator_ptr)
     {
         if (i)
         {
-            connect(i, &DataBlockInput::has_connected, this, &ProgramView::on_input_connected);
-            connect(i, &DataBlockInput::has_disconnected, this, &ProgramView::on_input_disconnected);
+            connect(i, &DataBlockInput::has_connected, this, &ProjectScopeView::on_input_connected);
+            connect(i, &DataBlockInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
         }
     }
 
@@ -62,7 +69,7 @@ void ProgramView::on_operator_added(BaseOperator* operator_ptr)
 }
 
 
-void ProgramView::on_operator_deleted(BaseOperator* operator_ptr)
+void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 {
     if (operator_views.contains(operator_ptr))
     {
@@ -70,8 +77,8 @@ void ProgramView::on_operator_deleted(BaseOperator* operator_ptr)
         {
             if (i)
             {
-                disconnect(i, &DataBlockInput::has_connected, this, &ProgramView::on_input_connected);
-                disconnect(i, &DataBlockInput::has_disconnected, this, &ProgramView::on_input_disconnected);
+                disconnect(i, &DataBlockInput::has_connected, this, &ProjectScopeView::on_input_connected);
+                disconnect(i, &DataBlockInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
             }
         }
 
@@ -83,7 +90,7 @@ void ProgramView::on_operator_deleted(BaseOperator* operator_ptr)
 }
 
 
-void ProgramView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void ProjectScopeView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
 
@@ -94,7 +101,7 @@ void ProgramView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 }
 
 
-void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
+void ProjectScopeView::keyPressEvent(QKeyEvent *keyEvent)
 {
     keyEvent->setAccepted(false);
     QGraphicsScene::keyPressEvent(keyEvent);
@@ -113,7 +120,7 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
         }
         else if (keyEvent->matches(QKeySequence::Delete))
         {
-            get_main_model()->get_undo_stack()->beginMacro("Remove selected operators.");
+            application::project_model()->get_undo_stack()->beginMacro("Remove selected operators.");
 
             for (auto obj : selectedItems())
             {
@@ -124,7 +131,7 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
                     op->operator_model.remove();
                 }
             }
-            get_main_model()->get_undo_stack()->endMacro();
+            application::project_model()->get_undo_stack()->endMacro();
             keyEvent->setAccepted(true);
         }
         else if (keyEvent->matches(QKeySequence::SelectAll))
@@ -139,13 +146,13 @@ void ProgramView::keyPressEvent(QKeyEvent *keyEvent)
 }
 
 
-void ProgramView::keyReleaseEvent(QKeyEvent *keyEvent)
+void ProjectScopeView::keyReleaseEvent(QKeyEvent *keyEvent)
 {
     QGraphicsScene::keyReleaseEvent(keyEvent);
 }
 
 
-void ProgramView::on_input_connected(BaseDataBlock* output, DataBlockInput* input)
+void ProjectScopeView::on_input_connected(BaseDataBlock* output, DataBlockInput* input)
 {
     auto input_op = operator_views[input->get_parent_operator()];
     auto output_op = operator_views[output->get_parent_operator()];
@@ -157,14 +164,14 @@ void ProgramView::on_input_connected(BaseDataBlock* output, DataBlockInput* inpu
 
         if (input_view && output_view)
         {
-            auto cable = new DataCableView(this, input_view, output_view);
+            auto cable = new DataBlockCable(this, input_view, output_view);
             cable_views.insert(input_view, cable);
             addItem(cable);
         }
     }
 }
 
-void ProgramView::on_input_disconnected(BaseDataBlock* output, DataBlockInput* input)
+void ProjectScopeView::on_input_disconnected(BaseDataBlock* output, DataBlockInput* input)
 {
     auto input_op = operator_views[input->get_parent_operator()];
 

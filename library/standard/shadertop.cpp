@@ -1,6 +1,6 @@
 #include "shadertop.h"
 
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 
 #include <iostream>
 #include <QOpenGLShader>
@@ -29,12 +29,12 @@ void main()
 
 
 
-ShaderTOP::ShaderTOP(ProgramModel& model)
+ShaderTOP::ShaderTOP(ProjectModel& model)
     : ShaderTOP(model, 0, default_fragment_shader_source)
 { }
 
 
-ShaderTOP::ShaderTOP(ProgramModel& model, int num_inputs, const QString& source)
+ShaderTOP::ShaderTOP(ProjectModel& model, int num_inputs, const QString& source)
     : fragment_shader_source(source)
 {
     //set_num_inputs(num_inputs);

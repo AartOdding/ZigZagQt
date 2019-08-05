@@ -1,8 +1,9 @@
 #include "baseoperator.h"
+#include "application.h"
 
 #include "command/movecommand.h"
 #include "command/removecommand.h"
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 #include "model/datablockinput.h"
 
 #include <QPointer>
@@ -144,7 +145,7 @@ void BaseOperator::refresh_parameters()
 
 void BaseOperator::remove()
 {
-    auto model = get_main_model();
+    auto model = application::project_model();
     auto undo_stack = model->get_undo_stack();
 
     undo_stack->beginMacro("Remove Operator");
@@ -168,7 +169,7 @@ void BaseOperator::move_to(int pos_x, int pos_y)
 {
     if (position_x != pos_x || position_y != pos_y)
     {
-        get_main_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
+        application::project_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
     }
 }
 

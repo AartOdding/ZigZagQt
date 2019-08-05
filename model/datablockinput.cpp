@@ -1,7 +1,8 @@
 #include "datablockinput.h"
 
+#include "application.h"
 #include "model/basedatablock.h"
-#include "model/programmodel.h"
+#include "model/projectmodel.h"
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
 
@@ -63,7 +64,7 @@ void DataBlockInput::connect_to(BaseDataBlock* new_connection)
         }
         else
         {
-            get_main_model()->get_undo_stack()->push(new ConnectCommand(new_connection, this));
+            application::project_model()->get_undo_stack()->push(new ConnectCommand(new_connection, this));
         }
     }
 }
@@ -73,7 +74,7 @@ void DataBlockInput::disconnect()
 {
     if (connection)
     {
-        get_main_model()->get_undo_stack()->push(new DisconnectCommand(connection, this));
+        application::project_model()->get_undo_stack()->push(new DisconnectCommand(connection, this));
     }
 }
 

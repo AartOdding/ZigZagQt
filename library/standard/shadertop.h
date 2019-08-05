@@ -5,7 +5,7 @@
 
 #include <QOpenGLFunctions_3_2_Core>
 
-class ProgramModel;
+class ProjectModel;
 
 
 
@@ -16,9 +16,9 @@ class ShaderTOP : public BaseOperator,
 public:
 
 
-    ShaderTOP(ProgramModel& model);
+    ShaderTOP(ProjectModel& model);
 
-    ShaderTOP(ProgramModel& model, int num_inputs, const QString& source);
+    ShaderTOP(ProjectModel& model, int num_inputs, const QString& source);
 
     ~ShaderTOP() override;
 
