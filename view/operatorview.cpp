@@ -3,8 +3,6 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include <iostream>
-
 #include "operatorview.h"
 #include "projectscopeview.h"
 
@@ -43,6 +41,12 @@ OperatorView::OperatorView(BaseOperator& op)
 }
 
 
+ProjectScopeView* OperatorView::scope_view()
+{
+    return dynamic_cast<ProjectScopeView*>(scene());
+}
+
+
 QRectF OperatorView::boundingRect() const
 {
     return QRectF(-width / 2, -height / 2, width, height);
@@ -52,7 +56,6 @@ QRectF OperatorView::boundingRect() const
 void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     selection_rect.setVisible(isSelected());
-    selection_rect.update();
 
     painter->setRenderHint(QPainter::Antialiasing);
     auto brush = QBrush(QColor(55, 55, 55));
@@ -78,9 +81,7 @@ DataBlockConnector* OperatorView::get_view_of(const BaseDataBlock* output)
 
 void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    auto v = dynamic_cast<ProjectScopeView*>(scene());
-    v->bring_to_front(this);
-
+    scope_view()->bring_to_front(this);
     QGraphicsItem::mousePressEvent(event);
 }
 
@@ -110,37 +111,27 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     was_dragged = false;
 
+    if (event->button() == Qt::LeftButton)
+    {
+        if (!(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::ShiftModifier))
+        {
+            scope_view()->set_focus_operator(this);
+        }
+    }
+
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
 
 void OperatorView::keyPressEvent(QKeyEvent *event)
 {
-    std::cout << "op key press\n";
     event->setAccepted(false);
 }
 
 
 void OperatorView::keyReleaseEvent(QKeyEvent *event)
 {
-    std::cout << "op key rel\n";
     event->setAccepted(false);
-}
-
-
-void OperatorView::focusInEvent(QFocusEvent *event)
-{
-    if (event->reason() == Qt::MouseFocusReason)
-    {
-        auto v = dynamic_cast<ProjectScopeView*>(scene());
-        //v->
-    }
-}
-
-
-void OperatorView::focusOutEvent(QFocusEvent *event)
-{
-
 }
 
 
@@ -226,5 +217,5 @@ void OperatorView::on_outputs_modified()
 
 void OperatorView::on_parameters_modified()
 {
-    std::cout << "on_parameters_modified() called\n";
+    //std::cout << "on_parameters_modified() called\n";
 }

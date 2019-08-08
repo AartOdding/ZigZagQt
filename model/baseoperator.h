@@ -26,7 +26,6 @@ public:
 
     virtual void run() = 0;
 
-    // Cannot be const because they might have to cache the data.
     const std::vector<DataBlockInput*>& inputs();
     const std::vector<BaseDataBlock*>& outputs();
     const std::vector<BaseParameter*>& parameters();

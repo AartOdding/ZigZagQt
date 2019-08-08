@@ -10,30 +10,33 @@ class EnumParameter : public BaseParameter
 
 public:
 
-    EnumParameter(const EnumDefinition& enum_def, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    EnumParameter(const EnumDefinition& definition, const char * name,
+                  ParameterMode mode = ParameterMode::PASSTHROUGH);
 
-    EnumParameter(const EnumDefinition& enum_def, int start_value, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    EnumParameter(const EnumDefinition& definition, const char * name,
+                  int start_value, ParameterMode mode = ParameterMode::PASSTHROUGH);
 
-    EnumParameter(const EnumDefinition& enum_def, const QString& start_value, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    EnumParameter(const EnumDefinition& definition, const char * name,
+                  const char* current_index, ParameterMode mode = ParameterMode::PASSTHROUGH);
 
-    void set(int ordinal);
+    void operator=(int index);
+    void operator=(const char* current_index);
 
-    void set(const QString& name);
+    operator int() const;
+    operator const char *() const;
 
-    int get_ordinal() const;
+    const EnumDefinition * const definition;
 
-    QString get_name() const;
 
-    void operator=(int ordinal);
+public slots:
 
-    void operator=(const QString& name);
+    void set(int index);
+    void set(const char* current_index);
 
 
 private:
 
-    int ordinal = INT_MIN;
-
-    const EnumDefinition* enum_definition;
+    int current_index = 0;
 
 
 };

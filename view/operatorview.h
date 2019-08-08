@@ -15,6 +15,7 @@ class ProjectModel;
 class DataBlockConnector;
 class BaseDataBlock;
 class DataBlockInput;
+class ProjectScopeView;
 
 
 class OperatorView : public QObject,
@@ -37,6 +38,9 @@ public:
 
     BaseOperator& operator_model;
 
+    ProjectScopeView * scope_view();
+
+
 public slots:
 
     void on_operator_moved(int to_x, int to_y);
@@ -44,6 +48,7 @@ public slots:
     void on_inputs_modified();
     void on_outputs_modified();
     void on_parameters_modified();
+
 
 signals:
 
@@ -58,9 +63,6 @@ protected:
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-
-    void focusInEvent(QFocusEvent *event) override;
-    void focusOutEvent(QFocusEvent *event) override;
 
 
 private:

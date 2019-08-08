@@ -47,6 +47,10 @@ bool DataBlockCable::is_flipped() const
     return in.x() < (out.x() + flip_distance);
 }
 
+bool DataBlockCable::contains(const QPointF &point) const
+{
+    return false;
+}
 
 void DataBlockCable::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {

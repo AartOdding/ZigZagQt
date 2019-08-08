@@ -11,8 +11,6 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include <iostream>
-
 
 ProjectScopeView::ProjectScopeView(QObject *parent)
 {
@@ -43,12 +41,6 @@ void ProjectScopeView::bring_to_front(OperatorView* op)
     }
     op->setZValue(1);
 }
-
-/*
-BaseConnector * ProjectScopeView::connector_at(const QPointF& pos) const
-{
-    return dynamic_cast<BaseConnector *>(itemAt(pos, QTransform()));
-}*/
 
 
 void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
@@ -86,6 +78,30 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
         operator_views.remove(operator_ptr);
         removeItem(op_view);
         delete op_view;
+    }
+}
+
+
+
+void ProjectScopeView::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+    QGraphicsScene::mousePressEvent(mouseEvent);
+
+    if (!mouseEvent->isAccepted())
+    {
+        set_focus_operator(nullptr);
+    }
+}
+
+
+void ProjectScopeView::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+    mouseEvent->setAccepted(false);
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
+
+    if (!mouseEvent->isAccepted())
+    {
+        //if (mouseEvent->)
     }
 }
 

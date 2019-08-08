@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 
 #include "view/projectscopeview.h"
+#include "view/parametereditor.h"
 
 
 
@@ -17,6 +18,8 @@ public:
 
     void set_view(ProjectScopeView* view_model /* , ProgramScope scope */);
 
+protected:
+
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
@@ -27,6 +30,7 @@ public:
 
     void wheelEvent(QWheelEvent *event) override;
 
+    void resizeEvent(QResizeEvent *event) override;
 
 signals:
 
@@ -47,5 +51,7 @@ private:
     double zoom_limit = 0.12;
 
     ProjectScopeView* view_model;
+
+    ParameterEditor parameter_editor;
 
 };

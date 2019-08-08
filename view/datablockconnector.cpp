@@ -22,14 +22,10 @@
 
 
 DataBlockConnector::DataBlockConnector(OperatorView& parent, DataBlockInput& input, int h)
-    : QGraphicsItem(static_cast<QGraphicsItem*>(&parent)),
+    : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
       parent_view(&parent),
       data_input(&input)
 {
-    setFlag(ItemIsFocusable);
-    setAcceptDrops(true);
-    setAcceptHoverEvents(true);
-    setAcceptedMouseButtons(Qt::MouseButton::LeftButton);
     int path_height = std::min(h - 6, 25);
     bounds = QRectF(-40, -h/2, 55, h);
     clip_bounds = QRectF(-40, -h/2, 40, h);
@@ -39,14 +35,10 @@ DataBlockConnector::DataBlockConnector(OperatorView& parent, DataBlockInput& inp
 
 
 DataBlockConnector::DataBlockConnector(OperatorView& parent, BaseDataBlock& output, int h)
-    : QGraphicsItem(static_cast<QGraphicsItem*>(&parent)),
+    : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
       parent_view(&parent),
       data_output(&output)
 {
-    setFlag(ItemIsFocusable);
-    setAcceptDrops(true);
-    setAcceptHoverEvents(true);
-    setAcceptedMouseButtons(Qt::MouseButton::LeftButton);
     int path_height = std::min(h - 4, 25);
     bounds = QRectF(-15, -h/2, 55, h);
     clip_bounds = QRectF(0, -h/2, 40, h);
@@ -86,104 +78,26 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
 }
 
 
-void DataBlockConnector::focusOutEvent(QFocusEvent *event)
-{
-    if (!get_connection_surface()->is_hovering_connector())
-    {
-        conclude_connection();
-    }
-}
-
-void DataBlockConnector::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void DataBlockConnector::highlight_on_event()
 {
     highlighted = true;
     update();
 }
 
 
-void DataBlockConnector::on_connection_hover_enter(BaseConnector* originating_connection)
-{
-    if (can_connect_with(originating_connection))
-    {
-        highlighted = true;
-        update();
-    }
-}
-
-
-void DataBlockConnector::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-{
-    if (!is_making_connection())
-    {
-        highlighted = false;
-        update();
-    }
-}
-
-
-void DataBlockConnector::on_connection_hover_leave(BaseConnector* originating_connection)
+void DataBlockConnector::highlight_off_event()
 {
     highlighted = false;
     update();
 }
 
 
-
-void DataBlockConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void DataBlockConnector::connection_made_event(BaseConnector* other)
 {
-    if (!is_making_connection())
-    {
-        auto start_pos = QVector2D(event->buttonDownPos(Qt::MouseButton::LeftButton));
-        auto current_pos = QVector2D(event->pos());
-
-        if ((start_pos - current_pos).lengthSquared() > 400)
-        {
-            start_connection();
-        }
-    }
-}
-
-
-
-void DataBlockConnector::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (application::project_view_model()->is_making_connection())
-    {
-        conclude_connection();
-    }
-    else
-    {
-        start_connection();
-
-        if (!highlighted)
-        {
-            highlighted = true;
-            update();
-        }
-    }
-}
-
-
-void DataBlockConnector::on_connection_made(BaseConnector* other)
-{
-    if (highlighted)
-    {
-        highlighted = false;
-        update();
-    }
     auto o = dynamic_cast<DataBlockConnector*>(other);
 
     if (is_input() && o && o->is_output())
     {
         data_input->connect_to(o->data_output);
-    }
-}
-
-void DataBlockConnector::on_connection_abort()
-{
-    if (highlighted)
-    {
-        highlighted = false;
-        update();
     }
 }

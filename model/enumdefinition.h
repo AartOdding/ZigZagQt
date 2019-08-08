@@ -1,54 +1,71 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include <utility>
 #include <initializer_list>
 
-#include <QHash>
-#include <QString>
+#include <QObject>
 
 
-class EnumDefinition
+class EnumDefinition : public QObject
 {
+    Q_OBJECT
 
 public:
 
-    EnumDefinition(const QString& name);
+    EnumDefinition(const char* name);
 
-    EnumDefinition(const QString& name, std::initializer_list<QString> values);
-
-    EnumDefinition(const QString& name, std::initializer_list<std::pair<QString, int>> values);
+    EnumDefinition(const char* name, std::initializer_list<const char*> values);
 
 
-    bool add(const QString& name);
+    bool add(const char* value);
 
-    bool add(const QString& name, int ordinal);
+    bool insert(const char* value, int index);
 
-    bool remove(int ordinal);
 
-    bool remove(const QString& name);
+    bool remove(int index);
+
+    bool remove(const char* value);
+
+
+    bool contains(int index) const;
+
+    bool contains(const char* name) const;
+
+    int index_of(const char* name) const;
 
 
     int size() const;
 
-    bool contains(int ordinal) const;
 
-    bool contains(const QString& name) const;
+    const std::string& operator[](int index) const;
 
-    QString name_of(int ordinal) const;
+    std::vector<std::string>::const_iterator begin() const;
 
-    int ordinal_of(const QString& name) const;
+    std::vector<std::string>::const_iterator end() const;
 
 
-    QHash<int, QString>::ConstIterator begin() const;
+signals:
 
-    QHash<int, QString>::ConstIterator end() const;
+    /*
+     * When new values are inserted, or values are removed the indexes of some values change.
+     * this signal lets you know when indexes have changed. Indexes below first_invalid_index
+     * are gauranteed to still be valid.
+     */
+    void invalidated_from(int first_invalid_index);
 
 
 private:
 
-    QString enum_name;
+    std::string enum_name;
 
-    QHash<int, QString> ordinal_to_name;
-    QHash<QString, int> name_to_ordinal;
+    std::vector<std::string> enum_values;
+
+
+public:
+
+    const char * const name;
+
 
 };

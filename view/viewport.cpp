@@ -1,13 +1,12 @@
 #include "viewport.h"
 
-#include <iostream>
 
 #include <QWheelEvent>
 
 
 
 Viewport::Viewport(QWidget* parent)
-    : QGraphicsView(parent)
+    : QGraphicsView(parent), parameter_editor(this)
 {
     setDragMode(QGraphicsView::ScrollHandDrag);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -18,9 +17,14 @@ Viewport::Viewport(QWidget* parent)
 }
 
 
-void Viewport::set_view(ProjectScopeView* view_model /* , ProgramScope scope */)
+void Viewport::set_view(ProjectScopeView* view_mdl /* , ProgramScope scope */)
 {
+    view_model = view_mdl;
     setScene(view_model);
+    parameter_editor.set_scene(view_model);
+
+    //connect(view_model, &ProjectSurface::focus_operator_changed,
+           // &parameter_editor, &ParameterEditor::on_focus_operator_changed);
 }
 
 
@@ -62,7 +66,15 @@ void Viewport::wheelEvent(QWheelEvent *event)
 
 void Viewport::mousePressEvent(QMouseEvent *event)
 {
+    event->setAccepted(false);
+
     QGraphicsView::mousePressEvent(event);
+
+    if (!event->isAccepted())
+    {
+        view_model->set_focus_operator(nullptr);
+    }
+
     viewport()->setCursor(Qt::ArrowCursor);
 }
 
@@ -72,11 +84,9 @@ void Viewport::mouseMoveEvent(QMouseEvent *event)
     QGraphicsView::mouseMoveEvent(event);
     viewport()->setCursor(Qt::ArrowCursor);
 
-    auto surface = qobject_cast<ProjectSurface*>(scene());
-
-    if (surface && surface->is_making_connection())
+    if (view_model && view_model->is_making_connection())
     {
-        surface->mouse_movement(mapToScene(event->pos()));
+        view_model->mouse_movement(mapToScene(event->pos()));
     }
 }
 
@@ -115,6 +125,10 @@ void Viewport::keyPressEvent(QKeyEvent *event)
             current_zoom = 1;
             centerOn(0, 0);  // TODO: center on avarage operator position;
         }
+        else if (event->key() == Qt::Key_P)
+        {
+            parameter_editor.setVisible(!parameter_editor.isVisible());
+        }
     }
 }
 
@@ -122,10 +136,11 @@ void Viewport::keyPressEvent(QKeyEvent *event)
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {
     QGraphicsView::keyReleaseEvent(event);
+}
 
-    if (!event->isAccepted())
-    {
 
-        std::cout << "view key rel\n";
-    }
+void Viewport::resizeEvent(QResizeEvent *event)
+{
+    parameter_editor.setGeometry(width() - 401, 1, 400, 400);
+    QGraphicsView::resizeEvent(event);
 }

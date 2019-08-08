@@ -1,13 +1,13 @@
 #include "integerparameter.h"
 
 
-IntegerParameter::IntegerParameter(ParameterMode mode)
-    : BaseParameter("integer", mode)
+IntegerParameter::IntegerParameter(const char * name, ParameterMode mode)
+    : BaseParameter(ParameterType::INT, name, mode)
 { }
 
 
-IntegerParameter::IntegerParameter(int initial_value, ParameterMode mode)
-    : BaseParameter("integer", mode)
+IntegerParameter::IntegerParameter(const char * name, int initial_value, ParameterMode mode)
+    : BaseParameter(ParameterType::INT, name, mode)
 {
     set(initial_value);
 }

@@ -3,7 +3,9 @@
 
 #include <QGraphicsScene>
 
+class BaseOperator;
 class BaseConnector;
+class OperatorView;
 
 
 
@@ -28,6 +30,17 @@ public:
 
     bool is_hovering_connector() const;
 
+
+public slots:
+
+    void set_focus_operator(OperatorView* op);
+
+
+signals:
+
+    void focus_operator_changed(BaseOperator* op);
+
+
 private:
 
     friend class BaseConnector;
@@ -35,6 +48,6 @@ private:
     BaseConnector * connection_starter = nullptr;
     BaseConnector * connection_hover = nullptr;
 
-
+    OperatorView * focus_operator = nullptr;
 
 };

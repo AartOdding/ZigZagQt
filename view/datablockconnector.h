@@ -9,8 +9,7 @@ class DataBlockInput;
 class BaseDataBlock;
 
 
-class DataBlockConnector : public QGraphicsItem,
-                           public BaseConnector
+class DataBlockConnector : public BaseConnector
 {
 
 public:
@@ -35,21 +34,10 @@ public:
 
 protected:
 
-    void focusInEvent(QFocusEvent *event) override { }
-    void focusOutEvent(QFocusEvent *event) override;
+    void highlight_on_event() override;
+    void highlight_off_event() override;
 
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
-
-    void on_connection_hover_enter(BaseConnector* originating_connection) override;
-    void on_connection_hover_leave(BaseConnector* originating_connection) override;
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override { }
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void on_connection_abort() override;
-    void on_connection_made(BaseConnector* other) override;
+    void connection_made_event(BaseConnector* other) override;
 
 
 private:
@@ -60,8 +48,8 @@ private:
     QRectF bounds;
     QRectF clip_bounds;
 
-    bool highlighted = false;
-
     QPainterPath path;
+
+    bool highlighted = false;
 
 };

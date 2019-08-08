@@ -12,6 +12,12 @@ enum class ParameterMode
 };
 
 
+enum class ParameterType
+{
+    INT,
+    FLOAT,
+    ENUM
+};
 
 
 class BaseParameter : public QObject
@@ -20,11 +26,16 @@ class BaseParameter : public QObject
 
 public:
 
-    BaseParameter(const char * parameter_type, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    BaseParameter(ParameterType type, const char * name, ParameterMode mode = ParameterMode::PASSTHROUGH);
 
-    ParameterMode get_mode() const;
+    const char * const name;
+    const ParameterType type;
+    const ParameterMode mode;
 
-    const char * const type_name;
+
+public slots:
+
+    //virtual void input_changed();
 
 protected:
 
@@ -33,10 +44,7 @@ protected:
         emit has_changed();
     }
 
-private:
 
-
-    ParameterMode mode;
 
 signals:
 

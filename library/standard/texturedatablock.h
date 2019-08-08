@@ -15,14 +15,14 @@ const inline EnumDefinition PixelType
 {
     "PixelType",
     {
-        { "uint8_1_channel", GL_R8 },
-        { "uint8_2_channel", GL_RG8 },
-        { "uint8_3_channel", GL_RGB8 },
-        { "uint8_4_channel", GL_RGBA8 },
-        { "float_1_channel", GL_R32F },
-        { "float_2_channel", GL_RG32F },
-        { "float_3_channel", GL_RGB32F },
-        { "float_4_channel", GL_RGBA32F }
+        "uint8_1_channel",
+        "uint8_2_channel",
+        "uint8_3_channel",
+        "uint8_4_channel",
+        "float_1_channel",
+        "float_2_channel",
+        "float_3_channel",
+        "float_4_channel"
     }
 };
 
@@ -47,9 +47,9 @@ public:
     void bind_as_texture(int texture_index);
 
 
-    EnumParameter pixel_type{ PixelType, GL_RGBA8 };
-    IntegerParameter resolution_x{ 256 };
-    IntegerParameter resolution_y{ 256 };
+    EnumParameter pixel_type{ PixelType, "pixel type", "uint8_4_channel" };
+    IntegerParameter resolution_x{ "resolution x", 256 };
+    IntegerParameter resolution_y{ "resolution y", 256 };
 
     std::vector<BaseParameter*> get_parameters() override
     {

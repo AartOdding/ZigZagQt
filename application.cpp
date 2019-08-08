@@ -6,6 +6,8 @@
 
 #include "library/standard/testoperator.h"
 
+#include <QStyle>
+#include <QStyleFactory>
 #include <QSurfaceFormat>
 
 

@@ -4,6 +4,7 @@
 #include <QApplication>
 
 #include "view/viewport.h"
+#include "view/parametereditor.h"
 
 
 class Application;
@@ -12,6 +13,7 @@ class ProjectScopeView;
 class OperatorLibrary;
 class NameManager;
 
+#include <iostream>
 
 namespace application
 {

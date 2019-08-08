@@ -4,127 +4,131 @@
 
 
 
-EnumDefinition::EnumDefinition(const QString& name)
-    : enum_name(name)
+static std::string null_string;
+
+
+
+EnumDefinition::EnumDefinition(const char* n)
+    : enum_name(n), name(enum_name.c_str())
 { }
 
-EnumDefinition::EnumDefinition(const QString& name, std::initializer_list<QString> values)
-    : enum_name(name)
+
+EnumDefinition::EnumDefinition(const char* n, std::initializer_list<const char*> values)
+    : enum_name(n), name(enum_name.c_str())
 {
-    int ordinal = 0;
-    for (const auto& name : values)
+    for (const auto& value : values)
     {
-        add(name, ordinal++);
+        add(value);
     }
 }
 
-EnumDefinition::EnumDefinition(const QString& name, std::initializer_list<std::pair<QString, int>> values)
-    : enum_name(name)
+
+bool EnumDefinition::add(const char* value)
 {
-    for (const auto& v : values)
+    if (!contains(value))
     {
-        add(v.first, v.second);
+        enum_values.emplace_back(value);
+        return true;
     }
+    return false;
 }
 
-bool EnumDefinition::add(const QString& name)
+
+bool EnumDefinition::insert(const char* value, int index)
 {
-    if (!name_to_ordinal.contains(name))
+    if (!contains(value))
     {
-        for (int attempts = 0; attempts < 100; ++attempts)
+        if (index < 0)
         {
-            int ordinal = QRandomGenerator::global()->bounded(10 + 10 * size());
-            if (!ordinal_to_name.contains(ordinal))
-            {
-                name_to_ordinal.insert(name, ordinal);
-                ordinal_to_name.insert(ordinal, name);
-                return true;
-            }
+            enum_values.emplace(enum_values.begin(), value);
+            emit invalidated_from(0);
         }
-    }
-    return false;
-}
-
-bool EnumDefinition::add(const QString& name, int ordinal)
-{
-    if (!name_to_ordinal.contains(name) && !ordinal_to_name.contains(ordinal))
-    {
-        name_to_ordinal.insert(name, ordinal);
-        ordinal_to_name.insert(ordinal, name);
+        else if (index >= size())
+        {
+            enum_values.emplace_back(value);
+        }
+        else
+        {
+            enum_values.emplace(enum_values.begin() + index, value);
+            emit invalidated_from(index);
+        }
         return true;
     }
     return false;
 }
 
-bool EnumDefinition::remove(int ordinal)
+
+bool EnumDefinition::remove(int index)
 {
-    if (ordinal_to_name.contains(ordinal))
+    if (contains(index))
     {
-        QString name = ordinal_to_name.value(ordinal);
-        name_to_ordinal.remove(name);
-        ordinal_to_name.remove(ordinal);
+        enum_values.erase(enum_values.begin() + index);
+        emit invalidated_from(index);
         return true;
     }
     return false;
 }
 
-bool EnumDefinition::remove(const QString& name)
+
+bool EnumDefinition::remove(const char* value)
 {
-    if (name_to_ordinal.contains(name))
-    {
-        int ordinal = name_to_ordinal.value(name);
-        name_to_ordinal.remove(name);
-        ordinal_to_name.remove(ordinal);
-        return true;
-    }
-    return false;
+    return remove(index_of(value));
 }
+
+
+bool EnumDefinition::contains(int index) const
+{
+    return index >= 0 && index < size();
+}
+
+
+bool EnumDefinition::contains(const char* value) const
+{
+    return std::find(enum_values.begin(), enum_values.end(), value) != enum_values.end();
+}
+
+
+int EnumDefinition::index_of(const char* name) const
+{
+    auto pos = std::find(enum_values.begin(), enum_values.end(), name);
+
+    if (pos != enum_values.end())
+    {
+        return pos - enum_values.begin();
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 
 int EnumDefinition::size() const
 {
-    return ordinal_to_name.size();
+    return enum_values.size();
 }
 
-bool EnumDefinition::contains(int ordinal) const
-{
-    return ordinal_to_name.contains(ordinal);
-}
 
-bool EnumDefinition::contains(const QString& name) const
+const std::string& EnumDefinition::operator[](int index) const
 {
-    return name_to_ordinal.contains(name);
-}
-
-QString EnumDefinition::name_of(int ordinal) const
-{
-    if (ordinal_to_name.contains(ordinal))
+    if (contains(index))
     {
-        return ordinal_to_name.value(ordinal);
+        return enum_values[index];
     }
     else
     {
-        return QString();
+        return null_string;
     }
 }
 
-int EnumDefinition::ordinal_of(const QString& name) const
+
+std::vector<std::string>::const_iterator EnumDefinition::begin() const
 {
-    if (name_to_ordinal.contains(name))
-    {
-        return name_to_ordinal.value(name);
-    }
-    else
-    {
-        return INT_MIN;
-    }
+    return enum_values.cbegin();
 }
 
-QHash<int, QString>::ConstIterator EnumDefinition::begin() const
-{
-    return ordinal_to_name.begin();
-}
 
-QHash<int, QString>::ConstIterator EnumDefinition::end() const
+std::vector<std::string>::const_iterator EnumDefinition::end() const
 {
-    return ordinal_to_name.end();
+    return enum_values.cend();
 }

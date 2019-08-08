@@ -45,6 +45,8 @@ SOURCES += \
         view/datablockconnector.cpp \
         view/operatornametag.cpp \
         view/operatorview.cpp \
+        view/parameterconnector.cpp \
+        view/parametereditor.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
         view/projectviewmodel.cpp \
@@ -80,6 +82,8 @@ HEADERS += \
         view/datablockconnector.h \
         view/operatornametag.h \
         view/operatorview.h \
+        view/parameterconnector.h \
+        view/parametereditor.h \
         view/projectscopeview.h \
         view/projectsurface.h \
         view/projectviewmodel.h \

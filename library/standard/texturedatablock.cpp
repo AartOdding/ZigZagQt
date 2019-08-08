@@ -23,7 +23,7 @@ void TextureDataBlock::acquire_resources()
 {
     glGenTextures(1, &texture_handle);
     glBindTexture(GL_TEXTURE_2D, texture_handle);
-    glTexImage2D(GL_TEXTURE_2D, 0, pixel_type.get_ordinal(), resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -70,6 +70,6 @@ void TextureDataBlock::reallocate_texture()
     if (currently_allocated)
     {
         glBindTexture(GL_TEXTURE_2D, texture_handle);
-        glTexImage2D(GL_TEXTURE_2D, 0, pixel_type.get_ordinal(), resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     }
 }

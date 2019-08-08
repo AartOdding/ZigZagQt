@@ -2,67 +2,77 @@
 
 
 
-EnumParameter::EnumParameter(const EnumDefinition& enum_def, ParameterMode mode)
-    : BaseParameter("enumeration", mode), enum_definition(&enum_def)
+EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, ParameterMode mode)
+    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
 {
 
 }
 
 
-EnumParameter::EnumParameter(const EnumDefinition& enum_def, int start_value, ParameterMode mode)
-    : BaseParameter("enumeration", mode), enum_definition(&enum_def)
+EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, int start_index, ParameterMode mode)
+    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
 {
-    if (enum_definition->contains(start_value))
+    if (definition->contains(start_index))
     {
-        ordinal = start_value;
-    }
-}
-
-EnumParameter::EnumParameter(const EnumDefinition& enum_def, const QString& start_value, ParameterMode mode)
-    : BaseParameter("enumeration", mode), enum_definition(&enum_def)
-{
-    if (enum_definition->contains(start_value))
-    {
-        ordinal = enum_definition->ordinal_of(start_value);
+        current_index = start_index;
     }
 }
 
 
-void EnumParameter::set(int new_ordinal)
+EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, const char * start_value, ParameterMode mode)
+    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
 {
-    if (enum_definition && enum_definition->contains(new_ordinal))
+    auto index = definition->index_of(start_value);
+
+    if (index != -1)
     {
-        ordinal = new_ordinal;
+        current_index = index;
+    }
+}
+
+
+void EnumParameter::set(int new_index)
+{
+    if (definition->contains(new_index))
+    {
+        current_index = new_index;
         propagate_changes();
     }
 }
 
-void EnumParameter::set(const QString& name)
+
+void EnumParameter::set(const char* new_value)
 {
-    if (enum_definition && enum_definition->contains(name))
+    auto index = definition->index_of(new_value);
+
+    if (index != -1)
     {
-        ordinal = enum_definition->ordinal_of(name);
+        current_index = index;
         propagate_changes();
     }
 }
 
-int EnumParameter::get_ordinal() const
+
+EnumParameter::operator int() const
 {
-    return ordinal;
+    return current_index;
 }
 
-QString EnumParameter::get_name() const
+
+EnumParameter::operator const char *() const
 {
-    return enum_definition->name_of(ordinal);
+    return definition->operator[](current_index).c_str();
 }
 
-void EnumParameter::operator=(int new_ordinal)
+
+void EnumParameter::operator=(int new_index)
 {
-    set(new_ordinal);
+    set(new_index);
 }
 
-void EnumParameter::operator=(const QString& name)
+
+void EnumParameter::operator=(const char * new_value)
 {
-    set(name);
+    set(new_value);
 }
 

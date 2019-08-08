@@ -3,7 +3,10 @@
 #include "model/baseoperator.h"
 
 #include "testdatablock.h"
+#include "texturedatablock.h"
 #include "model/datablockinput.h"
+#include "model/parameter/integerparameter.h"
+#include "model/parameter/enumparameter.h"
 
 
 // Implementation in testoperator.cpp
@@ -40,7 +43,7 @@ public:
     std::vector<BaseParameter*> provide_parameters()
     {
         std::cout << "TestOperator - get_parameters\n";
-        return { };
+        return { &par1, &par2, &par3 };
     }
 
     void acquire_resources()
@@ -55,6 +58,10 @@ public:
     }
 
 private:
+
+    IntegerParameter par1 { "parameter 1", -334 };
+    IntegerParameter par2 { "another paramenter", 43551 };
+    EnumParameter    par3 { PixelType, "pixel type", 2 };
 
     DataBlockInput input1{ "test" };
     DataBlockInput input2{ "test" };

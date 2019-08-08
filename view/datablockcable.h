@@ -26,6 +26,8 @@ public:
 
     bool is_flipped() const;
 
+    virtual bool contains(const QPointF &point) const override;
+
 
 public slots:
 

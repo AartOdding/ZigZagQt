@@ -16,7 +16,6 @@ class DataBlockCable;
 
 
 
-
 class ProjectScopeView : public ProjectSurface
 {
     Q_OBJECT
@@ -44,10 +43,11 @@ public slots:
 
 protected:
 
+    void mousePressEvent(QGraphicsSceneMouseEvent  *mouseEvent) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent  *mouseEvent) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
 
     void keyPressEvent(QKeyEvent *keyEvent) override;
-
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
 
 
