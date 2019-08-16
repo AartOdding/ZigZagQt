@@ -2,12 +2,12 @@
 
 
 IntegerParameter::IntegerParameter(const char * name, ParameterMode mode)
-    : BaseParameter(ParameterType::INT, name, mode)
+    : BaseParameter(ParameterType::Int, name, mode)
 { }
 
 
 IntegerParameter::IntegerParameter(const char * name, int initial_value, ParameterMode mode)
-    : BaseParameter(ParameterType::INT, name, mode)
+    : BaseParameter(ParameterType::Int, name, mode)
 {
     set(initial_value);
 }

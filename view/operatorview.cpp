@@ -11,11 +11,11 @@
 #include "model/basedatablock.h"
 #include "model/datablockinput.h"
 #include "view/datablockconnector.h"
-
+#include "library/standard/texturedatablock.h"
 
 
 OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag("Test operator number x", this)
+    : operator_model(op), name_tag("Test operator number x", this), data_view( static_cast<TextureDataBlock*>(operator_model.outputs()[0]), this)
 {
     setZValue(1);
     setPos(op.get_position_x(), op.get_position_y());
@@ -32,9 +32,14 @@ OperatorView::OperatorView(BaseOperator& op)
     connect(&operator_model, &BaseOperator::outputs_modified, this, &OperatorView::on_outputs_modified);
     connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
 
-    name_tag.setPos(-width / 2, -height / 2 - 33);
+    auto h_width = width / 2.0;
+    auto h_height = height / 2.0;
+
+    name_tag.setPos(-h_width, -h_height - 33);
+    data_view.set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
+
     selection_rect.setRect(0, 0, width + 50, height + 46);
-    selection_rect.setPos(- width / 2 - 25, -height / 2 - 35);
+    selection_rect.setPos(- h_width - 25, -h_height - 35);
     selection_rect.setPen(QPen(QBrush(QColor(51, 153, 255)), 2));
     selection_rect.setBrush(QColor(51, 153, 255, 30));
     selection_rect.setFlag(QGraphicsItem::ItemStacksBehindParent);

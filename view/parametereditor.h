@@ -26,8 +26,10 @@ public:
 
 protected:
 
-    void mouseMoveEvent(QMouseEvent * event);
-    void mousePressEvent(QMouseEvent * event);
+    void mouseMoveEvent(QMouseEvent * event) override;
+    void mousePressEvent(QMouseEvent * event) override;
+    void mouseReleaseEvent(QMouseEvent * event) override;
+
 
 private:
 
@@ -46,7 +48,7 @@ class ParameterEditor : public QWidget
 
 public:
 
-    ParameterEditor(QWidget *parent = nullptr);
+    ParameterEditor(QOpenGLWidget* gl);
 
     QSize sizeHint() const override { return QSize(400, 500); }
 
@@ -73,6 +75,7 @@ private:
     QGraphicsScene* scene = nullptr;
     OperatorView* focus_op = nullptr;
     QFormLayout * form_layout = nullptr;
+
     QSizeGrip size_grip;
 
     ParameterEditorHeader header;

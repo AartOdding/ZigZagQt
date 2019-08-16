@@ -30,6 +30,8 @@ SOURCES += \
         library/standard/testdatablock.cpp \
         library/standard/testoperator.cpp \
         library/standard/texturedatablock.cpp \
+        library/standard/texturedataview.cpp \
+        model/librarymodel.cpp \
         model/parameter/baseparameter.cpp \
         model/parameter/enumparameter.cpp \
         model/parameter/integerparameter.cpp \
@@ -37,12 +39,13 @@ SOURCES += \
         model/baseoperator.cpp \
         model/datablockinput.cpp \
         model/enumdefinition.cpp \
-        model/operatorlibrary.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         view/baseconnector.cpp \
+        view/basedataview.cpp \
         view/datablockcable.cpp \
         view/datablockconnector.cpp \
+        view/opengldataview.cpp \
         view/operatornametag.cpp \
         view/operatorview.cpp \
         view/parameterconnector.cpp \
@@ -66,6 +69,8 @@ HEADERS += \
         library/standard/testdatablock.h \
         library/standard/testoperator.h \
         library/standard/texturedatablock.h \
+        library/standard/texturedataview.h \
+        model/librarymodel.h \
         model/parameter/baseparameter.h \
         model/parameter/enumparameter.h \
         model/parameter/integerparameter.h \
@@ -74,12 +79,13 @@ HEADERS += \
         model/datablockinput.h \
         model/enumdefinition.h \
         model/namemanager.h \
-        model/operatorlibrary.h \
         model/projectmodel.h \
         model/projectscope.h \
         view/baseconnector.h \
+        view/basedataview.h \
         view/datablockcable.h \
         view/datablockconnector.h \
+        view/opengldataview.h \
         view/operatornametag.h \
         view/operatorview.h \
         view/parameterconnector.h \

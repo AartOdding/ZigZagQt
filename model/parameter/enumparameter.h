@@ -11,13 +11,13 @@ class EnumParameter : public BaseParameter
 public:
 
     EnumParameter(const EnumDefinition& definition, const char * name,
-                  ParameterMode mode = ParameterMode::PASSTHROUGH);
+                  ParameterMode mode = ParameterMode::Passthrough);
 
     EnumParameter(const EnumDefinition& definition, const char * name,
-                  int start_value, ParameterMode mode = ParameterMode::PASSTHROUGH);
+                  int start_value, ParameterMode mode = ParameterMode::Passthrough);
 
     EnumParameter(const EnumDefinition& definition, const char * name,
-                  const char* current_index, ParameterMode mode = ParameterMode::PASSTHROUGH);
+                  const char* current_index, ParameterMode mode = ParameterMode::Passthrough);
 
     void operator=(int index);
     void operator=(const char* current_index);

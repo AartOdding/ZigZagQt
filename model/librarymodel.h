@@ -9,13 +9,13 @@
 
 
 
-class OperatorLibrary
+class LibraryModel
 {
 
 public:
 
 
-    OperatorLibrary();
+    LibraryModel();
 
     /*
      * create_function can either be a static member function, a free function,

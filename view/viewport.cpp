@@ -5,13 +5,16 @@
 
 
 
-Viewport::Viewport(QWidget* parent)
-    : QGraphicsView(parent), parameter_editor(this)
+Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
+    : QGraphicsView(parent), parameter_editor(gl)
 {
+    //setViewport(&gl_widget);
     setDragMode(QGraphicsView::ScrollHandDrag);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeAnchor(QGraphicsView::AnchorViewCenter);
+    setViewport(gl);
+    setRenderHint(QPainter::Antialiasing);
 
     viewport()->setCursor(Qt::ArrowCursor);
 }
@@ -138,9 +141,11 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
     QGraphicsView::keyReleaseEvent(event);
 }
 
+#include <iostream>
 
 void Viewport::resizeEvent(QResizeEvent *event)
 {
+    std::cout << width() << "\n";
     parameter_editor.setGeometry(width() - 401, 1, 400, 400);
     QGraphicsView::resizeEvent(event);
 }

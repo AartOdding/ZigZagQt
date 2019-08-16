@@ -1,11 +1,23 @@
-#ifndef OPENGLDATAVIEW_H
-#define OPENGLDATAVIEW_H
+#pragma once
 
 
-class OpenGLDataView : public BaseDataView
+#include <QOpenGLFunctions_3_2_Core>
+
+#include "basedataview.h"
+
+
+class OpenGLDataView : public BaseDataView,
+                       public QOpenGLFunctions_3_2_Core
 {
+
 public:
-    OpenGLDataView();
+
+    OpenGLDataView(OperatorView& parent_op);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    virtual void paint_opengl(int res_x, int res_y) = 0;
+
+
 };
 
-#endif // OPENGLDATAVIEW_H

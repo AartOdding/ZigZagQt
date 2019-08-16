@@ -10,9 +10,9 @@ class IntegerParameter : public BaseParameter
 
 public:
 
-    IntegerParameter(const char * name, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    IntegerParameter(const char * name, ParameterMode mode = ParameterMode::Passthrough);
 
-    IntegerParameter(const char * name, int initial_value, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    IntegerParameter(const char * name, int initial_value, ParameterMode mode = ParameterMode::Passthrough);
 
 
     int get() const;

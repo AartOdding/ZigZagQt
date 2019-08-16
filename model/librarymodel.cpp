@@ -1,6 +1,6 @@
-#include "operatorlibrary.h"
+#include "librarymodel.h"
 
-OperatorLibrary::OperatorLibrary()
+LibraryModel::LibraryModel()
 {
 
 }
@@ -8,7 +8,7 @@ OperatorLibrary::OperatorLibrary()
 
 
 
-void OperatorLibrary::add_operator_type(const std::string& operator_type, std::function<BaseOperator*()> create_function)
+void LibraryModel::add_operator_type(const std::string& operator_type, std::function<BaseOperator*()> create_function)
 {
     if (creation_functions.count(operator_type) == 0)
     {
@@ -19,7 +19,7 @@ void OperatorLibrary::add_operator_type(const std::string& operator_type, std::f
 
 
 
-BaseOperator* OperatorLibrary::create_operator(const std::string& operator_type)
+BaseOperator* LibraryModel::create_operator(const std::string& operator_type)
 {
     if (creation_functions.count(operator_type) == 1)
     {
@@ -32,7 +32,7 @@ BaseOperator* OperatorLibrary::create_operator(const std::string& operator_type)
 }
 
 
-bool OperatorLibrary::contains_operator_type(const std::string& operator_type)
+bool LibraryModel::contains_operator_type(const std::string& operator_type)
 {
     return creation_functions.count(operator_type) == 1;
 }

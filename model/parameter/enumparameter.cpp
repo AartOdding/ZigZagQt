@@ -3,14 +3,14 @@
 
 
 EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, ParameterMode mode)
-    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
+    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
 {
 
 }
 
 
 EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, int start_index, ParameterMode mode)
-    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
+    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
 {
     if (definition->contains(start_index))
     {
@@ -20,7 +20,7 @@ EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, int st
 
 
 EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, const char * start_value, ParameterMode mode)
-    : BaseParameter(ParameterType::ENUM, name, mode), definition(&def)
+    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
 {
     auto index = definition->index_of(start_value);
 

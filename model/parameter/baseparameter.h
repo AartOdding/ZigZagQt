@@ -6,17 +6,17 @@
 
 enum class ParameterMode
 {
-    PASSTHROUGH, // Default: Parameter can be used as input and output.
-    INPUT,
-    OUTPUT
+    Passthrough, // Default: Parameter can be used as input and output.
+    Input,
+    Output
 };
 
 
 enum class ParameterType
 {
-    INT,
-    FLOAT,
-    ENUM
+    Int,
+    Float,
+    Enum
 };
 
 
@@ -26,7 +26,7 @@ class BaseParameter : public QObject
 
 public:
 
-    BaseParameter(ParameterType type, const char * name, ParameterMode mode = ParameterMode::PASSTHROUGH);
+    BaseParameter(ParameterType type, const char * name, ParameterMode mode = ParameterMode::Passthrough);
 
     const char * const name;
     const ParameterType type;

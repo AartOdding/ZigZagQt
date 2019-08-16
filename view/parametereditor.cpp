@@ -14,7 +14,7 @@
 #include <QMouseEvent>
 #include <QGraphicsScene>
 #include <QGuiApplication>
-
+#include <QOpenGLWidget>
 
 #include <iostream>
 
@@ -32,6 +32,7 @@ ParameterEditorHeader::ParameterEditorHeader(ParameterEditor& e)
 
 void ParameterEditorHeader::mouseMoveEvent(QMouseEvent * event)
 {
+    event->accept();
     auto viewport = static_cast<QWidget*>(editor.parent());
     auto y = mapTo(viewport, event->pos()).y();
     auto top = y - offset_y;
@@ -45,8 +46,15 @@ void ParameterEditorHeader::mouseMoveEvent(QMouseEvent * event)
 }
 
 
+
+void ParameterEditorHeader::mouseReleaseEvent(QMouseEvent * event)
+{
+    event->accept();
+}
+
 void ParameterEditorHeader::mousePressEvent(QMouseEvent * event)
 {
+    event->accept();
     start_y = mapTo(static_cast<QWidget*>(editor.parent()), event->pos()).y();
     offset_y = event->y();
 }
@@ -54,8 +62,8 @@ void ParameterEditorHeader::mousePressEvent(QMouseEvent * event)
 
 
 
-ParameterEditor::ParameterEditor(QWidget *parent)
-    : QWidget(parent), form_layout(new QFormLayout()), size_grip(this), header(*this)
+ParameterEditor::ParameterEditor(QOpenGLWidget* gl)
+    : QWidget(gl), form_layout(new QFormLayout()), size_grip(this), header(*this)
 {
     form_layout->setContentsMargins(7, 35, 7, 10);
     size_grip.setGeometry(0, height() - 10, 10, 10);
@@ -136,7 +144,7 @@ void ParameterEditor::build_up_ui()
     {
         QLabel* label = new QLabel(p->name);
 
-        if (p->type == ParameterType::INT)
+        if (p->type == ParameterType::Int)
         {
             auto par = qobject_cast<IntegerParameter*>(p);
             QSpinBox* spinbox = new QSpinBox(this);
@@ -145,7 +153,7 @@ void ParameterEditor::build_up_ui()
             connect(spinbox, qOverload<int>(&QSpinBox::valueChanged), par, &IntegerParameter::set);
             form_layout->addRow(label, spinbox);
         }
-        else if (p->type == ParameterType::ENUM)
+        else if (p->type == ParameterType::Enum)
         {
             auto par = qobject_cast<EnumParameter*>(p);
             QComboBox * combo_box = new QComboBox(this);

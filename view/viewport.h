@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QGraphicsView>
+#include <QOpenGLWidget>
 
 #include "view/projectscopeview.h"
 #include "view/parametereditor.h"
@@ -14,7 +15,7 @@ class Viewport : public QGraphicsView
 
 public:
 
-    Viewport(QWidget* parent = nullptr);
+    Viewport(QOpenGLWidget* gl, QWidget* parent = nullptr);
 
     void set_view(ProjectScopeView* view_model /* , ProgramScope scope */);
 
@@ -53,5 +54,7 @@ private:
     ProjectScopeView* view_model;
 
     ParameterEditor parameter_editor;
+
+    //QOpenGLWidget gl_widget;
 
 };

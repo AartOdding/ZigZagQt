@@ -1,7 +1,7 @@
 #include "application.h"
 
 #include "model/projectmodel.h"
-#include "model/operatorlibrary.h"
+#include "model/librarymodel.h"
 #include "view/projectscopeview.h"
 
 #include "library/standard/testoperator.h"
@@ -10,6 +10,7 @@
 #include <QStyleFactory>
 #include <QSurfaceFormat>
 
+#include <QBoxLayout>
 
 
 namespace application
@@ -29,9 +30,9 @@ namespace application
         return instance()->get_project_model();
     }
 
-    OperatorLibrary * operator_library()
+    LibraryModel * library_model()
     {
-        return instance()->get_operator_library();
+        return instance()->get_library_model();
     }
 
     ProjectScopeView * project_view_model()
@@ -41,28 +42,41 @@ namespace application
 }
 
 
+
 Application::Application(int &argc, char **argv)
     : QApplication (argc, argv)
 {
-    QSurfaceFormat format;
-    format.setDepthBufferSize(24);
-    format.setStencilBufferSize(8);
-    format.setVersion(4, 5);
-    format.setProfile(QSurfaceFormat::CoreProfile);
-    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    format.setSwapInterval(1);
-    QSurfaceFormat::setDefaultFormat(format);
+    library_model = std::make_unique<LibraryModel>();
+    library_model->add_operator_type("test", &create_test_operator);
 
-    operator_library = std::make_unique<OperatorLibrary>();
-    operator_library->add_operator_type("test", &create_test_operator);
-
-    project_model = std::make_unique<ProjectModel>(*operator_library);
+    project_model = std::make_unique<ProjectModel>(*library_model);
 
     project_view_model = std::make_unique<ProjectScopeView>();
     project_view_model->set_model(project_model.get());
 
-    viewport.set_view(project_view_model.get());
-    viewport.show();
+    //gl_widget = ;
+    //gl_widget->setGeometry(100, 100, 1000, 720);
+    //viewport.setParent(&gl_widget);
+    //auto gl = new QOpenGLWidget();
+
+    viewport = std::make_unique<Viewport>(new QOpenGLWidget());
+    //viewport->
+
+    viewport->set_view(project_view_model.get());
+
+    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
+    main_window = std::make_unique<QWidget>();
+    main_window->setLayout(layout);
+
+    //layout->setMenuBar();
+    //viewport->show();
+    //gl_widget.show();
+
+    //std::cout << gl->width() << "\n";
+    QWidget q;
+    QBoxLayout l(QBoxLayout::TopToBottom);
+    //.setM
+
 }
 
 
@@ -78,9 +92,9 @@ ProjectModel * Application::get_project_model()
 }
 
 
-OperatorLibrary * Application::get_operator_library()
+LibraryModel * Application::get_library_model()
 {
-    return operator_library.get();
+    return library_model.get();
 }
 
 

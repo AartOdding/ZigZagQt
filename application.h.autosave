@@ -13,8 +13,6 @@ class ProjectScopeView;
 class LibraryModel;
 class NameManager;
 
-class QMainWindow;
-
 
 namespace application
 {

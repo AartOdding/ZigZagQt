@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/operatorlibrary.h"
+#include "model/librarymodel.h"
 
 
 class ProjectModel;
@@ -21,7 +21,7 @@ class ProjectModel : public QObject
 
 public:
 
-    ProjectModel(OperatorLibrary& operator_library);
+    ProjectModel(LibraryModel& operator_library);
 
     QUndoStack* get_undo_stack();
 
@@ -64,7 +64,7 @@ private:
 
     QUndoStack undo_stack;
 
-    OperatorLibrary& operator_library;
+    LibraryModel& operator_library;
     QMap<qint64, BaseOperator*> operators;
 
 

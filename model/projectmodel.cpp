@@ -18,7 +18,7 @@
 
 
 
-ProjectModel::ProjectModel(OperatorLibrary& library)
+ProjectModel::ProjectModel(LibraryModel& library)
     : operator_library(library)
 { }
 
