@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QSizeGrip>
+#include <QOpenGLWidget>
 
 
 class BaseParameter;

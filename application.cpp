@@ -11,6 +11,8 @@
 #include <QSurfaceFormat>
 
 #include <QBoxLayout>
+#include <QMenuBar>
+#include <QMenu>
 
 
 namespace application
@@ -63,6 +65,30 @@ Application::Application(int &argc, char **argv)
     //viewport->
 
     viewport->set_view(project_view_model.get());
+
+
+    QMenuBar* menu_bar = new QMenuBar(nullptr);
+
+    QMenu* file_menu = new QMenu("File");
+    QMenu* edit_menu = new QMenu("Edit");
+    QMenu* view_menu = new QMenu("View");
+
+    file_menu->addAction("Save");
+    file_menu->addAction("Save As");
+
+    edit_menu->addAction("Cut");
+    edit_menu->addAction("Copy");
+    edit_menu->addAction("Paste");
+
+    view_menu->addAction("Recentre");
+    view_menu->addAction("Zoom In");
+    view_menu->addAction("Zoom Out");
+
+    menu_bar->addAction(file_menu->menuAction());
+    menu_bar->addAction(edit_menu->menuAction());
+    menu_bar->addAction(view_menu->menuAction());
+
+    viewport->show();
 
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
     main_window = std::make_unique<QWidget>();
