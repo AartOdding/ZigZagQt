@@ -3,6 +3,9 @@
 
 #include <QWheelEvent>
 
+#include <iostream>
+
+#include "operatorselectordialog.h"
 
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
@@ -64,6 +67,14 @@ void Viewport::wheelEvent(QWheelEvent *event)
     {
         zoom_out();
     }
+}
+
+
+void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseDoubleClickEvent(event);
+    auto dialog = new OperatorSelectorDialog{ this };
+    dialog->show();
 }
 
 
@@ -141,7 +152,6 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
     QGraphicsView::keyReleaseEvent(event);
 }
 
-#include <iostream>
 
 void Viewport::resizeEvent(QResizeEvent *event)
 {

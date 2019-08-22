@@ -2,9 +2,9 @@
 
 #include "model/baseoperator.h"
 
-#include "testdatablock.h"
-#include "texturedatablock.h"
-#include "model/datablockinput.h"
+#include "testdata.h"
+#include "texturedata.h"
+#include "model/datainput.h"
 #include "model/parameter/integerparameter.h"
 #include "model/parameter/enumparameter.h"
 
@@ -13,37 +13,27 @@
 BaseOperator * create_test_operator();
 
 
+
 class TestOperator : public BaseOperator
 {
 
 public:
 
+
+
+    static const inline OperatorTypeInfo Type { "Test Operator", create_test_operator };
+
     TestOperator()
+        : BaseOperator(Type)
     {
         std::cout << "TestOperator - constructor\n";
+        resolution_x.set_update_mode(BaseParameter::UpdateMode::NecessaryUpdates);
+        resolution_y.set_update_mode(BaseParameter::UpdateMode::NecessaryUpdates);
     }
 
     void run()
     {
         std::cout << "TestOperator - run\n";
-    }
-
-    std::vector<DataBlockInput*> provide_inputs()
-    {
-        std::cout << "TestOperator - get_inputs\n";
-        return { &input1, &input2, &input3, &input4, &input5, &input6, &input7, &input8, &input9 };
-    }
-
-    std::vector<BaseDataBlock*> provide_outputs()
-    {
-        std::cout << "TestOperator - get_outputs\n";
-        return { &output1, &output2 };
-    }
-
-    std::vector<BaseParameter*> provide_parameters()
-    {
-        std::cout << "TestOperator - get_parameters\n";
-        return { &par1, &par2, &par3 };
     }
 
     void acquire_resources()
@@ -59,21 +49,29 @@ public:
 
 private:
 
-    IntegerParameter par1 { "parameter 1", -334 };
-    IntegerParameter par2 { "another paramenter", 43551 };
-    EnumParameter    par3 { PixelType, "pixel type", 2 };
+    EnumParameter pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
+    EnumParameter pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
+    EnumParameter pixel_normalized{ this, PixelIsNormalized, "Pixel is Normalized", 1 };
+    IntegerParameter resolution_x{ this, "Resolution X", 600 };
+    IntegerParameter resolution_y{ this, "Resolution Y", 600 };
+    IntegerParameter resolution_z{ this, "Resolution Z", 300 };
 
-    DataBlockInput input1{ "test" };
-    DataBlockInput input2{ "test" };
-    DataBlockInput input3{ "test" };
-    DataBlockInput input4{ "test" };
-    DataBlockInput input5{ "test" };
-    DataBlockInput input6{ "test" };
-    DataBlockInput input7{ "test" };
-    DataBlockInput input8{ "test" };
-    DataBlockInput input9{ "test" };
+    //DataInput input1{ this, TestData::Type };
+    //DataInput input2{ this, TestData::Type };
+    //DataInput input3{ this, TestData::Type };
+    //DataInput input4{ this, TestData::Type };
+    //DataInput input5{ this, TestData::Type };
+    //DataInput input6{ this, TestData::Type };
+    DataInput input7{ this, TestData::Type };
+    DataInput input8{ this, TestData::Type };
+    DataInput input9{ this, TestData::Type };
+    DataInput input1{ this, TestData::Type };
+    DataInput input2{ this, TestData::Type };
+    DataInput input3{ this, TestData::Type };
 
-    TestDataBlock output1;
-    TestDataBlock output2;
+    TestData output1{ this };
+    TestData output2{ this };
+    TestData output3{ this };
+    TestData output4{ this };
 
 };

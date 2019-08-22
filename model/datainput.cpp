@@ -1,60 +1,43 @@
-#include "datablockinput.h"
+#include "datainput.h"
 
 #include "application.h"
-#include "model/basedatablock.h"
+#include "model/basedatatype.h"
+#include "model/baseoperator.h"
 #include "model/projectmodel.h"
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
 
 
-DataBlockInput::DataBlockInput(const char * data_block_type)
-    : type_name(data_block_type)
+DataInput::DataInput(BaseOperator* parent_operator_, const DataTypeInfo& type_info_)
+    : parent_operator(parent_operator_), type_info(&type_info_)
+{
+    parent_operator->register_data_input(this);
+}
+
+
+DataInput::~DataInput()
 {
 
 }
 
 
-DataBlockInput::~DataBlockInput()
+const DataTypeInfo * DataInput::type() const
 {
-
+    return type_info;
 }
 
 
-BaseOperator* DataBlockInput::get_parent_operator()
-{
-    return parent_operator;
-}
-
-
-const BaseOperator* DataBlockInput::get_parent_operator() const
-{
-    return parent_operator;
-}
-
-
-std::vector<BaseParameter*> DataBlockInput::get_parameters()
-{
-    return { };
-}
-
-
-void DataBlockInput::refresh_parameters()
-{
-    emit parameters_modified();
-}
-
-
-bool DataBlockInput::compatible_with(const BaseDataBlock* data_block) const
+bool DataInput::compatible_with(const BaseDataType* data_block) const
 {
     if (data_block)
     {
-        return strcmp(type_name, data_block->type_name) == 0;
+        return type_info->name == data_block->type()->name;
     }
     return false;
 }
 
 
-void DataBlockInput::connect_to(BaseDataBlock* new_connection)
+void DataInput::connect_to(BaseDataType* new_connection)
 {
     if (new_connection != connection)
     {
@@ -70,7 +53,7 @@ void DataBlockInput::connect_to(BaseDataBlock* new_connection)
 }
 
 
-void DataBlockInput::disconnect()
+void DataInput::disconnect()
 {
     if (connection)
     {
@@ -79,7 +62,7 @@ void DataBlockInput::disconnect()
 }
 
 
-bool DataBlockInput::set_connection(BaseDataBlock *new_connection)
+bool DataInput::set_connection(BaseDataType *new_connection)
 {
     if (new_connection == nullptr || compatible_with(new_connection))
     {
@@ -119,25 +102,19 @@ bool DataBlockInput::set_connection(BaseDataBlock *new_connection)
 }
 
 
-bool DataBlockInput::is_connected() const
+bool DataInput::is_connected() const
 {
     return static_cast<bool>(connection);
 }
 
 
-bool DataBlockInput::is_connected_to(const BaseDataBlock* data_block) const
+bool DataInput::is_connected_to(const BaseDataType* data_block) const
 {
     return connection == data_block;
 }
 
 
-void DataBlockInput::set_parent_operator(BaseOperator* op)
-{
-    parent_operator = op;
-}
-
-
-const BaseDataBlock* DataBlockInput::get_connection() const
+const BaseDataType* DataInput::get_connection() const
 {
     return connection;
 }

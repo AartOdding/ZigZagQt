@@ -1,6 +1,7 @@
-#include "basedatablock.h"
-#include "model/datablockinput.h"
+#include "basedatatype.h"
+#include "model/datainput.h"
 #include "model/projectmodel.h"
+#include "model/baseoperator.h"
 
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
@@ -9,56 +10,44 @@
 
 
 
-BaseDataBlock::BaseDataBlock(const char * data_type_name)
-    : type_name(data_type_name)
+BaseDataType::BaseDataType(BaseOperator* parent_operator_, const DataTypeInfo& type_info_)
+    : parent_operator(parent_operator_), type_info(&type_info_)
+{
+    parent_operator->register_data_output(this);
+}
+
+
+BaseDataType::~BaseDataType()
 {
 
 }
 
 
-BaseDataBlock::~BaseDataBlock()
+const DataTypeInfo * BaseDataType::type() const
 {
-
+    return type_info;
 }
 
 
-BaseOperator* BaseDataBlock::get_parent_operator()
-{
-    return parent_operator;
-}
-
-
-const BaseOperator* BaseDataBlock::get_parent_operator() const
-{
-    return parent_operator;
-}
-
-
-void BaseDataBlock::refresh_parameters()
-{
-    emit parameters_modified();
-}
-
-
-bool BaseDataBlock::is_connected() const
+bool BaseDataType::is_connected() const
 {
     return !connections.empty();
 }
 
 
-bool BaseDataBlock::is_connected_to(const DataBlockInput* data_input) const
+bool BaseDataType::is_connected_to(const DataInput* data_input) const
 {
     return std::find(connections.begin(), connections.end(), data_input) != connections.end();
 }
 
 
-std::vector<const DataBlockInput*> BaseDataBlock::get_connections() const
+const std::vector<DataInput*>& BaseDataType::get_connections() const
 {
-    return std::vector<const DataBlockInput*>(connections.begin(), connections.end());
+    return connections;
 }
 
 
-void BaseDataBlock::connect_to(DataBlockInput* data_input)
+void BaseDataType::connect_to(DataInput* data_input)
 {
     if (data_input && data_input->compatible_with(this))
     {
@@ -68,7 +57,7 @@ void BaseDataBlock::connect_to(DataBlockInput* data_input)
 
 
 // Undoable action
-void BaseDataBlock::disconnect_from(DataBlockInput* data_input)
+void BaseDataType::disconnect_from(DataInput* data_input)
 {
     if (is_connected_to(data_input))
     {
@@ -78,7 +67,7 @@ void BaseDataBlock::disconnect_from(DataBlockInput* data_input)
 
 
 // Undoable action
-void BaseDataBlock::disconnect_all()
+void BaseDataType::disconnect_all()
 {
     if (!connections.empty())
     {
@@ -94,14 +83,8 @@ void BaseDataBlock::disconnect_all()
 }
 
 
-void BaseDataBlock::set_parent_operator(BaseOperator* op)
-{
-    parent_operator = op;
-}
-
-
 // Non action version of connect_to
-bool BaseDataBlock::add_connection(DataBlockInput* data_input)
+bool BaseDataType::add_connection(DataInput* data_input)
 {
     if (data_input && data_input->compatible_with(this) && !is_connected_to(data_input))
     {
@@ -114,7 +97,7 @@ bool BaseDataBlock::add_connection(DataBlockInput* data_input)
 
 
 // Non action version of connect_to
-bool BaseDataBlock::remove_connection(DataBlockInput* data_input)
+bool BaseDataType::remove_connection(DataInput* data_input)
 {
     auto location = std::find(connections.begin(), connections.end(), data_input);
 

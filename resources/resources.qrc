@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>OxygenMono-Regular.ttf</file>
+        <file>Montserrat-Regular.ttf</file>
+        <file>OpenSans-Regular.ttf</file>
+        <file>OpenSans-SemiBold.ttf</file>
+        <file>Roboto-Regular.ttf</file>
+    </qresource>
+</RCC>

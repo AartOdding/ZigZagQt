@@ -3,10 +3,11 @@
 #include <memory>
 #include <QApplication>
 
+#include "renderer.h"
 #include "view/viewport.h"
-#include "view/parametereditor.h"
 
 
+class Renderer;
 class Application;
 class ProjectModel;
 class ProjectScopeView;
@@ -19,6 +20,7 @@ class QMainWindow;
 namespace application
 {
     Application *      instance();
+    Renderer*          renderer();
     NameManager *      name_manager();
     ProjectModel *     project_model();
     LibraryModel *     library_model();
@@ -36,6 +38,7 @@ public:
     Application(int &argc, char **argv);
 
     NameManager *      get_name_manager();
+    Renderer*          get_renderer();
     ProjectModel *     get_project_model();
     LibraryModel *     get_library_model();
     ProjectScopeView * get_project_view_model();
@@ -43,6 +46,7 @@ public:
 
 private:
 
+    std::unique_ptr<Renderer>         renderer;
     std::unique_ptr<ProjectModel>     project_model;
     std::unique_ptr<LibraryModel>     library_model;
     std::unique_ptr<ProjectScopeView> project_view_model;

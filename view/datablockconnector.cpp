@@ -1,7 +1,7 @@
 #include "datablockconnector.h"
 
-#include "model/datablockinput.h"
-#include "model/basedatablock.h"
+#include "model/datainput.h"
+#include "model/basedatatype.h"
 
 #include "view/projectscopeview.h"
 #include "view/operatorview.h"
@@ -21,7 +21,7 @@
 
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& parent, DataBlockInput& input, int h)
+DataBlockConnector::DataBlockConnector(OperatorView& parent, DataInput& input, int h)
     : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
       parent_view(&parent),
       data_input(&input)
@@ -29,12 +29,12 @@ DataBlockConnector::DataBlockConnector(OperatorView& parent, DataBlockInput& inp
     int path_height = std::min(h - 6, 25);
     bounds = QRectF(-40, -h/2, 55, h);
     clip_bounds = QRectF(-40, -h/2, 40, h);
-
+    color = input.type()->gui_color;
     path.addRoundedRect(QRectF(-15, -path_height/2, 20, path_height), 3, 3);
 }
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& parent, BaseDataBlock& output, int h)
+DataBlockConnector::DataBlockConnector(OperatorView& parent, BaseDataType& output, int h)
     : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
       parent_view(&parent),
       data_output(&output)
@@ -42,7 +42,7 @@ DataBlockConnector::DataBlockConnector(OperatorView& parent, BaseDataBlock& outp
     int path_height = std::min(h - 4, 25);
     bounds = QRectF(-15, -h/2, 55, h);
     clip_bounds = QRectF(0, -h/2, 40, h);
-
+    color = output.type()->gui_color;
     path.addRoundedRect(QRectF(-5, -path_height/2, 20, path_height), 3, 3);
 }
 
@@ -69,8 +69,8 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setClipRect(clip_bounds);
 
-    auto fill_brush = QBrush(highlighted ? QColor(205, 255, 0) : QColor(55, 55, 55));
-    auto stroke_pen = QPen(QBrush(QColor(205, 255, 0)), 2);
+    auto fill_brush = QBrush(highlighted ? color : QColor(55, 55, 55));
+    auto stroke_pen = QPen(QBrush(color), 2);
 
     painter->fillPath(path, fill_brush);
     painter->setPen(stroke_pen);
@@ -100,4 +100,10 @@ void DataBlockConnector::connection_made_event(BaseConnector* other)
     {
         data_input->connect_to(o->data_output);
     }
+}
+
+
+QColor DataBlockConnector::get_color() const
+{
+    return color;
 }

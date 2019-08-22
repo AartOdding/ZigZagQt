@@ -25,9 +25,7 @@ public:
 
     QUndoStack* get_undo_stack();
 
-    QList<BaseOperator*> get_entry_nodes();
-
-    QList<BaseOperator*> get_all_nodes();
+    const std::vector<BaseOperator*>& all_operators() const;
 
 
 public slots:
@@ -37,7 +35,7 @@ public slots:
     void undo();
 
     // Undoable action
-    void add_operator(const char* operator_class, int x, int y);
+    void add_operator(const OperatorTypeInfo& op_type, int x, int y);
 
     // Undoable action
     void remove_operator(BaseOperator* operator_ptr);
@@ -59,13 +57,15 @@ signals:
 private:
 
     void add_operator_to_model(BaseOperator * operator_ptr);
+
     void remove_operator_from_model(BaseOperator * operator_ptr);
 
 
     QUndoStack undo_stack;
 
     LibraryModel& operator_library;
-    QMap<qint64, BaseOperator*> operators;
+
+    std::vector<BaseOperator*> operators;
 
 
 };

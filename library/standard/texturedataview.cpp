@@ -2,7 +2,7 @@
 
 
 
-TextureDataView::TextureDataView(TextureDataBlock* t, OperatorView* parent_op)
+TextureDataView::TextureDataView(TextureData* t, OperatorView* parent_op)
     : OpenGLDataView(*parent_op), texture(t)
 {
 

@@ -2,27 +2,20 @@
 
 
 
-EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, ParameterMode mode)
-    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
+EnumParameter::EnumParameter(ParameterOwner * owner, const EnumDefinition& def, const char * name, int index)
+    : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
 {
-
-}
-
-
-EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, int start_index, ParameterMode mode)
-    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
-{
-    if (definition->contains(start_index))
+    if (definition->contains(index))
     {
-        current_index = start_index;
+        current_index = index;
     }
 }
 
 
-EnumParameter::EnumParameter(const EnumDefinition& def, const char* name, const char * start_value, ParameterMode mode)
-    : BaseParameter(ParameterType::Enum, name, mode), definition(&def)
+EnumParameter::EnumParameter(ParameterOwner * owner, const EnumDefinition& def, const char * name, const char* value)
+    : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
 {
-    auto index = definition->index_of(start_value);
+    auto index = definition->index_of(value);
 
     if (index != -1)
     {
@@ -36,7 +29,7 @@ void EnumParameter::set(int new_index)
     if (definition->contains(new_index))
     {
         current_index = new_index;
-        propagate_changes();
+        emit_changes();
     }
 }
 
@@ -48,7 +41,7 @@ void EnumParameter::set(const char* new_value)
     if (index != -1)
     {
         current_index = index;
-        propagate_changes();
+        emit_changes();
     }
 }
 

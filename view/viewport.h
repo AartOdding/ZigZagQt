@@ -5,7 +5,7 @@
 #include <QOpenGLWidget>
 
 #include "view/projectscopeview.h"
-#include "view/parametereditor.h"
+#include "view/parameter/parametereditor.h"
 
 
 
@@ -21,6 +21,7 @@ public:
 
 protected:
 
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;

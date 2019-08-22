@@ -5,6 +5,7 @@
 
 #include <QOpenGLFunctions_3_2_Core>
 
+/*
 class ProjectModel;
 
 
@@ -43,4 +44,4 @@ private:
     GLuint vao;
     GLuint vbo;
 
-};
+};*/

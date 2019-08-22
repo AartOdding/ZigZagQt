@@ -2,8 +2,8 @@
 
 #include <QUndoCommand>
 
-#include "model/basedatablock.h"
-#include "model/datablockinput.h"
+#include "model/basedatatype.h"
+#include "model/datainput.h"
 
 
 
@@ -12,7 +12,7 @@ class ConnectCommand : public QUndoCommand
 
 public:
 
-    ConnectCommand(BaseDataBlock* output_, DataBlockInput* input_)
+    ConnectCommand(BaseDataType* output_, DataInput* input_)
         : output(output_), input(input_)
     {
         initial_output = input->connection;
@@ -43,8 +43,8 @@ public:
 
 private:
 
-    BaseDataBlock* output;
-    BaseDataBlock* initial_output;
-    DataBlockInput* input;
+    BaseDataType* output;
+    BaseDataType* initial_output;
+    DataInput* input;
 
 };

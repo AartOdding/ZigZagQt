@@ -1,17 +1,33 @@
 #pragma once
 
 #include <vector>
+#include <functional>
+
 #include <QObject>
 
+#include "model/parameter/parameterowner.h"
 
-class BaseDataBlock;
+
+class BaseOperator;
+class BaseDataType;
 class BaseParameter;
-class DataBlockInput;
+class DataInput;
 
 
+struct OperatorTypeInfo
+{
+    std::string name;
+    std::function<BaseOperator*()> construct;
+    // Image
+    // Version
+    // Description
+    // Author
+    // License
+    // Etc
+};
 
 
-class BaseOperator : public QObject
+class BaseOperator : public ParameterOwner
 {
     Q_OBJECT
 
@@ -20,18 +36,29 @@ class BaseOperator : public QObject
 
 public:
 
-    BaseOperator();
+    BaseOperator(const OperatorTypeInfo& type);
 
     virtual ~BaseOperator();
 
     virtual void run() = 0;
 
-    const std::vector<DataBlockInput*>& inputs();
-    const std::vector<BaseDataBlock*>& outputs();
-    const std::vector<BaseParameter*>& parameters();
 
     int get_position_x() const;
     int get_position_y() const;
+
+    const OperatorTypeInfo * type() const;
+
+
+    const std::vector<DataInput*>& data_inputs() const;
+    const std::vector<BaseDataType*>& data_outputs() const;
+
+    std::vector<DataInput*> used_data_inputs() const;
+    std::vector<BaseDataType*> used_data_outputs() const;
+
+    int count_used_data_inputs() const;
+
+    void register_data_input(DataInput* input);
+    void register_data_output(BaseDataType* output);
 
 
 public slots:
@@ -42,25 +69,16 @@ public slots:
     // Undoable action.
     void move_to(int x, int y);
 
-    void refresh_inputs();
-    void refresh_outputs();
-    void refresh_parameters();
-
 
 signals:
 
-    void inputs_modified();
-    void outputs_modified();
-    void parameters_modified();
-
     void position_changed(int pos_x, int pos_y);
+
+    void data_input_added(DataInput * new_data_input);
+    void data_output_added(BaseDataType * new_data_output);
 
 
 protected:
-
-    virtual std::vector<DataBlockInput*> provide_inputs() = 0;
-    virtual std::vector<BaseDataBlock*>  provide_outputs() = 0;
-    virtual std::vector<BaseParameter*>  provide_parameters() = 0;
 
     // Should be overriden to acquire resources.
     // Never call this function directly, this is done for you.
@@ -74,19 +92,16 @@ protected:
 
 private:
 
+    // Direct version of move_to (non-undoable)
     void set_position(int pos_x, int pos_y);
 
 
-
-    std::vector<DataBlockInput*> cached_inputs;
-    std::vector<BaseDataBlock*> cached_outputs;
-    std::vector<BaseParameter*> cached_parameters;
-
-    bool inputs_cached = false;
-    bool outputs_cached = false;
-    bool parameters_cached = false;
+    std::vector<DataInput*> inputs;
+    std::vector<BaseDataType*> outputs;
 
     int position_x = 0;
     int position_y = 0;
+
+    const OperatorTypeInfo * type_info;
 
 };

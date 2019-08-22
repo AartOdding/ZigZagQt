@@ -77,7 +77,7 @@ void BaseConnector::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void BaseConnector::set_highlighted(bool value)
 {
-    if (value != highlighted);
+    if (value != highlighted)
     {
         highlighted = value;
 

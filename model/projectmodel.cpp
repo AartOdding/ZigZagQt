@@ -1,8 +1,8 @@
 #include "projectmodel.h"
 
 #include "model/baseoperator.h"
-#include "model/basedatablock.h"
-#include "model/datablockinput.h"
+#include "model/basedatatype.h"
+#include "model/datainput.h"
 
 #include "command/addcommand.h"
 #include "command/removecommand.h"
@@ -41,16 +41,14 @@ void ProjectModel::undo()
 }
 
 
-void ProjectModel::add_operator(const char * operator_class, int x, int y)
+void ProjectModel::add_operator(const OperatorTypeInfo& op_type, int x, int y)
 {
-    if (operator_library.contains_operator_type(operator_class))
-    {
-        //undo_stack.beginMacro("Adding Operator");
-        auto op = operator_library.create_operator(operator_class);
-        op->set_position(x, y);
-        undo_stack.push(new AddCommand(*this, op));
-        //undo_stack.endMacro();
-    }
+    //undo_stack.beginMacro("Adding Operator");
+    auto op = op_type.construct();
+
+    op->set_position(x, y);
+    undo_stack.push(new AddCommand(*this, op));
+    //undo_stack.endMacro();
 }
 
 
@@ -60,12 +58,12 @@ void ProjectModel::remove_operator(BaseOperator * operator_ptr)
     {
         undo_stack.beginMacro("Remove Operator");
 
-        for (auto& ptr : operator_ptr->inputs())
+        for (auto& ptr : operator_ptr->data_inputs())
         {
             ptr->disconnect();
         }
 
-        for (auto& ptr : operator_ptr->outputs())
+        for (auto& ptr : operator_ptr->data_outputs())
         {
             ptr->disconnect_all();
         }
@@ -112,7 +110,7 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
-        auto blocks = operator_ptr->outputs();
+        auto blocks = operator_ptr->data_outputs();
 
         for (auto& block : blocks)
         {
@@ -123,6 +121,7 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
         }
         operator_ptr->acquire_resources();
 
+        operators.push_back(operator_ptr);
         emit operator_added(operator_ptr);
     }
 }
@@ -134,7 +133,7 @@ void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
     {
         operator_ptr->release_resources();
 
-        auto blocks = operator_ptr->outputs();
+        auto blocks = operator_ptr->data_outputs();
 
         for (auto& block : blocks)
         {
@@ -143,31 +142,14 @@ void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
                 block->release_resources();
             }
         }
+
+        operators.erase(std::remove(operators.begin(), operators.end(), operator_ptr), operators.end());
         emit operator_removed(operator_ptr);
     }
 }
 
 
-QList<BaseOperator*> ProjectModel::get_entry_nodes()
+const std::vector<BaseOperator*>& ProjectModel::all_operators() const
 {
-    /*
-    auto all_children = findChildren<BaseOperator*>();
-    QList<BaseOperator*> entry_points;
-
-    for (auto child : all_children)
-    {
-        if (child->get_num_used_inputs() == 0)
-        {
-            entry_points.push_back(child);
-        }
-    }
-    return entry_points;
-    */
-    return QList<BaseOperator*>();
-}
-
-
-QList<BaseOperator*> ProjectModel::get_all_nodes()
-{
-    return findChildren<BaseOperator*>();
+    return operators;
 }

@@ -5,8 +5,8 @@
 #include "baseconnector.h"
 
 class OperatorView;
-class DataBlockInput;
-class BaseDataBlock;
+class DataInput;
+class BaseDataType;
 
 
 class DataBlockConnector : public BaseConnector
@@ -14,9 +14,9 @@ class DataBlockConnector : public BaseConnector
 
 public:
 
-    DataBlockConnector(OperatorView& parent, DataBlockInput& input, int height);
+    DataBlockConnector(OperatorView& parent, DataInput& input, int height);
 
-    DataBlockConnector(OperatorView& parent, BaseDataBlock& output, int height);
+    DataBlockConnector(OperatorView& parent, BaseDataType& output, int height);
 
 
     QRectF boundingRect() const override;
@@ -31,6 +31,8 @@ public:
 
     OperatorView * const parent_view;
 
+    QColor get_color() const;
+
 
 protected:
 
@@ -42,11 +44,12 @@ protected:
 
 private:
 
-    DataBlockInput* data_input = nullptr;
-    BaseDataBlock* data_output = nullptr;
+    DataInput* data_input = nullptr;
+    BaseDataType* data_output = nullptr;
 
     QRectF bounds;
     QRectF clip_bounds;
+    QColor color;
 
     QPainterPath path;
 

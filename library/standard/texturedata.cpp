@@ -1,25 +1,25 @@
-#include "texturedatablock.h"
+#include "texturedata.h"
 
 
 
 
-TextureDataBlock::TextureDataBlock()
-    : BaseDataBlock("texture")
+TextureData::TextureData(BaseOperator* parent_operator)
+    : BaseDataType(parent_operator, Type)
 {
     initializeOpenGLFunctions();
 
-    connect(&resolution_x, &IntegerParameter::has_changed, this, &TextureDataBlock::reallocate_texture);
-    connect(&resolution_y, &IntegerParameter::has_changed, this, &TextureDataBlock::reallocate_texture);
+    connect(&resolution_x, &IntegerParameter::value_changed, this, &TextureData::reallocate_texture);
+    connect(&resolution_y, &IntegerParameter::value_changed, this, &TextureData::reallocate_texture);
 }
 
 
-TextureDataBlock::~TextureDataBlock()
+TextureData::~TextureData()
 {
-
+    Q_ASSERT(!currently_allocated);
 }
 
 
-void TextureDataBlock::acquire_resources()
+void TextureData::acquire_resources()
 {
     glGenTextures(1, &texture_handle);
     glBindTexture(GL_TEXTURE_2D, texture_handle);
@@ -37,7 +37,8 @@ void TextureDataBlock::acquire_resources()
     currently_allocated = true;
 }
 
-void TextureDataBlock::release_resources()
+
+void TextureData::release_resources()
 {
     glDeleteFramebuffers(1, &fbo_handle);
     glDeleteTextures(1, &texture_handle);
@@ -46,7 +47,7 @@ void TextureDataBlock::release_resources()
 }
 
 
-void TextureDataBlock::bind_as_framebuffer()
+void TextureData::bind_as_framebuffer()
 {
     if (currently_allocated)
     {
@@ -55,7 +56,7 @@ void TextureDataBlock::bind_as_framebuffer()
 }
 
 
-void TextureDataBlock::bind_as_texture(int texture_index)
+void TextureData::bind_as_texture(int texture_index)
 {
     if (currently_allocated)
     {
@@ -65,7 +66,7 @@ void TextureDataBlock::bind_as_texture(int texture_index)
 }
 
 
-void TextureDataBlock::reallocate_texture()
+void TextureData::reallocate_texture()
 {
     if (currently_allocated)
     {

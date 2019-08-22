@@ -19,6 +19,7 @@ public:
     void set_bounds(double x, double y, double w, double h);
 
 
+    //virtual void draw(int res_x, int res_y) = 0;
 
 private:
 

@@ -27,7 +27,7 @@ void main()
 }
 )";
 
-
+/*
 
 ShaderTOP::ShaderTOP(ProjectModel& model)
     : ShaderTOP(model, 0, default_fragment_shader_source)
@@ -141,3 +141,4 @@ void ShaderTOP::recompile()
     glDeleteShader(old_fragment_shader);
     glDeleteProgram(old_shader_program);
 }
+*/

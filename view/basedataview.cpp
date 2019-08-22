@@ -11,6 +11,7 @@ BaseDataView::BaseDataView(OperatorView& parent_op)
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
 }
 
+
 QRectF BaseDataView::boundingRect() const
 {
     return bounds;

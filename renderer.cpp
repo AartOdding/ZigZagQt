@@ -4,24 +4,16 @@
 #include "renderer.h"
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
+#include "model/datainput.h"
 
 #include <QThread>
 #include <QApplication>
 
+#include <deque>
 
 
 Renderer::Renderer()
 {
-    render_surface.setFormat(QSurfaceFormat::defaultFormat());
-    render_surface.create();
-
-    context.setFormat(QSurfaceFormat::defaultFormat());
-    context.create();
-    context.makeCurrent(&render_surface);
-
-
-    initializeOpenGLFunctions();
-
     connect(&render_timer, &QTimer::timeout, this, &Renderer::render_frame);
 }
 
@@ -36,7 +28,7 @@ void Renderer::set_model(ProjectModel* model_)
     {
         model = model_;
         render_count = 0;
-        render_timer.start(static_cast<int>(1000.0f / 60.0f));
+        render_timer.start(17);
     }
     else
     {
@@ -46,16 +38,86 @@ void Renderer::set_model(ProjectModel* model_)
 }
 
 
+bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperator*>& closed_list)
+{
+    if (op)
+    {
+        for (auto& input : op->used_data_inputs())
+        {
+            auto connected_op = input->get_connection()->parent_operator;
+
+            /*
+             * If a connected operator has not yet been processed that one has to process first,
+             * thus return false: this operator does not yet have its turn.
+             */
+            if (closed_list.count(connected_op) == 0)
+            {
+                return false;
+            }
+        }
+
+        /*
+         *  If all inputs were looped through and they had all been processed already it's
+         *  this operators turn to be processed.
+         */
+        return true;
+    }
+    return false;
+}
+
 
 void Renderer::render_frame()
 {
-    context.makeCurrent(&render_surface);
+    //std::cout << "r\n";
+    ++render_count;
+    fps_monitor.frame();
+
+    if (render_count % 60 == 0)
+    {
+        //std::cout << fps_monitor.fps() << "\n";
+    }
+
+    int count = 0;
+
+    std::deque<BaseOperator*> open_list;
+    std::unordered_set<const BaseOperator*> closed_list;
+
+    for (auto o : model->all_operators())
+    {
+        if (o->count_used_data_inputs() == 0)
+        {
+            open_list.push_back(o);
+        }
+    }
+
+    while (!open_list.empty())
+    {
+        auto current = open_list.front();
+        open_list.pop_front();
+
+        if (has_turn(current, closed_list))
+        {
+            closed_list.insert(current);
+
+            for (auto& output : current->used_data_outputs())
+            {
+                for (auto connected_input : output->get_connections())
+                {
+                    open_list.push_back(connected_input->parent_operator);
+                }
+            }
+        }
+        else
+        {
+            open_list.push_back(current);
+        }
+    }
 
     //if (render_count % 120 == 0) std::cout <<"render " << QThread::currentThreadId() << "\n";
 
-    int node_count = model->get_all_nodes().size();
-    auto open_list = model->get_entry_nodes();
-    std::unordered_set<BaseOperator*> rendered;
+    //int node_count = model->get_all_nodes().size();
+    //auto open_list = model->get_entry_nodes();
+    //std::unordered_set<BaseOperator*> rendered;
     /*
     while(static_cast<int>(rendered.size()) < node_count)
     {
@@ -98,5 +160,5 @@ void Renderer::render_frame()
         }
     }*/
 
-    ++render_count;
+    //++render_count;
 }

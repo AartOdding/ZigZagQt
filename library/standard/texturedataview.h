@@ -4,7 +4,7 @@
 
 
 class OperatorView;
-class TextureDataBlock;
+class TextureData;
 
 
 class TextureDataView : public OpenGLDataView
@@ -12,13 +12,13 @@ class TextureDataView : public OpenGLDataView
 
 public:
 
-    TextureDataView(TextureDataBlock* texture, OperatorView* parent_op);
+    TextureDataView(TextureData* texture, OperatorView* parent_op);
 
     void paint_opengl(int res_x, int res_y) override;
 
 
 private:
 
-    TextureDataBlock* texture;
+    TextureData* texture;
 
 };

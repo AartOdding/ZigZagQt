@@ -14,8 +14,8 @@
 class BaseOperator;
 class ProjectModel;
 class DataBlockConnector;
-class BaseDataBlock;
-class DataBlockInput;
+class BaseDataType;
+class DataInput;
 class ProjectScopeView;
 
 
@@ -32,9 +32,9 @@ public:
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    DataBlockConnector* get_view_of(const DataBlockInput* input);
+    DataBlockConnector* get_view_of(const DataInput* input);
 
-    DataBlockConnector* get_view_of(const BaseDataBlock* output);
+    DataBlockConnector* get_view_of(const BaseDataType* output);
 
 
     BaseOperator& operator_model;
@@ -46,9 +46,8 @@ public slots:
 
     void on_operator_moved(int to_x, int to_y);
 
-    void on_inputs_modified();
-    void on_outputs_modified();
-    void on_parameters_modified();
+    void on_input_added(DataInput* ptr);
+    void on_output_added(BaseDataType* ptr);
 
 
 signals:
@@ -76,8 +75,8 @@ private:
 
     bool was_dragged = false;
 
-    std::unordered_map<const DataBlockInput*, DataBlockConnector*> inputs;
-    std::unordered_map<const BaseDataBlock*, DataBlockConnector*> outputs;
+    std::unordered_map<const DataInput*, DataBlockConnector*> inputs;
+    std::unordered_map<const BaseDataType*, DataBlockConnector*> outputs;
 
     OperatorNameTag name_tag;
     TextureDataView data_view;

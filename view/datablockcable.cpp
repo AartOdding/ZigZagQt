@@ -29,6 +29,8 @@ DataBlockCable::DataBlockCable(ProjectScopeView * p, DataBlockConnector * i, Dat
     connect(op1, &OperatorView::has_moved, this, &DataBlockCable::on_movement);
     connect(op2, &OperatorView::has_moved, this, &DataBlockCable::on_movement);
 
+    color = output_view->get_color();
+
     build_path();
 }
 
@@ -56,7 +58,7 @@ void DataBlockCable::paint(QPainter * painter, const QStyleOptionGraphicsItem * 
 {
     painter->setRenderHint(QPainter::Antialiasing);
 
-    auto brush = QBrush({ 205, 255, 0 });
+    auto brush = QBrush(color);
     auto pen = QPen(brush, 2);
     painter->setPen(pen);
 

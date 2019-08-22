@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <functional>
-#include <string_view>
 #include <unordered_map>
 
-#include "model/baseoperator.h"
+
+struct DataTypeInfo;
+struct OperatorTypeInfo;
 
 
 
@@ -17,23 +17,32 @@ public:
 
     LibraryModel();
 
-    /*
-     * create_function can either be a static member function, a free function,
-     * a member function that has bound arguments with std::bind, or a free function
-     * with bound arguments.
-     */
-    void add_operator_type(const std::string& operator_type, std::function<BaseOperator*()> create_function);
 
+    void register_data_type(const DataTypeInfo* type);
+    void register_data_type(const DataTypeInfo& type);
 
+    void register_operator(const OperatorTypeInfo* type);
+    void register_operator(const OperatorTypeInfo& type);
+
+    bool contains_operator(const std::string& name) const;
+/*
     BaseOperator* create_operator(const std::string& operator_type);
 
 
     bool contains_operator_type(const std::string& operator_type);
 
+*/
+
+    const std::unordered_map<std::string, const DataTypeInfo*>& data_types() const;
+
+    const std::unordered_map<std::string, const OperatorTypeInfo*>& operators() const;
+
+
 
 private:
 
-    std::unordered_map<std::string, std::function<BaseOperator*()>> creation_functions;
+    std::unordered_map<std::string, const DataTypeInfo*> m_data_types;
 
+    std::unordered_map<std::string, const OperatorTypeInfo*> m_operators;
 
 };

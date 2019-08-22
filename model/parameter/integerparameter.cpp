@@ -1,24 +1,21 @@
 #include "integerparameter.h"
 
+#include <iostream>
 
-IntegerParameter::IntegerParameter(const char * name, ParameterMode mode)
-    : BaseParameter(ParameterType::Int, name, mode)
-{ }
-
-
-IntegerParameter::IntegerParameter(const char * name, int initial_value, ParameterMode mode)
-    : BaseParameter(ParameterType::Int, name, mode)
+IntegerParameter::IntegerParameter(ParameterOwner * owner, const char * name, int value_)
+    : BaseParameter(owner, ParameterType::Int, name)
 {
-    set(initial_value);
+    value = value_;
 }
 
 
 void IntegerParameter::set(int new_value)
 {
+    std::cout << "set\n";
     if (value != new_value)
     {
         value = new_value;
-        propagate_changes();
+        emit_changes();
     }
 }
 

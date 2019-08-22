@@ -2,16 +2,15 @@
 
 #include <QTimer>
 #include <QObject>
-#include <QOpenGLContext>
-#include <QOffscreenSurface>
-#include <QOpenGLFunctions_3_2_Core>
+
+#include "utility/fpsmonitor.h"
+
 
 class ProjectModel;
 
 
 
-class Renderer : public QObject,
-                 protected QOpenGLFunctions_3_2_Core
+class Renderer : public QObject
 {
     Q_OBJECT
 
@@ -32,12 +31,12 @@ public slots:
 private:
 
     ProjectModel* model;
-    QOpenGLContext context;
-    QOffscreenSurface render_surface;
 
     QTimer render_timer;
 
     unsigned long long render_count = 0;
+
+    FpsMonitor fps_monitor{ 500ms };
 
 };
 

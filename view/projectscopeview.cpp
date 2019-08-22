@@ -5,11 +5,13 @@
 #include "view/operatorview.h"
 #include "view/datablockcable.h"
 #include "model/baseoperator.h"
-#include "model/datablockinput.h"
+#include "model/datainput.h"
 
 #include <QPointer>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
+
+#include "library/standard/testoperator.h"
 
 
 ProjectScopeView::ProjectScopeView(QObject *parent)
@@ -48,12 +50,12 @@ void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
     OperatorView* op_view = new OperatorView(*operator_ptr);
     operator_views.insert(operator_ptr, op_view);
 
-    for (auto i : operator_ptr->inputs())
+    for (auto i : operator_ptr->data_inputs())
     {
         if (i)
         {
-            connect(i, &DataBlockInput::has_connected, this, &ProjectScopeView::on_input_connected);
-            connect(i, &DataBlockInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
+            connect(i, &DataInput::has_connected, this, &ProjectScopeView::on_input_connected);
+            connect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
         }
     }
 
@@ -65,12 +67,12 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 {
     if (operator_views.contains(operator_ptr))
     {
-        for (auto i : operator_ptr->inputs())
+        for (auto i : operator_ptr->data_inputs())
         {
             if (i)
             {
-                disconnect(i, &DataBlockInput::has_connected, this, &ProjectScopeView::on_input_connected);
-                disconnect(i, &DataBlockInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
+                disconnect(i, &DataInput::has_connected, this, &ProjectScopeView::on_input_connected);
+                disconnect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
             }
         }
 
@@ -112,7 +114,7 @@ void ProjectScopeView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 
     if (!mouseEvent->isAccepted())
     {
-        data_model->add_operator("test", mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+        data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
     }
 }
 
@@ -168,10 +170,10 @@ void ProjectScopeView::keyReleaseEvent(QKeyEvent *keyEvent)
 }
 
 
-void ProjectScopeView::on_input_connected(BaseDataBlock* output, DataBlockInput* input)
+void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->get_parent_operator()];
-    auto output_op = operator_views[output->get_parent_operator()];
+    auto input_op = operator_views[input->parent_operator];
+    auto output_op = operator_views[output->parent_operator];
 
     if (input_op && output_op)
     {
@@ -187,9 +189,9 @@ void ProjectScopeView::on_input_connected(BaseDataBlock* output, DataBlockInput*
     }
 }
 
-void ProjectScopeView::on_input_disconnected(BaseDataBlock* output, DataBlockInput* input)
+void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->get_parent_operator()];
+    auto input_op = operator_views[input->parent_operator];
 
     if (input_op)
     {

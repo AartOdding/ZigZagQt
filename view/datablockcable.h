@@ -9,7 +9,7 @@ class DataBlockConnector;
 
 
 class DataBlockCable : public QObject,
-                      public QGraphicsItem
+                       public QGraphicsItem
 {
     Q_OBJECT
 
@@ -43,6 +43,7 @@ private:
     DataBlockConnector * input_view;
     DataBlockConnector * output_view;
 
+    QColor color;
     QPainterPath path;
     QPainterPath path_in_scene;
 

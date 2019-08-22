@@ -2,8 +2,8 @@
 
 #include <QUndoCommand>
 
-#include "model/basedatablock.h"
-#include "model/datablockinput.h"
+#include "model/basedatatype.h"
+#include "model/datainput.h"
 
 
 class DisconnectCommand : public QUndoCommand
@@ -11,7 +11,7 @@ class DisconnectCommand : public QUndoCommand
 
 public:
 
-    DisconnectCommand(BaseDataBlock* output_, DataBlockInput* input_)
+    DisconnectCommand(BaseDataType* output_, DataInput* input_)
         : output(output_), input(input_)
     {
 
@@ -31,7 +31,7 @@ public:
 
 private:
 
-    BaseDataBlock* output;
-    DataBlockInput* input;
+    BaseDataType* output;
+    DataInput* input;
 
 };

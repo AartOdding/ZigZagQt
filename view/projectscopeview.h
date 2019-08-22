@@ -9,7 +9,8 @@
 
 
 class BaseOperator;
-class DataBlockInput;
+class BaseDataType;
+class DataInput;
 class OperatorView;
 class DataBlockConnector;
 class DataBlockCable;
@@ -36,9 +37,9 @@ public slots:
     void on_operator_deleted(BaseOperator* operator_ptr);
 
 
-    void on_input_connected(BaseDataBlock* output, DataBlockInput* input);
+    void on_input_connected(BaseDataType* output, DataInput* input);
 
-    void on_input_disconnected(BaseDataBlock* output, DataBlockInput* input);
+    void on_input_disconnected(BaseDataType* output, DataInput* input);
 
 
 protected:

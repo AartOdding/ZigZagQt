@@ -27,18 +27,19 @@ CONFIG += c++17 console
 SOURCES += \
         application.cpp \
         library/standard/shadertop.cpp \
-        library/standard/testdatablock.cpp \
         library/standard/testoperator.cpp \
-        library/standard/texturedatablock.cpp \
+        library/standard/texture/blendoperator.cpp \
+        library/standard/texturedata.cpp \
         library/standard/texturedataview.cpp \
+        model/basedatatype.cpp \
+        model/datainput.cpp \
         model/librarymodel.cpp \
         model/parameter/baseparameter.cpp \
         model/parameter/enumparameter.cpp \
         model/parameter/integerparameter.cpp \
-        model/basedatablock.cpp \
         model/baseoperator.cpp \
-        model/datablockinput.cpp \
         model/enumdefinition.cpp \
+        model/parameter/parameterowner.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         view/baseconnector.cpp \
@@ -47,9 +48,13 @@ SOURCES += \
         view/datablockconnector.cpp \
         view/opengldataview.cpp \
         view/operatornametag.cpp \
+        view/operatorselectordialog.cpp \
         view/operatorview.cpp \
-        view/parameterconnector.cpp \
-        view/parametereditor.cpp \
+        view/parameter/enumwidget.cpp \
+        view/parameter/intwidget.cpp \
+        view/parameter/parametereditor.cpp \
+        view/parameter/parameterpanel.cpp \
+        view/parameter/parameterpanelheader.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
         view/projectviewmodel.cpp \
@@ -66,30 +71,38 @@ HEADERS += \
         command/movecommand.h \
         command/removecommand.h \
         library/standard/shadertop.h \
-        library/standard/testdatablock.h \
+        library/standard/testdata.h \
         library/standard/testoperator.h \
-        library/standard/texturedatablock.h \
+        library/standard/texture/blendoperator.h \
+        library/standard/texturedata.h \
         library/standard/texturedataview.h \
+        model/basedatatype.h \
+        model/datainput.h \
         model/librarymodel.h \
         model/parameter/baseparameter.h \
         model/parameter/enumparameter.h \
         model/parameter/integerparameter.h \
-        model/basedatablock.h \
         model/baseoperator.h \
-        model/datablockinput.h \
         model/enumdefinition.h \
         model/namemanager.h \
+        model/parameter/parameterowner.h \
         model/projectmodel.h \
         model/projectscope.h \
+        utility/fpsmonitor.h \
+        utility/frameratecontroller.h \
         view/baseconnector.h \
         view/basedataview.h \
         view/datablockcable.h \
         view/datablockconnector.h \
         view/opengldataview.h \
         view/operatornametag.h \
+        view/operatorselectordialog.h \
         view/operatorview.h \
-        view/parameterconnector.h \
-        view/parametereditor.h \
+        view/parameter/enumwidget.h \
+        view/parameter/intwidget.h \
+        view/parameter/parametereditor.h \
+        view/parameter/parameterpanel.h \
+        view/parameter/parameterpanelheader.h \
         view/projectscopeview.h \
         view/projectsurface.h \
         view/projectviewmodel.h \
@@ -97,6 +110,7 @@ HEADERS += \
         renderer.h
 
 FORMS += \
+        librarydialogpanel.ui \
         mainwindow.ui
 
 # Default rules for deployment.
@@ -107,3 +121,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     README.md \
     bugs-todos
+
+RESOURCES += \
+    resources/resources.qrc

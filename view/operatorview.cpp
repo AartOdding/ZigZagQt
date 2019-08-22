@@ -8,14 +8,14 @@
 
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
-#include "model/basedatablock.h"
-#include "model/datablockinput.h"
+#include "model/basedatatype.h"
+#include "model/datainput.h"
 #include "view/datablockconnector.h"
-#include "library/standard/texturedatablock.h"
+#include "library/standard/texturedata.h"
 
 
 OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag("Test operator number x", this), data_view( static_cast<TextureDataBlock*>(operator_model.outputs()[0]), this)
+    : operator_model(op), name_tag("Test operator number x", this), data_view( static_cast<TextureData*>(operator_model.data_outputs()[0]), this)
 {
     setZValue(1);
     setPos(op.get_position_x(), op.get_position_y());
@@ -23,14 +23,14 @@ OperatorView::OperatorView(BaseOperator& op)
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    on_inputs_modified();
-    on_outputs_modified();
-    on_parameters_modified();
+    on_input_added(nullptr);
+    on_output_added(nullptr);
+    //on_parameters_modified();
 
     connect(&operator_model, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
-    connect(&operator_model, &BaseOperator::inputs_modified, this, &OperatorView::on_inputs_modified);
-    connect(&operator_model, &BaseOperator::outputs_modified, this, &OperatorView::on_outputs_modified);
-    connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
+    connect(&operator_model, &BaseOperator::data_input_added, this, &OperatorView::on_input_added);
+    connect(&operator_model, &BaseOperator::data_output_added, this, &OperatorView::on_output_added);
+    //connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
 
     auto h_width = width / 2.0;
     auto h_height = height / 2.0;
@@ -72,13 +72,13 @@ void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 }
 
 
-DataBlockConnector* OperatorView::get_view_of(const DataBlockInput* input)
+DataBlockConnector* OperatorView::get_view_of(const DataInput* input)
 {
     return inputs[input];
 }
 
 
-DataBlockConnector* OperatorView::get_view_of(const BaseDataBlock* output)
+DataBlockConnector* OperatorView::get_view_of(const BaseDataType* output)
 {
     return outputs[output];
 }
@@ -152,9 +152,9 @@ void OperatorView::on_operator_moved(int to_x, int to_y)
 }
 
 
-void OperatorView::on_inputs_modified()
+void OperatorView::on_input_added(DataInput* ptr)
 {
-    const auto& new_inputs = operator_model.inputs();
+    const auto& new_inputs = operator_model.data_inputs();
     float spacing = height / (new_inputs.size());
 
     for (auto& [k, v] : inputs)
@@ -186,9 +186,9 @@ void OperatorView::on_inputs_modified()
 }
 
 
-void OperatorView::on_outputs_modified()
+void OperatorView::on_output_added(BaseDataType* ptr)
 {
-    const auto& new_outputs = operator_model.outputs();
+    const auto& new_outputs = operator_model.data_outputs();
     float spacing = height / (new_outputs.size());
 
     for (auto& [k, v] : outputs)
@@ -219,8 +219,8 @@ void OperatorView::on_outputs_modified()
     }
 }
 
-
+/*
 void OperatorView::on_parameters_modified()
 {
     //std::cout << "on_parameters_modified() called\n";
-}
+}*/

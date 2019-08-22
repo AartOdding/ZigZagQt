@@ -4,9 +4,11 @@
 #include "command/movecommand.h"
 #include "command/removecommand.h"
 #include "model/projectmodel.h"
-#include "model/datablockinput.h"
+#include "model/datainput.h"
 
 #include <QPointer>
+
+#include <algorithm>
 
 
 
@@ -25,57 +27,16 @@ static std::vector<T*> no_nullptr(std::vector<T*> vec)
 }
 
 
-BaseOperator::BaseOperator()
+BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
+    : type_info(&type_)
 {
+
 }
 
 
 BaseOperator::~BaseOperator()
 {
-}
 
-
-const std::vector<DataBlockInput*>& BaseOperator::inputs()
-{
-    if (!inputs_cached)
-    {
-        cached_inputs = no_nullptr(provide_inputs());
-
-        for (auto ptr : cached_inputs)
-        {
-            ptr->set_parent_operator(this);
-        }
-        inputs_cached = true;
-    }
-    return cached_inputs;
-}
-
-
-const std::vector<BaseDataBlock*>& BaseOperator::outputs()
-{
-    if (!outputs_cached)
-    {
-        cached_outputs = no_nullptr(provide_outputs());
-
-        for (auto ptr : cached_outputs)
-        {
-            ptr->set_parent_operator(this);
-        }
-
-        outputs_cached = true;
-    }
-    return cached_outputs;
-}
-
-
-const std::vector<BaseParameter*>& BaseOperator::parameters()
-{
-    if (!parameters_cached)
-    {
-        cached_parameters = no_nullptr(provide_parameters());
-        parameters_cached = true;
-    }
-    return cached_parameters;
 }
 
 
@@ -91,55 +52,9 @@ int BaseOperator::get_position_y() const
 }
 
 
-void BaseOperator::refresh_inputs()
+const OperatorTypeInfo * BaseOperator::type() const
 {
-    auto new_inputs = no_nullptr(provide_inputs());
-
-    if (cached_inputs != new_inputs)
-    {
-        std::swap(cached_inputs, new_inputs);
-
-        for (auto ptr : cached_inputs)
-        {
-            if (ptr)
-            {
-                ptr->set_parent_operator(this);
-            }
-        }
-        emit inputs_modified();
-    }
-}
-
-
-void BaseOperator::refresh_outputs()
-{
-    auto new_outputs = no_nullptr(provide_outputs());
-
-    if (cached_outputs != new_outputs)
-    {
-        std::swap(cached_outputs, new_outputs);
-
-        for (auto ptr : cached_outputs)
-        {
-            if (ptr)
-            {
-                ptr->set_parent_operator(this);
-            }
-        }
-        emit outputs_modified();
-    }
-}
-
-
-void BaseOperator::refresh_parameters()
-{
-    auto new_parameters = no_nullptr(provide_parameters());
-
-    if (cached_parameters != new_parameters)
-    {
-        std::swap(cached_parameters, new_parameters);
-        emit parameters_modified();
-    }
+    return type_info;
 }
 
 
@@ -150,12 +65,12 @@ void BaseOperator::remove()
 
     undo_stack->beginMacro("Remove Operator");
 
-    for (auto ptr : cached_inputs)
+    for (auto ptr : inputs)
     {
         ptr->disconnect();
     }
 
-    for (auto ptr : cached_outputs)
+    for (auto ptr : outputs)
     {
         ptr->disconnect_all();
     }
@@ -184,3 +99,84 @@ void BaseOperator::set_position(int pos_x, int pos_y)
         emit position_changed(pos_x, pos_y);
     }
 }
+
+
+
+const std::vector<DataInput*>& BaseOperator::data_inputs() const
+{
+    return inputs;
+}
+
+
+const std::vector<BaseDataType*>& BaseOperator::data_outputs() const
+{
+    return outputs;
+}
+
+
+std::vector<DataInput*> BaseOperator::used_data_inputs() const
+{
+    std::vector<DataInput*> result;
+    result.reserve(inputs.size());
+
+    for (const auto& input : inputs)
+    {
+        if (input->is_connected())
+        {
+            result.push_back(input);
+        }
+    }
+    return result;
+}
+
+
+std::vector<BaseDataType*> BaseOperator::used_data_outputs() const
+{
+    std::vector<BaseDataType*> result;
+    result.reserve(outputs.size());
+
+    for (const auto& output : outputs)
+    {
+        if (output->is_connected())
+        {
+            result.push_back(output);
+        }
+    }
+    return result;
+}
+
+
+int BaseOperator::count_used_data_inputs() const
+{
+    return std::count_if(
+                inputs.begin(),
+                inputs.end(),
+                [](const auto& i){ return i->is_connected(); });
+}
+
+
+void BaseOperator::register_data_input(DataInput* input)
+{
+    if (input)
+    {
+        if (std::find(inputs.begin(), inputs.end(), input) == inputs.end())
+        {
+            inputs.push_back(input);
+            emit data_input_added(input);
+        }
+    }
+}
+
+
+void BaseOperator::register_data_output(BaseDataType* output)
+{
+    if (output)
+    {
+        if (std::find(outputs.begin(), outputs.end(), output) == outputs.end())
+        {
+            outputs.push_back(output);
+            emit data_output_added(output);
+        }
+    }
+}
+

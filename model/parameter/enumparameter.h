@@ -3,6 +3,8 @@
 #include "model/enumdefinition.h"
 #include "model/parameter/baseparameter.h"
 
+class ParameterOwner;
+
 
 class EnumParameter : public BaseParameter
 {
@@ -10,20 +12,20 @@ class EnumParameter : public BaseParameter
 
 public:
 
-    EnumParameter(const EnumDefinition& definition, const char * name,
-                  ParameterMode mode = ParameterMode::Passthrough);
+    EnumParameter(ParameterOwner * owner, const EnumDefinition& definition, const char * name, int index = 0);
 
-    EnumParameter(const EnumDefinition& definition, const char * name,
-                  int start_value, ParameterMode mode = ParameterMode::Passthrough);
+    EnumParameter(ParameterOwner * owner, const EnumDefinition& definition, const char * name, const char* value);
 
-    EnumParameter(const EnumDefinition& definition, const char * name,
-                  const char* current_index, ParameterMode mode = ParameterMode::Passthrough);
 
     void operator=(int index);
+
     void operator=(const char* current_index);
 
+
     operator int() const;
+
     operator const char *() const;
+
 
     const EnumDefinition * const definition;
 
@@ -31,6 +33,7 @@ public:
 public slots:
 
     void set(int index);
+
     void set(const char* current_index);
 
 
