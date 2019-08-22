@@ -34,10 +34,10 @@ protected:
 
     void resizeEvent(QResizeEvent *event) override;
 
-signals:
-
 
 public slots:
+
+    void on_operator_requested(const OperatorTypeInfo* op_type, const QPointF& where);
 
 
 private:

@@ -10,6 +10,7 @@ ProjectSurface::ProjectSurface()
 
 }
 
+
 void ProjectSurface::start_connecting(BaseConnector* connector)
 {
     if (connector && connection_starter && connection_starter != connector)
@@ -22,6 +23,7 @@ void ProjectSurface::start_connecting(BaseConnector* connector)
         connector->set_highlighted(true);
     }
 }
+
 
 void ProjectSurface::mouse_movement(const QPointF &scene_pos)
 {

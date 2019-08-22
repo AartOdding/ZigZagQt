@@ -114,7 +114,8 @@ void ProjectScopeView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 
     if (!mouseEvent->isAccepted())
     {
-        data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+       data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+       std::cout << "data model" << data_model << "\n";
     }
 }
 

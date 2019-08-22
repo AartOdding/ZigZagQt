@@ -6,6 +6,9 @@
 #include <iostream>
 
 #include "operatorselectordialog.h"
+#include "model/baseoperator.h"
+#include "application.h"
+
 
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
@@ -73,8 +76,18 @@ void Viewport::wheelEvent(QWheelEvent *event)
 void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseDoubleClickEvent(event);
-    auto dialog = new OperatorSelectorDialog{ this };
+    auto dialog = new OperatorSelectorDialog{ this, mapToScene(event->pos()) };
+    connect(dialog, &OperatorSelectorDialog::operator_requested, this, &Viewport::on_operator_requested);
     dialog->show();
+}
+
+
+
+void Viewport::on_operator_requested(const OperatorTypeInfo* op_type, const QPointF& where)
+{
+    std::cout << "succes: " << op_type->name << "\n";
+    std::cout << application::project_model() << "\n";
+    application::project_model()->add_operator(*op_type, where.x(), where.y());
 }
 
 

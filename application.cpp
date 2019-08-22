@@ -6,6 +6,7 @@
 #include "view/projectscopeview.h"
 
 #include "library/standard/testoperator.h"
+#include "library/standard/texture/blendoperator.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -70,8 +71,13 @@ Application::Application(int &argc, char **argv)
     std::cout << QFontDatabase::applicationFontFamilies(montserrat).at(0).toStdString() << "\n";
 
     library_model = std::make_unique<LibraryModel>();
-    library_model->register_operator(TestOperator::Type);
+
     library_model->register_data_type(TestData::Type);
+    library_model->register_data_type(TextureData::Type);
+
+    library_model->register_operator(TestOperator::Type);
+    library_model->register_operator(BlendOperator::Type);
+
     // greenish color: { 205, 255, 0 }
 
     project_model = std::make_unique<ProjectModel>(*library_model);
