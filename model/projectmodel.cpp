@@ -1,4 +1,5 @@
 #include "projectmodel.h"
+#include "application.h"
 
 #include "model/baseoperator.h"
 #include "model/basedatatype.h"
@@ -12,6 +13,8 @@
 
 #include <QString>
 #include <QPointer>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include <iostream>
 
@@ -110,6 +113,10 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
+        auto context = QOpenGLContext::currentContext();
+        GLint old_fbo;
+        context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
+
         auto blocks = operator_ptr->data_outputs();
 
         for (auto& block : blocks)
@@ -122,6 +129,10 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
         operator_ptr->acquire_resources();
 
         operators.push_back(operator_ptr);
+
+        context->functions()->glBindFramebuffer(GL_FRAMEBUFFER, old_fbo);
+        //context->functions()->glFlush();
+
         emit operator_added(operator_ptr);
     }
 }

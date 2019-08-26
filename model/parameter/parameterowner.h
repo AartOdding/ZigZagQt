@@ -8,29 +8,34 @@
 #include "baseparameter.h"
 
 
-
-class ParameterOwner : public QObject
+namespace parameter
 {
-    Q_OBJECT
 
-public:
+    class ParameterOwner : public QObject
+    {
+        Q_OBJECT
 
-    ParameterOwner(QObject *parent = nullptr);
+    public:
 
-    const std::vector<BaseParameter*>& parameters() const;
+        ParameterOwner(QObject *parent = nullptr);
 
-    // Should not be necessary to be used by the user, called from BaseParameter.
-    void register_parameter(BaseParameter* parameter);
+        const std::vector<BaseParameter*>& parameters() const;
 
-
-signals:
-
-    void parameter_added(BaseParameter* parameter);
+        // Should not be necessary to be used by the user, called from BaseParameter.
+        void register_parameter(BaseParameter* parameter);
 
 
-protected:
+    signals:
 
-    std::vector<BaseParameter*> m_parameters;
+        void parameter_added(BaseParameter* parameter);
 
 
-};
+    protected:
+
+        std::vector<BaseParameter*> m_parameters;
+
+
+    };
+
+
+}

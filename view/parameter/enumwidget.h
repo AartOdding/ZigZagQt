@@ -2,7 +2,7 @@
 
 #include <QComboBox>
 
-#include "model/parameter/enumparameter.h"
+#include "model/parameter/enum.h"
 
 
 
@@ -13,7 +13,7 @@ class EnumWidget : public QComboBox
 
 public:
 
-    EnumWidget(QWidget * parent, EnumParameter* parameter);
+    EnumWidget(QWidget * parent, parameter::Enum* parameter);
 
 
     /*
@@ -28,7 +28,7 @@ private slots:
 
 private:
 
-    EnumParameter* parameter;
+    parameter::Enum* parameter;
     QFont OpenSans = QFont("Open Sans");
 
 

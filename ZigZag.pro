@@ -27,18 +27,20 @@ CONFIG += c++17 console
 SOURCES += \
         application.cpp \
         library/standard/shadertop.cpp \
-        library/standard/testoperator.cpp \
+        library/standard/test/testdataview.cpp \
+        library/standard/test/testoperator.cpp \
         library/standard/texture/blendoperator.cpp \
-        library/standard/texturedata.cpp \
-        library/standard/texturedataview.cpp \
+        library/standard/texture/coloroperator.cpp \
+        library/standard/texture/sinewaveoperator.cpp \
+        library/standard/texture/texturedata.cpp \
+        library/standard/texture/texturedataview.cpp \
         model/basedatatype.cpp \
         model/datainput.cpp \
         model/librarymodel.cpp \
         model/parameter/baseparameter.cpp \
-        model/parameter/enumparameter.cpp \
-        model/parameter/integerparameter.cpp \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
+        model/parameter/enum.cpp \
         model/parameter/parameterowner.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
@@ -51,13 +53,13 @@ SOURCES += \
         view/operatorselectordialog.cpp \
         view/operatorview.cpp \
         view/parameter/enumwidget.cpp \
+        view/parameter/floatwidget.cpp \
         view/parameter/intwidget.cpp \
         view/parameter/parametereditor.cpp \
         view/parameter/parameterpanel.cpp \
         view/parameter/parameterpanelheader.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
-        view/projectviewmodel.cpp \
         view/viewport.cpp \
         main.cpp \
         renderer.cpp
@@ -71,23 +73,27 @@ HEADERS += \
         command/movecommand.h \
         command/removecommand.h \
         library/standard/shadertop.h \
-        library/standard/testdata.h \
-        library/standard/testoperator.h \
+        library/standard/test/testdata.h \
+        library/standard/test/testdataview.h \
+        library/standard/test/testoperator.h \
         library/standard/texture/blendoperator.h \
-        library/standard/texturedata.h \
-        library/standard/texturedataview.h \
+        library/standard/texture/coloroperator.h \
+        library/standard/texture/sinewaveoperator.h \
+        library/standard/texture/texturedata.h \
+        library/standard/texture/texturedataview.h \
         model/basedatatype.h \
         model/datainput.h \
         model/librarymodel.h \
         model/parameter/baseparameter.h \
-        model/parameter/enumparameter.h \
-        model/parameter/integerparameter.h \
         model/baseoperator.h \
         model/enumdefinition.h \
         model/namemanager.h \
+        model/parameter/enum.h \
+        model/parameter/int.h \
         model/parameter/parameterowner.h \
         model/projectmodel.h \
         model/projectscope.h \
+        utility/bounded_value.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         view/baseconnector.h \
@@ -99,13 +105,13 @@ HEADERS += \
         view/operatorselectordialog.h \
         view/operatorview.h \
         view/parameter/enumwidget.h \
+        view/parameter/floatwidget.h \
         view/parameter/intwidget.h \
         view/parameter/parametereditor.h \
         view/parameter/parameterpanel.h \
         view/parameter/parameterpanelheader.h \
         view/projectscopeview.h \
         view/projectsurface.h \
-        view/projectviewmodel.h \
         view/viewport.h \
         renderer.h
 

@@ -10,6 +10,7 @@
 
 #include "view/operatorview.h"
 #include "view/parameter/intwidget.h"
+#include "view/parameter/floatwidget.h"
 #include "view/parameter/enumwidget.h"
 #include "view/parameter/parametereditor.h"
 
@@ -76,21 +77,47 @@ void ParameterPanel::on_selection_changed()
 }
 
 
-void ParameterPanel::add_parameters(const std::vector<BaseParameter*>& parameters)
+void ParameterPanel::add_parameters(const std::vector<parameter::BaseParameter*>& parameters)
 {
     for (auto & p : parameters)
     {
         QLabel* label = new QLabel(p->name);
         label->setFont(MontSerrat);
 
-        if (p->type == ParameterType::Int)
+        switch (p->type)
         {
-            layout->addRow(label, new IntWidget(this, qobject_cast<IntegerParameter*>(p)));
+            case parameter::ParameterType::Int:
+                layout->addRow(label, new IntWidget(this, static_cast<parameter::Int*>(p)));
+                break;
+            case parameter::ParameterType::Int2:
+                layout->addRow(label, new IntWidget(this, static_cast<parameter::Int2*>(p)));
+                break;
+            case parameter::ParameterType::Int3:
+                layout->addRow(label, new IntWidget(this, static_cast<parameter::Int3*>(p)));
+                break;
+            case parameter::ParameterType::Int4:
+                layout->addRow(label, new IntWidget(this, static_cast<parameter::Int4*>(p)));
+                break;
+
+            case parameter::ParameterType::Float:
+                layout->addRow(label, new FloatWidget(this, static_cast<parameter::Float*>(p)));
+                break;
+            case parameter::ParameterType::Float2:
+                layout->addRow(label, new FloatWidget(this, static_cast<parameter::Float2*>(p)));
+                break;
+            case parameter::ParameterType::Float3:
+                layout->addRow(label, new FloatWidget(this, static_cast<parameter::Float3*>(p)));
+                break;
+            case parameter::ParameterType::Float4:
+                layout->addRow(label, new FloatWidget(this, static_cast<parameter::Float4*>(p)));
+                break;
+
+            case parameter::ParameterType::Enum:
+                layout->addRow(label, new EnumWidget(this, static_cast<parameter::Enum*>(p)));
+                break;
+
         }
-        else if (p->type == ParameterType::Enum)
-        {
-            layout->addRow(label, new EnumWidget(this, qobject_cast<EnumParameter*>(p)));
-        }
+
     }
 }
 

@@ -14,11 +14,17 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
     : QDialog(vp, Qt::Popup), operator_position(where)
 {
     MontSerrat.setPixelSize(14);
+    OpenSans.setPixelSize(14);
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui.setupUi(this);
     ui.label_filter_input->setFont(MontSerrat);
-    ui.label_filter_output->setFont(MontSerrat);    
+    ui.label_filter_output->setFont(MontSerrat);
+    ui.input_filter->setFont(OpenSans);
+    ui.output_filter->setFont(OpenSans);
+    ui.accept_button->setFont(OpenSans);
+    ui.cancel_button->setFont(OpenSans);
+    ui.operator_list->setFont(MontSerrat);
     ui.accept_button->setDefault(true);
 
     auto library = application::library_model();

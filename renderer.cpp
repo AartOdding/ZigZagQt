@@ -2,12 +2,15 @@
 #include <iostream>
 
 #include "renderer.h"
+#include "application.h"
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 
 #include <QThread>
 #include <QApplication>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include <deque>
 
@@ -22,12 +25,14 @@ Renderer::~Renderer()
 { }
 
 
-void Renderer::set_model(ProjectModel* model_)
+void Renderer::set_model(ProjectModel* m)
 {
-    if (model != nullptr)
+    std::cout << "model: " << m << "\n";
+    if (m != nullptr)
     {
-        model = model_;
+        model = m;
         render_count = 0;
+        std::cout << "startin\'\n";
         render_timer.start(17);
     }
     else
@@ -68,16 +73,13 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
 void Renderer::render_frame()
 {
-    //std::cout << "r\n";
     ++render_count;
     fps_monitor.frame();
 
-    if (render_count % 60 == 0)
-    {
-        //std::cout << fps_monitor.fps() << "\n";
-    }
-
-    int count = 0;
+    Q_ASSERT(QOpenGLContext::currentContext());
+    auto gl = QOpenGLContext::currentContext()->functions();
+    GLint initial_fbo;
+    gl->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &initial_fbo);
 
     std::deque<BaseOperator*> open_list;
     std::unordered_set<const BaseOperator*> closed_list;
@@ -97,6 +99,7 @@ void Renderer::render_frame()
 
         if (has_turn(current, closed_list))
         {
+            current->run();
             closed_list.insert(current);
 
             for (auto& output : current->used_data_outputs())
@@ -112,53 +115,8 @@ void Renderer::render_frame()
             open_list.push_back(current);
         }
     }
+    application::project_view_model()->update();
+    gl->glBindFramebuffer(GL_FRAMEBUFFER, initial_fbo);
 
-    //if (render_count % 120 == 0) std::cout <<"render " << QThread::currentThreadId() << "\n";
 
-    //int node_count = model->get_all_nodes().size();
-    //auto open_list = model->get_entry_nodes();
-    //std::unordered_set<BaseOperator*> rendered;
-    /*
-    while(static_cast<int>(rendered.size()) < node_count)
-    {
-        auto current = open_list.front();
-        open_list.pop_front();
-
-        bool inputs_rendered = true;
-
-        for (int i = 0; i < current->get_num_inputs(); ++i)
-        {
-            // get_input(i) can be nullptr. Make sure been_rendered never contains nullptr!
-            if (rendered.find(current->get_input(i)) == rendered.end())
-            {
-                inputs_rendered = false;
-                break;
-            }
-        }
-
-        if (inputs_rendered)
-        {
-            current->prepare_render();
-            current->render();
-
-            rendered.insert(current);
-            // Now that current has been rendered, all children can be queued.
-            for (int i = 0; i < current->get_num_inputs(); ++i)
-            {
-                // if the input is not nullptr and not in the queue yet.
-                if (current->get_input(i) && open_list.count(current->get_input(i)) == 0)
-                {
-                    open_list.push_back(current->get_input(i));
-                }
-            }
-        }
-        else
-        {
-            // Node's inputs need to be evaluated before this one. Add current back to the
-            // queue to try again later.
-            open_list.push_back(current);
-        }
-    }*/
-
-    //++render_count;
 }

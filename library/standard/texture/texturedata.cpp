@@ -1,6 +1,6 @@
 #include "texturedata.h"
-
-
+#include "application.h"
+#include <iostream>
 
 
 TextureData::TextureData(BaseOperator* parent_operator)
@@ -8,8 +8,11 @@ TextureData::TextureData(BaseOperator* parent_operator)
 {
     initializeOpenGLFunctions();
 
-    connect(&resolution_x, &IntegerParameter::value_changed, this, &TextureData::reallocate_texture);
-    connect(&resolution_y, &IntegerParameter::value_changed, this, &TextureData::reallocate_texture);
+    resolution.set_update_mode(parameter::UpdateMode::NecessaryUpdates);
+    resolution_y.set_update_mode(parameter::UpdateMode::NecessaryUpdates);
+
+    connect(&resolution, &parameter::Int::value_changed, this, &TextureData::reallocate_texture);
+    connect(&resolution_y, &parameter::Int::value_changed, this, &TextureData::reallocate_texture);
 }
 
 
@@ -23,7 +26,7 @@ void TextureData::acquire_resources()
 {
     glGenTextures(1, &texture_handle);
     glBindTexture(GL_TEXTURE_2D, texture_handle);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution.get<0>(), resolution.get<0>(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -56,12 +59,13 @@ void TextureData::bind_as_framebuffer()
 }
 
 
-void TextureData::bind_as_texture(int texture_index)
+void TextureData::bind_as_texture(int texture_index) const
 {
+    auto this2 = const_cast<TextureData*>(this);
     if (currently_allocated)
     {
-        glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + texture_index));
-        glBindTexture(GL_TEXTURE_2D, texture_handle);
+        this2->glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + texture_index));
+        this2->glBindTexture(GL_TEXTURE_2D, texture_handle);
     }
 }
 
@@ -71,6 +75,6 @@ void TextureData::reallocate_texture()
     if (currently_allocated)
     {
         glBindTexture(GL_TEXTURE_2D, texture_handle);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution_x, resolution_y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution.get<0>(), resolution.get<1>(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     }
 }

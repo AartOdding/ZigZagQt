@@ -8,7 +8,7 @@
 #include <QGraphicsTextItem>
 
 #include "operatornametag.h"
-#include "library/standard/texturedataview.h"
+#include "library/standard/texture/texturedataview.h"
 
 
 class BaseOperator;
@@ -79,7 +79,7 @@ private:
     std::unordered_map<const BaseDataType*, DataBlockConnector*> outputs;
 
     OperatorNameTag name_tag;
-    TextureDataView data_view;
+    BaseDataView* data_view = nullptr;
     QGraphicsRectItem selection_rect{ this };
 
 };

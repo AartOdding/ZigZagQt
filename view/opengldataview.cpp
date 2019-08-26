@@ -3,8 +3,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
-OpenGLDataView::OpenGLDataView(OperatorView& parent_op)
-    : BaseDataView (parent_op)
+OpenGLDataView::OpenGLDataView()
 {
     initializeOpenGLFunctions();
 }

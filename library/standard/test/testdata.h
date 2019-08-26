@@ -2,7 +2,7 @@
 
 #include "model/basedatatype.h"
 #include "model/baseoperator.h"
-#include "model/parameter/integerparameter.h"
+#include "model/parameter/int.h"
 
 #include <iostream>
 
@@ -13,7 +13,7 @@ class TestData : public BaseDataType
 
 public:
 
-    static const inline DataTypeInfo Type { "Test", QColor(205, 255, 0) };
+    static const inline DataTypeInfo Type { "Test", "Standard/Test", QColor(205, 255, 0), false };
 
     TestData(BaseOperator* op)
         : BaseDataType(op, Type)
@@ -32,7 +32,7 @@ public:
     }
 
 
-    IntegerParameter par1 { this, "Test Parameter 1", -334 };
-    IntegerParameter par2 { this, "Test Parameter 2", 43551 };
+    parameter::Int par1 { this, "Test Parameter 1", -334 };
+    parameter::Int par2 { this, "Test Parameter 2", 43551 };
 
 };

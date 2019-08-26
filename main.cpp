@@ -13,11 +13,7 @@ int main(int argc, char *argv[])
     format.setSamples(8);
 
     QSurfaceFormat::setDefaultFormat(format);
-
-    //QMainWindow *widget = new QMainWindow;
-    //Ui::MainWindow mw;
-    //mw.setupUi(widget);
-    //widget->show();
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     Application app(argc, argv);
     return app.exec();

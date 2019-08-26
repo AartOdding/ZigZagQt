@@ -3,6 +3,7 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsSceneMouseEvent>
 
+#include "application.h"
 #include "operatorview.h"
 #include "projectscopeview.h"
 
@@ -11,11 +12,12 @@
 #include "model/basedatatype.h"
 #include "model/datainput.h"
 #include "view/datablockconnector.h"
-#include "library/standard/texturedata.h"
+#include "library/standard/texture/texturedata.h"
+
 
 
 OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag("Test operator number x", this), data_view( static_cast<TextureData*>(operator_model.data_outputs()[0]), this)
+    : operator_model(op), name_tag("Test operator number x", this)
 {
     setZValue(1);
     setPos(op.get_position_x(), op.get_position_y());
@@ -23,9 +25,8 @@ OperatorView::OperatorView(BaseOperator& op)
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    on_input_added(nullptr);
-    on_output_added(nullptr);
-    //on_parameters_modified();
+    if (!op.data_inputs().empty()) on_input_added(nullptr);
+    if (!op.data_outputs().empty())on_output_added(nullptr);
 
     connect(&operator_model, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
     connect(&operator_model, &BaseOperator::data_input_added, this, &OperatorView::on_input_added);
@@ -36,13 +37,26 @@ OperatorView::OperatorView(BaseOperator& op)
     auto h_height = height / 2.0;
 
     name_tag.setPos(-h_width, -h_height - 33);
-    data_view.set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
 
     selection_rect.setRect(0, 0, width + 50, height + 46);
     selection_rect.setPos(- h_width - 25, -h_height - 35);
     selection_rect.setPen(QPen(QBrush(QColor(51, 153, 255)), 2));
     selection_rect.setBrush(QColor(51, 153, 255, 30));
     selection_rect.setFlag(QGraphicsItem::ItemStacksBehindParent);
+
+    auto library = application::library_model();
+
+    for (auto output : operator_model.data_outputs())
+    {
+        if (library->contains_view_for(*output->type()))
+        {
+            auto data_view_type = library->data_views().at(output->type());
+            data_view = data_view_type->construct(output);
+            data_view->set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
+            data_view->setParentItem(this);
+            return;
+        }
+    }
 }
 
 

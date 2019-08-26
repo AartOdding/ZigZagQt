@@ -12,7 +12,7 @@ class BaseDataType;
 
 
 
-class DataInput : public ParameterOwner
+class DataInput : public parameter::ParameterOwner
 {
     Q_OBJECT
 

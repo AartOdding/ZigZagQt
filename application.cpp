@@ -5,8 +5,11 @@
 #include "model/librarymodel.h"
 #include "view/projectscopeview.h"
 
-#include "library/standard/testoperator.h"
+#include "library/standard/test/testoperator.h"
+#include "library/standard/test/testdataview.h"
 #include "library/standard/texture/blendoperator.h"
+#include "library/standard/texture/coloroperator.h"
+#include "library/standard/texture/texturedataview.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -49,6 +52,11 @@ namespace application
     {
         return instance()->get_project_view_model();
     }
+
+    QOpenGLContext * main_opengl_context()
+    {
+        return instance()->get_main_opengl_context();
+    }
 }
 
 
@@ -77,6 +85,10 @@ Application::Application(int &argc, char **argv)
 
     library_model->register_operator(TestOperator::Type);
     library_model->register_operator(BlendOperator::Type);
+    library_model->register_operator(ColorOperator::Type);
+
+    library_model->register_data_view(TestDataView::Type);
+    library_model->register_data_view(TextureDataView::Type);
 
     // greenish color: { 205, 255, 0 }
 
@@ -91,14 +103,15 @@ Application::Application(int &argc, char **argv)
     //viewport.setParent(&gl_widget);
     //auto gl = new QOpenGLWidget();
 
-    viewport = std::make_unique<Viewport>(new QOpenGLWidget());
+    main_opengl_widget = new QOpenGLWidget();
+    viewport = std::make_unique<Viewport>(main_opengl_widget);
     //viewport->
 
     viewport->set_view(project_view_model.get());
 
     renderer = std::make_unique<Renderer>();
     renderer->set_model(project_model.get());
-
+    std::cout << "renderer" << renderer << "\n";
 
     QMenuBar* menu_bar = new QMenuBar(viewport.get());
 
@@ -131,11 +144,6 @@ Application::Application(int &argc, char **argv)
     //viewport->show();
     //gl_widget.show();
 
-    //std::cout << gl->width() << "\n";
-    QWidget q;
-    QBoxLayout l(QBoxLayout::TopToBottom);
-    //.setM
-
 }
 
 
@@ -166,4 +174,11 @@ LibraryModel * Application::get_library_model()
 ProjectScopeView * Application::get_project_view_model()
 {
     return project_view_model.get();
+}
+
+
+QOpenGLContext * Application::get_main_opengl_context()
+{
+    // TODO: maybe change to static cast later
+    return main_opengl_widget->context();
 }

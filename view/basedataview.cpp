@@ -5,8 +5,7 @@
 #include <QPainter>
 
 
-BaseDataView::BaseDataView(OperatorView& parent_op)
-    : QGraphicsItem (&parent_op)
+BaseDataView::BaseDataView()
 {
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
 }

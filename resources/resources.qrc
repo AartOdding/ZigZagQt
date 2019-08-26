@@ -6,4 +6,10 @@
         <file>OpenSans-SemiBold.ttf</file>
         <file>Roboto-Regular.ttf</file>
     </qresource>
+    <qresource prefix="/shaders">
+        <file>shaders/minimal.vert</file>
+        <file>shaders/view_texture.frag</file>
+        <file>shaders/test_pattern.frag</file>
+    </qresource>
+    <qresource prefix="/"/>
 </RCC>

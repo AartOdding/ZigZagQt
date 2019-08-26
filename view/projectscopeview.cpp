@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include "library/standard/testoperator.h"
+#include "library/standard/test/testoperator.h"
 
 
 ProjectScopeView::ProjectScopeView(QObject *parent)
@@ -114,7 +114,7 @@ void ProjectScopeView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 
     if (!mouseEvent->isAccepted())
     {
-       data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+       //data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
        std::cout << "data model" << data_model << "\n";
     }
 }

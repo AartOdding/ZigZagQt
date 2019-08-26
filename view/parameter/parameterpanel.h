@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QWidget>
+#include "model/parameter/baseparameter.h"
 
 class BaseOperator;
-class BaseParameter;
 class ParameterEditor;
 class QFormLayout;
 class QGraphicsScene;
@@ -36,7 +36,7 @@ private:
 
     void reset_layout();
 
-    void add_parameters(const std::vector<BaseParameter*>& parameters);
+    void add_parameters(const std::vector<parameter::BaseParameter*>& parameters);
 
 
     QGraphicsScene* scene = nullptr;

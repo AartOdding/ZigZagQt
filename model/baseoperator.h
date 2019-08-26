@@ -8,6 +8,7 @@
 #include "model/parameter/parameterowner.h"
 
 
+struct DataTypeInfo;
 class BaseOperator;
 class BaseDataType;
 class BaseParameter;
@@ -17,7 +18,12 @@ class DataInput;
 struct OperatorTypeInfo
 {
     std::string name;
+    std::string library;
+    std::vector<const DataTypeInfo*> input_data_types;
+    std::vector<const DataTypeInfo*> output_data_types;
+    bool use_opengl;
     std::function<BaseOperator*()> construct;
+    // Library
     // Image
     // Version
     // Description
@@ -27,7 +33,7 @@ struct OperatorTypeInfo
 };
 
 
-class BaseOperator : public ParameterOwner
+class BaseOperator : public parameter::ParameterOwner
 {
     Q_OBJECT
 

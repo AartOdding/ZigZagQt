@@ -4,13 +4,14 @@
 
 #include <QFont>
 #include <QDialog>
+#include <QObject>
 
 #include "ui_librarydialogpanel.h"
 
 
 class Viewport;
-class DataTypeInfo;
-class OperatorTypeInfo;
+struct DataTypeInfo;
+struct OperatorTypeInfo;
 
 
 class OperatorSelectorDialog : public QDialog
@@ -41,6 +42,7 @@ private:
     Ui::OperatorSelectorForm ui;
 
     QFont MontSerrat{ "MontSerrat" };
+    QFont OpenSans{ "Open Sans" };
 
     QPointF operator_position;
 

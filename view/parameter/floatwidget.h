@@ -3,21 +3,20 @@
 #include <vector>
 
 #include <QWidget>
-#include <QSpinBox>
 #include <QHBoxLayout>
+#include <QDoubleSpinBox>
 
 #include "model/parameter/baseparameter.h"
 
 
 
-
-class IntWidget : public QWidget
+class FloatWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    IntWidget(QWidget * parent, parameter::BaseParameter* parameter);
+    FloatWidget(QWidget * parent, parameter::BaseParameter* parameter);
 
 
 private slots:
@@ -31,7 +30,7 @@ private:
 
     int num_components;
     parameter::BaseParameter* parameter;
-    std::vector<QSpinBox*> spinboxes;
+    std::vector<QDoubleSpinBox*> spinboxes;
     QHBoxLayout layout;
     QFont OpenSans = QFont("Open Sans");
 

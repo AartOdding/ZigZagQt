@@ -124,7 +124,7 @@
       <item>
        <widget class="QPushButton" name="accept_button">
         <property name="text">
-         <string>Accept</string>
+         <string>Add</string>
         </property>
        </widget>
       </item>

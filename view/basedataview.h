@@ -4,6 +4,34 @@
 
 
 class OperatorView;
+class BaseDataType;
+class BaseDataView;
+
+struct DataTypeInfo;
+
+
+enum class DataViewGraphicsApi
+{
+    QPainter,
+    OpenGL
+};
+
+
+struct DataViewTypeInfo
+{
+    std::string name;
+    std::string library;
+    const DataTypeInfo* data_type;
+    DataViewGraphicsApi graphics_api;
+    std::function<BaseDataView*(const BaseDataType*)> construct;
+    // Library
+    // Image
+    // Version
+    // Description
+    // Author
+    // License
+    // Etc
+};
 
 
 class BaseDataView : public QGraphicsItem
@@ -11,7 +39,7 @@ class BaseDataView : public QGraphicsItem
 
 public:
 
-    BaseDataView(OperatorView& parent);
+    BaseDataView();
 
 
     QRectF boundingRect() const override;

@@ -16,7 +16,9 @@ class DataInput;
 struct DataTypeInfo
 {
     std::string name;
+    std::string library;
     QColor gui_color;
+    bool use_opengl;
     // Description
     // Version
     // Author
@@ -26,7 +28,7 @@ struct DataTypeInfo
 
 
 
-class BaseDataType : public ParameterOwner
+class BaseDataType : public parameter::ParameterOwner
 {
     Q_OBJECT
 

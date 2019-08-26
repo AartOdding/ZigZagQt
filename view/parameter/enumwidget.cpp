@@ -2,7 +2,7 @@
 
 
 
-EnumWidget::EnumWidget(QWidget * parent, EnumParameter* par)
+EnumWidget::EnumWidget(QWidget * parent, parameter::Enum* par)
     : QComboBox(parent), parameter(par)
 {
     OpenSans.setPixelSize(14);
@@ -14,7 +14,7 @@ EnumWidget::EnumWidget(QWidget * parent, EnumParameter* par)
     }
 
     setCurrentIndex(*par);
-    connect(this, qOverload<int>(&QComboBox::currentIndexChanged), par, qOverload<int>(&EnumParameter::set));
+    connect(this, qOverload<int>(&QComboBox::currentIndexChanged), par, qOverload<int>(&parameter::Enum::set));
 }
 
 

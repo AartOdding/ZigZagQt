@@ -15,6 +15,7 @@ class LibraryModel;
 class NameManager;
 
 class QMainWindow;
+class QOpenGLContext;
 
 
 namespace application
@@ -25,6 +26,7 @@ namespace application
     ProjectModel *     project_model();
     LibraryModel *     library_model();
     ProjectScopeView * project_view_model();
+    QOpenGLContext *   main_opengl_context();
 }
 
 
@@ -42,6 +44,7 @@ public:
     ProjectModel *     get_project_model();
     LibraryModel *     get_library_model();
     ProjectScopeView * get_project_view_model();
+    QOpenGLContext *   get_main_opengl_context();
 
 
 private:
@@ -52,6 +55,7 @@ private:
     std::unique_ptr<ProjectScopeView> project_view_model;
 
     std::unique_ptr<Viewport> viewport;
+    QOpenGLWidget * main_opengl_widget;
 
     std::unique_ptr<QWidget> main_window;
 };

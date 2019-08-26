@@ -4,24 +4,29 @@
 
 
 
-class ParameterOwner;
 
 
 
-enum class ParameterType
+
+namespace parameter
 {
-    Int,
-    Float,
-    Enum
-};
+
+    class ParameterOwner;
 
 
+    enum class ParameterType
+    {
+        Int,
+        Int2,
+        Int3,
+        Int4,
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        Enum
+    };
 
-class BaseParameter : public QObject
-{
-    Q_OBJECT
-
-public:
 
     enum class UpdateMode
     {
@@ -29,37 +34,46 @@ public:
         NecessaryUpdates
     };
 
-    BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
-
-
-    UpdateMode update_mode() const;
-
-    void set_update_mode(const UpdateMode& mode);
-
-
-    ParameterOwner * const owner;
-
-    const ParameterType type;
-
-    const char * const name;
-
-
-protected:
-
-    void emit_changes()
+    class BaseParameter : public QObject
     {
-        emit value_changed();
-    }
+        Q_OBJECT
+
+    public:
+
+        BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
 
 
-signals:
+        UpdateMode update_mode() const;
 
-    void value_changed();
-
-
-private:
-
-    UpdateMode m_update_mode = UpdateMode::AllUpdates;
+        void set_update_mode(const UpdateMode& mode);
 
 
-};
+        ParameterOwner * const owner;
+
+        const ParameterType type;
+
+        const char * const name;
+
+
+    protected:
+
+        void flag_changed()
+        {
+            emit value_changed();
+        }
+
+
+    signals:
+
+        void value_changed();
+
+
+    private:
+
+        UpdateMode m_update_mode = UpdateMode::AllUpdates;
+
+
+    };
+
+
+}

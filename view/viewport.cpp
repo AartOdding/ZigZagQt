@@ -77,6 +77,9 @@ void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseDoubleClickEvent(event);
     auto dialog = new OperatorSelectorDialog{ this, mapToScene(event->pos()) };
+    auto x = event->screenPos().x() - dialog->size().width() / 2;
+    auto y = event->screenPos().y() - 100;
+    dialog->move(x, y);
     connect(dialog, &OperatorSelectorDialog::operator_requested, this, &Viewport::on_operator_requested);
     dialog->show();
 }
