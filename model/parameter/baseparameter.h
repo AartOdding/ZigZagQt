@@ -1,79 +1,59 @@
-#pragma once
-
-#include <QObject>
+﻿#pragma once
 
 
+class ParameterOwner;
 
 
-
-
-
-namespace parameter
+enum class ParameterType
 {
-
-    class ParameterOwner;
-
-
-    enum class ParameterType
-    {
-        Int,
-        Int2,
-        Int3,
-        Int4,
-        Float,
-        Float2,
-        Float3,
-        Float4,
-        Enum
-    };
+    Int,
+    Int2,
+    Int3,
+    Int4,
+    Float,
+    Float2,
+    Float3,
+    Float4,
+    Enum
+};
 
 
-    enum class UpdateMode
-    {
-        AllUpdates,
-        NecessaryUpdates
-    };
 
-    class BaseParameter : public QObject
-    {
-        Q_OBJECT
+class BaseParameter
+{
+public:
 
-    public:
+    BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
+    virtual ~BaseParameter();
 
-        BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
+    bool minimal_updates() const;
+    void set_minimal_updates(bool value);
 
+    bool rollover() const;      // Maybe move to the arithmetic parameter classes?
+    void set_rollover(bool value);
 
-        UpdateMode update_mode() const;
+    const char * name() const;
+    ParameterType type() const;
+    ParameterOwner * owner() const;
 
-        void set_update_mode(const UpdateMode& mode);
-
-
-        ParameterOwner * const owner;
-
-        const ParameterType type;
-
-        const char * const name;
+    // Also flags the parameter owner as changed!
+    void flag_changed();
+    void reset_changed_flag();
+    bool has_changed() const;
 
 
-    protected:
+private:
 
-        void flag_changed()
-        {
-            emit value_changed();
-        }
+    bool m_changed = false;
+    bool m_minimal_updates = false;
+    bool m_rollover = false;
 
+    ParameterOwner * const m_owner;
 
-    signals:
+    const ParameterType m_type;
 
-        void value_changed();
-
-
-    private:
-
-        UpdateMode m_update_mode = UpdateMode::AllUpdates;
+    const char * const m_name;
 
 
-    };
+};
 
-
-}

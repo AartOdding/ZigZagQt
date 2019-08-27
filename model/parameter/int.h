@@ -2,19 +2,184 @@
 
 #include <array>
 #include <cstdint>
-#include <type_traits>
 
 #include "baseparameter.h"
 #include "utility/bounded_value.h"
 
 
 
-#include <iostream> // TODO: remove
+using int32 = int32_t;
+using int32_2 = std::array<int32, 2>;
+using int32_3 = std::array<int32, 3>;
+using int32_4 = std::array<int32, 4>;
+
+
+
+class IntPar : public BaseParameter
+{
+public:
+
+    IntPar(ParameterOwner * owner, const char * name, int32 value = 0);
+    IntPar(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max);
+
+    int32 get() const;
+
+    void set(int32 new_value);
+
+    int32 min() const;
+    int32 max() const;
+
+    void set_min(int32 new_min);
+    void set_max(int32 new_max);
+
+    operator int32() const;
+    void operator=(int32 new_value);
+
+private:
+
+    bounded_value<int32> value;
+
+};
 
 
 
 
+class Int2Par : public BaseParameter
+{
+public:
 
+    Int2Par(ParameterOwner * owner, const char * name, int32 value = 0);
+    Int2Par(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max);
+
+    Int2Par(ParameterOwner * owner, const char * name, int32_2 values);
+    Int2Par(ParameterOwner * owner, const char * name, int32_2 values, int32 min, int32 max);
+
+
+    int32 x() const;
+    int32 y() const;
+
+    void set_x(int32 new_x);
+    void set_y(int32 new_y);
+
+    int32 min() const;
+    int32 max() const;
+
+    void set_min(int32 new_min);
+    void set_max(int32 new_max);
+
+    int32_2 get() const;
+
+    void set(int32_2 new_values);
+    void set(int32 x, int32 y);
+
+    operator int32_2() const;
+    void operator=(int32_2 new_values);
+
+
+private:
+
+    bounded_value<int32> x_value;
+    bounded_value<int32> y_value;
+
+};
+
+
+
+
+class Int3Par : public BaseParameter
+{
+public:
+
+    Int3Par(ParameterOwner * owner, const char * name, int32 value = 0);
+    Int3Par(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max);
+
+    Int3Par(ParameterOwner * owner, const char * name, int32_3 values);
+    Int3Par(ParameterOwner * owner, const char * name, int32_3 values, int32 min, int32 max);
+
+
+    int32 x() const;
+    int32 y() const;
+    int32 z() const;
+
+    void set_x(int32 new_x);
+    void set_y(int32 new_y);
+    void set_z(int32 new_z);
+
+    int32 min() const;
+    int32 max() const;
+
+    void set_min(int32 new_min);
+    void set_max(int32 new_max);
+
+    int32_3 get() const;
+
+    void set(int32_3 new_values);
+    void set(int32 x, int32 y, int32 z);
+
+    operator int32_3() const;
+    void operator=(int32_3 new_values);
+
+
+private:
+
+    bounded_value<int32> x_value;
+    bounded_value<int32> y_value;
+    bounded_value<int32> z_value;
+
+};
+
+
+
+
+class Int4Par : public BaseParameter
+{
+public:
+
+    Int4Par(ParameterOwner * owner, const char * name, int32 value = 0);
+    Int4Par(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max);
+
+    Int4Par(ParameterOwner * owner, const char * name, int32_4 values);
+    Int4Par(ParameterOwner * owner, const char * name, int32_4 values, int32 min, int32 max);
+
+
+    int32 x() const;
+    int32 y() const;
+    int32 z() const;
+    int32 w() const;
+
+    void set_x(int32 new_x);
+    void set_y(int32 new_y);
+    void set_z(int32 new_z);
+    void set_w(int32 new_w);
+
+    int32 min() const;
+    int32 max() const;
+
+    void set_min(int32 new_min);
+    void set_max(int32 new_max);
+
+    int32_4 get() const;
+
+    void set(int32_4 new_values);
+    void set(int32 x, int32 y, int32 z, int32 w);
+
+    operator int32_4() const;
+    void operator=(int32_4 new_values);
+
+
+private:
+
+    bounded_value<int32> x_value;
+    bounded_value<int32> y_value;
+    bounded_value<int32> z_value;
+    bounded_value<int32> w_value;
+
+
+};
+
+
+
+/*
 namespace parameter
 {
 
@@ -28,14 +193,14 @@ namespace parameter
         constexpr static int num_components = NUM_COMPONENTS;
         static_assert(NUM_COMPONENTS >= 1 && NUM_COMPONENTS <= 4, "Invalid number of components!");
         static_assert(std::is_arithmetic<COMPONENT_TYPE>::value, "Only fundamental arithmetic types can be components!");
-        static_assert(std::is_default_constructible<INTERFACE_TYPE>::value, "INTERFACE_TYPE must be default-constructible!");
+        static_assert(std::is_default_constructible<INTERFACE_TYPE>::value, "INTERFACE_TYPE must be default-constructible!");*/
         /*
          * INTERFACE_TYPE must also store the components contiguously in memory, and as the first thing in the class.
          * so that the address of component 0 is the same as the address of the whole object. Unfortunately this is
          * hard to check with static asserts.
          */
 
-
+/*
         ArithmeticParameter(ParameterOwner * owner, const char * name, INTERFACE_TYPE values = INTERFACE_TYPE())
             : BaseParameter (owner, PARAMETER_TYPE, name)
         {
@@ -58,9 +223,9 @@ namespace parameter
             std::cout << "num components " << num_components << "\n";
         }
 
-
+*/
         /* Getters of one component at a time. */
-
+/*
         template<int INDEX>
         COMPONENT_TYPE get() const
         {
@@ -95,9 +260,9 @@ namespace parameter
         COMPONENT_TYPE b() const { return get<2>(); }
         COMPONENT_TYPE a() const { return get<3>(); }
 
-
+*/
         /* Setters of one component at a time. */
-
+/*
         template<int INDEX>
         void set(const COMPONENT_TYPE& new_value)
         {
@@ -148,9 +313,9 @@ namespace parameter
         void set_b(const COMPONENT_TYPE& val) const { set<2>(val); }
         void set_a(const COMPONENT_TYPE& val) const { set<3>(val); }
 
-
+*/
         /* Getters and setters for the full composite type. */
-
+/*
         INTERFACE_TYPE get() const
         {
             if constexpr(std::is_same<COMPONENT_TYPE, INTERFACE_TYPE>::value)
@@ -197,13 +362,13 @@ namespace parameter
             return get();
         }
 
-
+*/
 /*      INTERFACE_TYPE get_min() const;
         INTERFACE_TYPE get_max() const;
         void set_min(INTERFACE_TYPE min);
         void set_max(INTERFACE_TYPE max);
         void set_limits(INTERFACE_TYPE min, INTERFACE_TYPE max);   */
-
+/*
 
     private:
 
@@ -223,3 +388,4 @@ namespace parameter
     using Float3 = ArithmeticParameter<double, 3, std::array<double, 3>, ParameterType::Float3>;
     using Float4 = ArithmeticParameter<double, 4, std::array<double, 4>, ParameterType::Float4>;
 }
+*/

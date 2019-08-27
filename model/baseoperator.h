@@ -33,7 +33,7 @@ struct OperatorTypeInfo
 };
 
 
-class BaseOperator : public parameter::ParameterOwner
+class BaseOperator : public ParameterOwner
 {
     Q_OBJECT
 

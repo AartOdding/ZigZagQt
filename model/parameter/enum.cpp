@@ -2,7 +2,7 @@
 
 
 
-parameter::Enum::Enum(ParameterOwner * owner, const EnumDefinition& def, const char * name, int index)
+EnumPar::EnumPar(ParameterOwner * owner, const EnumDefinition& def, const char * name, int index)
     : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
 {
     if (definition->contains(index))
@@ -12,7 +12,7 @@ parameter::Enum::Enum(ParameterOwner * owner, const EnumDefinition& def, const c
 }
 
 
-parameter::Enum::Enum(ParameterOwner * owner, const EnumDefinition& def, const char * name, const char* value)
+EnumPar::EnumPar(ParameterOwner * owner, const EnumDefinition& def, const char * name, const char* value)
     : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
 {
     auto index = definition->index_of(value);
@@ -24,7 +24,7 @@ parameter::Enum::Enum(ParameterOwner * owner, const EnumDefinition& def, const c
 }
 
 
-void parameter::Enum::set(int new_index)
+void EnumPar::set(int new_index)
 {
     if (definition->contains(new_index))
     {
@@ -34,7 +34,7 @@ void parameter::Enum::set(int new_index)
 }
 
 
-void parameter::Enum::set(const char* new_value)
+void EnumPar::set(const char* new_value)
 {
     auto index = definition->index_of(new_value);
 
@@ -46,25 +46,25 @@ void parameter::Enum::set(const char* new_value)
 }
 
 
-parameter::Enum::operator int() const
+EnumPar::operator int() const
 {
     return current_index;
 }
 
 
-parameter::Enum::operator const char *() const
+EnumPar::operator const char *() const
 {
     return definition->operator[](current_index).c_str();
 }
 
 
-void parameter::Enum::operator=(int new_index)
+void EnumPar::operator=(int new_index)
 {
     set(new_index);
 }
 
 
-void parameter::Enum::operator=(const char * new_value)
+void EnumPar::operator=(const char * new_value)
 {
     set(new_value);
 }

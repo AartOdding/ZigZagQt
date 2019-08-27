@@ -36,7 +36,7 @@ private:
 
     void reset_layout();
 
-    void add_parameters(const std::vector<parameter::BaseParameter*>& parameters);
+    void add_parameters(const std::vector<BaseParameter*>& parameters);
 
 
     QGraphicsScene* scene = nullptr;

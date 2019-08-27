@@ -41,7 +41,10 @@ SOURCES += \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
         model/parameter/enum.cpp \
+        model/parameter/float.cpp \
+        model/parameter/int.cpp \
         model/parameter/parameterowner.cpp \
+        model/parameter/parameterrow.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         view/baseconnector.cpp \
@@ -89,8 +92,10 @@ HEADERS += \
         model/enumdefinition.h \
         model/namemanager.h \
         model/parameter/enum.h \
+        model/parameter/float.h \
         model/parameter/int.h \
         model/parameter/parameterowner.h \
+        model/parameter/parameterrow.h \
         model/projectmodel.h \
         model/projectscope.h \
         utility/bounded_value.h \

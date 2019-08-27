@@ -11,32 +11,20 @@
 
 
 
-const inline EnumDefinition PixelType
-{
-    "PixelType",
-    {
-        "uint8_1_channel",
-        "uint8_2_channel",
-        "uint8_3_channel",
-        "uint8_4_channel",
-        "float_1_channel",
-        "float_2_channel",
-        "float_3_channel",
-        "float_4_channel"
-    }
-};
-
-
 const inline EnumDefinition PixelDataFormat
 {
     "PixelDataType",
     {
-        "8 Bit Unsigned",
-        "16 Bit Unsigned",
-        "32 Bit Unsigned", // Cannot be normalized
-        "8 Bit Signed",
-        "16 Bit Signed",
-        "32 Bit Signed", // Cannot be normalized
+        "8 Bit Unsigned Norm",
+        "8 Bit Signed Norm",
+        "8 Bit Unsigned Int",
+        "8 Bit Signed Int",
+        "16 Bit Unsigned Norm",
+        "16 Bit Signed Norm",
+        "16 Bit Unsigned Int",
+        "16 Bit Signed Int",
+        "32 Bit Unsigned Int",
+        "32 Bit Signed Int",
         "16 Bit Float",
         "32 Bit Float"
     }
@@ -51,15 +39,6 @@ const inline EnumDefinition PixelNumChannels
         "2 Channels",
         "3 Channels",
         "4 Channels"
-    }
-};
-
-const inline EnumDefinition PixelIsNormalized
-{
-    "PixelNumChannels",
-    {
-        "False",
-        "True"
     }
 };
 
@@ -89,18 +68,15 @@ public:
     static const inline DataTypeInfo Type { "Texture", "Standard/Texture", QColor(255, 20, 147), true };
 
 
-public slots:
-
-    void reallocate_texture();
-
-
 private:
 
-    parameter::Enum pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
-    parameter::Enum pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
-    parameter::Enum pixel_normalized{ this, PixelIsNormalized, "Pixel is Normalized", 1 };
-    parameter::Int2 resolution{ this, "Resolution", { 256, 256 }, { 0, 0 }, { 10000, 10000 } };
-    parameter::Int resolution_y{ this, "Resolution Y", 256 };
+    void reallocate();
+
+    static GLenum gl_format_for(const EnumPar& format, const EnumPar& num_channels);
+
+    Int2Par resolution{ this, "Resolution", { 256, 256 }, 1, 16384 };
+    EnumPar pixel_format{ this, PixelDataFormat, "Format", 0 };
+    EnumPar pixel_channels{ this, PixelNumChannels, "Num Channels", 3 };
 
     GLuint fbo_handle;
     GLuint texture_handle;

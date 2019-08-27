@@ -17,7 +17,7 @@ class IntWidget : public QWidget
 
 public:
 
-    IntWidget(QWidget * parent, parameter::BaseParameter* parameter);
+    IntWidget(QWidget * parent, BaseParameter* parameter);
 
 
 private slots:
@@ -30,7 +30,7 @@ private slots:
 private:
 
     int num_components;
-    parameter::BaseParameter* parameter;
+    BaseParameter* parameter;
     std::vector<QSpinBox*> spinboxes;
     QHBoxLayout layout;
     QFont OpenSans = QFont("Open Sans");

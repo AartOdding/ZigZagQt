@@ -32,7 +32,7 @@ public:
     }
 
 
-    parameter::Int par1 { this, "Test Parameter 1", -334 };
-    parameter::Int par2 { this, "Test Parameter 2", 43551 };
+    IntPar par1 { this, "Test Parameter 1", -334 };
+    IntPar par2 { this, "Test Parameter 2", 43551 };
 
 };

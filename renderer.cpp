@@ -119,4 +119,8 @@ void Renderer::render_frame()
     gl->glBindFramebuffer(GL_FRAMEBUFFER, initial_fbo);
 
 
+    // End with app wide reset of all the changed flags.
+    ParameterOwner::reset_all_changed_flags();
+
+
 }

@@ -1,30 +1,78 @@
 #include "baseparameter.h"
+#include "parameterowner.h"
 
-#include "model/parameter/parameterowner.h"
 
 
-namespace parameter
+BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, const char * name)
+    : m_owner(owner), m_type(type), m_name(name)
 {
-
-    BaseParameter::BaseParameter(ParameterOwner* owner_, ParameterType type_, const char * name_)
-        : owner(owner_), type(type_), name(name_)
-    {
-        Q_ASSERT(owner);
-        owner->register_parameter(this);
-    }
+    Q_ASSERT(owner);
+    owner->register_parameter(this);
+}
 
 
-    parameter::UpdateMode BaseParameter::update_mode() const
-    {
-        return m_update_mode;
-    }
+BaseParameter::~BaseParameter()
+{
+    m_owner->deregister_parameter(this);
+}
 
 
-    void BaseParameter::set_update_mode(const UpdateMode& mode)
-    {
-        m_update_mode = mode;
-    }
+ParameterOwner * BaseParameter::owner() const
+{
+    return m_owner;
+}
 
 
+ParameterType BaseParameter::type() const
+{
+    return m_type;
+}
 
+
+const char * BaseParameter::name() const
+{
+    return m_name;
+}
+
+
+bool BaseParameter::minimal_updates() const
+{
+    return m_minimal_updates;
+}
+
+
+void BaseParameter::set_minimal_updates(bool value)
+{
+    m_minimal_updates = value;
+}
+
+
+bool BaseParameter::rollover() const
+{
+    return m_rollover;
+}
+
+
+void BaseParameter::set_rollover(bool value)
+{
+    m_rollover = value;
+}
+
+
+void BaseParameter::flag_changed()
+{
+    m_changed = true;
+    m_owner->flag_parameters_changed();
+}
+
+
+void BaseParameter::reset_changed_flag()
+{
+    m_changed = false;
+}
+
+
+bool BaseParameter::has_changed() const
+{
+    return m_changed;
 }

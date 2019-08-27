@@ -13,22 +13,18 @@ class EnumWidget : public QComboBox
 
 public:
 
-    EnumWidget(QWidget * parent, parameter::Enum* parameter);
+    EnumWidget(QWidget * parent, EnumPar* parameter);
 
 
-    /*
-signals:
-
-    void has_changed(int value);
 
 private slots:
 
-    void on_editing_finished();
-*/
+    void on_index_changed(int new_index);
+
 
 private:
 
-    parameter::Enum* parameter;
+    EnumPar* parameter;
     QFont OpenSans = QFont("Open Sans");
 
 

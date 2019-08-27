@@ -29,10 +29,10 @@ public:
 
 private:
 
-    parameter::Int red_value  { this, "Red",   0, 0, 255 };
-    parameter::Int green_value{ this, "Green", 0, 0, 255 };
-    parameter::Int blue_value { this, "Blue",  0, 0, 255 };
-    parameter::Int alpha_value{ this, "Alpha", 255, 0, 255 };
+    IntPar red_value  { this, "Red",   0, 0, 255 };
+    IntPar green_value{ this, "Green", 0, 0, 255 };
+    IntPar blue_value { this, "Blue",  0, 0, 255 };
+    IntPar alpha_value{ this, "Alpha", 255, 0, 255 };
     //parameter::Float4 color { this, "Color", {0, 0, 0, 0}, { -1000, -1000, -1000, -1000 }, {1000, 1000, 1000, 1000} };
 
     //parameter::Int3 test{ this, "tets", {5, 6, 2} };

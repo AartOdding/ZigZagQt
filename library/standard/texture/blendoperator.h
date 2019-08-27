@@ -51,7 +51,7 @@ private:
 
     //DataInput texture_a{ this, TestData::Type };
 
-    parameter::Enum blend_mode{ this, BlendMode, "Blend Mode", 0 };
+    EnumPar blend_mode{ this, BlendMode, "Blend Mode", 0 };
 
     //TestData test_data{ this };
 

@@ -28,8 +28,8 @@ public:
         : BaseOperator(Type)
     {
         std::cout << "TestOperator - constructor\n";
-        resolution_x.set_update_mode(parameter::UpdateMode::NecessaryUpdates);
-        resolution_y.set_update_mode(parameter::UpdateMode::NecessaryUpdates);
+        resolution_x.set_minimal_updates(true);
+        resolution_y.set_minimal_updates(true);
     }
 
     void run()
@@ -50,12 +50,11 @@ public:
 
 private:
 
-    parameter::Enum pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
-    parameter::Enum pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
-    parameter::Enum pixel_normalized{ this, PixelIsNormalized, "Pixel is Normalized", 1 };
-    parameter::Int resolution_x{ this, "Resolution X", 600 };
-    parameter::Int resolution_y{ this, "Resolution Y", 600 };
-    parameter::Int resolution_z{ this, "Resolution Z", 300 };
+    EnumPar pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
+    EnumPar pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
+    IntPar resolution_x{ this, "Resolution X", 600 };
+    IntPar resolution_y{ this, "Resolution Y", 600 };
+    IntPar resolution_z{ this, "Resolution Z", 300 };
 
     //DataInput input1{ this, TestData::Type };
     //DataInput input2{ this, TestData::Type };

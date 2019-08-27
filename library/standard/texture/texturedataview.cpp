@@ -1,5 +1,7 @@
 #include "texturedataview.h"
 
+#include <iostream>
+
 
 bool TextureDataView::gpu_resources_initialized = false;
 QOpenGLShaderProgram TextureDataView::shader;

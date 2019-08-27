@@ -16,7 +16,7 @@ class FloatWidget : public QWidget
 
 public:
 
-    FloatWidget(QWidget * parent, parameter::BaseParameter* parameter);
+    FloatWidget(QWidget * parent, BaseParameter* parameter);
 
 
 private slots:
@@ -29,7 +29,7 @@ private slots:
 private:
 
     int num_components;
-    parameter::BaseParameter* parameter;
+    BaseParameter* parameter;
     std::vector<QDoubleSpinBox*> spinboxes;
     QHBoxLayout layout;
     QFont OpenSans = QFont("Open Sans");

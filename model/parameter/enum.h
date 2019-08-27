@@ -7,46 +7,38 @@ class ParameterOwner;
 
 
 
-namespace parameter
+
+class EnumPar : BaseParameter
 {
+public:
 
-    class Enum : public BaseParameter
-    {
-        Q_OBJECT
+    EnumPar(ParameterOwner * owner, const EnumDefinition& definition, const char * name, int index = 0);
 
-    public:
-
-        Enum(ParameterOwner * owner, const EnumDefinition& definition, const char * name, int index = 0);
-
-        Enum(ParameterOwner * owner, const EnumDefinition& definition, const char * name, const char* value);
+    EnumPar(ParameterOwner * owner, const EnumDefinition& definition, const char * name, const char* value);
 
 
-        void operator=(int index);
+    void operator=(int index);
 
-        void operator=(const char* current_index);
-
-
-        operator int() const;
-
-        operator const char *() const;
+    void operator=(const char* current_index);
 
 
-        const EnumDefinition * const definition;
+    operator int() const;
+
+    operator const char *() const;
+
+    void set(int index);
+
+    void set(const char* current_index);
 
 
-    public slots:
-
-        void set(int index);
-
-        void set(const char* current_index);
+    const EnumDefinition * const definition;
 
 
-    private:
 
-        int current_index = 0;
+private:
 
-
-    };
+    int current_index = 0;
 
 
-}
+};
+
