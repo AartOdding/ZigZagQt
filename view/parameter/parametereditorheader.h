@@ -8,11 +8,11 @@ class ParameterEditor;
 
 
 
-class ParameterPanelHeader : public QWidget
+class ParameterEditorHeader : public QWidget
 {
 public:
 
-    ParameterPanelHeader(ParameterEditor* editor);
+    ParameterEditorHeader(ParameterEditor* editor);
 
 protected:
 

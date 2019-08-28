@@ -1,7 +1,8 @@
-#pragma once
+  #pragma once
 
 #include "model/baseoperator.h"
 #include "model/parameter/int.h"
+#include "model/parameter/parameterrow.h"
 
 #include "library/standard/texture/texturedata.h"
 
@@ -29,10 +30,12 @@ public:
 
 private:
 
-    IntPar red_value  { this, "Red",   0, 0, 255 };
-    IntPar green_value{ this, "Green", 0, 0, 255 };
-    IntPar blue_value { this, "Blue",  0, 0, 255 };
-    IntPar alpha_value{ this, "Alpha", 255, 0, 255 };
+    ParameterRow row  { this, "Color [R,G]" };
+    IntPar red_value  { &row, "Red", 0, 0, 255 };
+    IntPar green_value{ &row, "Green", 0, 0, 255 };
+    IntPar blue_value { &row, "Blue",  0, 0, 255 };
+    IntPar alpha_value{ &row, "Alpha", 255, 0, 255 };
+
     //parameter::Float4 color { this, "Color", {0, 0, 0, 0}, { -1000, -1000, -1000, -1000 }, {1000, 1000, 1000, 1000} };
 
     //parameter::Int3 test{ this, "tets", {5, 6, 2} };

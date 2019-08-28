@@ -14,7 +14,8 @@ enum class ParameterType
     Float2,
     Float3,
     Float4,
-    Enum
+    Enum,
+    ParameterRow
 };
 
 
@@ -23,6 +24,7 @@ class BaseParameter
 {
 public:
 
+    BaseParameter(ParameterOwner& owner, ParameterType type, const char * name);
     BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
     virtual ~BaseParameter();
 

@@ -6,8 +6,7 @@
 #include <QSpinBox>
 #include <QHBoxLayout>
 
-#include "model/parameter/baseparameter.h"
-
+#include "model/parameter/int.h"
 
 
 

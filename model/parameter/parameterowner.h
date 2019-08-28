@@ -32,8 +32,8 @@ public:
     // Returns true if succesful
     bool deregister_parameter(BaseParameter* parameter);
 
-
-    void flag_parameters_changed();
+    // Default implementation does not pass on the flag
+    virtual void flag_parameters_changed();
 
     // Also resets all parameter's flags!
     void reset_changed_flags();

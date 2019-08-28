@@ -59,8 +59,9 @@ SOURCES += \
         view/parameter/floatwidget.cpp \
         view/parameter/intwidget.cpp \
         view/parameter/parametereditor.cpp \
+        view/parameter/parametereditorheader.cpp \
         view/parameter/parameterpanel.cpp \
-        view/parameter/parameterpanelheader.cpp \
+        view/parameter/parameterpanelgroup.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
         view/viewport.cpp \
@@ -113,8 +114,9 @@ HEADERS += \
         view/parameter/floatwidget.h \
         view/parameter/intwidget.h \
         view/parameter/parametereditor.h \
+        view/parameter/parametereditorheader.h \
         view/parameter/parameterpanel.h \
-        view/parameter/parameterpanelheader.h \
+        view/parameter/parameterpanelgroup.h \
         view/projectscopeview.h \
         view/projectsurface.h \
         view/viewport.h \

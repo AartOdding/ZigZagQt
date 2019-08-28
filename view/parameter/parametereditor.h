@@ -9,7 +9,7 @@
 class QScrollArea;
 class QGraphicsScene;
 class ParameterPanel;
-class ParameterPanelHeader;
+class ParameterEditorHeader;
 
 
 
@@ -35,7 +35,7 @@ protected:
 private:
 
 
-    ParameterPanelHeader* header;
+    ParameterEditorHeader* header;
     QScrollArea* body;
     ParameterPanel* content;
 

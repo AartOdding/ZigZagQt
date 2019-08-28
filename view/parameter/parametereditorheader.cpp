@@ -1,4 +1,4 @@
-#include "parameterpanelheader.h"
+#include "parametereditorheader.h"
 
 #include "parametereditor.h"
 
@@ -6,7 +6,7 @@
 #include <QGuiApplication>
 
 
-ParameterPanelHeader::ParameterPanelHeader(ParameterEditor* e)
+ParameterEditorHeader::ParameterEditorHeader(ParameterEditor* e)
     : QWidget(e), editor(*e)
 {
     setAutoFillBackground(true);
@@ -18,7 +18,7 @@ ParameterPanelHeader::ParameterPanelHeader(ParameterEditor* e)
 }
 
 
-void ParameterPanelHeader::mouseMoveEvent(QMouseEvent * event)
+void ParameterEditorHeader::mouseMoveEvent(QMouseEvent * event)
 {
     event->accept();
     auto viewport = static_cast<QWidget*>(editor.parent());
@@ -34,13 +34,13 @@ void ParameterPanelHeader::mouseMoveEvent(QMouseEvent * event)
 }
 
 
-
-void ParameterPanelHeader::mouseReleaseEvent(QMouseEvent * event)
+void ParameterEditorHeader::mouseReleaseEvent(QMouseEvent * event)
 {
     event->accept();
 }
 
-void ParameterPanelHeader::mousePressEvent(QMouseEvent * event)
+
+void ParameterEditorHeader::mousePressEvent(QMouseEvent * event)
 {
     event->accept();
     start_y = mapTo(static_cast<QWidget*>(editor.parent()), event->pos()).y();

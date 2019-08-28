@@ -2,7 +2,7 @@
 
 
 /*
-ParameterRow::ParameterRow()
+ParameterRow::ParameterRow(ParameterOwner* owner, const char * name)
 {
 
 }*/

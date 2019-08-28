@@ -3,6 +3,11 @@
 
 
 
+BaseParameter::BaseParameter(ParameterOwner& owner, ParameterType type, const char * name)
+    : BaseParameter(&owner, type, name)
+{ }
+
+
 BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, const char * name)
     : m_owner(owner), m_type(type), m_name(name)
 {

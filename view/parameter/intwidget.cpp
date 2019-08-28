@@ -1,7 +1,5 @@
 #include "intwidget.h"
 
-#include "model/parameter/int.h"
-
 #include <iostream>
 
 

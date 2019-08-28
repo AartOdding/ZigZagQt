@@ -1,7 +1,5 @@
 #include "floatwidget.h"
 
-#include "model/parameter/float.h"
-
 #include <iostream>
 
 

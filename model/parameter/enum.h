@@ -8,7 +8,7 @@ class ParameterOwner;
 
 
 
-class EnumPar : BaseParameter
+class EnumPar : public BaseParameter
 {
 public:
 

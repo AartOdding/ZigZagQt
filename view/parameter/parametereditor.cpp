@@ -1,6 +1,6 @@
 #include "parametereditor.h"
 #include "parameterpanel.h"
-#include "parameterpanelheader.h"
+#include "parametereditorheader.h"
 
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -12,7 +12,7 @@ ParameterEditor::ParameterEditor(QWidget* parent)
 {
     setWindowFlags(Qt::SubWindow);
 
-    header = new ParameterPanelHeader(this);
+    header = new ParameterEditorHeader(this);
     content = new ParameterPanel(this);
     body = new QScrollArea(this);
     body->setWidgetResizable(true);

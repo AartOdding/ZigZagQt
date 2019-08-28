@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
-#include "model/parameter/baseparameter.h"
+#include "model/parameter/float.h"
 
 
 
