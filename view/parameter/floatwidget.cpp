@@ -62,7 +62,7 @@ FloatWidget::FloatWidget(QWidget * parent, BaseParameter* par)
     }
 
 
-    if (parameter->minimal_updates())
+    if (static_cast<ArithmeticParameter*>(parameter)->minimal_updates())
     {
         for (auto& sb : spinboxes)
         {

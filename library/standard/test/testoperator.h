@@ -7,6 +7,7 @@
 #include "model/datainput.h"
 #include "model/parameter/int.h"
 #include "model/parameter/enum.h"
+#include "model/parameter/float.h"
 
 
 // Implementation in testoperator.cpp
@@ -52,9 +53,10 @@ private:
 
     EnumPar pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
     EnumPar pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
-    IntPar resolution_x{ this, "Resolution X", 600 };
-    IntPar resolution_y{ this, "Resolution Y", 600 };
-    IntPar resolution_z{ this, "Resolution Z", 300 };
+    IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };
+    IntPar resolution_y{ this, "Resolution Y", 600, 0, 255 };
+    IntPar resolution_z{ this, "Resolution Z", 300, 0, 255 };
+    FloatPar test_float{ this, "test float", 0.3 };
 
     //DataInput input1{ this, TestData::Type };
     //DataInput input2{ this, TestData::Type };

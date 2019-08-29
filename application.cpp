@@ -7,8 +7,11 @@
 
 #include "library/standard/test/testoperator.h"
 #include "library/standard/test/testdataview.h"
+
 #include "library/standard/texture/blendoperator.h"
 #include "library/standard/texture/coloroperator.h"
+#include "library/standard/texture/sinewaveoperator.h"
+
 #include "library/standard/texture/texturedataview.h"
 
 #include <QStyle>
@@ -86,6 +89,7 @@ Application::Application(int &argc, char **argv)
     library_model->register_operator(TestOperator::Type);
     library_model->register_operator(BlendOperator::Type);
     library_model->register_operator(ColorOperator::Type);
+    library_model->register_operator(SineWaveOperator::Type);
 
     library_model->register_data_view(TestDataView::Type);
     library_model->register_data_view(TextureDataView::Type);

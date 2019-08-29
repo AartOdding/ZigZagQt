@@ -1,19 +1,23 @@
 #pragma once
 
+#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLShaderProgram>
 
 #include "model/baseoperator.h"
+
 #include "texturedata.h"
 
 
 
-class SineWaveOperator : public BaseOperator
+class SineWaveOperator : public BaseOperator,
+                         public QOpenGLFunctions_3_3_Core
 {
 
 public:
 
     SineWaveOperator();
 
-    void run() override { }
+    void run() override;
 
     static BaseOperator * create() { return new SineWaveOperator(); }
 
@@ -21,8 +25,21 @@ public:
                                                 { &TextureData::Type }, true, &create };
 
 
-protected:
+private:
 
     TextureData output_texture{ this };
+
+    Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
+    Float4Par color_b{ this, "Color A", { 0, 0, 0, 1 }, 0, 1 };
+
+    Float2Par translation{ this, "Translate", {0, 0 }, -100000, 100000 };
+    FloatPar rotation{ this, "Rotate", 0, -100000, 100000 };
+    Float2Par scale{ this, "Scale", {1, 1}, 0, 1000 };
+
+
+    static bool gpu_resources_initialized;
+    static QOpenGLShaderProgram shader;
+    static GLuint vao;
+    static GLuint vbo;
 
 };

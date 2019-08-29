@@ -14,7 +14,7 @@ using float64_4 = std::array<float64, 4>;
 
 
 
-class FloatPar : public BaseParameter
+class FloatPar : public ArithmeticParameter
 {
 public:
 
@@ -44,7 +44,7 @@ private:
 
 
 
-class Float2Par : public BaseParameter
+class Float2Par : public ArithmeticParameter
 {
 public:
 
@@ -86,7 +86,7 @@ private:
 
 
 
-class Float3Par : public BaseParameter
+class Float3Par : public ArithmeticParameter
 {
 public:
 
@@ -131,7 +131,7 @@ private:
 
 
 
-class Float4Par : public BaseParameter
+class Float4Par : public ArithmeticParameter
 {
 public:
 

@@ -2,7 +2,7 @@
 
 
 IntPar::IntPar(ParameterOwner * owner, const char * name, int32 val)
-    : BaseParameter(owner, ParameterType::Int, name),
+    : ArithmeticParameter(owner, ParameterType::Int, name),
       value(val)
 {
 
@@ -10,7 +10,7 @@ IntPar::IntPar(ParameterOwner * owner, const char * name, int32 val)
 
 
 IntPar::IntPar(ParameterOwner * owner, const char * name, int32 val, int32 min, int32 max)
-    : BaseParameter(owner, ParameterType::Int, name),
+    : ArithmeticParameter(owner, ParameterType::Int, name),
       value(val, min, max)
 {
 
@@ -93,7 +93,7 @@ Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 
 Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values)
-    : BaseParameter(owner, ParameterType::Int2, name),
+    : ArithmeticParameter(owner, ParameterType::Int2, name),
       x_value(values[0]),
       y_value(values[1])
 {
@@ -102,7 +102,7 @@ Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values)
 
 
 Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values, int32 min, int32 max)
-    : BaseParameter(owner, ParameterType::Int2, name),
+    : ArithmeticParameter(owner, ParameterType::Int2, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max)
 {
@@ -228,7 +228,7 @@ Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 
 Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values)
-    : BaseParameter(owner, ParameterType::Int3, name),
+    : ArithmeticParameter(owner, ParameterType::Int3, name),
       x_value(values[0]),
       y_value(values[1]),
       z_value(values[2])
@@ -238,7 +238,7 @@ Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values)
 
 
 Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values, int32 min, int32 max)
-    : BaseParameter(owner, ParameterType::Int3, name),
+    : ArithmeticParameter(owner, ParameterType::Int3, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max),
       z_value(values[2], min, max)
@@ -383,7 +383,7 @@ Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 
 Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values)
-    : BaseParameter(owner, ParameterType::Int4, name),
+    : ArithmeticParameter(owner, ParameterType::Int4, name),
       x_value(values[0]),
       y_value(values[1]),
       z_value(values[2]),
@@ -394,7 +394,7 @@ Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values)
 
 
 Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values, int32 min, int32 max)
-    : BaseParameter(owner, ParameterType::Int4, name),
+    : ArithmeticParameter(owner, ParameterType::Int4, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max),
       z_value(values[2], min, max),

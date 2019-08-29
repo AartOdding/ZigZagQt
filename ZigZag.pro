@@ -45,6 +45,7 @@ SOURCES += \
         model/parameter/int.cpp \
         model/parameter/parameterowner.cpp \
         model/parameter/parameterrow.cpp \
+        model/parameter/transform.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         view/baseconnector.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
         view/parameter/parametereditorheader.cpp \
         view/parameter/parameterpanel.cpp \
         view/parameter/parameterpanelgroup.cpp \
+        view/parameter/transform2dwidget.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
         view/viewport.cpp \
@@ -97,6 +99,7 @@ HEADERS += \
         model/parameter/int.h \
         model/parameter/parameterowner.h \
         model/parameter/parameterrow.h \
+        model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \
         utility/bounded_value.h \
@@ -117,6 +120,7 @@ HEADERS += \
         view/parameter/parametereditorheader.h \
         view/parameter/parameterpanel.h \
         view/parameter/parameterpanelgroup.h \
+        view/parameter/transform2dwidget.h \
         view/projectscopeview.h \
         view/projectsurface.h \
         view/viewport.h \

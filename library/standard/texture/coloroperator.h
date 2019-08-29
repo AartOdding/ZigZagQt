@@ -30,7 +30,7 @@ public:
 
 private:
 
-    ParameterRow row  { this, "Color [R,G]" };
+    ParameterRow row  { this, "Color RGBA" };
     IntPar red_value  { &row, "Red", 0, 0, 255 };
     IntPar green_value{ &row, "Green", 0, 0, 255 };
     IntPar blue_value { &row, "Blue",  0, 0, 255 };

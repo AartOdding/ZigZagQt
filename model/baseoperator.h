@@ -3,15 +3,15 @@
 #include <vector>
 #include <functional>
 
-#include <QObject>
-
+#include "model/parameter/int.h"
+#include "model/parameter/float.h"
+#include "model/parameter/enum.h"
 #include "model/parameter/parameterowner.h"
 
 
 struct DataTypeInfo;
 class BaseOperator;
 class BaseDataType;
-class BaseParameter;
 class DataInput;
 
 

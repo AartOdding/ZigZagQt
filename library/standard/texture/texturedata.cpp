@@ -57,6 +57,7 @@ void TextureData::bind_as_framebuffer()
             reallocate();
         }
         glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
+        glViewport(0, 0, resolution.x(), resolution.y());
     }
 }
 

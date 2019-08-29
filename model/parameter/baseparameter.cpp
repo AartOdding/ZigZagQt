@@ -3,10 +3,6 @@
 
 
 
-BaseParameter::BaseParameter(ParameterOwner& owner, ParameterType type, const char * name)
-    : BaseParameter(&owner, type, name)
-{ }
-
 
 BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, const char * name)
     : m_owner(owner), m_type(type), m_name(name)
@@ -37,30 +33,6 @@ ParameterType BaseParameter::type() const
 const char * BaseParameter::name() const
 {
     return m_name;
-}
-
-
-bool BaseParameter::minimal_updates() const
-{
-    return m_minimal_updates;
-}
-
-
-void BaseParameter::set_minimal_updates(bool value)
-{
-    m_minimal_updates = value;
-}
-
-
-bool BaseParameter::rollover() const
-{
-    return m_rollover;
-}
-
-
-void BaseParameter::set_rollover(bool value)
-{
-    m_rollover = value;
 }
 
 

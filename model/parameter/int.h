@@ -15,7 +15,7 @@ using int32_4 = std::array<int32, 4>;
 
 
 
-class IntPar : public BaseParameter
+class IntPar : public ArithmeticParameter
 {
 public:
 
@@ -44,7 +44,7 @@ private:
 
 
 
-class Int2Par : public BaseParameter
+class Int2Par : public ArithmeticParameter
 {
 public:
 
@@ -86,7 +86,7 @@ private:
 
 
 
-class Int3Par : public BaseParameter
+class Int3Par : public ArithmeticParameter
 {
 public:
 
@@ -131,7 +131,7 @@ private:
 
 
 
-class Int4Par : public BaseParameter
+class Int4Par : public ArithmeticParameter
 {
 public:
 

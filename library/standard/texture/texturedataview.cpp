@@ -48,7 +48,7 @@ void TextureDataView::paint_opengl(int res_x, int res_y)
         glBindVertexArray(0);
     }
 
-    glClearColor(1, 0, 0, 1);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader.programId());

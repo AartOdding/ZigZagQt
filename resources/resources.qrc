@@ -10,6 +10,8 @@
         <file>shaders/minimal.vert</file>
         <file>shaders/view_texture.frag</file>
         <file>shaders/test_pattern.frag</file>
+        <file>shaders/basic.vert</file>
+        <file>shaders/sine_wave.frag</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

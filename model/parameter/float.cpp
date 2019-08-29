@@ -2,7 +2,7 @@
 
 
 FloatPar::FloatPar(ParameterOwner * owner, const char * name, float64 val)
-    : BaseParameter(owner, ParameterType::Float, name),
+    : ArithmeticParameter(owner, ParameterType::Float, name),
       value(val)
 {
 
@@ -10,7 +10,7 @@ FloatPar::FloatPar(ParameterOwner * owner, const char * name, float64 val)
 
 
 FloatPar::FloatPar(ParameterOwner * owner, const char * name, float64 val, float64 min, float64 max)
-    : BaseParameter(owner, ParameterType::Float, name),
+    : ArithmeticParameter(owner, ParameterType::Float, name),
       value(val, min, max)
 {
 
@@ -93,7 +93,7 @@ Float2Par::Float2Par(ParameterOwner * owner, const char * name, float64 val, flo
 
 
 Float2Par::Float2Par(ParameterOwner * owner, const char * name, float64_2 values)
-    : BaseParameter(owner, ParameterType::Float2, name),
+    : ArithmeticParameter(owner, ParameterType::Float2, name),
       x_value(values[0]),
       y_value(values[1])
 {
@@ -102,7 +102,7 @@ Float2Par::Float2Par(ParameterOwner * owner, const char * name, float64_2 values
 
 
 Float2Par::Float2Par(ParameterOwner * owner, const char * name, float64_2 values, float64 min, float64 max)
-    : BaseParameter(owner, ParameterType::Float2, name),
+    : ArithmeticParameter(owner, ParameterType::Float2, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max)
 {
@@ -228,7 +228,7 @@ Float3Par::Float3Par(ParameterOwner * owner, const char * name, float64 val, flo
 
 
 Float3Par::Float3Par(ParameterOwner * owner, const char * name, float64_3 values)
-    : BaseParameter(owner, ParameterType::Float3, name),
+    : ArithmeticParameter(owner, ParameterType::Float3, name),
       x_value(values[0]),
       y_value(values[1]),
       z_value(values[2])
@@ -238,7 +238,7 @@ Float3Par::Float3Par(ParameterOwner * owner, const char * name, float64_3 values
 
 
 Float3Par::Float3Par(ParameterOwner * owner, const char * name, float64_3 values, float64 min, float64 max)
-    : BaseParameter(owner, ParameterType::Float3, name),
+    : ArithmeticParameter(owner, ParameterType::Float3, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max),
       z_value(values[2], min, max)
@@ -383,7 +383,7 @@ Float4Par::Float4Par(ParameterOwner * owner, const char * name, float64 val, flo
 
 
 Float4Par::Float4Par(ParameterOwner * owner, const char * name, float64_4 values)
-    : BaseParameter(owner, ParameterType::Float4, name),
+    : ArithmeticParameter(owner, ParameterType::Float4, name),
       x_value(values[0]),
       y_value(values[1]),
       z_value(values[2]),
@@ -394,7 +394,7 @@ Float4Par::Float4Par(ParameterOwner * owner, const char * name, float64_4 values
 
 
 Float4Par::Float4Par(ParameterOwner * owner, const char * name, float64_4 values, float64 min, float64 max)
-    : BaseParameter(owner, ParameterType::Float4, name),
+    : ArithmeticParameter(owner, ParameterType::Float4, name),
       x_value(values[0], min, max),
       y_value(values[1], min, max),
       z_value(values[2], min, max),
