@@ -1,6 +1,9 @@
 #include "baseparameter.h"
+#include "application.h"
 #include "parameterowner.h"
 
+#include "command/connectparameterscommand.h"
+#include "command/disconnectparameterscommand.h"
 
 
 
@@ -52,4 +55,40 @@ void BaseParameter::reset_changed_flag()
 bool BaseParameter::has_changed() const
 {
     return m_changed;
+}
+
+
+bool BaseParameter::is_importing() const
+{
+    return m_import != nullptr;
+}
+
+
+BaseParameter * BaseParameter::get_import() const
+{
+    return m_import;
+}
+
+
+const std::vector<BaseParameter *> BaseParameter::get_exports() const
+{
+    return m_exports;
+}
+
+
+// Undoable action
+void BaseParameter::add_import(BaseParameter * import)
+{
+    auto model = application::project_model();
+    auto undo_stack = model->get_undo_stack();
+    undo_stack->push(new ConnectParametersCommand(import, this));
+}
+
+
+// Undoable action
+void BaseParameter::remove_import()
+{
+    auto model = application::project_model();
+    auto undo_stack = model->get_undo_stack();
+    undo_stack->push(new DisconnectParametersCommand(m_import, this));
 }

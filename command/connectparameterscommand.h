@@ -2,6 +2,9 @@
 
 #include <QUndoCommand>
 
+#include "model/parameter/baseparameter.h"
+
+#include "utility/std_containers_helpers.h"
 
 
 
@@ -9,31 +12,47 @@ class ConnectParametersCommand : public QUndoCommand
 {
 
 public:
-/*
-    ConnectParametersCommand(QPointer<BaseOperator> op_a, QPointer<BaseOperator> op_b, int b_input_index_)
-        : operator_a(op_a), operator_b(op_b), b_input_index(b_input_index_)
-    { }
+
+    ConnectParametersCommand(BaseParameter* exporter, BaseParameter* importer_)
+        : new_exporter(exporter), importer(importer_)
+    {
+        Q_ASSERT(new_exporter && importer);
+        initial_exporter = importer->m_import;
+    }
 
     void redo() override
     {
-        Q_ASSERT(operator_a && operator_b);
+        if (initial_exporter)
+        {
+            try_erase(initial_exporter->m_exports, importer);
+        }
 
-        initial_connection = operator_b->get_input(b_input_index);
-        operator_b->set_input(b_input_index, operator_a);
+        if (!contains(new_exporter->m_exports, importer))
+        {
+            new_exporter->m_exports.push_back(importer);
+        }
+
+        importer->m_import = new_exporter;
     }
+
 
     void undo() override
     {
-        Q_ASSERT(operator_a && operator_b);
-        Q_ASSERT(operator_b->get_input(b_input_index) == operator_a);
+        try_erase(new_exporter->m_exports, importer);
 
-        operator_b->set_input(b_input_index, initial_connection);
+        if (initial_exporter && !contains(initial_exporter->m_exports, importer))
+        {
+            initial_exporter->m_exports.push_back(importer);
+        }
+
+        importer->m_import = initial_exporter;
     }
+
 
 private:
 
-    QPointer<BaseOperator> operator_a;
-    QPointer<BaseOperator> operator_b;
-    QPointer<BaseOperator> initial_connection;
-    int b_input_index;*/
+    BaseParameter* new_exporter;
+    BaseParameter* initial_exporter;
+    BaseParameter* importer;
+
 };

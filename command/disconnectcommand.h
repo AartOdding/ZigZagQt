@@ -6,6 +6,7 @@
 #include "model/datainput.h"
 
 
+
 class DisconnectCommand : public QUndoCommand
 {
 

@@ -76,6 +76,7 @@ HEADERS += \
         command/connectcommand.h \
         command/connectparameterscommand.h \
         command/disconnectcommand.h \
+        command/disconnectparameterscommand.h \
         command/movecommand.h \
         command/removecommand.h \
         library/standard/shadertop.h \
@@ -105,6 +106,7 @@ HEADERS += \
         utility/bounded_value.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
+        utility/std_containers_helpers.h \
         view/baseconnector.h \
         view/basedataview.h \
         view/datablockcable.h \

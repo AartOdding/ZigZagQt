@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include <vector>
+
+
 
 class ParameterOwner;
 
@@ -40,22 +43,44 @@ public:
 
     // Also flags the parameter owner as changed!
     void flag_changed();
+
     void reset_changed_flag();
+
     bool has_changed() const;
+
+
+    bool is_importing() const;
+
+    BaseParameter * get_import() const;
+
+    const std::vector<BaseParameter *> get_exports() const;
+
+
+public: // slots?
+
+    // Undoable action
+    void add_import(BaseParameter * import);
+
+    // Undoable action
+    void remove_import();
 
 
 private:
 
+    friend class ConnectParametersCommand;
+    friend class DisconnectParametersCommand;
+
     bool m_changed = false;
 
     ParameterOwner * const m_owner;
-
     const ParameterType m_type;
-
     const char * const m_name;
 
+    BaseParameter * m_import = nullptr;
+    std::vector<BaseParameter *> m_exports;
 
 };
+
 
 
 
