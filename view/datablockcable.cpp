@@ -23,8 +23,8 @@ DataBlockCable::DataBlockCable(ProjectScopeView * p, DataBlockConnector * i, Dat
     auto p2 = o->scenePos();
     setPos(std::min(p1.x(), p2.x()), std::min(p1.y(), p2.y()));
 
-    auto op1 = i->parent_view;
-    auto op2 = o->parent_view;
+    auto op1 = i->operator_view;
+    auto op2 = o->operator_view;
 
     connect(op1, &OperatorView::has_moved, this, &DataBlockCable::on_movement);
     connect(op2, &OperatorView::has_moved, this, &DataBlockCable::on_movement);

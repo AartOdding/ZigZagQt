@@ -4,15 +4,14 @@
 
 #include <QObject>
 #include <QGraphicsItem>
+#include <QGraphicsWidget>
 #include <QGraphicsRectItem>
-#include <QGraphicsTextItem>
 
 #include "operatornametag.h"
-#include "library/standard/texture/texturedataview.h"
 
 
+class BaseDataView;
 class BaseOperator;
-class ProjectModel;
 class DataBlockConnector;
 class BaseDataType;
 class DataInput;
@@ -46,9 +45,6 @@ public slots:
 
     void on_operator_moved(int to_x, int to_y);
 
-    void on_input_added(DataInput* ptr);
-    void on_output_added(BaseDataType* ptr);
-
 
 signals:
 
@@ -77,6 +73,9 @@ private:
 
     std::unordered_map<const DataInput*, DataBlockConnector*> inputs;
     std::unordered_map<const BaseDataType*, DataBlockConnector*> outputs;
+
+    QGraphicsWidget inputs_panel{ this };
+    QGraphicsWidget outputs_panel{ this };
 
     OperatorNameTag name_tag;
     BaseDataView* data_view = nullptr;

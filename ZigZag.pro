@@ -64,6 +64,7 @@ SOURCES += \
         view/parameter/parameterpanel.cpp \
         view/parameter/parameterpanelgroup.cpp \
         view/parameter/transform2dwidget.cpp \
+        view/parameterconnector.cpp \
         view/projectscopeview.cpp \
         view/projectsurface.cpp \
         view/viewport.cpp \
@@ -123,6 +124,7 @@ HEADERS += \
         view/parameter/parameterpanel.h \
         view/parameter/parameterpanelgroup.h \
         view/parameter/transform2dwidget.h \
+        view/parameterconnector.h \
         view/projectscopeview.h \
         view/projectsurface.h \
         view/viewport.h \

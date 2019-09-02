@@ -21,35 +21,33 @@
 
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& parent, DataInput& input, int h)
-    : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
-      parent_view(&parent),
+DataBlockConnector::DataBlockConnector(OperatorView& op_view, DataInput& input)
+    : BaseConnector(application::project_view_model()),
+      operator_view(&op_view),
       data_input(&input)
 {
-    int path_height = std::min(h - 6, 25);
-    bounds = QRectF(-40, -h/2, 55, h);
-    clip_bounds = QRectF(-40, -h/2, 40, h);
     color = input.type()->gui_color;
-    path.addRoundedRect(QRectF(-15, -path_height/2, 20, path_height), 3, 3);
 }
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& parent, BaseDataType& output, int h)
-    : BaseConnector(application::project_view_model(), static_cast<QGraphicsItem*>(&parent)),
-      parent_view(&parent),
+DataBlockConnector::DataBlockConnector(OperatorView& op_view, BaseDataType& output)
+    : BaseConnector(application::project_view_model()),
+      operator_view(&op_view),
       data_output(&output)
 {
-    int path_height = std::min(h - 4, 25);
-    bounds = QRectF(-15, -h/2, 55, h);
-    clip_bounds = QRectF(0, -h/2, 40, h);
     color = output.type()->gui_color;
-    path.addRoundedRect(QRectF(-5, -path_height/2, 20, path_height), 3, 3);
 }
 
 
-QRectF DataBlockConnector::boundingRect() const
+void DataBlockConnector::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    return bounds;
+    auto size = event->newSize();
+    int path_height = std::min(size.height() - 4, 25.0);
+    double x = is_input() ? 10 : -10;
+    double y = 0.5 * (size.height() - path_height);
+    path = QPainterPath(); // Clear it
+    //path.addRoundedRect(QRectF(x, y, 20, path_height), 4, 4);
+    path.addRoundedRect(QRectF(x, y, 25, path_height), path_height / 3.0, path_height / 3.0);
 }
 
 
@@ -67,28 +65,13 @@ bool DataBlockConnector::can_connect_with(BaseConnector* other) const
 void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setClipRect(clip_bounds);
 
-    auto fill_brush = QBrush(highlighted ? color : QColor(55, 55, 55));
+    auto fill_brush = QBrush(is_highlighted() ? color : QColor(55, 55, 55));
     auto stroke_pen = QPen(QBrush(color), 2);
 
     painter->fillPath(path, fill_brush);
     painter->setPen(stroke_pen);
     painter->drawPath(path);
-}
-
-
-void DataBlockConnector::highlight_on_event()
-{
-    highlighted = true;
-    update();
-}
-
-
-void DataBlockConnector::highlight_off_event()
-{
-    highlighted = false;
-    update();
 }
 
 

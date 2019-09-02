@@ -9,11 +9,15 @@
 
 
 BaseConnector::BaseConnector(ProjectSurface* surface_, QGraphicsItem* parent_)
-    : QGraphicsItem(parent_), surface(surface_)
+    : QGraphicsWidget(parent_), surface(surface_)
 {
-    setFlag(ItemIsFocusable);
+    setFlag(QGraphicsItem::ItemClipsToShape); // Enable clipping.
+    setFlag(QGraphicsItem::ItemIsFocusable); // Because we need focus out event.
     setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::MouseButton::LeftButton);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setMinimumSize(10, 10);
+    setPreferredSize(10, 10);
 }
 
 
@@ -21,6 +25,22 @@ bool BaseConnector::is_connecting() const
 {
     return surface->connection_starter == this;
 }
+
+/*
+void BaseConnector::grabMouseEvent(QEvent *event)
+{
+
+}*/
+
+/*
+void BaseConnector::ungrabMouseEvent(QEvent *event)
+{
+    if (!surface->is_hovering_connector())
+    {
+        surface->stop_connecting();
+    }
+    std::cout << "ungrab\n";
+}*/
 
 
 void BaseConnector::focusOutEvent(QFocusEvent *event)
@@ -75,19 +95,11 @@ void BaseConnector::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-void BaseConnector::set_highlighted(bool value)
+void BaseConnector::set_highlighted(bool highlighted_)
 {
-    if (value != highlighted)
+    if (highlighted != highlighted_)
     {
-        highlighted = value;
-
-        if (highlighted)
-        {
-            highlight_on_event();
-        }
-        else
-        {
-            highlight_off_event();
-        }
+        highlighted = highlighted_;
+        update();
     }
 }

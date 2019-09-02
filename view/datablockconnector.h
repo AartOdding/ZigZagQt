@@ -9,17 +9,17 @@ class DataInput;
 class BaseDataType;
 
 
+
+
 class DataBlockConnector : public BaseConnector
 {
 
 public:
 
-    DataBlockConnector(OperatorView& parent, DataInput& input, int height);
+    DataBlockConnector(OperatorView& op_view, DataInput& input);
 
-    DataBlockConnector(OperatorView& parent, BaseDataType& output, int height);
+    DataBlockConnector(OperatorView& op_view, BaseDataType& output);
 
-
-    QRectF boundingRect() const override;
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
@@ -29,17 +29,17 @@ public:
 
     bool can_connect_with(BaseConnector* other) const override;
 
-    OperatorView * const parent_view;
+
+    OperatorView * const operator_view;
 
     QColor get_color() const;
 
 
 protected:
 
-    void highlight_on_event() override;
-    void highlight_off_event() override;
-
     void connection_made_event(BaseConnector* other) override;
+
+    void resizeEvent(QGraphicsSceneResizeEvent *event) override;
 
 
 private:
@@ -47,12 +47,7 @@ private:
     DataInput* data_input = nullptr;
     BaseDataType* data_output = nullptr;
 
-    QRectF bounds;
-    QRectF clip_bounds;
     QColor color;
-
     QPainterPath path;
-
-    bool highlighted = false;
 
 };

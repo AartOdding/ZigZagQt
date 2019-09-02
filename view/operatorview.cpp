@@ -1,19 +1,24 @@
 #include <QPainter>
 #include <QFocusEvent>
+#include <QGraphicsLinearLayout>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsSceneMouseEvent>
 
 #include "application.h"
+
+#include "basedataview.h"
 #include "operatorview.h"
 #include "projectscopeview.h"
+#include "datablockconnector.h"
+#include "parameterconnector.h"
 
+#include "model/datainput.h"
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
 #include "model/basedatatype.h"
-#include "model/datainput.h"
-#include "view/datablockconnector.h"
-#include "library/standard/texture/texturedata.h"
 
+
+#include <iostream>
 
 
 OperatorView::OperatorView(BaseOperator& op)
@@ -25,13 +30,7 @@ OperatorView::OperatorView(BaseOperator& op)
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    if (!op.data_inputs().empty()) on_input_added(nullptr);
-    if (!op.data_outputs().empty())on_output_added(nullptr);
-
     connect(&operator_model, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
-    connect(&operator_model, &BaseOperator::data_input_added, this, &OperatorView::on_input_added);
-    connect(&operator_model, &BaseOperator::data_output_added, this, &OperatorView::on_output_added);
-    //connect(&operator_model, &BaseOperator::parameters_modified, this, &OperatorView::on_parameters_modified);
 
     auto h_width = width / 2.0;
     auto h_height = height / 2.0;
@@ -43,6 +42,30 @@ OperatorView::OperatorView(BaseOperator& op)
     selection_rect.setPen(QPen(QBrush(QColor(51, 153, 255)), 2));
     selection_rect.setBrush(QColor(51, 153, 255, 30));
     selection_rect.setFlag(QGraphicsItem::ItemStacksBehindParent);
+
+    inputs_panel.setFlag(ItemHasNoContents);
+    outputs_panel.setFlag(ItemHasNoContents);
+    inputs_panel.setGeometry(-h_width - 25, -h_height, 25, height);
+    outputs_panel.setGeometry(h_width, -h_height, 25, height);
+    inputs_panel.setLayout(new QGraphicsLinearLayout(Qt::Vertical));
+    outputs_panel.setLayout(new QGraphicsLinearLayout(Qt::Vertical));
+    inputs_panel.layout()->setContentsMargins(0, 0, 0, 0);
+    outputs_panel.layout()->setContentsMargins(0, 0, 0, 0);
+    static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->setSpacing(0);
+    static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->setSpacing(0);
+
+    // add parameter connector first.
+    for (auto i : op.data_inputs())
+    {
+        static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new DataBlockConnector(*this, *i));
+    }
+    for (auto o : op.data_outputs())
+    {
+        static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new DataBlockConnector(*this, *o));
+    }
+
+    static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
+    static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
     auto library = application::library_model();
 
@@ -164,77 +187,3 @@ void OperatorView::on_operator_moved(int to_x, int to_y)
         emit has_moved();
     }
 }
-
-
-void OperatorView::on_input_added(DataInput* ptr)
-{
-    const auto& new_inputs = operator_model.data_inputs();
-    float spacing = height / (new_inputs.size());
-
-    for (auto& [k, v] : inputs)
-    {
-        // If there are inputs in the view that are no longer in the model:
-        if (std::find(new_inputs.begin(), new_inputs.end(), k) == new_inputs.end())
-        {
-            delete inputs[k];
-            inputs.erase(k);
-        }
-    }
-
-    for (int i = 0; i < new_inputs.size(); ++i)
-    {
-        int x = -width / 2;
-        int y = (-height / 2) + i * spacing + spacing / 2;
-
-        if(inputs.count(new_inputs[i]) > 0)
-        {
-            inputs[new_inputs[i]]->setPos(x, y);
-        }
-        else
-        {
-            auto new_input = new DataBlockConnector(*this, *new_inputs[i], spacing);
-            new_input->setPos(x, y);
-            inputs[new_inputs[i]] = new_input;
-        }
-    }
-}
-
-
-void OperatorView::on_output_added(BaseDataType* ptr)
-{
-    const auto& new_outputs = operator_model.data_outputs();
-    float spacing = height / (new_outputs.size());
-
-    for (auto& [k, v] : outputs)
-    {
-        // If there are inputs in the view that are no longer in the model:
-        if (std::find(new_outputs.begin(), new_outputs.end(), k) == new_outputs.end())
-        {
-            delete outputs[k];
-            outputs.erase(k);
-        }
-    }
-
-    for (int i = 0; i < new_outputs.size(); ++i)
-    {
-        int x = width / 2;
-        int y = (-height / 2) + i * spacing + spacing / 2;
-
-        if(outputs.count(new_outputs[i]) > 0)
-        {
-            outputs[new_outputs[i]]->setPos(x, y);
-        }
-        else
-        {
-            auto new_output = new DataBlockConnector(*this, *new_outputs[i], spacing);
-            new_output->setPos(x, y);
-            outputs[new_outputs[i]] = new_output;
-        }
-    }
-}
-
-/*
-void OperatorView::on_parameters_modified()
-{
-    //std::cout << "on_parameters_modified() called\n";
-}*/

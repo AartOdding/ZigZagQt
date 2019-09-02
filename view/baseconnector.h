@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QGraphicsItem>
+#include <QGraphicsWidget>
 
 
 
 class ProjectSurface;
 
 
-class BaseConnector : public QGraphicsItem
+class BaseConnector : public QGraphicsWidget
 {
     friend class ProjectSurface;
 
@@ -22,18 +22,18 @@ public:
 
     virtual bool can_connect_with(BaseConnector* other) const = 0;
 
-    void set_highlighted(bool value);
 
+    bool is_highlighted() const { return highlighted; }
+
+    void set_highlighted(bool highlighted);
 
 protected:
-
-    virtual void highlight_on_event() { }
-    virtual void highlight_off_event() { }
 
     virtual void connection_made_event(BaseConnector* other) = 0;
     virtual void connection_aborted_event() { }
 
-
+    //void grabMouseEvent(QEvent *event) override;
+    //void ungrabMouseEvent(QEvent *event) override;
 
     void focusInEvent(QFocusEvent *) override { }
     void focusOutEvent(QFocusEvent *event) override;
