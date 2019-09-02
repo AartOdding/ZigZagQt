@@ -4,53 +4,54 @@
 
 
 
-class ProjectSurface;
+class ConnectionManager;
 
 
 class BaseConnector : public QGraphicsWidget
 {
-    friend class ProjectSurface;
-
 public:
 
-    BaseConnector(ProjectSurface* surface, QGraphicsItem* parent = nullptr);
+    BaseConnector(ConnectionManager* manager, QGraphicsItem* parent = nullptr);
 
     virtual ~BaseConnector() override = default;
 
 
+    void try_connect();
+
     bool is_connecting() const;
+
+
+    //bool is_highlighted() const { return highlighted; }
+
+    //void set_highlighted(bool highlighted);
 
     virtual bool can_connect_with(BaseConnector* other) const = 0;
 
+    virtual void connection_requested_event(BaseConnector* other) = 0;
 
-    bool is_highlighted() const { return highlighted; }
-
-    void set_highlighted(bool highlighted);
-
-protected:
-
-    virtual void connection_made_event(BaseConnector* other) = 0;
     virtual void connection_aborted_event() { }
+
+
 
     //void grabMouseEvent(QEvent *event) override;
     //void ungrabMouseEvent(QEvent *event) override;
 
-    void focusInEvent(QFocusEvent *) override { }
-    void focusOutEvent(QFocusEvent *event) override;
+    //void focusInEvent(QFocusEvent *) override { }
+    //void focusOutEvent(QFocusEvent *event) override;
 
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+    //void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    //void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *) override { }
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    //virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    //virtual void mousePressEvent(QGraphicsSceneMouseEvent *) override { }
+    //virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 
 private:
 
 
-    ProjectSurface* surface = nullptr;
+    ConnectionManager* manager = nullptr;
 
-    bool highlighted = false;
+    //bool highlighted = false;
 
 };

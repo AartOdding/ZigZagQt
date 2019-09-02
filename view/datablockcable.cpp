@@ -90,8 +90,8 @@ float map(float value, float inMin, float inMax, float outMin, float outMax) {
 
 void DataBlockCable::build_path()
 {
-    QPointF out = output_view->scenePos() + QPointF(15, 0);
-    QPointF in = input_view->scenePos() - QPointF(15, 0);
+    QPointF out = output_view->scenePos() + QPointF(output_view->size().width() * (2.0/3.0), output_view->size().height() / 2);
+    QPointF in = input_view->scenePos() + QPointF(output_view->size().width() / 3.0, input_view->size().height() / 2);
 
     double w = abs(in.x() - out.x());
     double x_extrude = std::max(w * tension, flip_distance * tension);

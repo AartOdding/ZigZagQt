@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
+#include <QMetaType>
 
 
 
@@ -81,6 +82,7 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(BaseParameter*);
 
 
 
@@ -115,4 +117,6 @@ private:
 
     bool m_minimal_updates = false;
 };
+
+
 

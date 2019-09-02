@@ -15,6 +15,7 @@
 
 
 ProjectScopeView::ProjectScopeView(QObject *parent)
+    : QGraphicsScene(-20000, -20000, 40000, 40000)
 {
     setBackgroundBrush(QBrush(QColor(55, 55, 55)));
 }
@@ -88,11 +89,6 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 void ProjectScopeView::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     QGraphicsScene::mousePressEvent(mouseEvent);
-
-    if (!mouseEvent->isAccepted())
-    {
-        set_focus_operator(nullptr);
-    }
 }
 
 

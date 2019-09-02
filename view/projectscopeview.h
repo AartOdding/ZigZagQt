@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QGraphicsScene>
 
-#include "projectsurface.h"
+#include "connectionmanager.h"
 #include "model/projectmodel.h"
 
 
@@ -17,7 +17,8 @@ class DataBlockCable;
 
 
 
-class ProjectScopeView : public ProjectSurface
+class ProjectScopeView : public QGraphicsScene,
+                         public ConnectionManager
 {
     Q_OBJECT
 

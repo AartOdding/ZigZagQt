@@ -14,7 +14,6 @@
 #include <QWidget>
 #include <QPainter>
 #include <QVector2D>
-#include <QMimeData>
 #include <QGuiApplication>
 #include <QGraphicsSceneMouseEvent>
 
@@ -66,7 +65,7 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
 {
     painter->setRenderHint(QPainter::Antialiasing);
 
-    auto fill_brush = QBrush(is_highlighted() ? color : QColor(55, 55, 55));
+    auto fill_brush = QBrush(hovered || is_connecting() ? color : QColor(55, 55, 55));
     auto stroke_pen = QPen(QBrush(color), 2);
 
     painter->fillPath(path, fill_brush);
@@ -75,13 +74,21 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
 }
 
 
-void DataBlockConnector::connection_made_event(BaseConnector* other)
+void DataBlockConnector::connection_requested_event(BaseConnector* other)
 {
+    std::cout << "connection requested\n";
     auto o = dynamic_cast<DataBlockConnector*>(other);
 
-    if (is_input() && o && o->is_output())
+    if (o && is_input() != o->is_input())
     {
-        data_input->connect_to(o->data_output);
+        if (is_input())
+        {
+            data_input->connect_to(o->data_output);
+        }
+        else
+        {
+            data_output->connect_to(o->data_input);
+        }
     }
 }
 

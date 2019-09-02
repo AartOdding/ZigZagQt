@@ -50,6 +50,7 @@ SOURCES += \
         model/projectscope.cpp \
         view/baseconnector.cpp \
         view/basedataview.cpp \
+        view/connectionmanager.cpp \
         view/datablockcable.cpp \
         view/datablockconnector.cpp \
         view/opengldataview.cpp \
@@ -66,7 +67,6 @@ SOURCES += \
         view/parameter/transform2dwidget.cpp \
         view/parameterconnector.cpp \
         view/projectscopeview.cpp \
-        view/projectsurface.cpp \
         view/viewport.cpp \
         main.cpp \
         renderer.cpp
@@ -110,6 +110,7 @@ HEADERS += \
         utility/std_containers_helpers.h \
         view/baseconnector.h \
         view/basedataview.h \
+        view/connectionmanager.h \
         view/datablockcable.h \
         view/datablockconnector.h \
         view/opengldataview.h \
@@ -126,7 +127,6 @@ HEADERS += \
         view/parameter/transform2dwidget.h \
         view/parameterconnector.h \
         view/projectscopeview.h \
-        view/projectsurface.h \
         view/viewport.h \
         renderer.h
 

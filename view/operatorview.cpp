@@ -57,11 +57,15 @@ OperatorView::OperatorView(BaseOperator& op)
     // add parameter connector first.
     for (auto i : op.data_inputs())
     {
-        static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new DataBlockConnector(*this, *i));
+        auto connector = new DataBlockConnector(*this, *i);
+        inputs[i] = connector;
+        static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(connector);
     }
     for (auto o : op.data_outputs())
     {
-        static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new DataBlockConnector(*this, *o));
+        auto connector = new DataBlockConnector(*this, *o);
+        outputs[o] = connector;
+        static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(connector);
     }
 
     static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
@@ -152,14 +156,6 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         //model.move_operator_undoable(&operator_, position_x, position_y);
     }
     was_dragged = false;
-
-    if (event->button() == Qt::LeftButton)
-    {
-        if (!(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::ShiftModifier))
-        {
-            scope_view()->set_focus_operator(this);
-        }
-    }
 
     QGraphicsItem::mouseReleaseEvent(event);
 }

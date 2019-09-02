@@ -100,11 +100,6 @@ void Viewport::mousePressEvent(QMouseEvent *event)
 
     QGraphicsView::mousePressEvent(event);
 
-    if (!event->isAccepted())
-    {
-        view_model->set_focus_operator(nullptr);
-    }
-
     viewport()->setCursor(Qt::ArrowCursor);
 }
 
@@ -113,11 +108,6 @@ void Viewport::mouseMoveEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseMoveEvent(event);
     viewport()->setCursor(Qt::ArrowCursor);
-
-    if (view_model && view_model->is_making_connection())
-    {
-        view_model->mouse_movement(mapToScene(event->pos()));
-    }
 }
 
 

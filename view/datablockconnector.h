@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QGraphicsItem>
-
 #include "baseconnector.h"
 
 class OperatorView;
@@ -37,9 +35,15 @@ public:
 
 protected:
 
-    void connection_made_event(BaseConnector* other) override;
+    void connection_requested_event(BaseConnector* other) override;
+    void connection_aborted_event() override { update(); }
 
     void resizeEvent(QGraphicsSceneResizeEvent *event) override;
+
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *) override { hovered = true;  update(); }
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override { hovered = false; update(); }
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *) override { try_connect(); }
 
 
 private:
@@ -49,5 +53,7 @@ private:
 
     QColor color;
     QPainterPath path;
+
+    bool hovered = false;
 
 };

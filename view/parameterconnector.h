@@ -18,23 +18,36 @@ public:
 
     bool can_connect_with(BaseConnector* other) const override;
 
-    bool is_input() const { return m_is_input; }
+    bool is_input() const { return is_input_; }
 
 
     OperatorView * const operator_view;
 
 protected:
 
-    void connection_made_event(BaseConnector* other) override;
+    void connection_requested_event(BaseConnector* other) override;
+    void connection_aborted_event() override { update(); }
 
     void resizeEvent(QGraphicsSceneResizeEvent *event) override;
+
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *) override { hovered = true;  update(); }
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override { hovered = false; update(); }
+
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+
+private slots:
+
+    void item_selected(QAction *action);
 
 
 private:
 
     QPainterPath path;
 
-    bool highlighted = false;
-    bool m_is_input;
+    bool is_input_;
+    bool hovered = false;
 
 };

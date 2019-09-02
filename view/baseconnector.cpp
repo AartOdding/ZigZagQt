@@ -1,6 +1,6 @@
 #include "application.h"
 #include "baseconnector.h"
-#include "projectsurface.h"
+#include "connectionmanager.h"
 
 #include <QVector2D>
 #include <QGraphicsSceneMouseEvent>
@@ -8,8 +8,9 @@
 #include <iostream>
 
 
-BaseConnector::BaseConnector(ProjectSurface* surface_, QGraphicsItem* parent_)
-    : QGraphicsWidget(parent_), surface(surface_)
+
+BaseConnector::BaseConnector(ConnectionManager* manager_, QGraphicsItem* parent_)
+    : QGraphicsWidget(parent_), manager(manager_)
 {
     setFlag(QGraphicsItem::ItemClipsToShape); // Enable clipping.
     setFlag(QGraphicsItem::ItemIsFocusable); // Because we need focus out event.
@@ -21,10 +22,19 @@ BaseConnector::BaseConnector(ProjectSurface* surface_, QGraphicsItem* parent_)
 }
 
 
+void BaseConnector::try_connect()
+{
+    manager->try_connect(this);
+}
+
+
 bool BaseConnector::is_connecting() const
 {
-    return surface->connection_starter == this;
+    return manager->active_connector() == this;
 }
+
+
+
 
 /*
 void BaseConnector::grabMouseEvent(QEvent *event)
@@ -42,12 +52,12 @@ void BaseConnector::ungrabMouseEvent(QEvent *event)
     std::cout << "ungrab\n";
 }*/
 
-
+/*
 void BaseConnector::focusOutEvent(QFocusEvent *event)
 {
-    if (!surface->is_hovering_connector())
+    if (!manager->is_hovering_connector())
     {
-        surface->stop_connecting();
+        manager->cancel_connection();
     }
 }
 
@@ -69,14 +79,14 @@ void BaseConnector::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void BaseConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!surface->is_making_connection())
+    if (!manager->is_connecting())
     {
         auto start_pos = QVector2D(event->buttonDownPos(Qt::MouseButton::LeftButton));
         auto current_pos = QVector2D(event->pos());
 
         if ((start_pos - current_pos).lengthSquared() > 400)
         {
-            surface->start_connecting(this);
+            manager->try_connect(this);
         }
     }
 }
@@ -84,13 +94,13 @@ void BaseConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void BaseConnector::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (surface->is_making_connection())
+    if (manager->is_connecting())
     {
-        surface->stop_connecting();
+        manager->cancel_connection();
     }
     else
     {
-        surface->start_connecting(this);
+        manager->try_connect(this);
     }
 }
 
@@ -103,3 +113,4 @@ void BaseConnector::set_highlighted(bool highlighted_)
         update();
     }
 }
+*/

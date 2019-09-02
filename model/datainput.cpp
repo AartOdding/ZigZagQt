@@ -47,7 +47,10 @@ void DataInput::connect_to(BaseDataType* new_connection)
         }
         else
         {
-            application::project_model()->get_undo_stack()->push(new ConnectCommand(new_connection, this));
+            if (compatible_with(new_connection))
+            {
+                application::project_model()->get_undo_stack()->push(new ConnectCommand(new_connection, this));
+            }
         }
     }
 }

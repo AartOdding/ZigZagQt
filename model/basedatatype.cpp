@@ -49,9 +49,10 @@ const std::vector<DataInput*>& BaseDataType::get_connections() const
 
 void BaseDataType::connect_to(DataInput* data_input)
 {
-    if (data_input && data_input->compatible_with(this))
+    if (data_input && data_input->get_connection() != this && data_input->compatible_with(this))
     {
-        application::project_model()->get_undo_stack()->push(new ConnectCommand(this, data_input));
+        auto undo = application::project_model()->get_undo_stack();
+        undo->push(new ConnectCommand(this, data_input));
     }
 }
 

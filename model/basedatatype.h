@@ -53,7 +53,6 @@ public:
 
     bool is_connected_to(const DataInput* data_input) const;
 
-
     const std::vector<DataInput*>& get_connections() const;
 
 
