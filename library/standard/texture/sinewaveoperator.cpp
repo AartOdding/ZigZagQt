@@ -36,6 +36,10 @@ void SineWaveOperator::run()
         auto success = shader.link();
         Q_ASSERT(success);
 
+        glUseProgram(shader.programId());
+        shader.setUniformValue(shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
+        shader.setUniformValue(shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
+
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
@@ -56,9 +60,6 @@ void SineWaveOperator::run()
     glBindVertexArray(vao);
     shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
     shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
-    shader.setUniformValue(shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
-    shader.setUniformValue(shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
-
 
     //glm::mat3 transformation{ 1 };
     auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));

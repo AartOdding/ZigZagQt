@@ -12,6 +12,9 @@
         <file>shaders/test_pattern.frag</file>
         <file>shaders/basic.vert</file>
         <file>shaders/sine_wave.frag</file>
+        <file>shaders/blend.frag</file>
+        <file>shaders/sawtooth_wave.frag</file>
+        <file>shaders/square_wave.frag</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

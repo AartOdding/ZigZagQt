@@ -78,7 +78,11 @@ void Renderer::render_frame()
 
     Q_ASSERT(QOpenGLContext::currentContext());
     auto gl = QOpenGLContext::currentContext()->functions();
-    GLint initial_fbo;
+    GLint initial_fbo, initial_tex0, initial_tex1;
+    gl->glActiveTexture(GL_TEXTURE1);
+    gl->glGetIntegerv(GL_TEXTURE_2D, &initial_tex1);
+    gl->glActiveTexture(GL_TEXTURE0);
+    gl->glGetIntegerv(GL_TEXTURE_2D, &initial_tex0);
     gl->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &initial_fbo);
 
     std::deque<BaseOperator*> open_list;
@@ -118,6 +122,10 @@ void Renderer::render_frame()
     application::project_view_model()->update();
     gl->glBindFramebuffer(GL_FRAMEBUFFER, initial_fbo);
 
+    gl->glActiveTexture(GL_TEXTURE1);
+    gl->glBindTexture(GL_TEXTURE_2D, initial_tex1);
+    gl->glActiveTexture(GL_TEXTURE0);
+    gl->glBindTexture(GL_TEXTURE_2D, initial_tex0);
 
     // End with app wide reset of all the changed flags.
     ParameterOwner::reset_all_changed_flags();

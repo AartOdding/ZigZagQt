@@ -1,12 +1,12 @@
 #pragma once
 
+#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLShaderProgram>
+
 #include "model/baseoperator.h"
 #include "model/datainput.h"
-#include "model/enumdefinition.h"
-#include "model/parameter/enum.h"
 
 #include "library/standard/texture/texturedata.h"
-#include "library/standard/test/testdata.h"
 
 
 const inline EnumDefinition BlendMode
@@ -24,20 +24,19 @@ const inline EnumDefinition BlendMode
 };
 
 
-class BlendOperator : public BaseOperator
+class BlendOperator : public BaseOperator,
+                      public QOpenGLFunctions_3_3_Core
 {
 
 public:
 
     BlendOperator();
 
-    ~BlendOperator() override;
-
 
     void run() override;
 
 
-    static BaseOperator* create();
+    static BaseOperator* create() { return new BlendOperator(); }
 
     static const inline OperatorTypeInfo Type { "Blend Operator", "Standard/Texture",
         { &TextureData::Type, &TextureData::Type },
@@ -45,16 +44,17 @@ public:
 
 private:
 
+    EnumPar blend_mode{ this, BlendMode, "Blend Mode", 0 };
+
     DataInput texture_a{ this, TextureData::Type };
     DataInput texture_b{ this, TextureData::Type };
 
-
-    //DataInput texture_a{ this, TestData::Type };
-
-    EnumPar blend_mode{ this, BlendMode, "Blend Mode", 0 };
-
-    //TestData test_data{ this };
-
     TextureData output_texture{ this };
+
+
+    static bool gpu_resources_initialized;
+    static QOpenGLShaderProgram shader;
+    static GLuint vao;
+    static GLuint vbo;
 
 };
