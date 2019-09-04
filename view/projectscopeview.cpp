@@ -204,3 +204,15 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
     }
 }
 
+
+void ProjectScopeView::on_parameter_connected(BaseParameter * importer, BaseParameter * exporter)
+{
+    // check if those two operators don't have a connection yet
+
+}
+
+
+void ProjectScopeView::on_parameter_disconnected(BaseParameter * importer, BaseParameter * exporter)
+{
+
+}

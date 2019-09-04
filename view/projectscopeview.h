@@ -9,6 +9,7 @@
 
 
 class BaseOperator;
+class BaseParameter;
 class BaseDataType;
 class DataInput;
 class OperatorView;
@@ -34,13 +35,13 @@ public:
 public slots:
 
     void on_operator_added(BaseOperator* operator_ptr);
-
     void on_operator_deleted(BaseOperator* operator_ptr);
 
-
     void on_input_connected(BaseDataType* output, DataInput* input);
-
     void on_input_disconnected(BaseDataType* output, DataInput* input);
+
+    void on_parameter_connected(BaseParameter * exporter, BaseParameter * importer);
+    void on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer);
 
 
 protected:
