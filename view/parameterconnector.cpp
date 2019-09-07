@@ -44,6 +44,19 @@ bool ParameterConnector::can_connect_with(BaseConnector* other) const
 void ParameterConnector::connection_requested_event(BaseConnector* other)
 {
     std::cout << "connection rquested\n";
+    auto o = dynamic_cast<ParameterConnector*>(other);
+
+    if (o && is_input() != o->is_input())
+    {
+        if (is_input())
+        {
+            last_selected_parameter->add_import(o->last_selected_parameter);
+        }
+        else
+        {
+            o->last_selected_parameter->add_import(last_selected_parameter);
+        }
+    }
 }
 
 
@@ -66,7 +79,8 @@ void ParameterConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void ParameterConnector::item_selected(QAction *action)
 {
     auto par = action->data().value<BaseParameter*>();
-    std::cout << par->name() << "\n";
+    Q_ASSERT(par);
+    last_selected_parameter = par;
     try_connect();
 }
 

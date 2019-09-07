@@ -49,5 +49,6 @@ private:
 
     bool is_input_;
     bool hovered = false;
+    BaseParameter * last_selected_parameter = nullptr;
 
 };
