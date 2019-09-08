@@ -8,7 +8,7 @@
 
 
 BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, const char * name)
-    : m_owner(owner), m_type(type), m_name(name)
+    : m_owner(owner), m_name(name), m_type(type)
 {
     Q_ASSERT(owner);
     owner->register_parameter(this);
@@ -33,9 +33,21 @@ ParameterType BaseParameter::type() const
 }
 
 
+ParameterFamily BaseParameter::family() const
+{
+    return family_for(type());
+}
+
+
 const char * BaseParameter::name() const
 {
     return m_name;
+}
+
+
+bool BaseParameter::compatible_with(const BaseParameter* other) const
+{
+    return family() == other->family() && family() != ParameterFamily::DummyParameter;
 }
 
 
@@ -43,6 +55,11 @@ void BaseParameter::flag_changed()
 {
     m_changed = true;
     m_owner->flag_parameters_changed();
+
+    for (auto e : m_exports)
+    {
+        e->flag_changed();
+    }
 }
 
 

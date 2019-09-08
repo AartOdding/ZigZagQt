@@ -6,6 +6,7 @@
 
 class ProjectScopeView;
 class DataBlockConnector;
+class BaseConnector;
 
 
 class DataBlockCable : public QObject,
@@ -18,7 +19,7 @@ public:
     static constexpr double tension = 0.6;
     static constexpr double flip_distance = 100;
 
-    DataBlockCable(ProjectScopeView * program_view, DataBlockConnector * input_view, DataBlockConnector * output_view);
+    DataBlockCable(ProjectScopeView * program_view, BaseConnector * input_view, BaseConnector * output_view);
 
     QRectF boundingRect() const override;
 
@@ -40,8 +41,8 @@ private:
 
 
     ProjectScopeView * program_view;
-    DataBlockConnector * input_view;
-    DataBlockConnector * output_view;
+    BaseConnector * input_view;
+    BaseConnector * output_view;
 
     QColor color;
     QPainterPath path;

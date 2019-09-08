@@ -21,18 +21,14 @@
 
 
 DataBlockConnector::DataBlockConnector(OperatorView& op_view, DataInput& input)
-    : BaseConnector(application::project_view_model()),
-      operator_view(&op_view),
-      data_input(&input)
+    : BaseConnector(application::project_view_model(), &op_view), data_input(&input)
 {
     color = input.type()->gui_color;
 }
 
 
 DataBlockConnector::DataBlockConnector(OperatorView& op_view, BaseDataType& output)
-    : BaseConnector(application::project_view_model()),
-      operator_view(&op_view),
-      data_output(&output)
+    : BaseConnector(application::project_view_model(), &op_view), data_output(&output)
 {
     color = output.type()->gui_color;
 }
@@ -74,7 +70,7 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
 }
 
 
-void DataBlockConnector::connection_requested_event(BaseConnector* other)
+bool DataBlockConnector::connection_requested_event(BaseConnector* other)
 {
     std::cout << "connection requested\n";
     auto o = dynamic_cast<DataBlockConnector*>(other);
@@ -89,7 +85,9 @@ void DataBlockConnector::connection_requested_event(BaseConnector* other)
         {
             data_output->connect_to(o->data_input);
         }
+        return true;
     }
+    return false;
 }
 
 

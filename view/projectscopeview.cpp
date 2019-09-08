@@ -4,6 +4,7 @@
 #include "view/baseconnector.h"
 #include "view/operatorview.h"
 #include "view/datablockcable.h"
+#include "view/datablockconnector.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 
@@ -83,7 +84,6 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
         delete op_view;
     }
 }
-
 
 
 void ProjectScopeView::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -186,6 +186,7 @@ void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input
     }
 }
 
+
 void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* input)
 {
     auto input_op = operator_views[input->parent_operator];
@@ -208,11 +209,12 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 void ProjectScopeView::on_parameter_connected(BaseParameter * importer, BaseParameter * exporter)
 {
     // check if those two operators don't have a connection yet
-
+    // That logic should happen in view, because that concept does not exist in model!
+    std::cout << "par connected\n";
 }
 
 
 void ProjectScopeView::on_parameter_disconnected(BaseParameter * importer, BaseParameter * exporter)
 {
-
+    std::cout << "par disconnected\n";
 }

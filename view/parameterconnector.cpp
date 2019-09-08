@@ -11,8 +11,7 @@
 
 
 ParameterConnector::ParameterConnector(OperatorView& op_view, bool is_input)
-    : BaseConnector(application::project_view_model()),
-      operator_view(&op_view), is_input_(is_input)
+    : BaseConnector(application::project_view_model(), &op_view), is_input_(is_input)
 {
 }
 
@@ -41,7 +40,7 @@ bool ParameterConnector::can_connect_with(BaseConnector* other) const
 }
 
 
-void ParameterConnector::connection_requested_event(BaseConnector* other)
+bool ParameterConnector::connection_requested_event(BaseConnector* other)
 {
     std::cout << "connection rquested\n";
     auto o = dynamic_cast<ParameterConnector*>(other);
@@ -56,7 +55,9 @@ void ParameterConnector::connection_requested_event(BaseConnector* other)
         {
             o->last_selected_parameter->add_import(last_selected_parameter);
         }
+        return true;
     }
+    return false;
 }
 
 
@@ -94,7 +95,7 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         QMenu* menu = new QMenu();
         auto op_menu = menu->addMenu("Operator");
-        for (auto p : operator_view->operator_model.parameters())
+        for (auto p : operator_view()->operator_model.parameters())
         {
             op_menu->addAction(p->name())->setData(QVariant::fromValue(p));
         }

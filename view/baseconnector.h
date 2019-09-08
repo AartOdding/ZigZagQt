@@ -3,7 +3,7 @@
 #include <QGraphicsWidget>
 
 
-
+class OperatorView;
 class ConnectionManager;
 
 
@@ -11,7 +11,7 @@ class BaseConnector : public QGraphicsWidget
 {
 public:
 
-    BaseConnector(ConnectionManager* manager, QGraphicsItem* parent = nullptr);
+    BaseConnector(ConnectionManager* manager, OperatorView * operator_view);
 
     virtual ~BaseConnector() override = default;
 
@@ -20,38 +20,25 @@ public:
 
     bool is_connecting() const;
 
+    OperatorView * operator_view() const;
 
-    //bool is_highlighted() const { return highlighted; }
-
-    //void set_highlighted(bool highlighted);
 
     virtual bool can_connect_with(BaseConnector* other) const = 0;
 
-    virtual void connection_requested_event(BaseConnector* other) = 0;
+    virtual QColor get_color() const = 0;
+
+
+
+    virtual bool connection_requested_event(BaseConnector* other) = 0;
 
     virtual void connection_aborted_event() { }
 
 
-
-    //void grabMouseEvent(QEvent *event) override;
-    //void ungrabMouseEvent(QEvent *event) override;
-
-    //void focusInEvent(QFocusEvent *) override { }
-    //void focusOutEvent(QFocusEvent *event) override;
-
-    //void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
-    //void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
-
-    //virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    //virtual void mousePressEvent(QGraphicsSceneMouseEvent *) override { }
-    //virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
-
 private:
-
 
     ConnectionManager* manager = nullptr;
 
-    //bool highlighted = false;
+    OperatorView * op_view = nullptr;
+
 
 };

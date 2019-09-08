@@ -9,8 +9,8 @@
 
 
 
-BaseConnector::BaseConnector(ConnectionManager* manager_, QGraphicsItem* parent_)
-    : QGraphicsWidget(parent_), manager(manager_)
+BaseConnector::BaseConnector(ConnectionManager* manager_, OperatorView * operator_view_)
+    : manager(manager_), op_view(operator_view_)
 {
     setFlag(QGraphicsItem::ItemClipsToShape); // Enable clipping.
     setFlag(QGraphicsItem::ItemIsFocusable); // Because we need focus out event.
@@ -33,6 +33,11 @@ bool BaseConnector::is_connecting() const
     return manager->active_connector() == this;
 }
 
+
+OperatorView * BaseConnector::operator_view() const
+{
+    return op_view;
+}
 
 
 

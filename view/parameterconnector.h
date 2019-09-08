@@ -21,11 +21,12 @@ public:
     bool is_input() const { return is_input_; }
 
 
-    OperatorView * const operator_view;
+    QColor get_color() const override{ return QColor(255, 255, 2555); }
+
 
 protected:
 
-    void connection_requested_event(BaseConnector* other) override;
+    bool connection_requested_event(BaseConnector* other) override;
     void connection_aborted_event() override { update(); }
 
     void resizeEvent(QGraphicsSceneResizeEvent *event) override;
