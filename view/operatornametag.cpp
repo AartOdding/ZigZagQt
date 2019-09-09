@@ -16,7 +16,9 @@ OperatorNameTag::OperatorNameTag(const QString &text, OperatorView *parent)
 {
     setTabChangesFocus(true);
     setDefaultTextColor(QColor(255, 255, 255));
-    setFont(QFont("Helvetica", 14));
+    QFont font{ "Helvetica" };
+    font.setPixelSize(19);
+    setFont(font); // old: QFont("Helvetica", 14)
     setTextInteractionFlags(Qt::TextEditorInteraction);
 }
 

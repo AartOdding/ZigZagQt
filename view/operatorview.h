@@ -10,12 +10,14 @@
 #include "operatornametag.h"
 
 
-class BaseDataView;
 class BaseOperator;
-class DataBlockConnector;
-class BaseDataType;
+class DataConnector;
+class ParameterConnector;
 class DataInput;
+class BaseDataType;
+class BaseDataView;
 class ProjectScopeView;
+
 
 
 class OperatorView : public QObject,
@@ -31,14 +33,15 @@ public:
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    DataBlockConnector* get_view_of(const DataInput* input);
-
-    DataBlockConnector* get_view_of(const BaseDataType* output);
-
 
     BaseOperator& operator_model;
 
     ProjectScopeView * scope_view();
+
+    DataConnector* data_connector_in(const DataInput* input);
+    DataConnector* data_connector_out(const BaseDataType* output);
+    ParameterConnector* parameter_connector_in() const;
+    ParameterConnector* parameter_connector_out() const;
 
 
 public slots:
@@ -71,8 +74,8 @@ private:
 
     bool was_dragged = false;
 
-    std::unordered_map<const DataInput*, DataBlockConnector*> inputs;
-    std::unordered_map<const BaseDataType*, DataBlockConnector*> outputs;
+    std::unordered_map<const DataInput*, DataConnector*> inputs;
+    std::unordered_map<const BaseDataType*, DataConnector*> outputs;
 
     QGraphicsWidget inputs_panel{ this };
     QGraphicsWidget outputs_panel{ this };

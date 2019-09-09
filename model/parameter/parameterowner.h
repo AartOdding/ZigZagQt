@@ -19,7 +19,7 @@ public:
     static void reset_all_changed_flags();
 
 
-    ParameterOwner(QObject *parent = nullptr);
+    ParameterOwner(ParameterOwner *parent = nullptr);
 
     ~ParameterOwner();
 
@@ -32,6 +32,12 @@ public:
     // Returns true if succesful
     bool deregister_parameter(BaseParameter* parameter);
 
+
+    void flag_parameter_connection(BaseParameter * exporter, BaseParameter * importer);
+
+    void flag_parameter_disconnection(BaseParameter * exporter, BaseParameter * importer);
+
+
     // Default implementation does not pass on the flag
     virtual void flag_parameters_changed();
 
@@ -41,12 +47,20 @@ public:
     bool parameters_changed() const;
 
 
+    ParameterOwner * top_level_owner();
+
+    const ParameterOwner * top_level_owner() const;
+
+
 signals:
 
     void parameter_added(BaseParameter* parameter);
 
     void parameter_removed(BaseParameter* parameter);
 
+    void parameters_connected(BaseParameter* exporter, BaseParameter * importer);
+
+    void parameters_disconnected(BaseParameter* exporter, BaseParameter * importer);
 
 protected:
 
@@ -58,5 +72,7 @@ private:
     static std::unordered_set<ParameterOwner*> all_parameter_owners;
 
     bool m_changed = false;
+
+    ParameterOwner * parent = nullptr;
 
 };

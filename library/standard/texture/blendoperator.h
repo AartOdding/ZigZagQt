@@ -38,7 +38,7 @@ public:
 
     static BaseOperator* create() { return new BlendOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Blend Operator", "Standard/Texture",
+    static const inline OperatorTypeInfo Type { "Blend", "Standard/Texture",
         { &TextureData::Type, &TextureData::Type },
         { &TextureData::Type }, true, &create };
 

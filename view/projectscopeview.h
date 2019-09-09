@@ -13,9 +13,10 @@ class BaseParameter;
 class BaseDataType;
 class DataInput;
 class OperatorView;
-class DataBlockConnector;
-class DataBlockCable;
-
+class DataConnector;
+class ParameterConnector;
+class Cable;
+class ParameterOwner;
 
 
 class ProjectScopeView : public QGraphicsScene,
@@ -40,7 +41,7 @@ public slots:
     void on_input_connected(BaseDataType* output, DataInput* input);
     void on_input_disconnected(BaseDataType* output, DataInput* input);
 
-    void on_parameter_connected(BaseParameter * exporter, BaseParameter * importer);
+    void on_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
     void on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer);
 
 
@@ -61,7 +62,10 @@ private:
     // HashMap<Scope, Scene> scenes
     QHash<BaseOperator*, OperatorView*> operator_views;
 
-    QHash<DataBlockConnector*, DataBlockCable*> cable_views;
+    // Key is the input connector // TODO: maybe use both connectors as key like in parameters
+    QHash<DataConnector*, Cable*> data_cables;
+    QHash<std::pair<ParameterConnector*, ParameterConnector*>, Cable*> parameter_cables;
+
 
 
 signals:

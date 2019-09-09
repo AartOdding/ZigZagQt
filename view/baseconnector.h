@@ -33,6 +33,7 @@ public:
 
     virtual void connection_aborted_event() { }
 
+    double visible_width = 13;
 
 private:
 

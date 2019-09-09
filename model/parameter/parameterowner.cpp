@@ -13,8 +13,8 @@ void ParameterOwner::reset_all_changed_flags()
 }
 
 
-ParameterOwner::ParameterOwner(QObject *parent)
-    : QObject(parent)
+ParameterOwner::ParameterOwner(ParameterOwner *parent_)
+    : QObject(parent_), parent(parent_)
 {
     all_parameter_owners.insert(this);
 }
@@ -82,4 +82,32 @@ void ParameterOwner::reset_changed_flags()
 bool ParameterOwner::parameters_changed() const
 {
     return m_changed;
+}
+
+
+void ParameterOwner::flag_parameter_connection(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (exporter && importer)
+    {
+        emit parameters_connected(exporter, importer);
+    }
+}
+
+void ParameterOwner::flag_parameter_disconnection(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (exporter && importer)
+    {
+        emit parameters_disconnected(exporter, importer);
+    }
+}
+
+
+ParameterOwner * ParameterOwner::top_level_owner()
+{
+    return parent ? parent->top_level_owner() : this;
+}
+
+const ParameterOwner * ParameterOwner::top_level_owner() const
+{
+    return parent ? parent->top_level_owner() : this;
 }

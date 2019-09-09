@@ -94,18 +94,23 @@ const std::vector<BaseParameter *> BaseParameter::get_exports() const
 
 
 // Undoable action
-void BaseParameter::add_import(BaseParameter * import)
+void BaseParameter::add_import(BaseParameter * exporting_import)
 {
     auto model = application::project_model();
     auto undo_stack = model->get_undo_stack();
-    undo_stack->push(new ConnectParametersCommand(import, this));
+    undo_stack->push(new ConnectParametersCommand(exporting_import, this));
+    owner()->top_level_owner()->flag_parameter_connection(exporting_import, this);
 }
 
 
 // Undoable action
 void BaseParameter::remove_import()
 {
-    auto model = application::project_model();
-    auto undo_stack = model->get_undo_stack();
-    undo_stack->push(new DisconnectParametersCommand(m_import, this));
+    if (m_import)
+    {
+        auto model = application::project_model();
+        auto undo_stack = model->get_undo_stack();
+        undo_stack->push(new DisconnectParametersCommand(m_import, this));
+        owner()->top_level_owner()->flag_parameter_disconnection(m_import, this);
+    }
 }

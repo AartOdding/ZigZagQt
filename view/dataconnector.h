@@ -9,14 +9,14 @@ class BaseDataType;
 
 
 
-class DataBlockConnector : public BaseConnector
+class DataConnector : public BaseConnector
 {
 
 public:
 
-    DataBlockConnector(OperatorView& op_view, DataInput& input);
+    DataConnector(OperatorView& op_view, DataInput& input);
 
-    DataBlockConnector(OperatorView& op_view, BaseDataType& output);
+    DataConnector(OperatorView& op_view, BaseDataType& output);
 
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;

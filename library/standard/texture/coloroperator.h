@@ -25,7 +25,7 @@ public:
 
     static BaseOperator* create();
 
-    static const inline OperatorTypeInfo Type { "Color Operator", "Standard/Texture",
+    static const inline OperatorTypeInfo Type { "Uniform Value", "Standard/Texture",
         {  }, { &TextureData::Type }, true, &create };
 
 private:

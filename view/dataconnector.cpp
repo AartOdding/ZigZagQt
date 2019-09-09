@@ -1,4 +1,4 @@
-#include "datablockconnector.h"
+#include "dataconnector.h"
 
 #include "model/datainput.h"
 #include "model/basedatatype.h"
@@ -20,21 +20,23 @@
 
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& op_view, DataInput& input)
+DataConnector::DataConnector(OperatorView& op_view, DataInput& input)
     : BaseConnector(application::project_view_model(), &op_view), data_input(&input)
 {
     color = input.type()->gui_color;
+    visible_width = 15;
 }
 
 
-DataBlockConnector::DataBlockConnector(OperatorView& op_view, BaseDataType& output)
+DataConnector::DataConnector(OperatorView& op_view, BaseDataType& output)
     : BaseConnector(application::project_view_model(), &op_view), data_output(&output)
 {
     color = output.type()->gui_color;
+    visible_width = 15;
 }
 
 
-void DataBlockConnector::resizeEvent(QGraphicsSceneResizeEvent *event)
+void DataConnector::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     auto size = event->newSize();
     int path_height = std::min(size.height() - 4, 25.0);
@@ -46,9 +48,9 @@ void DataBlockConnector::resizeEvent(QGraphicsSceneResizeEvent *event)
 }
 
 
-bool DataBlockConnector::can_connect_with(BaseConnector* other) const
+bool DataConnector::can_connect_with(BaseConnector* other) const
 {
-    auto o = dynamic_cast<DataBlockConnector*>(other);
+    auto o = dynamic_cast<DataConnector*>(other);
     if (o && o->is_input() != is_input())
     {
         return true;
@@ -57,7 +59,7 @@ bool DataBlockConnector::can_connect_with(BaseConnector* other) const
 }
 
 
-void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void DataConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -70,10 +72,10 @@ void DataBlockConnector::paint(QPainter * painter, const QStyleOptionGraphicsIte
 }
 
 
-bool DataBlockConnector::connection_requested_event(BaseConnector* other)
+bool DataConnector::connection_requested_event(BaseConnector* other)
 {
     std::cout << "connection requested\n";
-    auto o = dynamic_cast<DataBlockConnector*>(other);
+    auto o = dynamic_cast<DataConnector*>(other);
 
     if (o && is_input() != o->is_input())
     {
@@ -91,7 +93,7 @@ bool DataBlockConnector::connection_requested_event(BaseConnector* other)
 }
 
 
-QColor DataBlockConnector::get_color() const
+QColor DataConnector::get_color() const
 {
     return color;
 }

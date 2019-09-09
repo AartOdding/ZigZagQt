@@ -21,7 +21,7 @@ public:
     bool is_input() const { return is_input_; }
 
 
-    QColor get_color() const override{ return QColor(255, 255, 2555); }
+    QColor get_color() const override{ return QColor(255, 255, 255); }
 
 
 protected:

@@ -21,6 +21,7 @@ FloatWidget::FloatWidget(QWidget * parent, BaseParameter* par)
         spinboxes.emplace_back(new QDoubleSpinBox());
         spinboxes.back()->setFont(OpenSans);
         spinboxes.back()->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        spinboxes.back()->setSingleStep(0.1);
         layout.addWidget(spinboxes.back());
     }
 

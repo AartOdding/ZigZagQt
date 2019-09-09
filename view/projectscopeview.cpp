@@ -3,8 +3,9 @@
 
 #include "view/baseconnector.h"
 #include "view/operatorview.h"
-#include "view/datablockcable.h"
-#include "view/datablockconnector.h"
+#include "view/cable.h"
+#include "view/dataconnector.h"
+#include "view/parameterconnector.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 
@@ -60,6 +61,8 @@ void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
             connect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
         }
     }
+    connect(operator_ptr, &ParameterOwner::parameters_connected, this, &ProjectScopeView::on_parameters_connected);
+    connect(operator_ptr, &ParameterOwner::parameters_disconnected, this, &ProjectScopeView::on_parameter_disconnected);
 
     addItem(op_view);
 }
@@ -77,6 +80,9 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
                 disconnect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
             }
         }
+        disconnect(operator_ptr, &ParameterOwner::parameters_connected, this, &ProjectScopeView::on_parameters_connected);
+        disconnect(operator_ptr, &ParameterOwner::parameters_disconnected, this, &ProjectScopeView::on_parameter_disconnected);
+
 
         OperatorView* op_view = operator_views[operator_ptr];
         operator_views.remove(operator_ptr);
@@ -174,13 +180,13 @@ void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input
 
     if (input_op && output_op)
     {
-        auto input_view = input_op->get_view_of(input);
-        auto output_view = output_op->get_view_of(output);
+        auto input_view = input_op->data_connector_in(input);
+        auto output_view = output_op->data_connector_out(output);
 
         if (input_view && output_view)
         {
-            auto cable = new DataBlockCable(this, input_view, output_view);
-            cable_views.insert(input_view, cable);
+            auto cable = new Cable(this, output_view, input_view);
+            data_cables.insert(input_view, cable);
             addItem(cable);
         }
     }
@@ -193,12 +199,12 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 
     if (input_op)
     {
-        auto input_view = input_op->get_view_of(input);
+        auto input_view = input_op->data_connector_in(input);
 
         if (input_view)
         {
-            auto cable = cable_views[input_view];
-            cable_views.remove(input_view);
+            auto cable = data_cables[input_view];
+            data_cables.remove(input_view);
             removeItem(cable);
             delete cable;
         }
@@ -206,15 +212,34 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 }
 
 
-void ProjectScopeView::on_parameter_connected(BaseParameter * importer, BaseParameter * exporter)
+void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
 {
+    OperatorView* export_op = operator_views[static_cast<BaseOperator*>(exporter->owner()->top_level_owner())];
+    OperatorView* import_op = operator_views[static_cast<BaseOperator*>(importer->owner()->top_level_owner())];
+
+    if (export_op && import_op)
+    {
+        auto export_connector = export_op->parameter_connector_out();
+        auto import_connector = import_op->parameter_connector_in();
+
+        if (export_connector && import_connector)
+        {
+            if (!parameter_cables.contains({ export_connector, import_connector }))
+            {
+                auto cable = new Cable(this, export_connector, import_connector);
+                parameter_cables.insert({ import_connector, export_connector }, cable);
+                addItem(cable);
+            }
+        }
+    }
+
     // check if those two operators don't have a connection yet
     // That logic should happen in view, because that concept does not exist in model!
     std::cout << "par connected\n";
 }
 
 
-void ProjectScopeView::on_parameter_disconnected(BaseParameter * importer, BaseParameter * exporter)
+void ProjectScopeView::on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer)
 {
     std::cout << "par disconnected\n";
 }

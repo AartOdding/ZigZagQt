@@ -50,9 +50,9 @@ SOURCES += \
         model/projectscope.cpp \
         view/baseconnector.cpp \
         view/basedataview.cpp \
+        view/cable.cpp \
         view/connectionmanager.cpp \
-        view/datablockcable.cpp \
-        view/datablockconnector.cpp \
+        view/dataconnector.cpp \
         view/opengldataview.cpp \
         view/operatornametag.cpp \
         view/operatorselectordialog.cpp \
@@ -110,9 +110,9 @@ HEADERS += \
         utility/std_containers_helpers.h \
         view/baseconnector.h \
         view/basedataview.h \
+        view/cable.h \
         view/connectionmanager.h \
-        view/datablockcable.h \
-        view/datablockconnector.h \
+        view/dataconnector.h \
         view/opengldataview.h \
         view/operatornametag.h \
         view/operatorselectordialog.h \

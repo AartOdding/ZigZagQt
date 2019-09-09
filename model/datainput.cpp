@@ -9,7 +9,7 @@
 
 
 DataInput::DataInput(BaseOperator* parent_operator_, const DataTypeInfo& type_info_)
-    : parent_operator(parent_operator_), type_info(&type_info_)
+    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), type_info(&type_info_)
 {
     parent_operator->register_data_input(this);
 }

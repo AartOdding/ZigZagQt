@@ -9,7 +9,7 @@
 #include "basedataview.h"
 #include "operatorview.h"
 #include "projectscopeview.h"
-#include "datablockconnector.h"
+#include "dataconnector.h"
 #include "parameterconnector.h"
 
 #include "model/datainput.h"
@@ -57,13 +57,13 @@ OperatorView::OperatorView(BaseOperator& op)
     // add parameter connector first.
     for (auto i : op.data_inputs())
     {
-        auto connector = new DataBlockConnector(*this, *i);
+        auto connector = new DataConnector(*this, *i);
         inputs[i] = connector;
         static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(connector);
     }
     for (auto o : op.data_outputs())
     {
-        auto connector = new DataBlockConnector(*this, *o);
+        auto connector = new DataConnector(*this, *o);
         outputs[o] = connector;
         static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(connector);
     }
@@ -113,15 +113,27 @@ void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 }
 
 
-DataBlockConnector* OperatorView::get_view_of(const DataInput* input)
+DataConnector* OperatorView::data_connector_in(const DataInput* input)
 {
     return inputs[input];
 }
 
 
-DataBlockConnector* OperatorView::get_view_of(const BaseDataType* output)
+DataConnector* OperatorView::data_connector_out(const BaseDataType* output)
 {
     return outputs[output];
+}
+
+
+ParameterConnector* OperatorView::parameter_connector_in() const
+{
+    return static_cast<ParameterConnector*>(inputs_panel.layout()->itemAt(inputs_panel.layout()->count() - 1));
+}
+
+
+ParameterConnector* OperatorView::parameter_connector_out() const
+{
+    return static_cast<ParameterConnector*>(outputs_panel.layout()->itemAt(outputs_panel.layout()->count() - 1));
 }
 
 
