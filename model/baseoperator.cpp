@@ -60,23 +60,7 @@ const OperatorTypeInfo * BaseOperator::type() const
 
 void BaseOperator::remove()
 {
-    auto model = application::project_model();
-    auto undo_stack = model->get_undo_stack();
-
-    undo_stack->beginMacro("Remove Operator");
-
-    for (auto ptr : inputs)
-    {
-        ptr->disconnect();
-    }
-
-    for (auto ptr : outputs)
-    {
-        ptr->disconnect_all();
-    }
-
-    undo_stack->push(new RemoveCommand(*model, this));
-    undo_stack->endMacro();
+    application::project_model()->remove_operator(this);
 }
 
 

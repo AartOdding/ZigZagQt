@@ -3,6 +3,8 @@
 #include "operatorview.h"
 #include "model/parameter/baseparameter.h"
 #include "model/baseoperator.h"
+#include "model/datainput.h"
+#include "model/basedatatype.h"
 
 #include <QMenu>
 #include <QGraphicsSceneResizeEvent>
@@ -42,20 +44,26 @@ bool ParameterConnector::can_connect_with(BaseConnector* other) const
 
 bool ParameterConnector::connection_requested_event(BaseConnector* other)
 {
-    std::cout << "connection rquested\n";
     auto o = dynamic_cast<ParameterConnector*>(other);
 
     if (o && is_input() != o->is_input())
     {
         if (is_input())
         {
-            last_selected_parameter->add_import(o->last_selected_parameter);
+            if (last_selected_parameter->compatible_with(o->last_selected_parameter))
+            {
+                last_selected_parameter->add_import(o->last_selected_parameter);
+                return true;
+            }
         }
         else
         {
-            o->last_selected_parameter->add_import(last_selected_parameter);
+            if (o->last_selected_parameter->compatible_with(last_selected_parameter))
+            {
+                o->last_selected_parameter->add_import(last_selected_parameter);
+                return true;
+            }
         }
-        return true;
     }
     return false;
 }
@@ -94,10 +102,38 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (p.x() >= 0 && p.y() >= 0 && p.x() <= size().width() && p.y() <= size().height())
     {
         QMenu* menu = new QMenu();
-        auto op_menu = menu->addMenu("Operator");
-        for (auto p : operator_view()->operator_model.parameters())
+
+        auto op_menu = menu->addMenu(operator_view()->operator_model.type()->name.c_str());
+
+        for (auto par : operator_view()->operator_model.parameters())
         {
-            op_menu->addAction(p->name())->setData(QVariant::fromValue(p));
+            op_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+        }
+
+        for (auto output : operator_view()->operator_model.data_outputs())
+        {
+            if (output->parameters().size() > 0)
+            {
+                auto output_menu = menu->addMenu(output->name());
+
+                for (auto par : output->parameters())
+                {
+                    output_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+                }
+            }
+        }
+
+        for (auto input : operator_view()->operator_model.data_inputs())
+        {
+            if (input->parameters().size() > 0)
+            {
+                auto input_menu = menu->addMenu(input->name());
+
+                for (auto par : input->parameters())
+                {
+                    input_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+                }
+            }
         }
 
         connect(menu, &QMenu::triggered, this, &ParameterConnector::item_selected);

@@ -25,7 +25,7 @@ public:
 
     static BaseOperator* create();
 
-    static const inline OperatorTypeInfo Type { "Uniform Value", "Standard/Texture",
+    static const inline OperatorTypeInfo Type { "Uniform Fill", "Standard/Texture",
         {  }, { &TextureData::Type }, true, &create };
 
 private:
@@ -42,6 +42,6 @@ private:
    // parameter::Float4 test2{ this, "tets", {5, 6, 2, 4}, {5, 6, 2, 4}, {5, 6, 2, 4}};
     //parameter::Float test3{ this, "tets"};
 
-    TextureData output_texture{ this };
+    TextureData output_texture{ this, "Output Texture" };
 
 };

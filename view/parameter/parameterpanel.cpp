@@ -64,11 +64,17 @@ void ParameterPanel::build_ui(BaseOperator& op)
     layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, op));
     for (auto output : op.data_outputs())
     {
-        layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *output));
+        if (output->parameters().size() > 0)
+        {
+            layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *output));
+        }
     }
     for (auto input : op.data_inputs())
     {
-        layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *input));
+        if (input->parameters().size() > 0)
+        {
+            layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *input));
+        }
     }
 }
 

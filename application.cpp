@@ -62,6 +62,7 @@ namespace application
     }
 }
 
+#include <QVariant>
 
 
 Application::Application(int &argc, char **argv)
@@ -143,6 +144,8 @@ Application::Application(int &argc, char **argv)
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
     main_window = std::make_unique<QWidget>();
     main_window->setLayout(layout);
+
+    std::cout << sizeof(QVariant) << "var\n";
 
     //layout->setMenuBar();
     //viewport->show();

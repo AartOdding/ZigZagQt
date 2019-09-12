@@ -29,10 +29,11 @@ void OpenGLDataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         auto view_top_left = view->mapFromScene(scene_top_left);
         auto view_bot_right = view->mapFromScene(scene_bot_right);
 
-        auto x = 2 * view_top_left.x();
-        auto y = 2 * (view->height() - view_bot_right.y()); // -2 seems to be necessary to be placed right
-        auto w = 2 * (view_bot_right.x() - view_top_left.x());
-        auto h = 2 * (view_bot_right.y() - view_top_left.y());
+        double scale_factor = 1; // Should be 2 on high dpi screen like mac retina.
+        auto x = scale_factor * view_top_left.x();
+        auto y = scale_factor * (view->height() - view_bot_right.y() - 2); // -2 seems to be necessary to be placed right
+        auto w = scale_factor * (view_bot_right.x() - view_top_left.x());
+        auto h = scale_factor * (view_bot_right.y() - view_top_left.y());
 
         painter->beginNativePainting();
 

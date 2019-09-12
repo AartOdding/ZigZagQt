@@ -7,9 +7,6 @@
 
 #include "command/addcommand.h"
 #include "command/removecommand.h"
-#include "command/connectcommand.h"
-#include "command/disconnectcommand.h"
-#include "command/movecommand.h"
 
 #include <QString>
 #include <QPointer>
@@ -46,12 +43,10 @@ void ProjectModel::undo()
 
 void ProjectModel::add_operator(const OperatorTypeInfo& op_type, int x, int y)
 {
-    //undo_stack.beginMacro("Adding Operator");
     auto op = op_type.construct();
-
     op->set_position(x, y);
+
     undo_stack.push(new AddCommand(*this, op));
-    //undo_stack.endMacro();
 }
 
 
@@ -61,52 +56,22 @@ void ProjectModel::remove_operator(BaseOperator * operator_ptr)
     {
         undo_stack.beginMacro("Remove Operator");
 
-        for (auto& ptr : operator_ptr->data_inputs())
-        {
-            ptr->disconnect();
-        }
+        operator_ptr->remove_imports_exports();
 
-        for (auto& ptr : operator_ptr->data_outputs())
+        for (auto& input : operator_ptr->data_inputs())
         {
-            ptr->disconnect_all();
+            input->remove_imports_exports();
+            input->disconnect();
         }
-        // Maybe give BaseOperator a remove function?
-        //undo_stack.beginMacro("remove command");
-        //operator_ptr->
+        for (auto& output : operator_ptr->data_outputs())
+        {
+            output->remove_imports_exports();
+            output->disconnect_all();
+        }
         undo_stack.push(new RemoveCommand(*this, operator_ptr));
-
         undo_stack.endMacro();
     }
 }
-
-/*
-void ProgramModel::move_operator_undoable(BaseOperator * op, int x, int y)
-{
-    if (op && (x != op->get_position_x() || y != op->get_position_y()))
-    {
-        undo_stack.push(new MoveCommand(*op, x, y));
-    }
-}
-
-
-void ProgramModel::connect_data_undoable(BaseDataBlock* output, DataBlockInput* input)
-{
-    if (output && input && input->compatible_with(output))
-    {
-        undo_stack.push(new ConnectCommand(output, input));
-    }
-}
-
-
-void ProgramModel::disconnect_data_undoable(BaseDataBlock* output, DataBlockInput* input)
-{
-    if (output && input)
-    {
-
-    }
-}*/
-
-
 
 
 void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
@@ -134,6 +99,15 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
         //context->functions()->glFlush();
 
         emit operator_added(operator_ptr);
+
+        // To avoid cables being drawn to the wrong until the operator is moved, i suspect, it is because
+        // layout has not yet been applied when cable is being made.
+        auto x = operator_ptr->get_position_x();
+        auto y = operator_ptr->get_position_y();
+        operator_ptr->set_position(0, 0);
+        operator_ptr->set_position(x, y);
+        //emit operator_ptr->position_changed();
+        //emit operator_ptr->position_changed(operator_ptr->get_position_x(), operator_ptr->get_position_y()+1);
     }
 }
 

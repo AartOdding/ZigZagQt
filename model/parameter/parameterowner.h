@@ -51,6 +51,9 @@ public:
 
     const ParameterOwner * top_level_owner() const;
 
+    // Undoable Action
+    void remove_imports_exports();
+
 
 signals:
 

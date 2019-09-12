@@ -27,14 +27,14 @@ public:
 
 private:
 
-    TextureData output_texture{ this };
+    TextureData output_texture{ this, "Output Texture" };
 
     Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Float4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
 
-    Float2Par translation{ this, "Translate", {0, 0 }, -100000, 100000 };
-    FloatPar rotation{ this, "Rotate", 0, -100000, 100000 };
-    Float2Par scale{ this, "Scale", {1, 1}, 0, 1000 };
+    Float2Par translation{ this, "Translate", 0 };
+    FloatPar rotation{ this, "Rotate", 0 };
+    Float2Par scale{ this, "Scale", 1 };
 
 
     static bool gpu_resources_initialized;

@@ -48,6 +48,57 @@ void ProjectScopeView::bring_to_front(OperatorView* op)
 }
 
 
+void ProjectScopeView::keyPressEvent(QKeyEvent *keyEvent)
+{
+    keyEvent->setAccepted(false);
+    QGraphicsScene::keyPressEvent(keyEvent);
+
+    if (!keyEvent->isAccepted())
+    {
+        if (keyEvent->matches(QKeySequence::Undo))
+        {
+            emit undo_signal();
+            keyEvent->setAccepted(true);
+        }
+        else if (keyEvent->matches(QKeySequence::Redo))
+        {
+            emit redo_signal();
+            keyEvent->setAccepted(true);
+        }
+        else if (keyEvent->matches(QKeySequence::Delete) || keyEvent->key() == Qt::Key_Backspace)
+        {
+            application::project_model()->get_undo_stack()->beginMacro("Remove selected operators.");
+
+            for (auto obj : selectedItems())
+            {
+                auto op = dynamic_cast<OperatorView*>(obj);
+
+                if (op)
+                {
+                    op->operator_model.remove();
+                }
+            }
+            application::project_model()->get_undo_stack()->endMacro();
+            keyEvent->setAccepted(true);
+        }
+        else if (keyEvent->matches(QKeySequence::SelectAll))
+        {
+            for (auto op : operator_views)
+            {
+                op->setSelected(true);
+            }
+            keyEvent->setAccepted(true);
+        }
+    }
+}
+
+
+void ProjectScopeView::keyReleaseEvent(QKeyEvent *keyEvent)
+{
+    QGraphicsScene::keyReleaseEvent(keyEvent);
+}
+
+
 void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
 {
     OperatorView* op_view = new OperatorView(*operator_ptr);
@@ -83,93 +134,11 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
         disconnect(operator_ptr, &ParameterOwner::parameters_connected, this, &ProjectScopeView::on_parameters_connected);
         disconnect(operator_ptr, &ParameterOwner::parameters_disconnected, this, &ProjectScopeView::on_parameter_disconnected);
 
-
         OperatorView* op_view = operator_views[operator_ptr];
         operator_views.remove(operator_ptr);
         removeItem(op_view);
         delete op_view;
     }
-}
-
-
-void ProjectScopeView::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
-{
-    QGraphicsScene::mousePressEvent(mouseEvent);
-}
-
-
-void ProjectScopeView::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
-{
-    mouseEvent->setAccepted(false);
-    QGraphicsScene::mouseReleaseEvent(mouseEvent);
-
-    if (!mouseEvent->isAccepted())
-    {
-        //if (mouseEvent->)
-    }
-}
-
-
-void ProjectScopeView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
-{
-    QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
-
-    if (!mouseEvent->isAccepted())
-    {
-       //data_model->add_operator(TestOperator::Type, mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
-       std::cout << "data model" << data_model << "\n";
-    }
-}
-
-
-void ProjectScopeView::keyPressEvent(QKeyEvent *keyEvent)
-{
-    keyEvent->setAccepted(false);
-    QGraphicsScene::keyPressEvent(keyEvent);
-
-    if (!keyEvent->isAccepted())
-    {
-        if (keyEvent->matches(QKeySequence::Undo))
-        {
-            emit undo_signal();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::Redo))
-        {
-            emit redo_signal();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::Delete))
-        {
-            application::project_model()->get_undo_stack()->beginMacro("Remove selected operators.");
-
-            for (auto obj : selectedItems())
-            {
-                auto op = dynamic_cast<OperatorView*>(obj);
-
-                if (op)
-                {
-                    op->operator_model.remove();
-                }
-            }
-            application::project_model()->get_undo_stack()->endMacro();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::SelectAll))
-        {
-            for (auto op : operator_views)
-            {
-                op->setSelected(true);
-            }
-            keyEvent->setAccepted(true);
-        }
-    }
-}
-
-
-void ProjectScopeView::keyReleaseEvent(QKeyEvent *keyEvent)
-{
-    QGraphicsScene::keyReleaseEvent(keyEvent);
 }
 
 
@@ -227,19 +196,40 @@ void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BasePar
             if (!parameter_cables.contains({ export_connector, import_connector }))
             {
                 auto cable = new Cable(this, export_connector, import_connector);
-                parameter_cables.insert({ import_connector, export_connector }, cable);
+                parameter_cables.insert({ export_connector, import_connector }, { cable, 1} );
                 addItem(cable);
+            }
+            else
+            {
+                parameter_cables[{export_connector, import_connector}].second += 1;
             }
         }
     }
-
-    // check if those two operators don't have a connection yet
-    // That logic should happen in view, because that concept does not exist in model!
-    std::cout << "par connected\n";
 }
 
 
 void ProjectScopeView::on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer)
 {
-    std::cout << "par disconnected\n";
+    OperatorView* export_op = operator_views[static_cast<BaseOperator*>(exporter->owner()->top_level_owner())];
+    OperatorView* import_op = operator_views[static_cast<BaseOperator*>(importer->owner()->top_level_owner())];
+
+    if (export_op && import_op)
+    {
+        auto export_connector = export_op->parameter_connector_out();
+        auto import_connector = import_op->parameter_connector_in();
+
+        if (export_connector && import_connector)
+        {
+            auto key = std::pair(export_connector, import_connector);
+            Q_ASSERT(parameter_cables.contains(key));
+
+            parameter_cables[key].second -= 1;
+            if (parameter_cables[key].second < 1)
+            {
+                removeItem(parameter_cables[key].first);
+                delete parameter_cables[key].first;
+                parameter_cables.remove(key);
+            }
+        }
+    }
 }

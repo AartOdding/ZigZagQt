@@ -16,7 +16,7 @@ public:
     static const inline DataTypeInfo Type { "Test", "Standard/Test", QColor(205, 255, 0), false };
 
     TestData(BaseOperator* op)
-        : BaseDataType(op, Type)
+        : BaseDataType(op, Type, "Test")
     {
         std::cout << "Test Data - constructor\n";
     }

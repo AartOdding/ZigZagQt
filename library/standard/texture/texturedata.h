@@ -50,7 +50,7 @@ class TextureData : public BaseDataType,
 
 public:
 
-    TextureData(BaseOperator* parent_operator);
+    TextureData(BaseOperator* parent_operator, const char * name);
 
     ~TextureData() override;
 
@@ -75,8 +75,8 @@ private:
     static GLenum gl_format_for(const EnumPar& format, const EnumPar& num_channels);
 
     Int2Par resolution{ this, "Resolution", { 256, 256 }, 1, 16384 };
-    EnumPar pixel_format{ this, PixelDataFormat, "Format", 0 };
-    EnumPar pixel_channels{ this, PixelNumChannels, "Num Channels", 3 };
+    EnumPar pixel_format{ this, "Format", PixelDataFormat, 0 };
+    EnumPar pixel_channels{ this, "Num Channels", PixelNumChannels, 3 };
 
     GLuint fbo_handle;
     GLuint texture_handle;

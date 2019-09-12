@@ -18,23 +18,18 @@ class DataInput : public ParameterOwner
 
 public:
 
-    DataInput(BaseOperator* parent_operator, const DataTypeInfo& type_info);
+    DataInput(BaseOperator* parent_operator, const char * name, const DataTypeInfo& type_info);
 
     virtual ~DataInput();
 
-
     virtual bool compatible_with(const BaseDataType* data_block) const;
 
-
     bool is_connected() const;
-
     bool is_connected_to(const BaseDataType* data_block) const;
-
     const BaseDataType* get_connection() const;
 
-
+    const char * name() const;
     const DataTypeInfo * type() const;
-
 
     BaseOperator * const parent_operator;
 
@@ -66,6 +61,7 @@ private:
 
     BaseDataType* connection = nullptr;
 
+    const char * const m_name;
     const DataTypeInfo * type_info = nullptr;
 
 };

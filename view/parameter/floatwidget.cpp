@@ -1,4 +1,5 @@
 #include "floatwidget.h"
+#include "model/parameter/parameterowner.h"
 
 #include <iostream>
 
@@ -76,6 +77,29 @@ FloatWidget::FloatWidget(QWidget * parent, BaseParameter* par)
         {
             connect(sb, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &FloatWidget::on_value_changed);
         }
+    }
+
+    auto op = parameter->owner()->top_level_owner();
+    connect(op, &ParameterOwner::parameters_connected, this, &FloatWidget::on_parameters_connected);
+    connect(op, &ParameterOwner::parameters_disconnected, this, &FloatWidget::on_parameters_disconnected);
+    setEnabled(!parameter->is_importing());
+}
+
+
+void FloatWidget::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (importer == parameter)
+    {
+        setEnabled(false);
+    }
+}
+
+
+void FloatWidget::on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (importer == parameter)
+    {
+        setEnabled(true);
     }
 }
 

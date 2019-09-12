@@ -47,10 +47,6 @@ public slots:
 
 protected:
 
-    void mousePressEvent(QGraphicsSceneMouseEvent  *mouseEvent) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent  *mouseEvent) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
-
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
 
@@ -64,7 +60,7 @@ private:
 
     // Key is the input connector // TODO: maybe use both connectors as key like in parameters
     QHash<DataConnector*, Cable*> data_cables;
-    QHash<std::pair<ParameterConnector*, ParameterConnector*>, Cable*> parameter_cables;
+    QHash<std::pair<ParameterConnector*, ParameterConnector*>, std::pair<Cable*, int>> parameter_cables;
 
 
 

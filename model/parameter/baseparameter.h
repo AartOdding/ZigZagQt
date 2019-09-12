@@ -8,37 +8,24 @@
 class ParameterOwner;
 
 
-enum class ParameterType
+enum class ParameterType : short
 {
-    ArithmeticParametersBegin,
-        Int,
-        Int2,
-        Int3,
-        Int4,
-        Float,
-        Float2,
-        Float3,
-        Float4,
-        Enum,
-        Transform2D,
-        Transform3D,
-    ArithmeticParametersEnd,
-
-    TextualParametersBegin,
-        // Add textual parameter types here.
-    TextualParametersEnd,
-
-    ReferenceParametersBegin,
-        // Add reference parameter types here.
-    ReferenceParametersEnd,
-
-    DummyParametersBegin,
-        ParameterRow,
-    DummyParametersEnd
+    Int,
+    Int2,
+    Int3,
+    Int4,
+    Enum,
+    Float,
+    Float2,
+    Float3,
+    Float4,
+    Transform2D,
+    Transform3D,
+    ParameterRow,
 };
 
 
-enum class ParameterFamily
+enum class ParameterFamily : short
 {
     ArithmeticParameter,
     TextualParameter,
@@ -47,74 +34,43 @@ enum class ParameterFamily
 };
 
 
-constexpr ParameterFamily family_for(ParameterType type)
-{
-    if (static_cast<int>(type) > static_cast<int>(ParameterType::ArithmeticParametersBegin)
-        && static_cast<int>(type) < static_cast<int>(ParameterType::ArithmeticParametersEnd))
-    {
-        return ParameterFamily::ArithmeticParameter;
-    }
-    else if (static_cast<int>(type) > static_cast<int>(ParameterType::TextualParametersBegin)
-        && static_cast<int>(type) < static_cast<int>(ParameterType::TextualParametersEnd))
-    {
-        return ParameterFamily::TextualParameter;
-    }
-    else if (static_cast<int>(type) > static_cast<int>(ParameterType::ReferenceParametersBegin)
-        && static_cast<int>(type) < static_cast<int>(ParameterType::ReferenceParametersEnd))
-    {
-        return ParameterFamily::ReferenceParameter;
-    }
-    else
-    {
-        return ParameterFamily::DummyParameter;
-    }
-}
-
-
 
 class BaseParameter
 {
 public:
 
-    BaseParameter(ParameterOwner* owner, ParameterType type, const char * name);
+    BaseParameter(ParameterOwner* owner, ParameterType type, ParameterFamily family, const char * name);
 
     virtual ~BaseParameter();
 
-
     const char * name() const;
-
     ParameterType type() const;
-
     ParameterFamily family() const;
-
     ParameterOwner * owner() const;
-
-
-    bool compatible_with(const BaseParameter* other) const;
-
 
     // Also flags the parameter owner as changed!
     void flag_changed();
-
     void reset_changed_flag();
-
     bool has_changed() const;
 
-
     bool is_importing() const;
-
     BaseParameter * get_import() const;
-
     const std::vector<BaseParameter *> get_exports() const;
 
-
-public: // slots?
 
     // Undoable action
     void add_import(BaseParameter * import);
 
     // Undoable action
     void remove_import();
+
+    // Default implementation will check if family is the same and it's not a dummy.
+    virtual bool compatible_with(const BaseParameter* other) const;
+
+
+protected:
+
+    virtual void import_flagged_changed() { }
 
 
 private:
@@ -124,11 +80,12 @@ private:
 
     ParameterOwner * const m_owner;
     const char * const m_name;
-
     BaseParameter * m_import = nullptr;
     std::vector<BaseParameter *> m_exports;
 
     const ParameterType m_type;
+    const ParameterFamily m_family;
+
     bool m_changed = false;
 
 };
@@ -141,13 +98,15 @@ class ArithmeticParameter : public BaseParameter
 {
 public:
 
-    using BaseParameter::BaseParameter;
-
+    ArithmeticParameter(ParameterOwner* owner, ParameterType type, const char * name)
+        : BaseParameter(owner, type, ParameterFamily::ArithmeticParameter, name)
+    { }
 
     bool minimal_updates() const
     {
         return m_minimal_updates;
     }
+
     void set_minimal_updates(bool value)
     {
         m_minimal_updates = value;
@@ -157,16 +116,39 @@ public:
     {
         return m_rollover;
     }
+
     void set_rollover(bool value)
     {
         m_rollover = value;
     }
 
+    // Needs to be reimplemented to provide the most meaningful value at said index.
+    virtual int32_t int_at(unsigned index) const = 0;
+
+    // Needs to be reimplemented to provide the most meaningful value at said index.
+    virtual double double_at(unsigned index) const = 0;
+
+
+protected:
+
+    bool is_int_based() const
+    {
+        return (type() == ParameterType::Int  || type() == ParameterType::Int2
+             || type() == ParameterType::Int3 || type() == ParameterType::Int4
+             || type() == ParameterType::Enum);
+    }
+
+    bool is_float_based() const
+    {
+        return !is_int_based();
+    }
+
+
 private:
 
     bool m_rollover = false;
-
     bool m_minimal_updates = false;
+
 };
 
 

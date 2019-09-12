@@ -71,6 +71,26 @@ void FloatPar::operator=(float64 new_value)
 }
 
 
+int32_t FloatPar::int_at(unsigned index) const
+{
+    return index == 0 ? get() : 0;
+}
+
+
+double FloatPar::double_at(unsigned index) const
+{
+    return index == 0 ? get() : 0;
+}
+
+
+void FloatPar::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set(i->double_at(0));
+}
+
+
 /*********************/
 /*                   */
 /*      Int2Par      */
@@ -203,6 +223,27 @@ Float2Par::operator float64_2() const
 void Float2Par::operator=(float64_2 new_values)
 {
     set(new_values);
+}
+
+
+int32_t Float2Par::int_at(unsigned index) const
+{
+    return index < 2 ? get()[index] : 0;
+}
+
+
+double Float2Par::double_at(unsigned index) const
+{
+    return index < 2 ? get()[index] : 0;
+}
+
+
+void Float2Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->double_at(0));
+    set_y(i->double_at(1));
 }
 
 
@@ -358,6 +399,28 @@ Float3Par::operator float64_3() const
 void Float3Par::operator=(float64_3 new_values)
 {
     set(new_values);
+}
+
+
+int32_t Float3Par::int_at(unsigned index) const
+{
+    return index < 3 ? get()[index] : 0;
+}
+
+
+double Float3Par::double_at(unsigned index) const
+{
+    return index < 3 ? get()[index] : 0;
+}
+
+
+void Float3Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->double_at(0));
+    set_y(i->double_at(1));
+    set_z(i->double_at(2));
 }
 
 
@@ -533,4 +596,27 @@ Float4Par::operator float64_4() const
 void Float4Par::operator=(float64_4 new_values)
 {
     set(new_values);
+}
+
+
+int32_t Float4Par::int_at(unsigned index) const
+{
+    return index < 4 ? get()[index] : 0;
+}
+
+
+double Float4Par::double_at(unsigned index) const
+{
+    return index < 4 ? get()[index] : 0;
+}
+
+
+void Float4Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->double_at(0));
+    set_y(i->double_at(1));
+    set_z(i->double_at(2));
+    set_w(i->double_at(3));
 }

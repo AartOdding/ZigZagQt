@@ -10,8 +10,8 @@
 
 
 
-BaseDataType::BaseDataType(BaseOperator* parent_operator_, const DataTypeInfo& type_info_)
-    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), type_info(&type_info_)
+BaseDataType::BaseDataType(BaseOperator* parent_operator_, const DataTypeInfo& type_info_, const char * name_)
+    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), m_name(name_), m_type(&type_info_)
 {
     Q_ASSERT(parent_operator);
     parent_operator->register_data_output(this);
@@ -24,9 +24,15 @@ BaseDataType::~BaseDataType()
 }
 
 
+const char * BaseDataType::name() const
+{
+    return m_name;
+}
+
+
 const DataTypeInfo * BaseDataType::type() const
 {
-    return type_info;
+    return m_type;
 }
 
 

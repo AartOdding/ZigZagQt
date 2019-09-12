@@ -44,12 +44,12 @@ public:
 
 private:
 
-    EnumPar blend_mode{ this, BlendMode, "Blend Mode", 0 };
+    EnumPar blend_mode{ this, "Blend Mode", BlendMode, 0 };
 
-    DataInput texture_a{ this, TextureData::Type };
-    DataInput texture_b{ this, TextureData::Type };
+    DataInput texture_a{ this, "Texture in 0", TextureData::Type };
+    DataInput texture_b{ this, "Texture in 1", TextureData::Type };
 
-    TextureData output_texture{ this };
+    TextureData output_texture{ this, "Output Texture" };
 
 
     static bool gpu_resources_initialized;

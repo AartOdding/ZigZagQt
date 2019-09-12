@@ -19,7 +19,12 @@ public:
     FloatWidget(QWidget * parent, BaseParameter* parameter);
 
 
-private slots:
+public slots:
+
+    void on_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
+
+    void on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer);
+
 
     void on_editing_finished();
 

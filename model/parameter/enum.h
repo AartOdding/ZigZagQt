@@ -8,13 +8,13 @@ class ParameterOwner;
 
 
 
-class EnumPar : public BaseParameter
+class EnumPar : public ArithmeticParameter
 {
 public:
 
-    EnumPar(ParameterOwner * owner, const EnumDefinition& definition, const char * name, int index = 0);
+    EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& definition, int index = 0);
 
-    EnumPar(ParameterOwner * owner, const EnumDefinition& definition, const char * name, const char* value);
+    EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& definition, const char* value);
 
 
     void operator=(int index);
@@ -33,6 +33,14 @@ public:
 
     const EnumDefinition * const definition;
 
+    int32_t int_at(unsigned index) const override;
+
+    double double_at(unsigned index) const override;
+
+
+protected:
+
+    void import_flagged_changed() override;
 
 
 private:

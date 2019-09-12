@@ -93,6 +93,7 @@ void ParameterOwner::flag_parameter_connection(BaseParameter * exporter, BasePar
     }
 }
 
+
 void ParameterOwner::flag_parameter_disconnection(BaseParameter * exporter, BaseParameter * importer)
 {
     if (exporter && importer)
@@ -107,7 +108,22 @@ ParameterOwner * ParameterOwner::top_level_owner()
     return parent ? parent->top_level_owner() : this;
 }
 
+
 const ParameterOwner * ParameterOwner::top_level_owner() const
 {
     return parent ? parent->top_level_owner() : this;
+}
+
+
+void ParameterOwner::remove_imports_exports()
+{
+    for (auto par : m_parameters)
+    {
+        par->remove_import();
+
+        for (auto e : par->get_exports())
+        {
+            e->remove_import();
+        }
+    }
 }

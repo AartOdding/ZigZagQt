@@ -3,7 +3,7 @@
 #include <QUndoCommand>
 
 #include "model/projectmodel.h"
-
+#include "model/baseoperator.h"
 
 
 

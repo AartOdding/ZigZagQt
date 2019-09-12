@@ -3,8 +3,8 @@
 #include <iostream>
 
 
-TextureData::TextureData(BaseOperator* parent_operator)
-    : BaseDataType(parent_operator, Type)
+TextureData::TextureData(BaseOperator* parent_operator, const char * name)
+    : BaseDataType(parent_operator, Type, name)
 {
     initializeOpenGLFunctions();
 

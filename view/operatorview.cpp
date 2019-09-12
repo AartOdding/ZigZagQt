@@ -25,7 +25,9 @@ OperatorView::OperatorView(BaseOperator& op)
     : operator_model(op), name_tag("Test operator number x", this)
 {
     setZValue(1);
-    setPos(op.get_position_x(), op.get_position_y());
+    position_x = op.get_position_x();
+    position_y = op.get_position_y();
+    setPos(position_x, position_y);
 
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -187,6 +189,8 @@ void OperatorView::keyReleaseEvent(QKeyEvent *event)
 
 void OperatorView::on_operator_moved(int to_x, int to_y)
 {
+    std::cout << "on op moved in view\n";
+
     if (to_x != position_x || to_y != position_y)
     {
         position_x = to_x;

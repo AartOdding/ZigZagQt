@@ -34,7 +34,7 @@ class BaseDataType : public ParameterOwner
 
 public:
 
-    BaseDataType(BaseOperator* parent_operator, const DataTypeInfo& type_info);
+    BaseDataType(BaseOperator* parent_operator, const DataTypeInfo& type, const char * name);
 
     virtual ~BaseDataType();
 
@@ -48,16 +48,12 @@ public:
     // Never call this function directly, this is done for you.
     virtual void release_resources() { }
 
-
     bool is_connected() const;
-
     bool is_connected_to(const DataInput* data_input) const;
-
     const std::vector<DataInput*>& get_connections() const;
 
-
+    const char * name() const;
     const DataTypeInfo * type() const;
-
 
     BaseOperator* const parent_operator;
 
@@ -93,8 +89,8 @@ private:
     // Non action version of connect_to
     bool remove_connection(DataInput* data_input);
 
-
-    const DataTypeInfo * type_info;
+    const char * const m_name;
+    const DataTypeInfo * m_type;
 
     std::vector<DataInput*> connections;
 

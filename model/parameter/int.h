@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <QMetaType>
 
 #include "baseparameter.h"
 #include "utility/bounded_value.h"
@@ -12,6 +13,12 @@ using int32 = int32_t;
 using int32_2 = std::array<int32, 2>;
 using int32_3 = std::array<int32, 3>;
 using int32_4 = std::array<int32, 4>;
+
+Q_DECLARE_METATYPE(int32);
+Q_DECLARE_METATYPE(int32_2);
+Q_DECLARE_METATYPE(int32_3);
+Q_DECLARE_METATYPE(int32_4);
+
 
 
 
@@ -34,6 +41,14 @@ public:
 
     operator int32() const;
     void operator=(int32 new_value);
+
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
+
 
 private:
 
@@ -75,6 +90,12 @@ public:
     operator int32_2() const;
     void operator=(int32_2 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 
@@ -119,6 +140,12 @@ public:
     operator int32_3() const;
     void operator=(int32_3 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 
@@ -166,6 +193,12 @@ public:
     operator int32_4() const;
     void operator=(int32_4 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 

@@ -1,10 +1,10 @@
-#pragma oce
+#pragma once
 
 #include "baseparameter.h"
 
 
 
-class ParTransform2D : public BaseParameter
+class ParTransform2D : public ArithmeticParameter
 {
 public:
 

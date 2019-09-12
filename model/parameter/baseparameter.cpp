@@ -7,8 +7,8 @@
 
 
 
-BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, const char * name)
-    : m_owner(owner), m_name(name), m_type(type)
+BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, ParameterFamily family, const char * name)
+    : m_owner(owner), m_name(name), m_type(type), m_family(family)
 {
     Q_ASSERT(owner);
     owner->register_parameter(this);
@@ -35,7 +35,7 @@ ParameterType BaseParameter::type() const
 
 ParameterFamily BaseParameter::family() const
 {
-    return family_for(type());
+    return m_family;
 }
 
 
@@ -58,7 +58,7 @@ void BaseParameter::flag_changed()
 
     for (auto e : m_exports)
     {
-        e->flag_changed();
+        e->import_flagged_changed();
     }
 }
 
@@ -99,7 +99,6 @@ void BaseParameter::add_import(BaseParameter * exporting_import)
     auto model = application::project_model();
     auto undo_stack = model->get_undo_stack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
-    owner()->top_level_owner()->flag_parameter_connection(exporting_import, this);
 }
 
 
@@ -111,6 +110,5 @@ void BaseParameter::remove_import()
         auto model = application::project_model();
         auto undo_stack = model->get_undo_stack();
         undo_stack->push(new DisconnectParametersCommand(m_import, this));
-        owner()->top_level_owner()->flag_parameter_disconnection(m_import, this);
     }
 }

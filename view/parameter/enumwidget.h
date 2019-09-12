@@ -19,6 +19,11 @@ public:
 
 private slots:
 
+    void on_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
+
+    void on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer);
+
+
     void on_index_changed(int new_index);
 
 

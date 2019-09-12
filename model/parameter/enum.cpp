@@ -2,8 +2,8 @@
 
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const EnumDefinition& def, const char * name, int index)
-    : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
+EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, int index)
+    : ArithmeticParameter(owner, ParameterType::Enum, name), definition(&def)
 {
     if (definition->contains(index))
     {
@@ -12,8 +12,8 @@ EnumPar::EnumPar(ParameterOwner * owner, const EnumDefinition& def, const char *
 }
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const EnumDefinition& def, const char * name, const char* value)
-    : BaseParameter(owner, ParameterType::Enum, name), definition(&def)
+EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, const char* value)
+    : ArithmeticParameter(owner, ParameterType::Enum, name), definition(&def)
 {
     auto index = definition->index_of(value);
 
@@ -67,5 +67,25 @@ void EnumPar::operator=(int new_index)
 void EnumPar::operator=(const char * new_value)
 {
     set(new_value);
+}
+
+
+void EnumPar::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set(i->int_at(0));
+}
+
+
+int32_t EnumPar::int_at(unsigned index) const
+{
+    return index == 0 ? current_index : 0;
+}
+
+
+double EnumPar::double_at(unsigned index) const
+{
+    return index == 0 ? current_index : 0;
 }
 

@@ -1,4 +1,5 @@
 #include "intwidget.h"
+#include "model/parameter/parameterowner.h"
 
 #include <iostream>
 
@@ -59,7 +60,6 @@ IntWidget::IntWidget(QWidget * parent, BaseParameter* par)
         spinboxes[3]->setValue(p->w());
     }
 
-
     if (static_cast<ArithmeticParameter*>(parameter)->minimal_updates())
     {
         for (auto& sb : spinboxes)
@@ -73,6 +73,29 @@ IntWidget::IntWidget(QWidget * parent, BaseParameter* par)
         {
             connect(sb, qOverload<int>(&QSpinBox::valueChanged), this, &IntWidget::on_value_changed);
         }
+    }
+
+    auto op = parameter->owner()->top_level_owner();
+    connect(op, &ParameterOwner::parameters_connected, this, &IntWidget::on_parameters_connected);
+    connect(op, &ParameterOwner::parameters_disconnected, this, &IntWidget::on_parameters_disconnected);
+    setEnabled(!parameter->is_importing());
+}
+
+
+void IntWidget::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (importer == parameter)
+    {
+        setEnabled(false);
+    }
+}
+
+
+void IntWidget::on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer)
+{
+    if (importer == parameter)
+    {
+        setEnabled(true);
     }
 }
 
@@ -101,6 +124,7 @@ void IntWidget::on_value_changed(int)
         p->set(spinboxes[0]->value(), spinboxes[1]->value(), spinboxes[2]->value(), spinboxes[3]->value());
     }
 }
+
 
 void IntWidget::on_editing_finished()
 {

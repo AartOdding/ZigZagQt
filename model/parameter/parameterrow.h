@@ -11,7 +11,7 @@ class ParameterRow : public BaseParameter,
 public:
 
     ParameterRow(ParameterOwner* owner, const char * name)
-        : BaseParameter(owner, ParameterType::ParameterRow, name), ParameterOwner(owner)
+        : BaseParameter(owner, ParameterType::ParameterRow, ParameterFamily::DummyParameter, name), ParameterOwner(owner)
     { }
 
     void flag_parameters_changed() override

@@ -51,8 +51,8 @@ public:
 
 private:
 
-    EnumPar pixel_format{ this, PixelDataFormat, "Pixel Data Format", 0 };
-    EnumPar pixel_channels{ this, PixelNumChannels, "Pixel Num Channels", 3 };
+    EnumPar pixel_format{ this, "Pixel Data Format", PixelDataFormat, 0 };
+    EnumPar pixel_channels{ this, "Pixel Num Channels", PixelNumChannels, 3 };
     IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };
     IntPar resolution_y{ this, "Resolution Y", 600, 0, 255 };
     IntPar resolution_z{ this, "Resolution Z", 300, 0, 255 };
@@ -64,9 +64,9 @@ private:
     //DataInput input4{ this, TestData::Type };
     //DataInput input5{ this, TestData::Type };
     //DataInput input6{ this, TestData::Type };
-    DataInput input1{ this, TestData::Type };
-    DataInput input2{ this, TestData::Type };
-    DataInput input3{ this, TestData::Type };
+    DataInput input1{ this, "Test In 1", TestData::Type };
+    DataInput input2{ this, "Test In 2", TestData::Type };
+    DataInput input3{ this, "Test In 3", TestData::Type };
 
     TestData output1{ this };
     TestData output2{ this };

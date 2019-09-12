@@ -28,6 +28,8 @@ Cable::Cable(ProjectScopeView * p, BaseConnector * out, BaseConnector * in)
 
     connect(out_op, &OperatorView::has_moved, this, &Cable::on_movement);
     connect(in_op, &OperatorView::has_moved, this, &Cable::on_movement);
+    connect(output_connector, &QGraphicsWidget::geometryChanged, this, &Cable::on_movement);
+    connect(input_connector, &QGraphicsWidget::geometryChanged, this, &Cable::on_movement);
 
     color = output_connector->get_color();
 
@@ -62,25 +64,18 @@ void Cable::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, Q
 
     auto brush = QBrush(color);
     auto pen = QPen(brush, 2);
+
     painter->setPen(pen);
-
-    //painter->drawRect(boundingRect().marginsRemoved({1, 1, 1, 1}));
-
     painter->drawPath(path);
-
 }
 
 
 void Cable::on_movement()
 {
-
     QPointF out = output_connector->scenePos() + QPointF(15, 0);
     QPointF in = input_connector->scenePos() - QPointF(15, 0);
-
     setPos(std::min(in.x(), out.x()), std::min(in.y(), out.y()));
-
     prepareGeometryChange();
-
     build_path();
 }
 

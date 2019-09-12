@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <QMetaType>
 
 #include "baseparameter.h"
 #include "utility/bounded_value.h"
@@ -11,6 +12,12 @@ using float64 = double;
 using float64_2 = std::array<float64, 2>;
 using float64_3 = std::array<float64, 3>;
 using float64_4 = std::array<float64, 4>;
+
+Q_DECLARE_METATYPE(float64);
+Q_DECLARE_METATYPE(float64_2);
+Q_DECLARE_METATYPE(float64_3);
+Q_DECLARE_METATYPE(float64_4);
+
 
 
 
@@ -34,6 +41,12 @@ public:
     operator float64() const;
     void operator=(float64 new_value);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 
@@ -75,6 +88,12 @@ public:
     operator float64_2() const;
     void operator=(float64_2 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 
@@ -119,6 +138,12 @@ public:
     operator float64_3() const;
     void operator=(float64_3 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 
@@ -166,6 +191,12 @@ public:
     operator float64_4() const;
     void operator=(float64_4 new_values);
 
+    int32_t int_at(unsigned index) const override;
+    double double_at(unsigned index) const override;
+
+protected:
+
+    void import_flagged_changed() override;
 
 private:
 

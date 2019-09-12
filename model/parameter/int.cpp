@@ -71,6 +71,26 @@ void IntPar::operator=(int32 new_value)
 }
 
 
+int32 IntPar::int_at(unsigned index) const
+{
+    return index == 0 ? get() : 0;
+}
+
+
+double IntPar::double_at(unsigned index) const
+{
+    return index == 0 ? get() : 0;
+}
+
+
+void IntPar::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set(i->int_at(0));
+}
+
+
 /*********************/
 /*                   */
 /*      Int2Par      */
@@ -203,6 +223,27 @@ Int2Par::operator int32_2() const
 void Int2Par::operator=(int32_2 new_values)
 {
     set(new_values);
+}
+
+
+int32 Int2Par::int_at(unsigned index) const
+{
+    return index < 2 ? get()[index] : 0;
+}
+
+
+double Int2Par::double_at(unsigned index) const
+{
+    return index < 2 ? get()[index] : 0;
+}
+
+
+void Int2Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->int_at(0));
+    set_y(i->int_at(1));
 }
 
 
@@ -358,6 +399,28 @@ Int3Par::operator int32_3() const
 void Int3Par::operator=(int32_3 new_values)
 {
     set(new_values);
+}
+
+
+int32 Int3Par::int_at(unsigned index) const
+{
+    return index < 3 ? get()[index] : 0;
+}
+
+
+double Int3Par::double_at(unsigned index) const
+{
+    return index < 3 ? get()[index] : 0;
+}
+
+
+void Int3Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->int_at(0));
+    set_y(i->int_at(1));
+    set_z(i->int_at(2));
 }
 
 
@@ -533,4 +596,27 @@ Int4Par::operator int32_4() const
 void Int4Par::operator=(int32_4 new_values)
 {
     set(new_values);
+}
+
+
+int32 Int4Par::int_at(unsigned index) const
+{
+    return index < 4 ? get()[index] : 0;
+}
+
+
+double Int4Par::double_at(unsigned index) const
+{
+    return index < 4 ? get()[index] : 0;
+}
+
+
+void Int4Par::import_flagged_changed()
+{
+    Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
+    auto i = static_cast<ArithmeticParameter*>(get_import());
+    set_x(i->int_at(0));
+    set_y(i->int_at(1));
+    set_z(i->int_at(2));
+    set_w(i->int_at(3));
 }

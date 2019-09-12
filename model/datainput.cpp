@@ -8,8 +8,8 @@
 #include "command/disconnectcommand.h"
 
 
-DataInput::DataInput(BaseOperator* parent_operator_, const DataTypeInfo& type_info_)
-    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), type_info(&type_info_)
+DataInput::DataInput(BaseOperator* parent_operator_, const char * name_, const DataTypeInfo& type_info_)
+    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), m_name(name_), type_info(&type_info_)
 {
     parent_operator->register_data_input(this);
 }
@@ -24,6 +24,12 @@ DataInput::~DataInput()
 const DataTypeInfo * DataInput::type() const
 {
     return type_info;
+}
+
+
+const char * DataInput::name() const
+{
+    return m_name;
 }
 
 
