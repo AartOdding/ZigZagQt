@@ -189,8 +189,6 @@ void OperatorView::keyReleaseEvent(QKeyEvent *event)
 
 void OperatorView::on_operator_moved(int to_x, int to_y)
 {
-    std::cout << "on op moved in view\n";
-
     if (to_x != position_x || to_y != position_y)
     {
         position_x = to_x;

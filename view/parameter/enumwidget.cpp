@@ -1,5 +1,5 @@
 #include "enumwidget.h"
-#include "model/parameter/parameterowner.h"
+#include "model/baseoperator.h"
 
 
 
@@ -17,28 +17,21 @@ EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
     setCurrentIndex(*par);
     connect(this, qOverload<int>(&QComboBox::currentIndexChanged), this, &EnumWidget::on_index_changed);
 
-    auto op = parameter->owner()->top_level_owner();
-    connect(op, &ParameterOwner::parameters_connected, this, &EnumWidget::on_parameters_connected);
-    connect(op, &ParameterOwner::parameters_disconnected, this, &EnumWidget::on_parameters_disconnected);
+    connect(parameter, &BaseParameter::started_importing_from, this, &EnumWidget::on_parameter_started_importing);
+    connect(parameter, &BaseParameter::stopped_importing_from, this, &EnumWidget::on_parameters_stopped_importing);
     setEnabled(!parameter->is_importing());
 }
 
 
-void EnumWidget::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+void EnumWidget::on_parameter_started_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(false);
-    }
+    setEnabled(false);
 }
 
 
-void EnumWidget::on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer)
+void EnumWidget::on_parameters_stopped_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(true);
-    }
+    setEnabled(true);
 }
 
 

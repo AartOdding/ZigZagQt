@@ -28,7 +28,8 @@ struct DataTypeInfo
 
 
 
-class BaseDataType : public ParameterOwner
+class BaseDataType : public QObject,
+                     public ParameterOwner
 {
     Q_OBJECT
 

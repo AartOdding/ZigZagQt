@@ -1,10 +1,12 @@
 ﻿#pragma once
 
 #include <vector>
+#include <QObject>
 #include <QMetaType>
 
 
 
+class BaseOperator;
 class ParameterOwner;
 
 
@@ -35,8 +37,10 @@ enum class ParameterFamily : short
 
 
 
-class BaseParameter
+class BaseParameter : public QObject
 {
+    Q_OBJECT
+
 public:
 
     BaseParameter(ParameterOwner* owner, ParameterType type, ParameterFamily family, const char * name);
@@ -47,25 +51,37 @@ public:
     ParameterType type() const;
     ParameterFamily family() const;
     ParameterOwner * owner() const;
+    BaseOperator * parent_operator() const;
+
+    bool is_importing() const;
+    bool is_exporting() const;
+    BaseParameter * get_import() const;
+    const std::vector<BaseParameter *>& get_exports() const;
+
+    // Default implementation will check if family is the same and it's not a dummy.
+    virtual bool compatible_with(const BaseParameter* other) const;
+
+
+public slots:
+
+    // Undoable action
+    void add_import(BaseParameter * exporter);
+
+    // Undoable action
+    void remove_import();
 
     // Also flags the parameter owner as changed!
     void flag_changed();
     void reset_changed_flag();
     bool has_changed() const;
 
-    bool is_importing() const;
-    BaseParameter * get_import() const;
-    const std::vector<BaseParameter *> get_exports() const;
 
+signals:
 
-    // Undoable action
-    void add_import(BaseParameter * import);
-
-    // Undoable action
-    void remove_import();
-
-    // Default implementation will check if family is the same and it's not a dummy.
-    virtual bool compatible_with(const BaseParameter* other) const;
+    void started_importing_from(BaseParameter* exporter);
+    void stopped_importing_from(BaseParameter* exporter);
+    void started_exporting_to(BaseParameter* importer);
+    void stopped_exporting_to(BaseParameter* importer);
 
 
 protected:

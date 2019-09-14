@@ -164,3 +164,15 @@ void BaseOperator::register_data_output(BaseDataType* output)
     }
 }
 
+
+const std::vector<BaseParameter*>& BaseOperator::importing_parameters() const
+{
+    return m_importing_parameters;
+}
+
+
+const std::vector<BaseParameter*>& BaseOperator::exporting_parameters() const
+{
+    return m_exporting_parameters;
+}
+

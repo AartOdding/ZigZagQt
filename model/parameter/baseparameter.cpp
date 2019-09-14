@@ -1,6 +1,7 @@
 #include "baseparameter.h"
-#include "application.h"
 #include "parameterowner.h"
+#include "application.h"
+#include "model/baseoperator.h"
 
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
@@ -45,6 +46,13 @@ const char * BaseParameter::name() const
 }
 
 
+BaseOperator * BaseParameter::parent_operator() const
+{
+    Q_ASSERT(static_cast<BaseOperator*>(owner()->top_level_owner()));
+    return static_cast<BaseOperator*>(owner()->top_level_owner());
+}
+
+
 bool BaseParameter::compatible_with(const BaseParameter* other) const
 {
     return family() == other->family() && family() != ParameterFamily::DummyParameter;
@@ -81,13 +89,19 @@ bool BaseParameter::is_importing() const
 }
 
 
+bool BaseParameter::is_exporting() const
+{
+    return !m_exports.empty();
+}
+
+
 BaseParameter * BaseParameter::get_import() const
 {
     return m_import;
 }
 
 
-const std::vector<BaseParameter *> BaseParameter::get_exports() const
+const std::vector<BaseParameter *>& BaseParameter::get_exports() const
 {
     return m_exports;
 }
@@ -99,6 +113,7 @@ void BaseParameter::add_import(BaseParameter * exporting_import)
     auto model = application::project_model();
     auto undo_stack = model->get_undo_stack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
+    import_flagged_changed();
 }
 
 

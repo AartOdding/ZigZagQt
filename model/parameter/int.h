@@ -5,7 +5,7 @@
 #include <QMetaType>
 
 #include "baseparameter.h"
-#include "utility/bounded_value.h"
+#include "utility/constrained.h"
 
 
 
@@ -24,20 +24,16 @@ Q_DECLARE_METATYPE(int32_4);
 
 class IntPar : public ArithmeticParameter
 {
+    Q_OBJECT
+
 public:
 
     IntPar(ParameterOwner * owner, const char * name, int32 value = 0);
     IntPar(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max);
 
-    int32 get() const;
-
-    void set(int32 new_value);
-
+    int32 value() const;
     int32 min() const;
     int32 max() const;
-
-    void set_min(int32 new_min);
-    void set_max(int32 new_max);
 
     operator int32() const;
     void operator=(int32 new_value);
@@ -45,14 +41,28 @@ public:
     int32_t int_at(unsigned index) const override;
     double double_at(unsigned index) const override;
 
-protected:
+
+public slots:
+
+    void set_value(int32 new_value);
+    void set_min(int32 new_min);
+    void set_max(int32 new_max);
+
+
+protected slots:
 
     void import_flagged_changed() override;
 
 
+signals:
+
+    void value_changed();
+    void value_changed_to(int32 new_value);
+
+
 private:
 
-    bounded_value<int32> value;
+    constrained<int32> m_value;
 
 };
 
@@ -99,8 +109,8 @@ protected:
 
 private:
 
-    bounded_value<int32> x_value;
-    bounded_value<int32> y_value;
+    constrained<int32> x_value;
+    constrained<int32> y_value;
 
 };
 
@@ -149,9 +159,9 @@ protected:
 
 private:
 
-    bounded_value<int32> x_value;
-    bounded_value<int32> y_value;
-    bounded_value<int32> z_value;
+    constrained<int32> x_value;
+    constrained<int32> y_value;
+    constrained<int32> z_value;
 
 };
 
@@ -202,10 +212,10 @@ protected:
 
 private:
 
-    bounded_value<int32> x_value;
-    bounded_value<int32> y_value;
-    bounded_value<int32> z_value;
-    bounded_value<int32> w_value;
+    constrained<int32> x_value;
+    constrained<int32> y_value;
+    constrained<int32> z_value;
+    constrained<int32> w_value;
 
 
 };

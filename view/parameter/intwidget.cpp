@@ -1,5 +1,5 @@
 #include "intwidget.h"
-#include "model/parameter/parameterowner.h"
+#include "model/baseoperator.h"
 
 #include <iostream>
 
@@ -27,7 +27,8 @@ IntWidget::IntWidget(QWidget * parent, BaseParameter* par)
     {
         auto p = static_cast<IntPar*>(parameter);
         spinboxes[0]->setRange(p->min(), p->max());
-        spinboxes[0]->setValue(p->get());
+        spinboxes[0]->setValue(p->value());
+        connect(p, &IntPar::value_changed, this, &IntWidget::on_value_changed);
     }
     else if (num_components == 2)
     {
@@ -71,42 +72,65 @@ IntWidget::IntWidget(QWidget * parent, BaseParameter* par)
     {
         for (auto& sb : spinboxes)
         {
-            connect(sb, qOverload<int>(&QSpinBox::valueChanged), this, &IntWidget::on_value_changed);
+            connect(sb, qOverload<int>(&QSpinBox::valueChanged), this, &IntWidget::on_value_changed_to);
         }
     }
 
-    auto op = parameter->owner()->top_level_owner();
-    connect(op, &ParameterOwner::parameters_connected, this, &IntWidget::on_parameters_connected);
-    connect(op, &ParameterOwner::parameters_disconnected, this, &IntWidget::on_parameters_disconnected);
+    connect(parameter, &BaseParameter::started_importing_from, this, &IntWidget::on_parameter_started_importing);
+    connect(parameter, &BaseParameter::stopped_importing_from, this, &IntWidget::on_parameters_stopped_importing);
     setEnabled(!parameter->is_importing());
 }
 
 
-void IntWidget::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+void IntWidget::on_parameter_started_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(false);
-    }
+    setEnabled(false);
 }
 
 
-void IntWidget::on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer)
+void IntWidget::on_parameters_stopped_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(true);
-    }
+    setEnabled(true);
 }
 
 
-void IntWidget::on_value_changed(int)
+void IntWidget::on_value_changed()
 {
-    std::cout << "on value changed" << spinboxes[0]->value() << "\n";
     if (num_components == 1)
     {
         auto p = static_cast<IntPar*>(parameter);
-        p->set(spinboxes[0]->value());
+        spinboxes[0]->setValue(p->value());
+    }
+    else if (num_components == 2)
+    {
+        auto p = static_cast<Int2Par*>(parameter);
+        spinboxes[0]->setValue(p->x());
+        spinboxes[1]->setValue(p->y());
+    }
+    else if (num_components == 3)
+    {
+        auto p = static_cast<Int3Par*>(parameter);
+        spinboxes[0]->setValue(p->x());
+        spinboxes[1]->setValue(p->y());
+        spinboxes[2]->setValue(p->z());
+    }
+    else if (num_components == 4)
+    {
+        auto p = static_cast<Int4Par*>(parameter);
+        spinboxes[0]->setValue(p->x());
+        spinboxes[1]->setValue(p->y());
+        spinboxes[2]->setValue(p->z());
+        spinboxes[3]->setValue(p->w());
+    }
+}
+
+
+void IntWidget::on_value_changed_to(int)
+{
+    if (num_components == 1)
+    {
+        auto p = static_cast<IntPar*>(parameter);
+        p->set_value(spinboxes[0]->value());
     }
     else if (num_components == 2)
     {
@@ -128,11 +152,10 @@ void IntWidget::on_value_changed(int)
 
 void IntWidget::on_editing_finished()
 {
-    std::cout << "on edit finished\n";
     if (num_components == 1)
     {
         auto p = static_cast<IntPar*>(parameter);
-        p->set(spinboxes[0]->value());
+        p->set_value(spinboxes[0]->value());
     }
     else if (num_components == 2)
     {

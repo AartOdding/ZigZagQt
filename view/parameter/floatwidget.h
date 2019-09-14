@@ -21,9 +21,9 @@ public:
 
 public slots:
 
-    void on_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
+    void on_parameter_started_importing(BaseParameter * exporter);
 
-    void on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer);
+    void on_parameters_stopped_importing(BaseParameter * exporter);
 
 
     void on_editing_finished();

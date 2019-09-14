@@ -12,7 +12,8 @@ class BaseDataType;
 
 
 
-class DataInput : public ParameterOwner
+class DataInput : public QObject,
+                  public ParameterOwner
 {
     Q_OBJECT
 

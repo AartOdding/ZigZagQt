@@ -9,12 +9,12 @@ static std::string null_string;
 
 
 EnumDefinition::EnumDefinition(const char* n)
-    : enum_name(n), name(enum_name.c_str())
+    : enum_name(n)
 { }
 
 
 EnumDefinition::EnumDefinition(const char* n, std::initializer_list<const char*> values)
-    : enum_name(n), name(enum_name.c_str())
+    : enum_name(n)
 {
     for (const auto& value : values)
     {
@@ -103,22 +103,34 @@ int EnumDefinition::index_of(const char* name) const
 }
 
 
+const char * EnumDefinition::text_of(int index) const
+{
+    if (contains(index))
+    {
+        return enum_values[index].c_str();
+    }
+    else
+    {
+        return null_string.c_str();
+    }
+}
+
+
+const char * EnumDefinition::name() const
+{
+    return enum_name.c_str();
+}
+
+
 int EnumDefinition::size() const
 {
     return enum_values.size();
 }
 
 
-const std::string& EnumDefinition::operator[](int index) const
+const char * EnumDefinition::operator[](int index) const
 {
-    if (contains(index))
-    {
-        return enum_values[index];
-    }
-    else
-    {
-        return null_string;
-    }
+    return text_of(index);
 }
 
 

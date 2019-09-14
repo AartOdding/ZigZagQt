@@ -1,5 +1,5 @@
 #include "floatwidget.h"
-#include "model/parameter/parameterowner.h"
+#include "model/baseoperator.h"
 
 #include <iostream>
 
@@ -11,7 +11,7 @@ FloatWidget::FloatWidget(QWidget * parent, BaseParameter* par)
     setLayout(&layout);
     layout.setMargin(0);
 
-    bounded_value<double> val;
+    constrained<double> val;
 
     num_components = static_cast<int>(par->type()) - static_cast<int>(ParameterType::Float) + 1;
     Q_ASSERT(num_components >= 1 && num_components <= 4);
@@ -79,34 +79,26 @@ FloatWidget::FloatWidget(QWidget * parent, BaseParameter* par)
         }
     }
 
-    auto op = parameter->owner()->top_level_owner();
-    connect(op, &ParameterOwner::parameters_connected, this, &FloatWidget::on_parameters_connected);
-    connect(op, &ParameterOwner::parameters_disconnected, this, &FloatWidget::on_parameters_disconnected);
+    connect(parameter, &BaseParameter::started_importing_from, this, &FloatWidget::on_parameter_started_importing);
+    connect(parameter, &BaseParameter::stopped_importing_from, this, &FloatWidget::on_parameters_stopped_importing);
     setEnabled(!parameter->is_importing());
 }
 
 
-void FloatWidget::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+void FloatWidget::on_parameter_started_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(false);
-    }
+    setEnabled(false);
 }
 
 
-void FloatWidget::on_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer)
+void FloatWidget::on_parameters_stopped_importing(BaseParameter * exporter)
 {
-    if (importer == parameter)
-    {
-        setEnabled(true);
-    }
+    setEnabled(true);
 }
 
 
 void FloatWidget::on_value_changed(int)
 {
-    std::cout << "on value changed" << spinboxes[0]->value() << "\n";
     if (num_components == 1)
     {
         auto p = static_cast<FloatPar*>(parameter);
@@ -132,7 +124,6 @@ void FloatWidget::on_value_changed(int)
 
 void FloatWidget::on_editing_finished()
 {
-    std::cout << "on edit finished\n";
     if (num_components == 1)
     {
         auto p = static_cast<FloatPar*>(parameter);

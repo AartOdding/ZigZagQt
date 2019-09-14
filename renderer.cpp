@@ -6,6 +6,7 @@
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
+#include "utility/std_containers_helpers.h"
 
 #include <QThread>
 #include <QApplication>
@@ -45,29 +46,31 @@ void Renderer::set_model(ProjectModel* m)
 
 bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperator*>& closed_list)
 {
-    if (op)
+    Q_ASSERT(op);
+
+    for (auto& input : op->used_data_inputs())
     {
-        for (auto& input : op->used_data_inputs())
+        auto connected_op = input->get_connection()->parent_operator;
+
+        // If a connected operator has not yet been processed that one has to process first,
+        // thus return false: this operator does not yet have its turn.
+        if (closed_list.count(connected_op) == 0)
         {
-            auto connected_op = input->get_connection()->parent_operator;
-
-            /*
-             * If a connected operator has not yet been processed that one has to process first,
-             * thus return false: this operator does not yet have its turn.
-             */
-            if (closed_list.count(connected_op) == 0)
-            {
-                return false;
-            }
+            return false;
         }
-
-        /*
-         *  If all inputs were looped through and they had all been processed already it's
-         *  this operators turn to be processed.
-         */
-        return true;
     }
-    return false;
+
+    for (auto par : op->importing_parameters())
+    {
+        if (closed_list.count(par->get_import()->parent_operator()) == 0)
+        {
+            return false;
+        }
+    }
+
+    // If all inputs were looped through and they had all been processed already it's
+    // this operators turn to be processed.
+    return true;
 }
 
 
@@ -90,7 +93,7 @@ void Renderer::render_frame()
 
     for (auto o : model->all_operators())
     {
-        if (o->count_used_data_inputs() == 0)
+        if (o->count_used_data_inputs() == 0 && o->importing_parameters().empty())
         {
             open_list.push_back(o);
         }
@@ -110,7 +113,20 @@ void Renderer::render_frame()
             {
                 for (auto connected_input : output->get_connections())
                 {
-                    open_list.push_back(connected_input->parent_operator);
+                    if (!contains(open_list, connected_input->parent_operator))
+                    {
+                        open_list.push_back(connected_input->parent_operator);
+                    }
+                }
+            }
+            for (auto par : current->exporting_parameters())
+            {
+                for (auto importer : par->get_exports())
+                {
+                    if (!contains(open_list, importer->parent_operator()))
+                    {
+                        open_list.push_back(importer->parent_operator());
+                    }
                 }
             }
         }

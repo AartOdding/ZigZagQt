@@ -21,8 +21,8 @@ public:
 
     static BaseOperator * create() { return new SineWaveOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Sine Wave", "Standard/Texture", { },
-                                                { &TextureData::Type }, true, &create };
+    static const inline OperatorTypeInfo Type { "Sine Wave", "Standard/Texture", {  },
+                                              { &TextureData::Type }, true, &create };
 
 
 private:

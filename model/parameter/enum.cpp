@@ -1,34 +1,43 @@
 #include "enum.h"
+#include "utility/constrained.h"
 
 
 
 EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, int index)
     : ArithmeticParameter(owner, ParameterType::Enum, name), definition(&def)
 {
-    if (definition->contains(index))
-    {
-        current_index = index;
-    }
+    current_index = constrain(index, 0, definition->size()-1);
 }
 
 
 EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, const char* value)
     : ArithmeticParameter(owner, ParameterType::Enum, name), definition(&def)
 {
+    // Returns -1 if value doesn't exist in enum, constrain will then make it 0 again.
     auto index = definition->index_of(value);
+    current_index = constrain(index, 0, definition->size()-1);
+}
 
-    if (index != -1)
-    {
-        current_index = index;
-    }
+
+int32_t EnumPar::get_index() const
+{
+    return current_index;
+}
+
+
+const char * EnumPar::get_text() const
+{
+    return definition->text_of(current_index);
 }
 
 
 void EnumPar::set(int new_index)
 {
-    if (definition->contains(new_index))
+    int temp = constrain(new_index, 0, definition->size()-1);
+
+    if (temp != current_index)
     {
-        current_index = new_index;
+        current_index = temp;
         flag_changed();
     }
 }
@@ -36,9 +45,9 @@ void EnumPar::set(int new_index)
 
 void EnumPar::set(const char* new_value)
 {
-    auto index = definition->index_of(new_value);
+    auto index = constrain(definition->index_of(new_value), 0, definition->size()-1);
 
-    if (index != -1)
+    if (index != current_index)
     {
         current_index = index;
         flag_changed();
@@ -54,7 +63,7 @@ EnumPar::operator int() const
 
 EnumPar::operator const char *() const
 {
-    return definition->operator[](current_index).c_str();
+    return definition->text_of(current_index);
 }
 
 

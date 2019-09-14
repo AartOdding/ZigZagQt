@@ -4,7 +4,7 @@
 #include <QMetaType>
 
 #include "baseparameter.h"
-#include "utility/bounded_value.h"
+#include "utility/constrained.h"
 
 
 
@@ -50,7 +50,7 @@ protected:
 
 private:
 
-    bounded_value<float64> value;
+    constrained<float64> value;
 
 };
 
@@ -97,8 +97,8 @@ protected:
 
 private:
 
-    bounded_value<float64> x_value;
-    bounded_value<float64> y_value;
+    constrained<float64> x_value;
+    constrained<float64> y_value;
 
 };
 
@@ -147,9 +147,9 @@ protected:
 
 private:
 
-    bounded_value<float64> x_value;
-    bounded_value<float64> y_value;
-    bounded_value<float64> z_value;
+    constrained<float64> x_value;
+    constrained<float64> y_value;
+    constrained<float64> z_value;
 
 };
 
@@ -200,10 +200,10 @@ protected:
 
 private:
 
-    bounded_value<float64> x_value;
-    bounded_value<float64> y_value;
-    bounded_value<float64> z_value;
-    bounded_value<float64> w_value;
+    constrained<float64> x_value;
+    constrained<float64> y_value;
+    constrained<float64> z_value;
+    constrained<float64> w_value;
 
 
 };

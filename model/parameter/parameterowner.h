@@ -10,19 +10,14 @@
 class BaseParameter;
 
 
-class ParameterOwner : public QObject
+class ParameterOwner
 {
-    Q_OBJECT
-
 public:
 
     static void reset_all_changed_flags();
 
-
     ParameterOwner(ParameterOwner *parent = nullptr);
-
     ~ParameterOwner();
-
 
     const std::vector<BaseParameter*>& parameters() const;
 
@@ -32,10 +27,14 @@ public:
     // Returns true if succesful
     bool deregister_parameter(BaseParameter* parameter);
 
+    /*
+    void flag_parameter_importing(BaseParameter * exporting_par);
+    void flag_parameter_exporting(BaseParameter * importing_par);
+    void flag_parameter_stopped_importing(BaseParameter * old_exporter);
+    void flag_parameter_stopped_exporting(BaseParameter * old_importer);*/
 
-    void flag_parameter_connection(BaseParameter * exporter, BaseParameter * importer);
-
-    void flag_parameter_disconnection(BaseParameter * exporter, BaseParameter * importer);
+    //void flag_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
+    //void flag_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer);
 
 
     // Default implementation does not pass on the flag
@@ -55,27 +54,23 @@ public:
     void remove_imports_exports();
 
 
-signals:
+//signals:
 
-    void parameter_added(BaseParameter* parameter);
-
-    void parameter_removed(BaseParameter* parameter);
-
-    void parameters_connected(BaseParameter* exporter, BaseParameter * importer);
-
-    void parameters_disconnected(BaseParameter* exporter, BaseParameter * importer);
-
-protected:
-
-    std::vector<BaseParameter*> m_parameters;
+    //void parameter_started_importing(BaseParameter* exporter, BaseParameter * importer);
+    //void parameter_stopped_importing(BaseParameter* exporter, BaseParameter * importer);
 
 
 private:
 
+    friend class ConnectParametersCommand;
+    friend class DisconnectParametersCommand;
+
     static std::unordered_set<ParameterOwner*> all_parameter_owners;
 
-    bool m_changed = false;
+    std::vector<BaseParameter*> m_parameters;
 
     ParameterOwner * parent = nullptr;
+
+    bool m_changed = false;
 
 };

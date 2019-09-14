@@ -26,6 +26,7 @@ CONFIG += c++17 console
 
 SOURCES += \
         application.cpp \
+        library/standard/control/systemclockoperator.cpp \
         library/standard/shadertop.cpp \
         library/standard/test/testdataview.cpp \
         library/standard/test/testoperator.cpp \
@@ -80,6 +81,7 @@ HEADERS += \
         command/disconnectparameterscommand.h \
         command/movecommand.h \
         command/removecommand.h \
+        library/standard/control/systemclockoperator.h \
         library/standard/shadertop.h \
         library/standard/test/testdata.h \
         library/standard/test/testdataview.h \
@@ -104,7 +106,7 @@ HEADERS += \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \
-        utility/bounded_value.h \
+        utility/constrained.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         utility/std_containers_helpers.h \

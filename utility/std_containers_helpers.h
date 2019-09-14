@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_set>
 
 
 template<typename T>
@@ -12,9 +13,17 @@ typename std::vector<T>::iterator find(std::vector<T>& vec, const T& item)
 
 
 template<typename T>
-bool contains(std::vector<T>& vec, const T& item)
+typename std::vector<T>::const_iterator find(const std::vector<T>& vec, const T& item)
 {
-    return find(vec, item) != vec.end();
+    return std::find(vec.cbegin(), vec.cend(), item);
+}
+
+
+template<typename CONTAINER, typename T>
+bool contains(const CONTAINER& container, const T& item)
+{
+    static_assert(std::is_same_v<CONTAINER::value_type, T>, "Container needs a data type that is the same as T!");
+    return std::find(container.begin(), container.end(), item) != container.end();
 }
 
 

@@ -1,85 +1,100 @@
 #include "int.h"
 
 
-IntPar::IntPar(ParameterOwner * owner, const char * name, int32 val)
+IntPar::IntPar(ParameterOwner * owner, const char * name, int32 value)
     : ArithmeticParameter(owner, ParameterType::Int, name),
-      value(val)
+      m_value(value)
 {
 
 }
 
 
-IntPar::IntPar(ParameterOwner * owner, const char * name, int32 val, int32 min, int32 max)
+IntPar::IntPar(ParameterOwner * owner, const char * name, int32 value, int32 min, int32 max)
     : ArithmeticParameter(owner, ParameterType::Int, name),
-      value(val, min, max)
+      m_value(value, min, max)
 {
 
 }
 
 
-int32 IntPar::get() const
+int32 IntPar::value() const
 {
-    return value.get();
+    return m_value;
 }
 
 
-void IntPar::set(int32 new_value)
+void IntPar::set_value(int32 new_value)
 {
     bool changed;
-    value.set(new_value, changed);
-    if (changed) flag_changed();
+    m_value.set(new_value, changed);
+    if (changed)
+    {
+        flag_changed();
+        emit value_changed();
+        emit value_changed_to(m_value);
+    }
 }
 
 
 int32 IntPar::min() const
 {
-    return value.get_min();
+    return m_value.get_min();
 }
 
 
 int32 IntPar::max() const
 {
-    return value.get_max();
+    return m_value.get_max();
 }
 
 
 void IntPar::set_min(int32 new_min)
 {
     bool changed;
-    value.set_min(new_min, changed);
-    if (changed) flag_changed();
+    m_value.set_min(new_min, changed);
+    if (changed)
+    {
+        flag_changed();
+        emit value_changed();
+        emit value_changed_to(m_value);
+    }
 }
 
 
 void IntPar::set_max(int32 new_max)
 {
     bool changed;
-    value.set_max(new_max, changed);
-    if (changed) flag_changed();
+    m_value.set_max(new_max, changed);
+    if (changed)
+    {
+        flag_changed();
+        emit value_changed();
+        emit value_changed_to(m_value);
+    }
 }
 
 
 IntPar::operator int32() const
 {
-    return get();
+    return value();
 }
 
 
 void IntPar::operator=(int32 new_value)
 {
-    set(new_value);
+    set_value(new_value);
 }
 
 
 int32 IntPar::int_at(unsigned index) const
 {
-    return index == 0 ? get() : 0;
+    return index == 0 ? value() : 0;
 }
 
 
 double IntPar::double_at(unsigned index) const
 {
-    return index == 0 ? get() : 0;
+    return index == 0 ? value() : 0;
 }
 
 
@@ -87,7 +102,7 @@ void IntPar::import_flagged_changed()
 {
     Q_ASSERT(dynamic_cast<ArithmeticParameter*>(get_import()));
     auto i = static_cast<ArithmeticParameter*>(get_import());
-    set(i->int_at(0));
+    set_value(i->int_at(0));
 }
 
 

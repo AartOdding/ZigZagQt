@@ -13,28 +13,22 @@ class EnumPar : public ArithmeticParameter
 public:
 
     EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& definition, int index = 0);
-
     EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& definition, const char* value);
 
-
-    void operator=(int index);
-
-    void operator=(const char* current_index);
-
-
-    operator int() const;
-
-    operator const char *() const;
+    int32_t get_index() const;
+    const char * get_text() const;
 
     void set(int index);
-
     void set(const char* current_index);
 
+    operator int() const;
+    operator const char *() const;
+
+    void operator=(int index);
+    void operator=(const char* current_index);
 
     const EnumDefinition * const definition;
-
     int32_t int_at(unsigned index) const override;
-
     double double_at(unsigned index) const override;
 
 

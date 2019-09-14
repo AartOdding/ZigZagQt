@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QObject>
+
 #include <vector>
 #include <functional>
 
@@ -33,7 +35,8 @@ struct OperatorTypeInfo
 };
 
 
-class BaseOperator : public ParameterOwner
+class BaseOperator : public QObject,
+                     public ParameterOwner
 {
     Q_OBJECT
 
@@ -66,6 +69,9 @@ public:
     void register_data_input(DataInput* input);
     void register_data_output(BaseDataType* output);
 
+    const std::vector<BaseParameter*>& importing_parameters() const;
+    const std::vector<BaseParameter*>& exporting_parameters() const;
+
 
 public slots:
 
@@ -83,6 +89,9 @@ signals:
     void data_input_added(DataInput * new_data_input);
     void data_output_added(BaseDataType * new_data_output);
 
+    void parameter_started_importing(BaseParameter* exporter, BaseParameter* importer);
+    void parameter_stopped_importing(BaseParameter* exporter, BaseParameter* importer);
+
 
 protected:
 
@@ -98,15 +107,21 @@ protected:
 
 private:
 
+    friend class ConnectParametersCommand;
+    friend class DisconnectParametersCommand;
+
     // Direct version of move_to (non-undoable)
     void set_position(int pos_x, int pos_y);
 
 
+    int position_x = 0;
+    int position_y = 0;
+
     std::vector<DataInput*> inputs;
     std::vector<BaseDataType*> outputs;
 
-    int position_x = 0;
-    int position_y = 0;
+    std::vector<BaseParameter*> m_importing_parameters;
+    std::vector<BaseParameter*> m_exporting_parameters;
 
     const OperatorTypeInfo * type_info;
 

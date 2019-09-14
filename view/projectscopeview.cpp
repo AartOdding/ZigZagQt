@@ -112,8 +112,8 @@ void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
             connect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
         }
     }
-    connect(operator_ptr, &ParameterOwner::parameters_connected, this, &ProjectScopeView::on_parameters_connected);
-    connect(operator_ptr, &ParameterOwner::parameters_disconnected, this, &ProjectScopeView::on_parameter_disconnected);
+    connect(operator_ptr, &BaseOperator::parameter_started_importing, this, &ProjectScopeView::on_parameters_connected);
+    connect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &ProjectScopeView::on_parameter_disconnected);
 
     addItem(op_view);
 }
@@ -131,8 +131,8 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
                 disconnect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
             }
         }
-        disconnect(operator_ptr, &ParameterOwner::parameters_connected, this, &ProjectScopeView::on_parameters_connected);
-        disconnect(operator_ptr, &ParameterOwner::parameters_disconnected, this, &ProjectScopeView::on_parameter_disconnected);
+        disconnect(operator_ptr, &BaseOperator::parameter_started_importing, this, &ProjectScopeView::on_parameters_connected);
+        disconnect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &ProjectScopeView::on_parameter_disconnected);
 
         OperatorView* op_view = operator_views[operator_ptr];
         operator_views.remove(operator_ptr);
@@ -183,8 +183,8 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 
 void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
 {
-    OperatorView* export_op = operator_views[static_cast<BaseOperator*>(exporter->owner()->top_level_owner())];
-    OperatorView* import_op = operator_views[static_cast<BaseOperator*>(importer->owner()->top_level_owner())];
+    OperatorView* export_op = operator_views[exporter->parent_operator()];
+    OperatorView* import_op = operator_views[importer->parent_operator()];
 
     if (export_op && import_op)
     {
@@ -210,8 +210,8 @@ void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BasePar
 
 void ProjectScopeView::on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer)
 {
-    OperatorView* export_op = operator_views[static_cast<BaseOperator*>(exporter->owner()->top_level_owner())];
-    OperatorView* import_op = operator_views[static_cast<BaseOperator*>(importer->owner()->top_level_owner())];
+    OperatorView* export_op = operator_views[exporter->parent_operator()];
+    OperatorView* import_op = operator_views[importer->parent_operator()];
 
     if (export_op && import_op)
     {

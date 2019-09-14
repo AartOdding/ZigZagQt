@@ -11,8 +11,9 @@
 #include "library/standard/texture/blendoperator.h"
 #include "library/standard/texture/coloroperator.h"
 #include "library/standard/texture/sinewaveoperator.h"
-
 #include "library/standard/texture/texturedataview.h"
+
+#include "library/standard/control/systemclockoperator.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -94,6 +95,8 @@ Application::Application(int &argc, char **argv)
 
     library_model->register_data_view(TestDataView::Type);
     library_model->register_data_view(TextureDataView::Type);
+
+    library_model->register_operator(SystemClockOperator::Type);
 
     // greenish color: { 205, 255, 0 }
 
