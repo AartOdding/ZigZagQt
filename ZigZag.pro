@@ -134,7 +134,8 @@ HEADERS += \
 
 FORMS += \
         librarydialogpanel.ui \
-        mainwindow.ui
+        mainwindow.ui \
+        parameterconnectionscreen.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

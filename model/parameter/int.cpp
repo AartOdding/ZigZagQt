@@ -129,8 +129,8 @@ Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values)
     : ArithmeticParameter(owner, ParameterType::Int2, name),
-      x_value(values[0]),
-      y_value(values[1])
+      x_value(this, "X", values[0]),
+      y_value(this, "Y", values[1])
 {
 
 }
@@ -138,8 +138,8 @@ Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values)
 
 Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values, int32 min, int32 max)
     : ArithmeticParameter(owner, ParameterType::Int2, name),
-      x_value(values[0], min, max),
-      y_value(values[1], min, max)
+      x_value(this, "X", values[0], min, max),
+      y_value(this, "Y", values[1], min, max)
 {
 
 }
@@ -147,85 +147,71 @@ Int2Par::Int2Par(ParameterOwner * owner, const char * name, int32_2 values, int3
 
 int32 Int2Par::x() const
 {
-    return x_value.get();
+    return x_value.value();
 }
 
 
 int32 Int2Par::y() const
 {
-    return y_value.get();
+    return y_value.value();
 }
 
 
 void Int2Par::set_x(int32 new_x)
 {
-    bool changed;
-    x_value.set(new_x, changed);
-    if (changed) flag_changed();
+    x_value.set_value(new_x);
 }
 
 
 void Int2Par::set_y(int32 new_y)
 {
-    bool changed;
-    y_value.set(new_y, changed);
-    if (changed) flag_changed();
+    y_value.set_value(new_y);
 }
 
 
 int32 Int2Par::min() const
 {
-    //Q_ASSERT(x_value.get_min() == y_value.get_min());
-    return x_value.get_min();
+    return x_value.min();
 }
 
 
 int32 Int2Par::max() const
 {
-    //Q_ASSERT(x_value.get_max() == y_value.get_max());
-    return x_value.get_max();
+    return x_value.max();
 }
 
 
 void Int2Par::set_min(int32 new_min)
 {
-    bool x_changed, y_changed;
-    x_value.set_min(new_min, x_changed);
-    y_value.set_min(new_min, y_changed);
-    if (x_changed || y_changed) flag_changed();
+    x_value.set_min(new_min);
+    y_value.set_min(new_min);
 }
 
 
 void Int2Par::set_max(int32 new_max)
 {
-    bool x_changed, y_changed;
-    x_value.set_max(new_max, x_changed);
-    y_value.set_max(new_max, y_changed);
-    if (x_changed || y_changed) flag_changed();
+    x_value.set_max(new_max);
+    y_value.set_max(new_max);
 }
 
 
 int32_2 Int2Par::get() const
 {
-    return { x_value.get(), y_value.get() };
+    return { x_value.value(), y_value.value() };
 }
 
 
 void Int2Par::set(int32_2 new_values)
 {
-    bool x_changed, y_changed;
-    x_value.set(new_values[0], x_changed);
-    y_value.set(new_values[1], y_changed);
-    if (x_changed || y_changed) flag_changed();
+    x_value.set_value(new_values[0]);
+    y_value.set_value(new_values[1]);
 }
 
 
 void Int2Par::set(int32 x, int32 y)
 {
-    bool x_changed, y_changed;
-    x_value.set(x, x_changed);
-    y_value.set(y, y_changed);
-    if (x_changed || y_changed) flag_changed();
+    x_value.set_value(x);
+    y_value.set_value(y);
 }
 
 
@@ -285,9 +271,9 @@ Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values)
     : ArithmeticParameter(owner, ParameterType::Int3, name),
-      x_value(values[0]),
-      y_value(values[1]),
-      z_value(values[2])
+      x_value(this, "X", values[0]),
+      y_value(this, "Y", values[1]),
+      z_value(this, "Z", values[2])
 {
 
 }
@@ -295,9 +281,9 @@ Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values)
 
 Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values, int32 min, int32 max)
     : ArithmeticParameter(owner, ParameterType::Int3, name),
-      x_value(values[0], min, max),
-      y_value(values[1], min, max),
-      z_value(values[2], min, max)
+      x_value(this, "X", values[0], min, max),
+      y_value(this, "Y", values[1], min, max),
+      z_value(this, "Z", values[2], min, max)
 {
 
 }
@@ -305,103 +291,87 @@ Int3Par::Int3Par(ParameterOwner * owner, const char * name, int32_3 values, int3
 
 int32 Int3Par::x() const
 {
-    return x_value.get();
+    return x_value.value();
 }
 
 
 int32 Int3Par::y() const
 {
-    return y_value.get();
+    return y_value.value();
 }
 
 
 int32 Int3Par::z() const
 {
-    return z_value.get();
+    return z_value.value();
 }
 
 
 void Int3Par::set_x(int32 new_x)
 {
-    bool changed;
-    x_value.set(new_x, changed);
-    if (changed) flag_changed();
+    x_value.set_value(new_x);
 }
 
 
 void Int3Par::set_y(int32 new_y)
 {
-    bool changed;
-    y_value.set(new_y, changed);
-    if (changed) flag_changed();
+    y_value.set_value(new_y);
 }
 
 
 void Int3Par::set_z(int32 new_z)
 {
-    bool changed;
-    z_value.set(new_z, changed);
-    if (changed) flag_changed();
+    z_value.set_value(new_z);
 }
 
 
 int32 Int3Par::min() const
 {
-    //Q_ASSERT(x_value.get_min() == y_value.get_min() == z_value.get_min());
-    return x_value.get_min();
+    return x_value.min();
 }
 
 
 int32 Int3Par::max() const
 {
-    //Q_ASSERT(x_value.get_max() == y_value.get_max() == z_value.get_max());
-    return x_value.get_max();
+    return x_value.max();
 }
 
 
 void Int3Par::set_min(int32 new_min)
 {
-    bool x_changed, y_changed, z_changed;
-    x_value.set_min(new_min, x_changed);
-    y_value.set_min(new_min, y_changed);
-    z_value.set_min(new_min, z_changed);
-    if (x_changed || y_changed || z_changed) flag_changed();
+    x_value.set_min(new_min);
+    y_value.set_min(new_min);
+    z_value.set_min(new_min);
 }
 
 
 void Int3Par::set_max(int32 new_max)
 {
-    bool x_changed, y_changed, z_changed;
-    x_value.set_max(new_max, x_changed);
-    y_value.set_max(new_max, y_changed);
-    z_value.set_max(new_max, z_changed);
-    if (x_changed || y_changed || z_changed) flag_changed();
+    x_value.set_max(new_max);
+    y_value.set_max(new_max);
+    z_value.set_max(new_max);
 }
 
 
 int32_3 Int3Par::get() const
 {
-    return { x_value.get(), y_value.get(), z_value.get() };
+    return { x_value.value(), y_value.value(), z_value.value() };
 }
 
 
 void Int3Par::set(int32_3 new_values)
 {
-    bool x_changed, y_changed, z_changed;
-    x_value.set(new_values[0], x_changed);
-    y_value.set(new_values[1], y_changed);
-    z_value.set(new_values[2], z_changed);
-    if (x_changed || y_changed || z_changed) flag_changed();
+    x_value.set_value(new_values[0]);
+    y_value.set_value(new_values[1]);
+    z_value.set_value(new_values[2]);
 }
 
 
 void Int3Par::set(int32 x, int32 y, int32 z)
 {
-    bool x_changed, y_changed, z_changed;
-    x_value.set(x, x_changed);
-    y_value.set(y, y_changed);
-    z_value.set(z, z_changed);
-    if (x_changed || y_changed || z_changed) flag_changed();
+    x_value.set_value(x);
+    y_value.set_value(y);
+    z_value.set_value(z);
 }
 
 
@@ -462,10 +432,10 @@ Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32 val, int32 min
 
 Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values)
     : ArithmeticParameter(owner, ParameterType::Int4, name),
-      x_value(values[0]),
-      y_value(values[1]),
-      z_value(values[2]),
-      w_value(values[3])
+      x_value(this, "X", values[0]),
+      y_value(this, "Y", values[1]),
+      z_value(this, "Z", values[2]),
+      w_value(this, "W", values[3])
 {
 
 }
@@ -473,10 +443,10 @@ Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values)
 
 Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values, int32 min, int32 max)
     : ArithmeticParameter(owner, ParameterType::Int4, name),
-      x_value(values[0], min, max),
-      y_value(values[1], min, max),
-      z_value(values[2], min, max),
-      w_value(values[3], min, max)
+      x_value(this, "X", values[0], min, max),
+      y_value(this, "Y", values[1], min, max),
+      z_value(this, "Z", values[2], min, max),
+      w_value(this, "W", values[3], min, max)
 {
 
 }
@@ -484,121 +454,105 @@ Int4Par::Int4Par(ParameterOwner * owner, const char * name, int32_4 values, int3
 
 int32 Int4Par::x() const
 {
-    return x_value.get();
+    return x_value.value();
 }
 
 
 int32 Int4Par::y() const
 {
-    return y_value.get();
+    return y_value.value();
 }
 
 
 int32 Int4Par::z() const
 {
-    return z_value.get();
+    return z_value.value();
 }
 
 
 int32 Int4Par::w() const
 {
-    return w_value.get();
+    return w_value.value();
 }
 
 
 void Int4Par::set_x(int32 new_x)
 {
-    bool changed;
-    x_value.set(new_x, changed);
-    if (changed) flag_changed();
+    x_value.set_value(new_x);
 }
 
 
 void Int4Par::set_y(int32 new_y)
 {
-    bool changed;
-    y_value.set(new_y, changed);
-    if (changed) flag_changed();
+    y_value.set_value(new_y);
 }
 
 
 void Int4Par::set_z(int32 new_z)
 {
-    bool changed;
-    z_value.set(new_z, changed);
-    if (changed) flag_changed();
+    z_value.set_value(new_z);
 }
 
 
 void Int4Par::set_w(int32 new_w)
 {
-    bool changed;
-    w_value.set(new_w, changed);
-    if (changed) flag_changed();
+    w_value.set_value(new_w);
 }
 
 
 int32 Int4Par::min() const
 {
     //Q_ASSERT(x_value.get_min() == y_value.get_min() == z_value.get_min() == w_value.get_min());
-    return x_value.get_min();
+    return x_value.min();
 }
 
 
 int32 Int4Par::max() const
 {
     //Q_ASSERT(x_value.get_max() == y_value.get_max() == z_value.get_max() == w_value.get_max());
-    return x_value.get_max();
+    return x_value.max();
 }
 
 
 void Int4Par::set_min(int32 new_min)
 {
-    bool x_changed, y_changed, z_changed, w_changed;
-    x_value.set_min(new_min, x_changed);
-    y_value.set_min(new_min, y_changed);
-    z_value.set_min(new_min, z_changed);
-    w_value.set_min(new_min, w_changed);
-    if (x_changed || y_changed || z_changed || w_changed) flag_changed();
+    x_value.set_min(new_min);
+    y_value.set_min(new_min);
+    z_value.set_min(new_min);
+    w_value.set_min(new_min);
 }
 
 
 void Int4Par::set_max(int32 new_max)
 {
-    bool x_changed, y_changed, z_changed, w_changed;
-    x_value.set_max(new_max, x_changed);
-    y_value.set_max(new_max, y_changed);
-    z_value.set_max(new_max, z_changed);
-    w_value.set_max(new_max, w_changed);
-    if (x_changed || y_changed || z_changed || w_changed) flag_changed();
+    x_value.set_max(new_max);
+    y_value.set_max(new_max);
+    z_value.set_max(new_max);
+    w_value.set_max(new_max);
 }
 
 
 int32_4 Int4Par::get() const
 {
-    return { x_value.get(), y_value.get(), z_value.get(), w_value.get() };
+    return { x_value.value(), y_value.value(), z_value.value(), w_value.value() };
 }
 
 
 void Int4Par::set(int32_4 new_values)
 {
-    bool x_changed, y_changed, z_changed, w_changed;
-    x_value.set(new_values[0], x_changed);
-    y_value.set(new_values[1], y_changed);
-    z_value.set(new_values[2], z_changed);
-    w_value.set(new_values[3], w_changed);
-    if (x_changed || y_changed || z_changed || w_changed) flag_changed();
+    x_value.set_value(new_values[0]);
+    y_value.set_value(new_values[1]);
+    z_value.set_value(new_values[2]);
+    w_value.set_value(new_values[3]);
 }
 
 
 void Int4Par::set(int32 x, int32 y, int32 z, int32 w)
 {
-    bool x_changed, y_changed, z_changed, w_changed;
-    x_value.set(x, x_changed);
-    y_value.set(y, y_changed);
-    z_value.set(z, z_changed);
-    w_value.set(w, w_changed);
-    if (x_changed || y_changed || z_changed || w_changed) flag_changed();
+    x_value.set_value(x);
+    y_value.set_value(y);
+    z_value.set_value(z);
+    w_value.set_value(w);
 }
 
 

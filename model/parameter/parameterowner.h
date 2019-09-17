@@ -17,7 +17,7 @@ public:
     static void reset_all_changed_flags();
 
     ParameterOwner(ParameterOwner *parent = nullptr);
-    ~ParameterOwner();
+    virtual ~ParameterOwner();
 
     const std::vector<BaseParameter*>& parameters() const;
 
