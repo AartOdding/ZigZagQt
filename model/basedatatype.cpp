@@ -10,11 +10,11 @@
 
 
 
-BaseDataType::BaseDataType(BaseOperator* parent_operator_, const DataTypeInfo& type_info_, const char * name_)
-    : ParameterOwner(parent_operator_), parent_operator(parent_operator_), m_name(name_), m_type(&type_info_)
+BaseDataType::BaseDataType(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
+    : ParameterOwner(parent_op, name), data_type(&type_info)
 {
-    Q_ASSERT(parent_operator);
-    parent_operator->register_data_output(this);
+    Q_ASSERT(parent_op);
+    parent_op->register_data_output(this);
 }
 
 
@@ -24,15 +24,9 @@ BaseDataType::~BaseDataType()
 }
 
 
-const char * BaseDataType::name() const
-{
-    return m_name;
-}
-
-
 const DataTypeInfo * BaseDataType::type() const
 {
-    return m_type;
+    return data_type;
 }
 
 
@@ -97,7 +91,7 @@ bool BaseDataType::add_connection(DataInput* data_input)
     if (data_input && data_input->compatible_with(this) && !is_connected_to(data_input))
     {
         connections.push_back(data_input);
-        emit connected_to(data_input);
+        emit has_connected(this, data_input);
         return true;
     }
     return false;
@@ -113,7 +107,7 @@ bool BaseDataType::remove_connection(DataInput* data_input)
     {
         std::swap(*location, connections.back());
         connections.pop_back();
-        emit disconnected_from(data_input);
+        emit has_disconnected(this, data_input);
         return true;
     }
     return false;

@@ -5,9 +5,9 @@
 #include "testdata.h"
 #include "library/standard/texture/texturedata.h"
 #include "model/datainput.h"
-#include "model/parameter/int.h"
-#include "model/parameter/enum.h"
-#include "model/parameter/float.h"
+#include "model/parameter/int64parameter.h"
+#include "model/parameter/enumparameter.h"
+#include "model/parameter/doubleparameter.h"
 
 
 // Implementation in testoperator.cpp
@@ -29,8 +29,8 @@ public:
         : BaseOperator(Type)
     {
         std::cout << "TestOperator - constructor\n";
-        resolution_x.set_minimal_updates(true);
-        resolution_y.set_minimal_updates(true);
+        //resolution_x.set_minimal_updates(true);
+        //resolution_y.set_minimal_updates(true);
     }
 
     void run()
@@ -56,7 +56,7 @@ private:
     IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };
     IntPar resolution_y{ this, "Resolution Y", 600, 0, 255 };
     IntPar resolution_z{ this, "Resolution Z", 300, 0, 255 };
-    FloatPar test_float{ this, "test float", 0.3 };
+    DoublePar test_float{ this, "test float", 0.3 };
 
     //DataInput input1{ this, TestData::Type };
     //DataInput input2{ this, TestData::Type };

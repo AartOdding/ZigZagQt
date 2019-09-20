@@ -21,7 +21,7 @@ private:
 
     std::chrono::system_clock clock;
 
-    FloatPar seconds{ this, "Seconds", 0 };
+    DoublePar seconds{ this, "Seconds", 0 };
     IntPar frame{ this, "Frame" };
 
 };

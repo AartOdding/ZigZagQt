@@ -5,9 +5,9 @@
 #include <vector>
 #include <functional>
 
-#include "model/parameter/int.h"
-#include "model/parameter/float.h"
-#include "model/parameter/enum.h"
+#include "model/parameter/int64parameter.h"
+#include "model/parameter/doubleparameter.h"
+#include "model/parameter/enumparameter.h"
 #include "model/parameter/parameterowner.h"
 
 
@@ -49,6 +49,7 @@ public:
 
     virtual ~BaseOperator();
 
+    virtual void prepare() { }
     virtual void run() = 0;
 
 
@@ -69,8 +70,8 @@ public:
     void register_data_input(DataInput* input);
     void register_data_output(BaseDataType* output);
 
-    const std::vector<BaseParameter*>& importing_parameters() const;
-    const std::vector<BaseParameter*>& exporting_parameters() const;
+    const std::vector<ParameterComponent*>& importing_parameters() const;
+    const std::vector<ParameterComponent*>& exporting_parameters() const;
 
 
 public slots:
@@ -89,8 +90,8 @@ signals:
     void data_input_added(DataInput * new_data_input);
     void data_output_added(BaseDataType * new_data_output);
 
-    void parameter_started_importing(BaseParameter* exporter, BaseParameter* importer);
-    void parameter_stopped_importing(BaseParameter* exporter, BaseParameter* importer);
+    void parameter_started_importing(ParameterComponent* exporter, ParameterComponent* importer);
+    void parameter_stopped_importing(ParameterComponent* exporter, ParameterComponent* importer);
 
 
 protected:
@@ -120,8 +121,8 @@ private:
     std::vector<DataInput*> inputs;
     std::vector<BaseDataType*> outputs;
 
-    std::vector<BaseParameter*> m_importing_parameters;
-    std::vector<BaseParameter*> m_exporting_parameters;
+    std::vector<ParameterComponent*> m_importing_parameters;
+    std::vector<ParameterComponent*> m_exporting_parameters;
 
     const OperatorTypeInfo * type_info;
 

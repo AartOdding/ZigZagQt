@@ -8,6 +8,7 @@
 #include "view/parameterconnector.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
+#include "model/parameter/parametercomponent.h"
 
 #include <QPointer>
 #include <QKeyEvent>
@@ -144,8 +145,8 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 
 void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->parent_operator];
-    auto output_op = operator_views[output->parent_operator];
+    auto input_op = operator_views[input->get_operator()];
+    auto output_op = operator_views[output->get_operator()];
 
     if (input_op && output_op)
     {
@@ -164,7 +165,7 @@ void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input
 
 void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->parent_operator];
+    auto input_op = operator_views[input->get_operator()];
 
     if (input_op)
     {
@@ -181,10 +182,10 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 }
 
 
-void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BaseParameter * importer)
+void ProjectScopeView::on_parameters_connected(ParameterComponent * exporter, ParameterComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->parent_operator()];
-    OperatorView* import_op = operator_views[importer->parent_operator()];
+    OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
+    OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];
 
     if (export_op && import_op)
     {
@@ -208,10 +209,10 @@ void ProjectScopeView::on_parameters_connected(BaseParameter * exporter, BasePar
 }
 
 
-void ProjectScopeView::on_parameter_disconnected(BaseParameter * exporter, BaseParameter * importer)
+void ProjectScopeView::on_parameter_disconnected(ParameterComponent * exporter, ParameterComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->parent_operator()];
-    OperatorView* import_op = operator_views[importer->parent_operator()];
+    OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
+    OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];
 
     if (export_op && import_op)
     {

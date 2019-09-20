@@ -50,7 +50,7 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
     for (auto& input : op->used_data_inputs())
     {
-        auto connected_op = input->get_connection()->parent_operator;
+        auto connected_op = input->get_connection()->get_operator();
 
         // If a connected operator has not yet been processed that one has to process first,
         // thus return false: this operator does not yet have its turn.
@@ -62,7 +62,7 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
     for (auto par : op->importing_parameters())
     {
-        if (closed_list.count(par->get_import()->parent_operator()) == 0)
+        if (closed_list.count(par->get_import()->get_parameter()->get_operator()) == 0)
         {
             return false;
         }
@@ -106,16 +106,19 @@ void Renderer::render_frame()
 
         if (has_turn(current, closed_list))
         {
+            current->prepare();
+            current->process_parameter_changes();
             current->run();
+
             closed_list.insert(current);
 
             for (auto& output : current->used_data_outputs())
             {
                 for (auto connected_input : output->get_connections())
                 {
-                    if (!contains(open_list, connected_input->parent_operator))
+                    if (!contains(open_list, connected_input->get_operator()))
                     {
-                        open_list.push_back(connected_input->parent_operator);
+                        open_list.push_back(connected_input->get_operator());
                     }
                 }
             }
@@ -123,9 +126,9 @@ void Renderer::render_frame()
             {
                 for (auto importer : par->get_exports())
                 {
-                    if (!contains(open_list, importer->parent_operator()))
+                    if (!contains(open_list, importer->get_parameter()->get_operator()))
                     {
-                        open_list.push_back(importer->parent_operator());
+                        open_list.push_back(importer->get_parameter()->get_operator());
                     }
                 }
             }
@@ -142,9 +145,5 @@ void Renderer::render_frame()
     gl->glBindTexture(GL_TEXTURE_2D, initial_tex1);
     gl->glActiveTexture(GL_TEXTURE0);
     gl->glBindTexture(GL_TEXTURE_2D, initial_tex0);
-
-    // End with app wide reset of all the changed flags.
-    ParameterOwner::reset_all_changed_flags();
-
 
 }

@@ -1,76 +1,58 @@
 #pragma once
 
 #include <vector>
-#include <unordered_set>
 
-#include <QObject>
-
+#include "baseparameter.h"
 
 
-class BaseParameter;
 
 
-class ParameterOwner
+class ParameterOwner : public BaseParameter
 {
 public:
 
-    static void reset_all_changed_flags();
+    // Parent should be nullptr if 'this' is the operator.
+    ParameterOwner(ParameterOwner * parent, const char * name);
 
-    ParameterOwner(ParameterOwner *parent = nullptr);
-    virtual ~ParameterOwner();
-
-    const std::vector<BaseParameter*>& parameters() const;
-
-    // Should not be necessary to be used by the user, called from BaseParameter.
-    void register_parameter(BaseParameter* parameter);
-
-    // Returns true if succesful
-    bool deregister_parameter(BaseParameter* parameter);
-
-    /*
-    void flag_parameter_importing(BaseParameter * exporting_par);
-    void flag_parameter_exporting(BaseParameter * importing_par);
-    void flag_parameter_stopped_importing(BaseParameter * old_exporter);
-    void flag_parameter_stopped_exporting(BaseParameter * old_importer);*/
-
-    //void flag_parameters_connected(BaseParameter * exporter, BaseParameter * importer);
-    //void flag_parameters_disconnected(BaseParameter * exporter, BaseParameter * importer);
+    virtual ~ParameterOwner() override = default;
 
 
-    // Default implementation does not pass on the flag
-    virtual void flag_parameters_changed();
-
-    // Also resets all parameter's flags!
-    void reset_changed_flags();
-
-    bool parameters_changed() const;
+    const std::vector<BaseParameter*>& get_parameters() const;
 
 
-    ParameterOwner * top_level_owner();
+    virtual void remove_imports_exports() override;
 
-    const ParameterOwner * top_level_owner() const;
+    // Will recursively call children
+    virtual void process_parameter_changes() override;
 
-    // Undoable Action
-    void remove_imports_exports();
+    // Return true if the parameter change was acepted, when false is returned
+    // the parameter change event will be passed on to the owner of this ParameterOwner
+    virtual bool parameter_changed(BaseParameter*) { return false; }
 
 
-//signals:
 
-    //void parameter_started_importing(BaseParameter* exporter, BaseParameter * importer);
-    //void parameter_stopped_importing(BaseParameter* exporter, BaseParameter * importer);
+    bool is_operator() const;
+
+
+    virtual int num_components() const override { return 0; }
+
+    virtual ParameterComponent* get_component(int) override { return nullptr; }
+
+    virtual const ParameterComponent* get_component(int) const override { return nullptr; }
 
 
 private:
 
-    friend class ConnectParametersCommand;
-    friend class DisconnectParametersCommand;
+    friend class BaseParameter;
 
-    static std::unordered_set<ParameterOwner*> all_parameter_owners;
+    // Called from BaseParameter constructor.
+    void register_parameter(BaseParameter* parameter);
 
-    std::vector<BaseParameter*> m_parameters;
+    // Called from BaseParameter destructor, returns true if succesful.
+    bool deregister_parameter(BaseParameter* parameter);
 
-    ParameterOwner * parent = nullptr;
 
-    bool m_changed = false;
+    std::vector<BaseParameter*> parameters;
+
 
 };

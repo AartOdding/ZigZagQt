@@ -35,7 +35,7 @@ class BaseDataType : public QObject,
 
 public:
 
-    BaseDataType(BaseOperator* parent_operator, const DataTypeInfo& type, const char * name);
+    BaseDataType(BaseOperator* parent_operator, const char * name, const DataTypeInfo& type_info);
 
     virtual ~BaseDataType();
 
@@ -49,14 +49,12 @@ public:
     // Never call this function directly, this is done for you.
     virtual void release_resources() { }
 
+
     bool is_connected() const;
     bool is_connected_to(const DataInput* data_input) const;
     const std::vector<DataInput*>& get_connections() const;
 
-    const char * name() const;
     const DataTypeInfo * type() const;
-
-    BaseOperator* const parent_operator;
 
 
 public slots:
@@ -73,9 +71,9 @@ public slots:
 
 signals:
 
-    void connected_to(DataInput* data_block);
+    void has_connected(BaseDataType* output, DataInput* input);
 
-    void disconnected_from(DataInput* data_block);
+    void has_disconnected(BaseDataType* output, DataInput* input);
 
 
 private:
@@ -90,10 +88,10 @@ private:
     // Non action version of connect_to
     bool remove_connection(DataInput* data_input);
 
-    const char * const m_name;
-    const DataTypeInfo * m_type;
 
     std::vector<DataInput*> connections;
+
+    const DataTypeInfo * data_type;
 
 
 };

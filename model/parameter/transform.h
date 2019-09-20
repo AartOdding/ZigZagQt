@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 #include "baseparameter.h"
 
 
@@ -11,3 +12,4 @@ public:
     ParTransform2D(ParameterOwner * owner, const char * name);
 
 };
+*/

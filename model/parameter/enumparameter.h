@@ -1,14 +1,15 @@
 #pragma once
 
+#include <QObject>
+#include "baseparameter.h"
+#include "parametercomponentint64.h"
 #include "model/enumdefinition.h"
-#include "model/parameter/baseparameter.h"
 
 class ParameterOwner;
 
 
 
-
-class EnumPar : public ArithmeticParameter
+class EnumPar : public BaseParameter
 {
 public:
 
@@ -21,26 +22,24 @@ public:
     void set(int index);
     void set(const char* current_index);
 
-    operator int() const;
-    operator const char *() const;
-
     void operator=(int index);
     void operator=(const char* current_index);
 
-    const EnumDefinition * const definition;
-    int32_t int_at(unsigned index) const override;
-    double double_at(unsigned index) const override;
+    const EnumDefinition * get_enum() const;
 
 
-protected:
+    int num_components() const override;
 
-    void import_flagged_changed() override;
+    ParameterComponent* get_component(int index) override;
+
+    const ParameterComponent* get_component(int index) const override;
 
 
 private:
 
-    int current_index = 0;
+    const EnumDefinition * definition;
 
+    ParameterComponentInt64 index;
 
 };
 

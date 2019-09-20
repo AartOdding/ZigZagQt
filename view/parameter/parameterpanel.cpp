@@ -49,7 +49,6 @@ void ParameterPanel::on_selection_changed()
 
         if (selected)
         {
-            clear();
             build_ui(selected->operator_model);
             editor->setVisible(true);
             return;
@@ -61,28 +60,12 @@ void ParameterPanel::on_selection_changed()
 
 void ParameterPanel::build_ui(BaseOperator& op)
 {
-    layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, op));
-    for (auto output : op.data_outputs())
+    if (parameters)
     {
-        if (output->parameters().size() > 0)
-        {
-            layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *output));
-        }
+        delete parameters;
+        parameters = nullptr;
     }
-    for (auto input : op.data_inputs())
-    {
-        if (input->parameters().size() > 0)
-        {
-            layout.insertWidget(layout.count()-1, new ParameterPanelGroup(this, *input));
-        }
-    }
+    parameters = new ParameterPanelGroup(this, &op);
+    layout.insertWidget(0, parameters);
 }
 
-
-void ParameterPanel::clear()
-{
-    for (auto child : findChildren<ParameterPanelGroup*>())
-    {
-        delete child;
-    }
-}

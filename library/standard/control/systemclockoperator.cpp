@@ -1,4 +1,7 @@
 #include "systemclockoperator.h"
+#include <ctime>
+
+
 
 SystemClockOperator::SystemClockOperator()
     : BaseOperator(Type)
@@ -8,16 +11,18 @@ SystemClockOperator::SystemClockOperator()
 
 void SystemClockOperator::run()
 {
-    frame = frame + 1;
+    frame.set(frame.get() + 1);
 
-    if (frame > 1000)
+    if (frame.get() >= 1000)
     {
-        frame = 0;
+        frame.set(0);
     }
 
+
+/*
     seconds = seconds + 0.02;
     if (seconds > 5)
     {
         seconds = 0;
-    }
+    }*/
 }

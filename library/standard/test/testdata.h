@@ -2,7 +2,7 @@
 
 #include "model/basedatatype.h"
 #include "model/baseoperator.h"
-#include "model/parameter/int.h"
+#include "model/parameter/int64parameter.h"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ public:
     static const inline DataTypeInfo Type { "Test", "Standard/Test", QColor(205, 255, 0), false };
 
     TestData(BaseOperator* op)
-        : BaseDataType(op, Type, "Test")
+        : BaseDataType(op, "Test", Type)
     {
         std::cout << "Test Data - constructor\n";
     }

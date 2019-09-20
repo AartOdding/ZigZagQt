@@ -28,7 +28,7 @@ static std::vector<T*> no_nullptr(std::vector<T*> vec)
 
 
 BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
-    : type_info(&type_)
+    : ParameterOwner(nullptr, type_.name.c_str()), type_info(&type_)
 {
 
 }
@@ -165,13 +165,13 @@ void BaseOperator::register_data_output(BaseDataType* output)
 }
 
 
-const std::vector<BaseParameter*>& BaseOperator::importing_parameters() const
+const std::vector<ParameterComponent*>& BaseOperator::importing_parameters() const
 {
     return m_importing_parameters;
 }
 
 
-const std::vector<BaseParameter*>& BaseOperator::exporting_parameters() const
+const std::vector<ParameterComponent*>& BaseOperator::exporting_parameters() const
 {
     return m_exporting_parameters;
 }

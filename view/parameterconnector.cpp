@@ -50,19 +50,21 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
     {
         if (is_input())
         {
-            if (last_selected_parameter->compatible_with(o->last_selected_parameter))
+            int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
+            for (int i = 0; i < num_components; ++i)
             {
-                last_selected_parameter->add_import(o->last_selected_parameter);
-                return true;
+                last_selected_parameter->get_component(i)->set_import(o->last_selected_parameter->get_component(i));
             }
+            return true;
         }
         else
         {
-            if (o->last_selected_parameter->compatible_with(last_selected_parameter))
+            int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
+            for (int i = 0; i < num_components; ++i)
             {
-                o->last_selected_parameter->add_import(last_selected_parameter);
-                return true;
+                o->last_selected_parameter->get_component(i)->set_import(last_selected_parameter->get_component(i));
             }
+            return true;
         }
     }
     return false;
@@ -105,33 +107,33 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         auto op_menu = menu->addMenu(operator_view()->operator_model.type()->name.c_str());
 
-        for (auto par : operator_view()->operator_model.parameters())
+        for (auto par : operator_view()->operator_model.get_parameters())
         {
-            op_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+            op_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
         }
 
         for (auto output : operator_view()->operator_model.data_outputs())
         {
-            if (output->parameters().size() > 0)
+            if (output->get_parameters().size() > 0)
             {
-                auto output_menu = menu->addMenu(output->name());
+                auto output_menu = menu->addMenu(output->get_name());
 
-                for (auto par : output->parameters())
+                for (auto par : output->get_parameters())
                 {
-                    output_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+                    output_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
                 }
             }
         }
 
         for (auto input : operator_view()->operator_model.data_inputs())
         {
-            if (input->parameters().size() > 0)
+            if (input->get_parameters().size() > 0)
             {
-                auto input_menu = menu->addMenu(input->name());
+                auto input_menu = menu->addMenu(input->get_name());
 
-                for (auto par : input->parameters())
+                for (auto par : input->get_parameters())
                 {
-                    input_menu->addAction(par->name())->setData(QVariant::fromValue(par));
+                    input_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
                 }
             }
         }

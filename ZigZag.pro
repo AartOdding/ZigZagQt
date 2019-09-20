@@ -38,12 +38,13 @@ SOURCES += \
         model/basedatatype.cpp \
         model/datainput.cpp \
         model/librarymodel.cpp \
-        model/parameter/baseparameter.cpp \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
-        model/parameter/enum.cpp \
-        model/parameter/float.cpp \
-        model/parameter/int.cpp \
+        model/parameter/baseparameter.cpp \
+        model/parameter/enumparameter.cpp \
+        model/parameter/parametercomponent.cpp \
+        model/parameter/parametercomponentdouble.cpp \
+        model/parameter/parametercomponentint64.cpp \
         model/parameter/parameterowner.cpp \
         model/parameter/parameterrow.cpp \
         model/parameter/transform.cpp \
@@ -58,9 +59,9 @@ SOURCES += \
         view/operatornametag.cpp \
         view/operatorselectordialog.cpp \
         view/operatorview.cpp \
+        view/parameter/doubleparameterbox.cpp \
         view/parameter/enumwidget.cpp \
-        view/parameter/floatwidget.cpp \
-        view/parameter/intwidget.cpp \
+        view/parameter/int64parameterbox.cpp \
         view/parameter/parametereditor.cpp \
         view/parameter/parametereditorheader.cpp \
         view/parameter/parameterpanel.cpp \
@@ -94,21 +95,24 @@ HEADERS += \
         model/basedatatype.h \
         model/datainput.h \
         model/librarymodel.h \
-        model/parameter/baseparameter.h \
         model/baseoperator.h \
         model/enumdefinition.h \
         model/namemanager.h \
-        model/parameter/enum.h \
-        model/parameter/float.h \
-        model/parameter/int.h \
+        model/parameter/baseparameter.h \
+        model/parameter/doubleparameter.h \
+        model/parameter/enumparameter.h \
+        model/parameter/int64parameter.h \
+        model/parameter/parametercomponent.h \
+        model/parameter/parametercomponentdouble.h \
+        model/parameter/parametercomponentint64.h \
         model/parameter/parameterowner.h \
         model/parameter/parameterrow.h \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \
-        utility/constrained.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
+        utility/numeric.h \
         utility/std_containers_helpers.h \
         view/baseconnector.h \
         view/basedataview.h \
@@ -119,9 +123,9 @@ HEADERS += \
         view/operatornametag.h \
         view/operatorselectordialog.h \
         view/operatorview.h \
+        view/parameter/doubleparameterbox.h \
         view/parameter/enumwidget.h \
-        view/parameter/floatwidget.h \
-        view/parameter/intwidget.h \
+        view/parameter/int64parameterbox.h \
         view/parameter/parametereditor.h \
         view/parameter/parametereditorheader.h \
         view/parameter/parameterpanel.h \

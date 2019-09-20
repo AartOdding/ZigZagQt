@@ -3,12 +3,12 @@
 #include <iostream>
 
 
-TextureData::TextureData(BaseOperator* parent_operator, const char * name)
-    : BaseDataType(parent_operator, Type, name)
+TextureData::TextureData(BaseOperator* parent_op, const char * name)
+    : BaseDataType(parent_op, name, Type)
 {
     initializeOpenGLFunctions();
 
-    resolution.set_minimal_updates(true);
+    //resolution.set_minimal_updates(true);
 
     //connect(&resolution_y, &IntPar::value_changed, this, &TextureData::reallocate_texture);
 }
@@ -17,6 +17,13 @@ TextureData::TextureData(BaseOperator* parent_operator, const char * name)
 TextureData::~TextureData()
 {
     Q_ASSERT(!currently_allocated);
+}
+
+
+bool TextureData::parameter_changed(BaseParameter*)
+{
+    needs_reallocation = true;
+    return true;
 }
 
 
@@ -52,9 +59,10 @@ void TextureData::bind_as_framebuffer()
 {
     if (currently_allocated)
     {
-        if (parameters_changed())
+        if (needs_reallocation)
         {
             reallocate();
+            needs_reallocation = false;
         }
         glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
         glViewport(0, 0, resolution.x(), resolution.y());
@@ -75,7 +83,6 @@ void TextureData::bind_as_texture(int texture_index) const
 
 void TextureData::reallocate()
 {
-    std::cout << "realloc texture\n";
     if (currently_allocated)
     {
         glBindTexture(GL_TEXTURE_2D, texture_handle);
@@ -87,10 +94,10 @@ void TextureData::reallocate()
 
 GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_channels)
 {
-    switch (static_cast<int>(format))
+    switch (format.get_index())
     {
     case 0:
-        switch (static_cast<int>(num_channels)) // 8 Bit Unsigned Norm
+        switch (num_channels.get_index()) // 8 Bit Unsigned Norm
         {
         case 0:
             return GL_R8; // 1 Channel
@@ -102,7 +109,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA8; // 4 Channels
         }
     case 1:
-        switch (static_cast<int>(num_channels)) // 8 Bit Signed Norm
+        switch (num_channels.get_index()) // 8 Bit Signed Norm
         {
         case 0:
             return GL_R8_SNORM; // 1 Channel
@@ -114,7 +121,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA8_SNORM; // 4 Channels
         }
     case 2:
-        switch (static_cast<int>(num_channels)) // 8 Bit Unsigned Int
+        switch (num_channels.get_index()) // 8 Bit Unsigned Int
         {
         case 0:
             return GL_R8UI; // 1 Channel
@@ -126,7 +133,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA8UI; // 4 Channels
         }
     case 3:
-        switch (static_cast<int>(num_channels)) // 8 Bit Signed Int
+        switch (num_channels.get_index()) // 8 Bit Signed Int
         {
         case 0:
             return GL_R8I; // 1 Channel
@@ -138,7 +145,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA8I; // 4 Channels
         }
     case 4:
-        switch (static_cast<int>(num_channels)) // 16 Bit Unsigned Norm
+        switch (num_channels.get_index()) // 16 Bit Unsigned Norm
         {
         case 0:
             return GL_R16; // 1 Channel
@@ -150,7 +157,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA16; // 4 Channels
         }
     case 5:
-        switch (static_cast<int>(num_channels)) // 16 Bit Signed Norm
+        switch (num_channels.get_index()) // 16 Bit Signed Norm
         {
         case 0:
             return GL_R16_SNORM; // 1 Channel
@@ -162,7 +169,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA16_SNORM; // 4 Channels
         }
     case 6:
-        switch (static_cast<int>(num_channels)) // 16 Bit Unsigned Int
+        switch (num_channels.get_index()) // 16 Bit Unsigned Int
         {
         case 0:
             return GL_R16UI; // 1 Channel
@@ -174,7 +181,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA16UI; // 4 Channels
         }
     case 7:
-        switch (static_cast<int>(num_channels)) // 16 Bit Signed Int
+        switch (num_channels.get_index()) // 16 Bit Signed Int
         {
         case 0:
             return GL_R16I; // 1 Channel
@@ -186,7 +193,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA16I; // 4 Channels
         }
     case 8:
-        switch (static_cast<int>(num_channels)) // 32 Bit Unsigned Int
+        switch (num_channels.get_index()) // 32 Bit Unsigned Int
         {
         case 0:
             return GL_R32UI; // 1 Channel
@@ -198,7 +205,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA32UI; // 4 Channels
         }
     case 9:
-        switch (static_cast<int>(num_channels)) // 32 Bit Signed Int
+        switch (num_channels.get_index()) // 32 Bit Signed Int
         {
         case 0:
             return GL_R32I; // 1 Channel
@@ -210,7 +217,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA32I; // 4 Channels
         }
     case 10:
-        switch (static_cast<int>(num_channels)) // 16 Bit Float
+        switch (num_channels.get_index()) // 16 Bit Float
         {
         case 0:
             return GL_R16F ; // 1 Channel
@@ -222,7 +229,7 @@ GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_chan
             return GL_RGBA16F; // 4 Channels
         }
     case 11:
-        switch (static_cast<int>(num_channels)) // 32 Bit Float
+        switch (num_channels.get_index()) // 32 Bit Float
         {
         case 0:
             return GL_R32F; // 1 Channel

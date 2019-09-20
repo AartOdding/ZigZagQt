@@ -2,7 +2,6 @@
 
 #include <QObject>
 
-
 #include "model/basedatatype.h"
 #include "model/parameter/parameterowner.h"
 
@@ -29,10 +28,7 @@ public:
     bool is_connected_to(const BaseDataType* data_block) const;
     const BaseDataType* get_connection() const;
 
-    const char * name() const;
     const DataTypeInfo * type() const;
-
-    BaseOperator * const parent_operator;
 
 
 public slots:
@@ -62,7 +58,6 @@ private:
 
     BaseDataType* connection = nullptr;
 
-    const char * const m_name;
-    const DataTypeInfo * type_info = nullptr;
+    const DataTypeInfo * data_type;
 
 };

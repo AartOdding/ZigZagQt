@@ -8,122 +8,85 @@
 
 
 
-BaseParameter::BaseParameter(ParameterOwner* owner, ParameterType type, ParameterFamily family, const char * name)
-    : m_owner(owner), m_name(name), m_type(type), m_family(family)
+BaseParameter::BaseParameter(ParameterOwner* owner_, ParameterType type_, const char * name_)
+    : parent(owner_), name(name_), parameter_type(type_)
 {
-    Q_ASSERT(owner);
-    owner->register_parameter(this);
+    // BaseOperator also inherits parameter so parent can be nullptr.
+    if (parent)
+    {
+        parent->register_parameter(this);
+    }
 }
 
 
 BaseParameter::~BaseParameter()
 {
-    m_owner->deregister_parameter(this);
-}
-
-
-ParameterOwner * BaseParameter::owner() const
-{
-    return m_owner;
-}
-
-
-ParameterType BaseParameter::type() const
-{
-    return m_type;
-}
-
-
-ParameterFamily BaseParameter::family() const
-{
-    return m_family;
-}
-
-
-const char * BaseParameter::name() const
-{
-    return m_name;
-}
-
-
-BaseOperator * BaseParameter::parent_operator() const
-{
-    Q_ASSERT(static_cast<BaseOperator*>(owner()->top_level_owner()));
-    return static_cast<BaseOperator*>(owner()->top_level_owner());
-}
-
-
-bool BaseParameter::compatible_with(const BaseParameter* other) const
-{
-    return family() == other->family() && family() != ParameterFamily::DummyParameter;
-}
-
-
-void BaseParameter::flag_changed()
-{
-    m_changed = true;
-    m_owner->flag_parameters_changed();
-
-    for (auto e : m_exports)
+    if (parent)
     {
-        e->import_flagged_changed();
+        parent->deregister_parameter(this);
     }
 }
 
 
-void BaseParameter::reset_changed_flag()
+void BaseParameter::remove_imports_exports()
 {
-    m_changed = false;
-}
-
-
-bool BaseParameter::has_changed() const
-{
-    return m_changed;
-}
-
-
-bool BaseParameter::is_importing() const
-{
-    return m_import != nullptr;
-}
-
-
-bool BaseParameter::is_exporting() const
-{
-    return !m_exports.empty();
-}
-
-
-BaseParameter * BaseParameter::get_import() const
-{
-    return m_import;
-}
-
-
-const std::vector<BaseParameter *>& BaseParameter::get_exports() const
-{
-    return m_exports;
-}
-
-
-// Undoable action
-void BaseParameter::add_import(BaseParameter * exporting_import)
-{
-    auto model = application::project_model();
-    auto undo_stack = model->get_undo_stack();
-    undo_stack->push(new ConnectParametersCommand(exporting_import, this));
-    import_flagged_changed();
-}
-
-
-// Undoable action
-void BaseParameter::remove_import()
-{
-    if (m_import)
+    for (int i = 0; i < num_components(); ++i)
     {
-        auto model = application::project_model();
-        auto undo_stack = model->get_undo_stack();
-        undo_stack->push(new DisconnectParametersCommand(m_import, this));
+        get_component(i)->stop_importing();
+        get_component(i)->stop_exporting();
+    }
+}
+
+
+void BaseParameter::process_parameter_changes()
+{
+    bool changed = false;
+    for (int i = 0; i < num_components(); ++i)
+    {
+        changed |= get_component(i)->process_changes();
+    }
+    if (changed)
+    {
+        ParameterOwner * owner = get_parent();
+
+        while(owner)
+        {
+            if (owner->parameter_changed(this))
+            {
+                break;
+            }
+            owner = owner->get_parent();
+        }
+    }
+}
+
+
+const char * BaseParameter::get_name() const
+{
+    return name;
+}
+
+
+ParameterType BaseParameter::get_parameter_type() const
+{
+    return parameter_type;
+}
+
+
+ParameterOwner * BaseParameter::get_parent() const
+{
+    return parent;
+}
+
+
+BaseOperator * BaseParameter::get_operator() const
+{
+    if (parent->is_operator())
+    {
+        return static_cast<BaseOperator*>(parent);
+    }
+    else
+    {
+        return parent->get_operator();
     }
 }

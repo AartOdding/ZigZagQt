@@ -2,8 +2,11 @@
 
 #include <QComboBox>
 
-#include "model/parameter/enum.h"
+#include "model/parameter/enumparameter.h"
 
+
+class ParameterComponent;
+class ParameterComponentInt64;
 
 
 
@@ -15,22 +18,13 @@ public:
 
     EnumWidget(QWidget * parent, EnumPar* parameter);
 
-
-
 private slots:
 
-    void on_parameter_started_importing(BaseParameter * exporter);
-
-    void on_parameters_stopped_importing(BaseParameter * exporter);
-
-
-    void on_index_changed(int new_index);
-
+    void on_parameter_started_importing(ParameterComponent *);
+    void on_parameters_stopped_importing(ParameterComponent *);
 
 private:
 
     EnumPar* parameter;
-    QFont OpenSans = QFont("Open Sans");
-
 
 };

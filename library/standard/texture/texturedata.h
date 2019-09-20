@@ -2,8 +2,8 @@
 
 #include "model/basedatatype.h"
 #include "model/enumdefinition.h"
-#include "model/parameter/enum.h"
-#include "model/parameter/int.h"
+#include "model/parameter/enumparameter.h"
+#include "model/parameter/int64parameter.h"
 
 #include <QObject>
 #include <QOpenGLFunctions_3_2_Core>
@@ -55,6 +55,9 @@ public:
     ~TextureData() override;
 
 
+    bool parameter_changed(BaseParameter*) override;
+
+
     void acquire_resources() override;
 
     void release_resources() override;
@@ -82,6 +85,7 @@ private:
     GLuint texture_handle;
 
     bool currently_allocated = false;
+    bool needs_reallocation = false;
 
 
 };

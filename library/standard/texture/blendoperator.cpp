@@ -61,7 +61,7 @@ void BlendOperator::run()
         output_texture.bind_as_framebuffer();
         glUseProgram(shader.programId());
         glBindVertexArray(vao);
-        shader.setUniformValue(shader.uniformLocation("blend_mode"), static_cast<int>(blend_mode));
+        shader.setUniformValue(shader.uniformLocation("blend_mode"), blend_mode.get_index());
         a->bind_as_texture(0);
         b->bind_as_texture(1);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

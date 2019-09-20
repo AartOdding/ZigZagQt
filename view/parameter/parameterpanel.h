@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QBoxLayout>
 
 
 class BaseOperator;
@@ -30,12 +30,12 @@ public slots:
 
 private:
 
-    void clear();
-
     void build_ui(BaseOperator& op);
 
-    QVBoxLayout layout{ this };
+    QBoxLayout layout{ QBoxLayout::TopToBottom, this };
     QGraphicsScene* scene = nullptr;
     ParameterEditor* editor = nullptr;
+
+    ParameterPanelGroup * parameters = nullptr;
 
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <QFrame>
 #include <QFormLayout>
 
 
@@ -9,21 +9,20 @@ class ParameterOwner;
 class ParameterRow;
 
 
-class ParameterPanelGroup : public QWidget
+class ParameterPanelGroup : public QFrame
 {
     Q_OBJECT
 
 public:
 
-    explicit ParameterPanelGroup(QWidget *parent, ParameterOwner& group_owner);
+    explicit ParameterPanelGroup(QWidget *parent, ParameterOwner* parameters);
 
 
 private:
 
     QWidget* new_widget_for_parameter(BaseParameter * parameter);
-    QWidget* new_widget_for_row(ParameterRow* parameter_row);
 
-    ParameterOwner * owner;
+    ParameterOwner * parameter_owner;
     QFormLayout layout{ this };
 
 };

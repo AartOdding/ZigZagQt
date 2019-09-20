@@ -4,82 +4,88 @@
 #include "model/parameter/parameterowner.h"
 #include "model/parameter/parameterrow.h"
 
-#include "intwidget.h"
-#include "floatwidget.h"
 #include "enumwidget.h"
+
+#include "model/parameter/parametercomponentint64.h"
+#include "model/parameter/parametercomponentdouble.h"
+#include "int64parameterbox.h"
+#include "doubleparameterbox.h"
 
 
 #include <QLabel>
 
 
 
-ParameterPanelGroup::ParameterPanelGroup(QWidget *parent, ParameterOwner& group_owner)
-    : QWidget(parent), owner(&group_owner)
+ParameterPanelGroup::ParameterPanelGroup(QWidget *parent, ParameterOwner* parameters)
+    : QFrame(parent), parameter_owner(parameters)
 {
-    layout.setContentsMargins(0, 0, 0, 0);
-    layout.addRow(new QLabel("Parameters"));
+    Q_ASSERT(parent);
+    Q_ASSERT(parameters);
 
-    for (auto par : owner->parameters())
+    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+
+    layout.setMargin(3);
+    layout.addRow(new QLabel(parameter_owner->get_name()));
+
+    for (auto parameter : parameter_owner->get_parameters())
     {
-        layout.addRow(par->name(), new_widget_for_parameter(par));
+        if (parameter->get_parameter_type() == ParameterType::ParameterOwner)
+        {
+            layout.addRow(new ParameterPanelGroup(this, static_cast<ParameterOwner*>(parameter)));
+        }
+        else
+        {
+            layout.addRow(parameter->get_name(), new_widget_for_parameter(parameter));
+        }
     }
-
-    QFrame* line = new QFrame();
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-    layout.addRow(line);
 }
 
 
 QWidget* ParameterPanelGroup::new_widget_for_parameter(BaseParameter* par)
 {
-    if (par)
+    Q_ASSERT(par);
+
+    if (par->get_parameter_type() == ParameterType::Enum)
     {
-        switch (par->type())
+        return new EnumWidget(this, static_cast<EnumPar*>(par));
+    }
+    else if (par->get_component(0)->get_type() == ParameterComponent::Int64)
+    {
+        if (par->num_components() == 1)
         {
-            case ParameterType::Int:
-                return new IntWidget(this, static_cast<IntPar*>(par));
-            case ParameterType::Int2:
-                return new IntWidget(this, static_cast<Int2Par*>(par));
-            case ParameterType::Int3:
-                return new IntWidget(this, static_cast<Int3Par*>(par));
-            case ParameterType::Int4:
-                return new IntWidget(this, static_cast<Int4Par*>(par));
+            return new Int64ParameterBox(this, static_cast<ParameterComponentInt64*>(par->get_component(0)));
+        }
+        else
+        {
+            auto widget = new QWidget(this);
+            auto widget_layout = new QHBoxLayout(widget);
+            widget_layout->setMargin(0);
 
-            case ParameterType::Float:
-                return new FloatWidget(this, static_cast<FloatPar*>(par));
-            case ParameterType::Float2:
-                return new FloatWidget(this, static_cast<Float2Par*>(par));
-            case ParameterType::Float3:
-                return new FloatWidget(this, static_cast<Float3Par*>(par));
-            case ParameterType::Float4:
-                return new FloatWidget(this, static_cast<Float4Par*>(par));
-
-            case ParameterType::Enum:
-                return new EnumWidget(this, static_cast<EnumPar*>(par));
-
-            case ParameterType::ParameterRow:
-                return new_widget_for_row(static_cast<ParameterRow*>(par));
+            for (int i = 0; i < par->num_components(); ++i)
+            {
+                widget_layout->addWidget(new Int64ParameterBox(this, static_cast<ParameterComponentInt64*>(par->get_component(i))));
+            }
+            return widget;
         }
     }
-    return nullptr;
-}
-
-
-
-QWidget* ParameterPanelGroup::new_widget_for_row(ParameterRow* parameter_row)
-{
-    if (parameter_row->parameters().size() > 0)
+    else if (par->get_component(0)->get_type() == ParameterComponent::Double)
     {
-        auto * widget = new QWidget(this);
-        auto * l = new QHBoxLayout(widget);
-        l->setContentsMargins(0, 0, 0, 0);
-
-        for (auto par : parameter_row->parameters())
+        if (par->num_components() == 1)
         {
-            l->addWidget(new_widget_for_parameter(par));
+            return new DoubleParameterBox(this, static_cast<ParameterComponentDouble*>(par->get_component(0)));
         }
-        return widget;
+        else
+        {
+            auto widget = new QWidget(this);
+            auto widget_layout = new QHBoxLayout(widget);
+            widget_layout->setMargin(0);
+
+            for (int i = 0; i < par->num_components(); ++i)
+            {
+                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<ParameterComponentDouble*>(par->get_component(i))));
+            }
+            return widget;
+        }
     }
     return nullptr;
 }

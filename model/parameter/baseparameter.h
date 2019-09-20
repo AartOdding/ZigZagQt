@@ -1,171 +1,78 @@
 ﻿#pragma once
 
 #include <vector>
-#include <QObject>
 #include <QMetaType>
-
 
 
 class BaseOperator;
 class ParameterOwner;
+class ParameterComponent;
+
 
 
 enum class ParameterType : short
 {
+    Float,
+    Float2,
+    Float3,
+    Float4,
+    Matrix3x3,
+    Matrix4x4,
     Int,
     Int2,
     Int3,
     Int4,
     Enum,
-    Float,
-    Float2,
-    Float3,
-    Float4,
-    Transform2D,
-    Transform3D,
-    ParameterRow,
-};
-
-
-enum class ParameterFamily : short
-{
-    ArithmeticParameter,
-    TextualParameter,
-    ReferenceParameter,
-    DummyParameter // Dummy parameters are all parameters that cannot import / export.
+    ParameterOwner,
 };
 
 
 
-class BaseParameter : public QObject
+class BaseParameter
 {
-    Q_OBJECT
-
 public:
 
-    BaseParameter(ParameterOwner* owner, ParameterType type, ParameterFamily family, const char * name);
+    BaseParameter(ParameterOwner* owner, ParameterType parameter_type, const char * name);
 
     virtual ~BaseParameter();
 
-    const char * name() const;
-    ParameterType type() const;
-    ParameterFamily family() const;
-    ParameterOwner * owner() const;
-    BaseOperator * parent_operator() const;
-
-    bool is_importing() const;
-    bool is_exporting() const;
-    BaseParameter * get_import() const;
-    const std::vector<BaseParameter *>& get_exports() const;
-
-    // Default implementation will check if family is the same and it's not a dummy.
-    virtual bool compatible_with(const BaseParameter* other) const;
 
 
-public slots:
+    virtual int num_components() const = 0;
 
-    // Undoable action
-    void add_import(BaseParameter * exporter);
+    virtual ParameterComponent* get_component(int index) = 0;
 
-    // Undoable action
-    void remove_import();
-
-    // Also flags the parameter owner as changed!
-    void flag_changed();
-    void reset_changed_flag();
-    bool has_changed() const;
+    virtual const ParameterComponent* get_component(int index) const = 0;
 
 
-signals:
 
-    void started_importing_from(BaseParameter* exporter);
-    void stopped_importing_from(BaseParameter* exporter);
-    void started_exporting_to(BaseParameter* importer);
-    void stopped_exporting_to(BaseParameter* importer);
+    virtual void remove_imports_exports();
+
+    // Notifies parent operator if changed.
+    virtual void process_parameter_changes();
 
 
-protected:
 
-    virtual void import_flagged_changed() { }
+    const char * get_name() const;
+
+    ParameterType get_parameter_type() const;
+
+    ParameterOwner * get_parent() const;
+
+    // Recursive
+    BaseOperator * get_operator() const;
 
 
 private:
 
-    friend class ConnectParametersCommand;
-    friend class DisconnectParametersCommand;
+    ParameterOwner * parent;
 
-    ParameterOwner * const m_owner;
-    const char * const m_name;
-    BaseParameter * m_import = nullptr;
-    std::vector<BaseParameter *> m_exports;
+    const char * name;
 
-    const ParameterType m_type;
-    const ParameterFamily m_family;
+    ParameterType parameter_type;
 
-    bool m_changed = false;
 
 };
+
 
 Q_DECLARE_METATYPE(BaseParameter*);
-
-
-
-class ArithmeticParameter : public BaseParameter
-{
-public:
-
-    ArithmeticParameter(ParameterOwner* owner, ParameterType type, const char * name)
-        : BaseParameter(owner, type, ParameterFamily::ArithmeticParameter, name)
-    { }
-
-    bool minimal_updates() const
-    {
-        return m_minimal_updates;
-    }
-
-    void set_minimal_updates(bool value)
-    {
-        m_minimal_updates = value;
-    }
-
-    bool rollover() const
-    {
-        return m_rollover;
-    }
-
-    void set_rollover(bool value)
-    {
-        m_rollover = value;
-    }
-
-    // Needs to be reimplemented to provide the most meaningful value at said index.
-    virtual int32_t int_at(unsigned index) const = 0;
-
-    // Needs to be reimplemented to provide the most meaningful value at said index.
-    virtual double double_at(unsigned index) const = 0;
-
-
-protected:
-
-    bool is_int_based() const
-    {
-        return (type() == ParameterType::Int  || type() == ParameterType::Int2
-             || type() == ParameterType::Int3 || type() == ParameterType::Int4
-             || type() == ParameterType::Enum);
-    }
-
-    bool is_float_based() const
-    {
-        return !is_int_based();
-    }
-
-
-private:
-
-    bool m_rollover = false;
-    bool m_minimal_updates = false;
-
-};
-
-
-

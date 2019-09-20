@@ -3,7 +3,7 @@
 #include "baseparameter.h"
 #include "parameterowner.h"
 
-
+/*
 class ParameterRow : public BaseParameter,
                      public ParameterOwner
 {
@@ -22,3 +22,4 @@ public:
 
 
 };
+*/
