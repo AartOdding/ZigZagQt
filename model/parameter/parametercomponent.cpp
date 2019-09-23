@@ -24,6 +24,12 @@ BaseParameter * ParameterComponent::get_parameter() const
 }
 
 
+int ParameterComponent::get_flags() const
+{
+    return flags;
+}
+
+
 bool ParameterComponent::is_importing() const
 {
     return import != nullptr;
@@ -45,6 +51,36 @@ ParameterComponent * ParameterComponent::get_import() const
 const std::vector<ParameterComponent *>& ParameterComponent::get_exports() const
 {
     return exports;
+}
+
+
+void ParameterComponent::set_flags(int new_flags)
+{
+    if (flags != new_flags)
+    {
+        flags = new_flags;
+        emit flags_changed(new_flags);
+    }
+}
+
+
+void ParameterComponent::set_flag(ParameterFlag flag, bool value)
+{
+    auto new_value = value ? flag : 0;
+    auto current_value = flags & flag;
+
+    if (current_value != new_value)
+    {
+        if (value)
+        {
+            flags |= flag;
+        }
+        else
+        {
+            flags &= ~value;
+        }
+        emit flags_changed(flags);
+    }
 }
 
 

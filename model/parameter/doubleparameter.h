@@ -70,7 +70,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return &(components[index].value());
+            return &(*components[index]);
         }
         else
         {
@@ -83,7 +83,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return &(components[index].value());
+            return &(*components[index]);
         }
         else
         {
@@ -96,14 +96,14 @@ public:
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            return components[0].value().get();
+            return components[0]->get();
         }
         else
         {
             interface_type return_value;
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                return_value[i] = components[i].value().get();
+                return_value[i] = components[i]->get();
             }
             return return_value;
         }
@@ -114,7 +114,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return components[index].value().get();
+            return components[index]->get();
         }
         return 0.0;
     }
@@ -123,28 +123,28 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> x() const
     {
-        return components[0].value().get();
+        return components[0]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> y() const
     {
-        return components[1].value().get();
+        return components[1]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 2), double> z() const
     {
-        return components[2].value().get();
+        return components[2]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 3), double> w() const
     {
-        return components[3].value().get();
+        return components[3]->get();
     }
 
 
@@ -152,7 +152,7 @@ public:
     {
         for (auto& component : components)
         {
-            component.value().set(value);
+            component->set(value);
         }
     }
 
@@ -160,27 +160,27 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 2), void> set(double x, double y)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
+        components[0]->set(x);
+        components[1]->set(y);
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 3), void> set(double x, double y, double z)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
-        components[2].value().set(z);
+        components[0]->set(x);
+        components[1]->set(y);
+        components[2]->set(z);
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 4), void> set(double x, double y, double z, double w)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
-        components[2].value().set(z);
-        components[3].value().set(w);
+        components[0]->set(x);
+        components[1]->set(y);
+        components[2]->set(z);
+        components[3]->set(w);
     }
 
 

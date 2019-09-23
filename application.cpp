@@ -1,6 +1,7 @@
 #include "application.h"
 #include "renderer.h"
 
+#include "model/clock.h"
 #include "model/projectmodel.h"
 #include "model/librarymodel.h"
 #include "view/projectscopeview.h"
@@ -35,6 +36,11 @@ namespace application
     NameManager * name_manager()
     {
         return instance()->get_name_manager();
+    }
+
+    Clock * clock()
+    {
+        return instance()->get_clock();
     }
 
     Renderer * renderer()
@@ -83,6 +89,7 @@ Application::Application(int &argc, char **argv)
     std::cout << QFontDatabase::applicationFontFamilies(open_sans_semi).at(0).toStdString() << "\n";
     std::cout << QFontDatabase::applicationFontFamilies(montserrat).at(0).toStdString() << "\n";
 
+    clock = std::make_unique<Clock>();
     library_model = std::make_unique<LibraryModel>();
 
     library_model->register_data_type(TestData::Type);
@@ -148,18 +155,19 @@ Application::Application(int &argc, char **argv)
     main_window = std::make_unique<QWidget>();
     main_window->setLayout(layout);
 
-    std::cout << sizeof(QVariant) << "var\n";
-
-    //layout->setMenuBar();
-    //viewport->show();
-    //gl_widget.show();
-
+    connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
 }
 
 
 NameManager * Application::get_name_manager()
 {
     return nullptr;
+}
+
+
+Clock * Application::get_clock()
+{
+    return clock.get();
 }
 
 

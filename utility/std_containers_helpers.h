@@ -22,7 +22,7 @@ typename std::vector<T>::const_iterator find(const std::vector<T>& vec, const T&
 template<typename CONTAINER, typename T>
 bool contains(const CONTAINER& container, const T& item)
 {
-    static_assert(std::is_same_v<CONTAINER::value_type, T>, "Container needs a data type that is the same as T!");
+    static_assert(std::is_same_v<typename CONTAINER::value_type, T>, "Container needs a data type that is the same as T!");
     return std::find(container.begin(), container.end(), item) != container.end();
 }
 

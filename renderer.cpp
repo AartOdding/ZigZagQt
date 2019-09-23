@@ -18,7 +18,6 @@
 
 Renderer::Renderer()
 {
-    connect(&render_timer, &QTimer::timeout, this, &Renderer::render_frame);
 }
 
 
@@ -28,19 +27,7 @@ Renderer::~Renderer()
 
 void Renderer::set_model(ProjectModel* m)
 {
-    std::cout << "model: " << m << "\n";
-    if (m != nullptr)
-    {
-        model = m;
-        render_count = 0;
-        std::cout << "startin\'\n";
-        render_timer.start(17);
-    }
-    else
-    {
-        model = nullptr;
-        render_timer.stop();
-    }
+    model = m;
 }
 
 
@@ -76,7 +63,6 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
 void Renderer::render_frame()
 {
-    ++render_count;
     fps_monitor.frame();
 
     Q_ASSERT(QOpenGLContext::currentContext());

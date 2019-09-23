@@ -62,7 +62,7 @@ public:
     }
 
 
-    int num_components() const
+    int num_components() const override
     {
         return NUM_COMPONENTS;
     }
@@ -72,7 +72,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return &(components[index].value());
+            return &(*components[index]);
         }
         return nullptr;
     }
@@ -82,7 +82,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return &(components[index].value());
+            return &(*components[index]);
         }
         return nullptr;
     }
@@ -92,14 +92,14 @@ public:
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            return components[0].value().get();
+            return components[0]->get();
         }
         else
         {
             interface_type return_value;
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                return_value[i] = components[i].value().get();
+                return_value[i] = components[i]->get();
             }
             return return_value;
         }
@@ -110,7 +110,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return components[index].value().get();
+            return components[index]->get();
         }
         return 0;
     }
@@ -119,28 +119,28 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), int64> x() const
     {
-        return components[0].value().get();
+        return components[0]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), int64> y() const
     {
-        return components[1].value().get();
+        return components[1]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 2), int64> z() const
     {
-        return components[2].value().get();
+        return components[2]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 3), int64> w() const
     {
-        return components[3].value().get();
+        return components[3]->get();
     }
 
 
@@ -148,7 +148,7 @@ public:
     {
         for (auto& component : components)
         {
-            component.value().set(value);
+            component->set(value);
         }
     }
 
@@ -156,27 +156,27 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 2), void> set(int64 x, int64 y)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
+        components[0]->set(x);
+        components[1]->set(y);
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 3), void> set(int64 x, int64 y, int64 z)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
-        components[2].value().set(z);
+        components[0]->set(x);
+        components[1]->set(y);
+        components[2]->set(z);
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM == 4), void> set(int64 x, int64 y, int64 z, int64 w)
     {
-        components[0].value().set(x);
-        components[1].value().set(y);
-        components[2].value().set(z);
-        components[3].value().set(w);
+        components[0]->set(x);
+        components[1]->set(y);
+        components[2]->set(z);
+        components[3]->set(w);
     }
 
 

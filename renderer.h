@@ -32,10 +32,6 @@ private:
 
     ProjectModel* model;
 
-    QTimer render_timer;
-
-    unsigned long long render_count = 0;
-
     FpsMonitor fps_monitor{ 500ms };
 
 };

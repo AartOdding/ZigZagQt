@@ -21,6 +21,16 @@ public:
         Reference
     };
 
+    enum ParameterFlag
+    {
+        CanImport =  1<<0,
+        CanExport =  1<<1,
+        CanEdit   =  1<<2,
+        IsVisible =  1<<3,
+        // Add more flags here
+        AllFlags  = (1<<4)-1
+    };
+
     ParameterComponent(BaseParameter * parameter, ParameterComponentType type);
 
     virtual ~ParameterComponent() = default;
@@ -29,6 +39,8 @@ public:
     ParameterComponentType get_type() const;
 
     BaseParameter * get_parameter() const;
+
+    int get_flags() const;
 
 
 
@@ -46,6 +58,9 @@ public:
 
 
 public slots:
+
+    void set_flags(int flags);
+    void set_flag(ParameterFlag flag, bool value);
 
     void set_import(ParameterComponent * exporter);
     void stop_importing();
@@ -66,6 +81,8 @@ signals:
     void started_exporting_to(ParameterComponent* importer);
     void stopped_exporting_to(ParameterComponent* importer);
 
+    void flags_changed(int new_flags);
+
     void value_changed(int64_t value);
     void value_changed(double value);
     void value_changed(const QString& value);
@@ -84,6 +101,8 @@ private:
     BaseParameter * parameter;
 
     ParameterComponentType type;
+
+    int flags = AllFlags;
 
 
 };

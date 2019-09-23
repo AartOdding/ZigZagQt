@@ -36,6 +36,7 @@ SOURCES += \
         library/standard/texture/texturedata.cpp \
         library/standard/texture/texturedataview.cpp \
         model/basedatatype.cpp \
+        model/clock.cpp \
         model/datainput.cpp \
         model/librarymodel.cpp \
         model/baseoperator.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
         library/standard/texture/texturedata.h \
         library/standard/texture/texturedataview.h \
         model/basedatatype.h \
+        model/clock.h \
         model/datainput.h \
         model/librarymodel.h \
         model/baseoperator.h \

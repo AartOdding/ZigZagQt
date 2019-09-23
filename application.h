@@ -5,8 +5,10 @@
 
 #include "renderer.h"
 #include "view/viewport.h"
+#include "model/clock.h"
 
 
+//class Clock;
 class Renderer;
 class Application;
 class ProjectModel;
@@ -21,6 +23,7 @@ class QOpenGLContext;
 namespace application
 {
     Application *      instance();
+    Clock *            clock();
     Renderer*          renderer();
     NameManager *      name_manager();
     ProjectModel *     project_model();
@@ -40,6 +43,7 @@ public:
     Application(int &argc, char **argv);
 
     NameManager *      get_name_manager();
+    Clock *            get_clock();
     Renderer*          get_renderer();
     ProjectModel *     get_project_model();
     LibraryModel *     get_library_model();
@@ -49,6 +53,7 @@ public:
 
 private:
 
+    std::unique_ptr<Clock>            clock;
     std::unique_ptr<Renderer>         renderer;
     std::unique_ptr<ProjectModel>     project_model;
     std::unique_ptr<LibraryModel>     library_model;
