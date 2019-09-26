@@ -27,7 +27,7 @@ public slots:
     void on_parameter_changed(int64_t new_value);
     void on_parameter_min_changed(int64_t new_min);
     void on_parameter_max_changed(int64_t new_max);
-    void on_parameter_update_eager_changed(bool is_eager);
+    void on_parameter_flags_changed(int old_flags, int new_flags);
 
 
 private:

@@ -6,6 +6,7 @@
 #include "model/baseoperator.h"
 
 #include "texturedata.h"
+#include "textureview.h"
 
 
 
@@ -21,9 +22,11 @@ public:
 
     static BaseOperator * create() { return new SineWaveOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Sine Wave", "Standard/Texture", {  },
-                                              { &TextureData::Type }, true, &create };
+    void parameter_changed(BaseParameter* parameter) override;
 
+
+    static const inline OperatorTypeInfo Type { "Sine Wave", "Texture", {  },
+                                              { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
 
@@ -34,7 +37,9 @@ private:
     DoublePar rotation{ this, "Rotate", 0 };
     Double2Par scale{ this, "Scale", { 1, 1 } };
 
-    TextureData output_texture{ this, "Output Texture" };
+    TextureData output_texture{ this, "Texture" };
+
+    bool should_update = false;
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

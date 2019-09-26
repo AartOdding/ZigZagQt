@@ -22,6 +22,7 @@ SineWaveOperator::SineWaveOperator()
     : BaseOperator(Type)
 {
     initializeOpenGLFunctions();
+    should_update = true;
 }
 
 
@@ -55,22 +56,30 @@ void SineWaveOperator::run()
         glBindVertexArray(0);
     }
 
-    output_texture.bind_as_framebuffer();
-    glUseProgram(shader.programId());
-    glBindVertexArray(vao);
-    shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
-    shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
+    if (should_update)
+    {
+        output_texture.bind_as_framebuffer();
 
-    //glm::mat3 transformation{ 1 };
-    auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));
-    auto rotated = glm::rotate(translated, static_cast<float>(rotation.get()));
-    auto final = glm::scale(rotated, glm::vec2(scale.x(), scale.y()));
-    glUniformMatrix3fv(shader.uniformLocation("transformation"), 1, GL_FALSE, (float*)(&final));
-    //Q_ASSERT(transformation.isIdentity());
-    //transformation.translate();
-    //transformation.rotate(rotation);
-    //transformation.scale(scale.x(), scale.y());
+        glUseProgram(shader.programId());
+        glBindVertexArray(vao);
 
-    //shader.setUniformValue(shader.uniformLocation("transformation"), transformation);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
+        shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
+
+        auto scaled = glm::scale(glm::mat3(1), glm::vec2(scale.x(), scale.y()));
+        auto rotated = glm::rotate(scaled, static_cast<float>(rotation.get()));
+        auto translated = glm::translate(rotated, glm::vec2(translation.x(), translation.y()));
+
+        glUniformMatrix3fv(shader.uniformLocation("transformation"), 1, GL_FALSE, (float*)(&translated));
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        should_update = false;
+        update_view();
+    }
+}
+
+
+void SineWaveOperator::parameter_changed(BaseParameter* parameter)
+{
+    should_update = true;
 }

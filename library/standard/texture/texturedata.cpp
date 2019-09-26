@@ -3,14 +3,10 @@
 #include <iostream>
 
 
-TextureData::TextureData(BaseOperator* parent_op, const char * name)
-    : BaseDataType(parent_op, name, Type)
+TextureData::TextureData(BaseOperator* parent_op, const char * name, bool has_fbo_)
+    : BaseDataType(parent_op, name, Type), has_fbo(has_fbo_)
 {
     initializeOpenGLFunctions();
-
-    //resolution.set_minimal_updates(true);
-
-    //connect(&resolution_y, &IntPar::value_changed, this, &TextureData::reallocate_texture);
 }
 
 
@@ -20,43 +16,70 @@ TextureData::~TextureData()
 }
 
 
-bool TextureData::parameter_changed(BaseParameter*)
+void TextureData::parameter_changed(BaseParameter*)
 {
     needs_reallocation = true;
-    return true;
 }
 
 
 void TextureData::acquire_resources()
 {
     glGenTextures(1, &texture_handle);
-    glBindTexture(GL_TEXTURE_2D, texture_handle);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, resolution.x(), resolution.y(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    currently_allocated = true;
+    reallocate();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glGenFramebuffers(1, &fbo_handle);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_handle, 0);
-
-    currently_allocated = true;
+    if (has_fbo)
+    {
+        glGenFramebuffers(1, &fbo_handle);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_handle, 0);
+    }
 }
 
 
 void TextureData::release_resources()
 {
-    glDeleteFramebuffers(1, &fbo_handle);
+    if (has_fbo)
+    {
+        glDeleteFramebuffers(1, &fbo_handle);
+    }
     glDeleteTextures(1, &texture_handle);
 
     currently_allocated = false;
 }
 
 
+void TextureData::upload_data(PixelNumChannelsEnum num_channels, PixelDataFormatEnum format, const void * pixel_data)
+{
+    Q_ASSERT(!has_fbo);
+
+    static constexpr std::array channel_types{ GL_RED, GL_RG, GL_RGB, GL_RGBA };
+    static constexpr std::array format_types{ 0, 0, GL_UNSIGNED_BYTE, GL_BYTE,
+                                              0, 0, GL_UNSIGNED_SHORT, GL_SHORT,
+                                              GL_UNSIGNED_INT, GL_INT, 0, GL_FLOAT };
+
+    auto channel_type = channel_types[static_cast<int>(num_channels)];
+    auto format_type = format_types[static_cast<int>(format)];
+
+    //Q_ASSERT(channel_type == GL_RED);
+    //Q_ASSERT(format_type == GL_UNSIGNED_SHORT);
+
+    if (format_type != 0)
+    {
+        glBindTexture(GL_TEXTURE_2D, texture_handle);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, resolution.x(), resolution.y(), channel_type, format_type, pixel_data);
+    }
+}
+
+
 void TextureData::bind_as_framebuffer()
 {
+    Q_ASSERT(has_fbo);
     if (currently_allocated)
     {
         if (needs_reallocation)
@@ -78,6 +101,48 @@ void TextureData::bind_as_texture(int texture_index) const
         this2->glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + texture_index));
         this2->glBindTexture(GL_TEXTURE_2D, texture_handle);
     }
+}
+
+
+void TextureData::set_resolution(int x, int y)
+{
+    resolution.set(x, y);
+}
+
+
+void TextureData::set_num_channels(PixelNumChannelsEnum num)
+{
+    pixel_channels.set(static_cast<int>(num));
+}
+
+
+void TextureData::set_format(PixelDataFormatEnum format)
+{
+    pixel_format.set(static_cast<int>(format));
+}
+
+
+int TextureData::get_resolution_x() const
+{
+    return resolution.x();
+}
+
+
+int TextureData::get_resolution_y() const
+{
+    return resolution.y();
+}
+
+
+PixelNumChannelsEnum TextureData::get_num_channels() const
+{
+    return static_cast<PixelNumChannelsEnum>(pixel_channels.get_index());
+}
+
+
+PixelDataFormatEnum TextureData::get_format() const
+{
+    return static_cast<PixelDataFormatEnum>(pixel_format.get_index());
 }
 
 

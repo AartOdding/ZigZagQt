@@ -6,13 +6,15 @@
 #include "basedataview.h"
 
 
+
+
 class OpenGLDataView : public BaseDataView,
                        public QOpenGLFunctions_3_2_Core
 {
 
 public:
 
-    OpenGLDataView();
+    OpenGLDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 

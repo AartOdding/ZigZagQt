@@ -11,8 +11,8 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-TestDataView::TestDataView(const BaseDataType* data)
-    : viewed_data(data)
+TestDataView::TestDataView(BaseOperator* parent_operator)
+    : OpenGLDataView(parent_operator, &Type)
 {
 
 }
@@ -64,7 +64,7 @@ void TestDataView::paint_opengl(int res_x, int res_y)
 }
 
 
-BaseDataView* TestDataView::create(const BaseDataType* data)
+BaseDataView* TestDataView::create(BaseOperator* parent_operator)
 {
-    return new TestDataView(data);
+    return new TestDataView(parent_operator);
 }

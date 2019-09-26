@@ -23,6 +23,7 @@ enum class ParameterType : short
     Int3,
     Int4,
     Enum,
+    Button,
     ParameterOwner,
 };
 

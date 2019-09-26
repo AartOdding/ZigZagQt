@@ -94,11 +94,11 @@ private:
     {
         // Add the importing/ exporting pointers in the parameters.
         importer_->import = nullptr;
-        try_erase(exporter_->exports, importer_);
+        erase(exporter_->exports, importer_);
 
         // Erase the parameters from their parent's list of importing/ exporting parameters.
-        try_erase(importer_->get_parameter()->get_operator()->m_importing_parameters, importer_);
-        try_erase(exporter_->get_parameter()->get_operator()->m_exporting_parameters, exporter_);
+        erase(importer_->get_parameter()->get_operator()->m_importing_parameters, importer_);
+        erase(exporter_->get_parameter()->get_operator()->m_exporting_parameters, exporter_);
 
         switch (exporter_->get_type())
         {

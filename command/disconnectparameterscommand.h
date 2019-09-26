@@ -27,11 +27,11 @@ public:
         Q_ASSERT(contains(exporter->exports, importer));
 
         importer->import = nullptr;
-        try_erase(exporter->exports, importer);
+        erase(exporter->exports, importer);
 
         // Erase the parameters from their parent's list of importing/ exporting parameters.
-        try_erase(importer->get_parameter()->get_operator()->m_importing_parameters, importer);
-        try_erase(exporter->get_parameter()->get_operator()->m_exporting_parameters, exporter);
+        erase(importer->get_parameter()->get_operator()->m_importing_parameters, importer);
+        erase(exporter->get_parameter()->get_operator()->m_exporting_parameters, exporter);
 
         emit importer->get_parameter()->get_operator()->parameter_stopped_importing(exporter, importer);
         emit importer->stopped_importing_from(exporter);

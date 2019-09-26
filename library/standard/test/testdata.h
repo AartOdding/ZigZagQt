@@ -13,7 +13,7 @@ class TestData : public BaseDataType
 
 public:
 
-    static const inline DataTypeInfo Type { "Test", "Standard/Test", QColor(205, 255, 0), false };
+    static const inline DataTypeInfo Type { "Test", "Test", QColor(205, 255, 0), false };
 
     TestData(BaseOperator* op)
         : BaseDataType(op, "Test", Type)

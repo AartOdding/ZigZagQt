@@ -30,6 +30,12 @@ int ParameterComponent::get_flags() const
 }
 
 
+bool ParameterComponent::has_flag(ParameterFlag flag) const
+{
+    return (flags & flag) != 0;
+}
+
+
 bool ParameterComponent::is_importing() const
 {
     return import != nullptr;
@@ -58,28 +64,30 @@ void ParameterComponent::set_flags(int new_flags)
 {
     if (flags != new_flags)
     {
+        int old_flags = flags;
         flags = new_flags;
-        emit flags_changed(new_flags);
+        emit flags_changed(old_flags, new_flags);
     }
 }
 
 
 void ParameterComponent::set_flag(ParameterFlag flag, bool value)
 {
-    auto new_value = value ? flag : 0;
-    auto current_value = flags & flag;
+    auto current_value = has_flag(flag);
 
-    if (current_value != new_value)
+    if (current_value != value)
     {
+        int old_flags = flags;
+
         if (value)
         {
             flags |= flag;
         }
         else
         {
-            flags &= ~value;
+            flags &= ~flag;
         }
-        emit flags_changed(flags);
+        emit flags_changed(old_flags, flags);
     }
 }
 

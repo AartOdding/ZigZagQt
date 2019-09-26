@@ -22,7 +22,7 @@
 
 
 OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag("Test operator number x", this)
+    : operator_model(op), name_tag(op.type()->name.c_str(), this)
 {
     setZValue(1);
     position_x = op.get_position_x();
@@ -73,18 +73,12 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
-    auto library = application::library_model();
 
-    for (auto output : operator_model.data_outputs())
+    if (operator_model.type()->view_type)
     {
-        if (library->contains_view_for(*output->type()))
-        {
-            auto data_view_type = library->data_views().at(output->type());
-            data_view = data_view_type->construct(output);
-            data_view->set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
-            data_view->setParentItem(this);
-            return;
-        }
+        data_view = operator_model.type()->view_type->construct(&operator_model);
+        data_view->set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
+        data_view->setParentItem(this);
     }
 }
 

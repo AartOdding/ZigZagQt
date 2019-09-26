@@ -9,13 +9,13 @@ class ParameterOwner;
 class ParameterRow;
 
 
-class ParameterPanelGroup : public QFrame
+class ParameterGroup : public QFrame
 {
     Q_OBJECT
 
 public:
 
-    explicit ParameterPanelGroup(QWidget *parent, ParameterOwner* parameters);
+    explicit ParameterGroup(QWidget *parent, ParameterOwner* parameters);
 
 
 private:

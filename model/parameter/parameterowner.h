@@ -20,14 +20,14 @@ public:
     const std::vector<BaseParameter*>& get_parameters() const;
 
 
+    // Will recurively call remove_imports_exports on all its children.
     virtual void remove_imports_exports() override;
 
     // Will recursively call children
     virtual void process_parameter_changes() override;
 
-    // Return true if the parameter change was acepted, when false is returned
-    // the parameter change event will be passed on to the owner of this ParameterOwner
-    virtual bool parameter_changed(BaseParameter*) { return false; }
+    // Called when one of the owned parameters, or one of their children changed.
+    virtual void parameter_changed(BaseParameter*) { }
 
 
 

@@ -12,7 +12,7 @@
 
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
-    : QGraphicsView(parent), parameter_editor(gl)
+    : QGraphicsView(parent), parameter_editor(this)
 {
     //setViewport(&gl_widget);
     setDragMode(QGraphicsView::ScrollHandDrag);
@@ -145,10 +145,6 @@ void Viewport::keyPressEvent(QKeyEvent *event)
             current_zoom = 1;
             centerOn(0, 0);  // TODO: center on avarage operator position;
         }
-        else if (event->key() == Qt::Key_P)
-        {
-            parameter_editor.setVisible(!parameter_editor.isVisible());
-        }
     }
 }
 
@@ -161,7 +157,7 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
 
 void Viewport::resizeEvent(QResizeEvent *event)
 {
-    std::cout << width() << "\n";
-    parameter_editor.setGeometry(width() - 401, 1, 400, 400);
+    //std::cout << width() << "\n";
+    //parameter_editor.setGeometry(width() - 401, 1, 400, 400);
     QGraphicsView::resizeEvent(event);
 }

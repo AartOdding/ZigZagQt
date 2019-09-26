@@ -3,9 +3,10 @@
 #include "view/viewport.h"
 #include "model/librarymodel.h"
 #include "application.h"
+#include "model/baseoperator.h"
 
 #include "ui_librarydialogpanel.h"
-
+#include <QComboBox>
 #include <iostream>
 
 
@@ -18,10 +19,7 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui.setupUi(this);
-    ui.label_filter_input->setFont(MontSerrat);
-    ui.label_filter_output->setFont(MontSerrat);
-    ui.input_filter->setFont(OpenSans);
-    ui.output_filter->setFont(OpenSans);
+    ui.filter->setFont(OpenSans);
     ui.accept_button->setFont(OpenSans);
     ui.cancel_button->setFont(OpenSans);
     ui.operator_list->setFont(MontSerrat);
@@ -29,22 +27,19 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
 
     auto library = application::library_model();
 
-    data_types.reserve(library->data_types().size());
+    auto sub_libraries = library->libraries();
 
-    ui.input_filter->addItem("No Filter");
-    ui.output_filter->addItem("No Filter");
-    data_types.push_back(nullptr);
-
-    for (const auto& [name, details] : library->data_types())
+    for (auto name : sub_libraries)
     {
-        ui.input_filter->addItem(name.c_str());
-        ui.output_filter->addItem(name.c_str());
-        data_types.push_back(details);
+        ui.filter->addItem(name);
     }
 
-    for (const auto& [name, details] : library->operators())
+    ui.filter->setCurrentText("Texture");
+    auto ops = application::library_model()->operators_for_library("Texture");
+
+    for (auto op : ops)
     {
-        ui.operator_list->addItem(name.c_str());
+        ui.operator_list->addItem(op->name.c_str());
     }
 
     ui.operator_list->setCurrentRow(0);
@@ -52,14 +47,35 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
 
     connect(ui.accept_button, &QPushButton::clicked, this, &OperatorSelectorDialog::accept_clicked);
     connect(ui.cancel_button, &QPushButton::clicked, this, &OperatorSelectorDialog::cancel_clicked);
+    connect(ui.filter, &QComboBox::currentTextChanged, this, &OperatorSelectorDialog::on_different_library_selected);
+}
+
+
+void OperatorSelectorDialog::on_different_library_selected(const QString& new_library)
+{
+    ui.operator_list->clear();
+    auto name = new_library.toStdString();
+
+    auto operators = application::library_model()->operators_for_library(name.c_str());
+    for (auto op : operators)
+    {
+        ui.operator_list->addItem(op->name.c_str());
+    }
 }
 
 
 void OperatorSelectorDialog::accept_clicked()
 {
-    auto current = ui.operator_list->currentItem()->text().toStdString();
-    auto details = application::library_model()->operators().at(current);
-    emit operator_requested(details, operator_position);
+    if (ui.operator_list->currentItem())
+    {
+        auto op = application::library_model()->find_operator(
+                    ui.filter->currentText().toStdString(),
+                    ui.operator_list->currentItem()->text().toStdString());
+        if (op)
+        {
+            emit operator_requested(op, operator_position);
+        }
+    }
     close();
 }
 

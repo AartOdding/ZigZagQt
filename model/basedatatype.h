@@ -27,6 +27,11 @@ struct DataTypeInfo
 };
 
 
+inline bool operator==(const DataTypeInfo& t1, const DataTypeInfo& t2)
+{
+    return t1.name == t2.name && t1.library == t2.library;
+}
+
 
 class BaseDataType : public QObject,
                      public ParameterOwner

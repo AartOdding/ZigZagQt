@@ -28,7 +28,7 @@ bool contains(const CONTAINER& container, const T& item)
 
 
 template<typename T>
-bool try_erase(std::vector<T>& vec, const T& item)
+bool erase(std::vector<T>& vec, const T& item)
 {
     auto it = find(vec, item);
     if (it != vec.end())
@@ -37,4 +37,24 @@ bool try_erase(std::vector<T>& vec, const T& item)
         return true;
     }
     return false;
+}
+
+
+/*
+ *  Inserts an item in a vector that is presumed to be sorted already.
+ */
+template<typename T>
+decltype(auto) insert_sorted(std::vector<T>& vec, const T& item)
+{
+    return vec.insert(std::upper_bound( vec.begin(), vec.end(), item), item);
+}
+
+
+/*
+ *  Inserts an item in a vector that is presumed to be sorted already.
+ */
+template<typename T, typename Predicate>
+decltype(auto) insert_sorted(std::vector<T>& vec, const T& item, Predicate predicate)
+{
+    return vec.insert(std::upper_bound( vec.begin(), vec.end(), item, predicate), item);
 }

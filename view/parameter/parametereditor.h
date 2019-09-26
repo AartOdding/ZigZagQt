@@ -1,45 +1,42 @@
 #pragma once
 
-#include <QWheelEvent>
-#include <QMouseEvent>
 #include <QWidget>
-#include <QSizeGrip>
+#include <QScrollArea>
+#include <QBoxLayout>
+
+#include "parametergroup.h"
 
 
-class QScrollArea;
+class BaseOperator;
 class QGraphicsScene;
-class ParameterPanel;
-class ParameterEditorHeader;
 
 
 
 class ParameterEditor : public QWidget
 {
+    Q_OBJECT
 
 public:
 
-    ParameterEditor(QWidget* parent);
+    ParameterEditor(QWidget* parent = nullptr);
 
     void set_scene(QGraphicsScene* scene);
 
-protected:
+public slots:
 
-    void resizeEvent(QResizeEvent *event) override;
-
-
-    void wheelEvent(QWheelEvent * e) override { e->accept(); }
-    void mouseMoveEvent(QMouseEvent *e) override { e->accept(); }
-    void mousePressEvent(QMouseEvent *e) override { e->accept(); }
-    void mouseReleaseEvent(QMouseEvent *e) override { e->accept(); }
+    void on_selection_changed();
 
 private:
 
+    QScrollArea scroll_area;
+    QWidget parameter_area;
+    QBoxLayout outer_layout{ QBoxLayout::TopToBottom, this };
+    QBoxLayout inner_layout{ QBoxLayout::TopToBottom, &parameter_area };
 
-    ParameterEditorHeader* header;
-    QScrollArea* body;
-    ParameterPanel* content;
+    ParameterGroup * parameters = nullptr;
 
-    QSizeGrip size_grip;
+    QGraphicsScene* model = nullptr;
+
 
 };
 

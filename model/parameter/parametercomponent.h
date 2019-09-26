@@ -21,35 +21,34 @@ public:
         Reference
     };
 
-    enum ParameterFlag
+    enum ParameterFlag         // Consequence when false.
     {
-        CanImport =  1<<0,
-        CanExport =  1<<1,
-        CanEdit   =  1<<2,
-        IsVisible =  1<<3,
+        CanImport     =  1<<0, // Parameter will be hidden from import menu.
+        CanExport     =  1<<1, // Parameter will be hidden from export menu.
+        IsEditable    =  1<<2, // The widget will always look disabled.
+        IsVisible     =  1<<3, // Hides the widget from the parameter edit panel.
+        IsUpdateEager =  1<<4, // Will only receive update when the user finishes editing.
+
         // Add more flags here
-        AllFlags  = (1<<4)-1
+        AllFlags      = (1<<5)-1
     };
+
 
     ParameterComponent(BaseParameter * parameter, ParameterComponentType type);
 
     virtual ~ParameterComponent() = default;
 
-
-    ParameterComponentType get_type() const;
+    int get_flags() const;
+    bool has_flag(ParameterFlag flag) const;
 
     BaseParameter * get_parameter() const;
-
-    int get_flags() const;
-
+    ParameterComponentType get_type() const;
 
 
     bool is_importing() const;
-
     bool is_exporting() const;
 
     ParameterComponent * get_import() const;
-
     const std::vector<ParameterComponent *>& get_exports() const;
 
 
@@ -81,7 +80,7 @@ signals:
     void started_exporting_to(ParameterComponent* importer);
     void stopped_exporting_to(ParameterComponent* importer);
 
-    void flags_changed(int new_flags);
+    void flags_changed(int old_flags, int new_flags);
 
     void value_changed(int64_t value);
     void value_changed(double value);

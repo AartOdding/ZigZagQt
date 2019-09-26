@@ -55,7 +55,6 @@ void BlendOperator::run()
     auto a = static_cast<const TextureData*>(texture_a.get_connection());
     auto b = static_cast<const TextureData*>(texture_b.get_connection());
 
-
     if (a && b)
     {
         output_texture.bind_as_framebuffer();
@@ -72,4 +71,14 @@ void BlendOperator::run()
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+    update_view();
+
 }
+
+
+void BlendOperator::parameter_changed(BaseParameter* parameter)
+{
+
+}
+
+

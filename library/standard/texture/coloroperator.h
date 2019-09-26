@@ -5,6 +5,8 @@
 #include "model/parameter/parameterrow.h"
 
 #include "library/standard/texture/texturedata.h"
+#include "library/standard/texture/textureview.h"
+
 
 #include <QOpenGLFunctions_3_2_Core>
 
@@ -25,8 +27,8 @@ public:
 
     static BaseOperator* create();
 
-    static const inline OperatorTypeInfo Type { "Uniform Fill", "Standard/Texture",
-        {  }, { &TextureData::Type }, true, &create };
+    static const inline OperatorTypeInfo Type { "Uniform Fill", "Texture",
+        {  }, { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
 

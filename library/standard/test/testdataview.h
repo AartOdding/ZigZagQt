@@ -11,14 +11,13 @@ class TestDataView : public OpenGLDataView
 
 public:
 
-    TestDataView(const BaseDataType* data);
+    TestDataView(BaseOperator* parent_operator);
 
     void paint_opengl(int res_x, int res_y) override;
 
-    static BaseDataView* create(const BaseDataType* data);
+    static BaseDataView* create(BaseOperator* parent_operator);
 
-    static const inline DataViewTypeInfo Type { "Test View", "Standard/Test",
-        &TestData::Type, DataViewGraphicsApi::OpenGL, &create };
+    static const inline DataViewTypeInfo Type { "Test View", "Test", DataViewGraphicsApi::OpenGL, &create };
 
 
 private:

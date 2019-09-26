@@ -19,8 +19,6 @@ public:
     int64_t get_min() const;
     int64_t get_max() const;
 
-    bool get_update_eager() const;
-
 public slots:
 
     void set(int64_t value);
@@ -30,13 +28,10 @@ public slots:
     void set_later(int64_t value) override;
     void set_later(double value) override;
 
-    void set_update_eager(bool eagerness);
-
 signals:
 
     void min_changed(int64_t new_min);
     void max_changed(int64_t new_max);
-    void update_eager_changed(bool new_eagerness);
 
 private:
 
@@ -45,6 +40,5 @@ private:
     int64_t max_value;
     int64_t pending_value;
     bool new_value_pending = false;
-    bool update_eager = true;
 
 };

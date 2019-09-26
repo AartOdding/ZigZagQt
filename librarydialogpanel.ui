@@ -37,13 +37,7 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="horizontalSpacing">
-       <number>4</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>4</number>
-      </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -56,47 +50,44 @@
       <property name="bottomMargin">
        <number>3</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_filter_input">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Filter Input</string>
+         <string>Library</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="input_filter"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_filter_output">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="text">
-         <string>Filter Output</string>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="output_filter"/>
+      <item>
+       <widget class="QComboBox" name="filter"/>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="lineEdit">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string> Search</string>
-     </property>
     </widget>
    </item>
    <item>

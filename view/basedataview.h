@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGraphicsItem>
+#include "model/parameter/parameterowner.h"
 
 
 class OperatorView;
@@ -21,9 +22,8 @@ struct DataViewTypeInfo
 {
     std::string name;
     std::string library;
-    const DataTypeInfo* data_type;
     DataViewGraphicsApi graphics_api;
-    std::function<BaseDataView*(const BaseDataType*)> construct;
+    std::function<BaseDataView*(BaseOperator*)> construct;
     // Library
     // Image
     // Version
@@ -33,23 +33,31 @@ struct DataViewTypeInfo
     // Etc
 };
 
+inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
+{
+    return t1.name == t2.name && t1.library == t2.library && t1.graphics_api == t2.graphics_api;
+}
 
-class BaseDataView : public QGraphicsItem
+class BaseDataView : public QGraphicsItem,
+                     public ParameterOwner
 {
 
 public:
 
-    BaseDataView();
+    BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info);
 
 
     QRectF boundingRect() const override;
 
     void set_bounds(double x, double y, double w, double h);
 
+    const DataViewTypeInfo * get_type();
 
     //virtual void draw(int res_x, int res_y) = 0;
 
 private:
+
+    const DataViewTypeInfo * type_info;
 
     // Arbitrary initial bounding box, will be changed by OperatorView calling set_bounds().
     QRectF bounds{ 0, 0, 10, 10 };

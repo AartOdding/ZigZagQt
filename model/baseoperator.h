@@ -8,10 +8,12 @@
 #include "model/parameter/int64parameter.h"
 #include "model/parameter/doubleparameter.h"
 #include "model/parameter/enumparameter.h"
+#include "model/parameter/buttonparameter.h"
 #include "model/parameter/parameterowner.h"
 
 
 struct DataTypeInfo;
+struct DataViewTypeInfo;
 class BaseOperator;
 class BaseDataType;
 class DataInput;
@@ -23,8 +25,9 @@ struct OperatorTypeInfo
     std::string library;
     std::vector<const DataTypeInfo*> input_data_types;
     std::vector<const DataTypeInfo*> output_data_types;
-    bool use_opengl;
+    const DataViewTypeInfo * view_type;
     std::function<BaseOperator*()> construct;
+    // USe OpenGL
     // Library
     // Image
     // Version
@@ -33,6 +36,13 @@ struct OperatorTypeInfo
     // License
     // Etc
 };
+
+
+inline bool operator<(const OperatorTypeInfo& t1, const OperatorTypeInfo& t2)
+{
+    return t1.name < t2.name;
+}
+
 
 
 class BaseOperator : public QObject,
@@ -52,9 +62,10 @@ public:
     virtual void prepare() { }
     virtual void run() = 0;
 
-
     int get_position_x() const;
     int get_position_y() const;
+
+    void update_view();
 
     const OperatorTypeInfo * type() const;
 
@@ -84,6 +95,8 @@ public slots:
 
 
 signals:
+
+    void update_view_requested();
 
     void position_changed(int pos_x, int pos_y);
 
@@ -117,6 +130,8 @@ private:
 
     int position_x = 0;
     int position_y = 0;
+
+    bool input_has_changed = false;
 
     std::vector<DataInput*> inputs;
     std::vector<BaseDataType*> outputs;

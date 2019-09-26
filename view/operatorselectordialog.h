@@ -32,6 +32,8 @@ public slots:
 
     //void build_list(int);
 
+    void on_different_library_selected(const QString& new_library);
+
     void accept_clicked();
 
     void cancel_clicked();

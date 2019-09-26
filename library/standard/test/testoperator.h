@@ -8,6 +8,7 @@
 #include "model/parameter/int64parameter.h"
 #include "model/parameter/enumparameter.h"
 #include "model/parameter/doubleparameter.h"
+#include "library/standard/test/testdataview.h"
 
 
 // Implementation in testoperator.cpp
@@ -20,9 +21,9 @@ class TestOperator : public BaseOperator
 
 public:
 
-    static const inline OperatorTypeInfo Type { "Test Operator", "Standard/Test",
+    static const inline OperatorTypeInfo Type { "Test Operator", "Test",
         { &TestData::Type, &TestData::Type, &TestData::Type },
-        { &TestData::Type, &TestData::Type }, true, create_test_operator };
+        { &TestData::Type, &TestData::Type }, &TestDataView::Type, create_test_operator };
 
 
     TestOperator()
@@ -33,10 +34,18 @@ public:
         //resolution_y.set_minimal_updates(true);
     }
 
+
+    void parameter_changed(BaseParameter* par) override
+    {
+        std::cout << "par changed " << par->get_name() << "\n";
+    }
+
+
     void run()
     {
         //std::cout << "TestOperator - run\n";
     }
+
 
     void acquire_resources()
     {
@@ -51,6 +60,7 @@ public:
 
 private:
 
+    ButtonPar test_buton{ this, "Test Button" };
     EnumPar pixel_format{ this, "Pixel Data Format", PixelDataFormat, 0 };
     EnumPar pixel_channels{ this, "Pixel Num Channels", PixelNumChannels, 3 };
     IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };

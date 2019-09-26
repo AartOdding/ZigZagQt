@@ -26,15 +26,19 @@ CONFIG += c++17 console
 
 SOURCES += \
         application.cpp \
-        library/standard/control/systemclockoperator.cpp \
+        library/standard/control/clockoperator.cpp \
+        library/standard/control/noisewavecontroloperator.cpp \
+        library/standard/control/sinewavecontroloperator.cpp \
         library/standard/shadertop.cpp \
         library/standard/test/testdataview.cpp \
         library/standard/test/testoperator.cpp \
         library/standard/texture/blendoperator.cpp \
         library/standard/texture/coloroperator.cpp \
+        library/standard/texture/kinect2textureoperator.cpp \
         library/standard/texture/sinewaveoperator.cpp \
         library/standard/texture/texturedata.cpp \
-        library/standard/texture/texturedataview.cpp \
+        library/standard/texture/textureview.cpp \
+        library/standard/texture/textureviewwindow.cpp \
         model/basedatatype.cpp \
         model/clock.cpp \
         model/datainput.cpp \
@@ -42,10 +46,12 @@ SOURCES += \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
         model/parameter/baseparameter.cpp \
+        model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
         model/parameter/parametercomponent.cpp \
         model/parameter/parametercomponentdouble.cpp \
         model/parameter/parametercomponentint64.cpp \
+        model/parameter/parametercomponentsignal.cpp \
         model/parameter/parameterowner.cpp \
         model/parameter/parameterrow.cpp \
         model/parameter/transform.cpp \
@@ -60,13 +66,12 @@ SOURCES += \
         view/operatornametag.cpp \
         view/operatorselectordialog.cpp \
         view/operatorview.cpp \
+        view/parameter/buttonparameterbox.cpp \
         view/parameter/doubleparameterbox.cpp \
         view/parameter/enumwidget.cpp \
         view/parameter/int64parameterbox.cpp \
         view/parameter/parametereditor.cpp \
-        view/parameter/parametereditorheader.cpp \
-        view/parameter/parameterpanel.cpp \
-        view/parameter/parameterpanelgroup.cpp \
+        view/parameter/parametergroup.cpp \
         view/parameter/transform2dwidget.cpp \
         view/parameterconnector.cpp \
         view/projectscopeview.cpp \
@@ -83,16 +88,20 @@ HEADERS += \
         command/disconnectparameterscommand.h \
         command/movecommand.h \
         command/removecommand.h \
-        library/standard/control/systemclockoperator.h \
+        library/standard/control/clockoperator.h \
+        library/standard/control/noisewavecontroloperator.h \
+        library/standard/control/sinewavecontroloperator.h \
         library/standard/shadertop.h \
         library/standard/test/testdata.h \
         library/standard/test/testdataview.h \
         library/standard/test/testoperator.h \
         library/standard/texture/blendoperator.h \
         library/standard/texture/coloroperator.h \
+        library/standard/texture/kinect2textureoperator.h \
         library/standard/texture/sinewaveoperator.h \
         library/standard/texture/texturedata.h \
-        library/standard/texture/texturedataview.h \
+        library/standard/texture/textureview.h \
+        library/standard/texture/textureviewwindow.h \
         model/basedatatype.h \
         model/clock.h \
         model/datainput.h \
@@ -101,12 +110,14 @@ HEADERS += \
         model/enumdefinition.h \
         model/namemanager.h \
         model/parameter/baseparameter.h \
+        model/parameter/buttonparameter.h \
         model/parameter/doubleparameter.h \
         model/parameter/enumparameter.h \
         model/parameter/int64parameter.h \
         model/parameter/parametercomponent.h \
         model/parameter/parametercomponentdouble.h \
         model/parameter/parametercomponentint64.h \
+        model/parameter/parametercomponentsignal.h \
         model/parameter/parameterowner.h \
         model/parameter/parameterrow.h \
         model/parameter/transform.h \
@@ -115,6 +126,7 @@ HEADERS += \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         utility/numeric.h \
+        utility/stb_image_write.h \
         utility/std_containers_helpers.h \
         view/baseconnector.h \
         view/basedataview.h \
@@ -125,13 +137,12 @@ HEADERS += \
         view/operatornametag.h \
         view/operatorselectordialog.h \
         view/operatorview.h \
+        view/parameter/buttonparameterbox.h \
         view/parameter/doubleparameterbox.h \
         view/parameter/enumwidget.h \
         view/parameter/int64parameterbox.h \
         view/parameter/parametereditor.h \
-        view/parameter/parametereditorheader.h \
-        view/parameter/parameterpanel.h \
-        view/parameter/parameterpanelgroup.h \
+        view/parameter/parametergroup.h \
         view/parameter/transform2dwidget.h \
         view/parameterconnector.h \
         view/projectscopeview.h \
@@ -142,6 +153,12 @@ FORMS += \
         librarydialogpanel.ui \
         mainwindow.ui \
         parameterconnectionscreen.ui
+
+win32 {
+    INCLUDEPATH += ext/Kinect2/include
+    LIBS += -L"C:\Users\aart_\Documents\ZigZag\ext\Kinect2\lib" -lKinect20
+}
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

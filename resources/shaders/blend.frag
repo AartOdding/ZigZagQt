@@ -23,16 +23,19 @@ const int BLEND_MODE_DIFFERENCE = 6;
 
 void main()
 {
+    vec4 color_a = texture(input_a, pos);
+    vec4 color_b = texture(input_b, pos);
+
     switch (blend_mode)
     {
         case BLEND_MODE_OVER:
-            output_color = 0.5 * texture(input_a, pos) + 0.5 * texture(input_b, pos);
+            output_color = color_a.w * color_a + (1 - color_a.w) * color_b;
             return;
         case BLEND_MODE_ADD:
-            output_color = texture(input_b, pos);
+            output_color = color_a + color_b;
             return;
         case BLEND_MODE_SUBTRACT:
-            output_color = vec4(0);
+            output_color = color_a - color_b;
             return;
         case BLEND_MODE_MULTIPLY:
             output_color = vec4(0);

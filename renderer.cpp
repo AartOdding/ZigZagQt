@@ -10,14 +10,17 @@
 
 #include <QThread>
 #include <QApplication>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
 
 #include <deque>
 
 
 Renderer::Renderer()
 {
+    opengl_widget.show();
+    opengl_widget.close();
+
+    opengl_widget.makeCurrent();
+    initializeOpenGLFunctions();
 }
 
 
@@ -65,14 +68,7 @@ void Renderer::render_frame()
 {
     fps_monitor.frame();
 
-    Q_ASSERT(QOpenGLContext::currentContext());
-    auto gl = QOpenGLContext::currentContext()->functions();
-    GLint initial_fbo, initial_tex0, initial_tex1;
-    gl->glActiveTexture(GL_TEXTURE1);
-    gl->glGetIntegerv(GL_TEXTURE_2D, &initial_tex1);
-    gl->glActiveTexture(GL_TEXTURE0);
-    gl->glGetIntegerv(GL_TEXTURE_2D, &initial_tex0);
-    gl->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &initial_fbo);
+    opengl_widget.makeCurrent();
 
     std::deque<BaseOperator*> open_list;
     std::unordered_set<const BaseOperator*> closed_list;
@@ -124,12 +120,10 @@ void Renderer::render_frame()
             open_list.push_back(current);
         }
     }
-    application::project_view_model()->update();
-    gl->glBindFramebuffer(GL_FRAMEBUFFER, initial_fbo);
 
-    gl->glActiveTexture(GL_TEXTURE1);
-    gl->glBindTexture(GL_TEXTURE_2D, initial_tex1);
-    gl->glActiveTexture(GL_TEXTURE0);
-    gl->glBindTexture(GL_TEXTURE_2D, initial_tex0);
-
+    if (fps_monitor.frame_count() % 500 == 0)
+    {
+        std::cout << fps_monitor.fps() << " fps in renderer.\n";
+    }
+    glFlush();
 }

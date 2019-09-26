@@ -12,20 +12,6 @@
 
 
 
-// helper function to remove nullptrs from a vector
-template<typename T>
-static std::vector<T*> no_nullptr(std::vector<T*> vec)
-{
-    for (int i = vec.size() - 1; i >= 0; --i)
-    {
-        if (!vec[i])
-        {
-            vec.erase(vec.begin() + i);
-        }
-    }
-    return vec;
-}
-
 
 BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
     : ParameterOwner(nullptr, type_.name.c_str()), type_info(&type_)
@@ -37,6 +23,12 @@ BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
 BaseOperator::~BaseOperator()
 {
 
+}
+
+
+void BaseOperator::update_view()
+{
+    emit update_view_requested();
 }
 
 

@@ -10,6 +10,25 @@
 
 
 
+enum class PixelDataFormatEnum
+{
+    unsigned_norm_8bit,
+    signed_norm_8bit,
+    unsigned_int_8bit,
+    signed_int_8bit,
+
+    unsigned_norm_16bit,
+    signed_norm_16bit,
+    unsigned_int_16bit,
+    signed_int_16bit,
+
+    unsigned_int_32bit,
+    signed_int_32bit,
+
+    float_16bit,
+    float_32bit
+};
+
 
 const inline EnumDefinition PixelDataFormat
 {
@@ -28,6 +47,15 @@ const inline EnumDefinition PixelDataFormat
         "16 Bit Float",
         "32 Bit Float"
     }
+};
+
+
+enum class PixelNumChannelsEnum
+{
+    one_channel,
+    two_channels,
+    three_channels,
+    four_channels
 };
 
 
@@ -50,25 +78,32 @@ class TextureData : public BaseDataType,
 
 public:
 
-    TextureData(BaseOperator* parent_operator, const char * name);
+    TextureData(BaseOperator* parent_operator, const char * name, bool has_fbo = true);
 
     ~TextureData() override;
 
+    void parameter_changed(BaseParameter*) override;
 
-    bool parameter_changed(BaseParameter*) override;
-
+    // Note, num channels and format describe the image data as it resides in memory at the pixel_data
+    // pointer, it is not a description of the storage method on the gpu!
+    void upload_data(PixelNumChannelsEnum num_channels, PixelDataFormatEnum format, const void * pixel_data);
 
     void acquire_resources() override;
-
     void release_resources() override;
 
-
     void bind_as_framebuffer();
-
     void bind_as_texture(int texture_index) const;
 
+    void set_resolution(int x, int y);
+    void set_num_channels(PixelNumChannelsEnum num);
+    void set_format(PixelDataFormatEnum format);
 
-    static const inline DataTypeInfo Type { "Texture", "Standard/Texture", QColor(255, 20, 147), true };
+    int get_resolution_x() const;
+    int get_resolution_y() const;
+    PixelNumChannelsEnum get_num_channels() const;
+    PixelDataFormatEnum get_format() const;
+
+    static const inline DataTypeInfo Type { "Texture", "Texture", QColor(255, 20, 147), true };
 
 
 private:
@@ -86,6 +121,6 @@ private:
 
     bool currently_allocated = false;
     bool needs_reallocation = false;
-
+    bool has_fbo;
 
 };

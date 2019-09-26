@@ -12,9 +12,11 @@
 #include "library/standard/texture/blendoperator.h"
 #include "library/standard/texture/coloroperator.h"
 #include "library/standard/texture/sinewaveoperator.h"
-#include "library/standard/texture/texturedataview.h"
+#include "library/standard/texture/kinect2textureoperator.h"
 
-#include "library/standard/control/systemclockoperator.h"
+#include "library/standard/control/clockoperator.h"
+#include "library/standard/control/sinewavecontroloperator.h"
+#include "library/standard/control/noisewavecontroloperator.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -75,6 +77,8 @@ namespace application
 Application::Application(int &argc, char **argv)
     : QApplication (argc, argv)
 {
+    setAttribute(Qt::AA_ShareOpenGLContexts);
+
     int oxygen = QFontDatabase::addApplicationFont(":/fonts/OxygenMono-Regular.ttf");
     int open_sans_reg = QFontDatabase::addApplicationFont(":/fonts/OpenSans-Regular.ttf");
     int open_sans_semi = QFontDatabase::addApplicationFont(":/fonts/OpenSans-SemiBold.ttf");
@@ -99,11 +103,14 @@ Application::Application(int &argc, char **argv)
     library_model->register_operator(BlendOperator::Type);
     library_model->register_operator(ColorOperator::Type);
     library_model->register_operator(SineWaveOperator::Type);
+    library_model->register_operator(Kinect2TextureOperator::Type);
 
-    library_model->register_data_view(TestDataView::Type);
-    library_model->register_data_view(TextureDataView::Type);
+    //library_model->register_data_view(TestDataView::Type);
+    //library_model->register_data_view(TextureDataView::Type);
 
-    library_model->register_operator(SystemClockOperator::Type);
+    library_model->register_operator(ClockOperator::Type);
+    library_model->register_operator(SineWaveControlOperator::Type);
+    library_model->register_operator(NoiseWaveControlOperator::Type);
 
     // greenish color: { 205, 255, 0 }
 
@@ -119,14 +126,17 @@ Application::Application(int &argc, char **argv)
     //auto gl = new QOpenGLWidget();
 
     main_opengl_widget = new QOpenGLWidget();
+
+    renderer = std::make_unique<Renderer>();
+
     viewport = std::make_unique<Viewport>(main_opengl_widget);
     //viewport->
 
     viewport->set_view(project_view_model.get());
 
-    renderer = std::make_unique<Renderer>();
     renderer->set_model(project_model.get());
     std::cout << "renderer" << renderer << "\n";
+
 
     QMenuBar* menu_bar = new QMenuBar(viewport.get());
 
@@ -148,6 +158,7 @@ Application::Application(int &argc, char **argv)
     menu_bar->addAction(file_menu->menuAction());
     menu_bar->addAction(edit_menu->menuAction());
     menu_bar->addAction(view_menu->menuAction());
+
 
     viewport->show();
 

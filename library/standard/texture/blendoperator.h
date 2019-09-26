@@ -7,6 +7,7 @@
 #include "model/datainput.h"
 
 #include "library/standard/texture/texturedata.h"
+#include "library/standard/texture/textureview.h"
 
 
 const inline EnumDefinition BlendMode
@@ -32,15 +33,16 @@ public:
 
     BlendOperator();
 
-
     void run() override;
-
 
     static BaseOperator* create() { return new BlendOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Blend", "Standard/Texture",
+    void parameter_changed(BaseParameter* parameter) override;
+
+
+    static const inline OperatorTypeInfo Type { "Blend", "Texture",
         { &TextureData::Type, &TextureData::Type },
-        { &TextureData::Type }, true, &create };
+        { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
 
@@ -50,7 +52,6 @@ private:
     DataInput texture_b{ this, "Texture in 1", TextureData::Type };
 
     TextureData output_texture{ this, "Output Texture" };
-
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

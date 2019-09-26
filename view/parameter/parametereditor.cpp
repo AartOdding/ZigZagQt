@@ -1,53 +1,72 @@
 #include "parametereditor.h"
-#include "parameterpanel.h"
-#include "parametereditorheader.h"
+#include "model/baseoperator.h"
+#include "view/operatorview.h"
 
-#include <QScrollArea>
-#include <QVBoxLayout>
+#include <QGraphicsScene>
 
 
 
 ParameterEditor::ParameterEditor(QWidget* parent)
-    : QWidget(parent), size_grip(this)
+    : QWidget(parent)
 {
-    setWindowFlags(Qt::SubWindow);
+    setWindowFlag(Qt::Window);
 
-    header = new ParameterEditorHeader(this);
-    content = new ParameterPanel(this);
-    body = new QScrollArea(this);
-    body->setWidgetResizable(true);
-    body->setWidget(content);
+    outer_layout.setMargin(0);
+    outer_layout.setSpacing(0);
+    outer_layout.addWidget(&scroll_area);
 
-    auto layout = new QVBoxLayout();
-    layout->addWidget(header);
-    layout->addWidget(body);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    setLayout(layout);
+    scroll_area.setWidgetResizable(true);
+    scroll_area.setWidget(&parameter_area);
 
-    content->show();
-    size_grip.raise();
-    setVisible(false);
+    inner_layout.setMargin(10);
+    inner_layout.setSpacing(10);
+    inner_layout.addStretch();
 }
 
 
-void ParameterEditor::set_scene(QGraphicsScene* scene)
+void ParameterEditor::set_scene(QGraphicsScene* new_model)
 {
-    content->set_scene(scene);
+    if (model != new_model)
+    {
+        if (model != nullptr)
+        {
+            disconnect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::on_selection_changed);
+        }
+        if (new_model)
+        {
+            model = new_model;
+            connect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::on_selection_changed);
+        }
+    }
 }
 
-/*
-size_grip.setGeometry(0, height() - 10, 10, 10);
-header.setGeometry(0, 0, width(), 25);
 
-setVisible(false);
-*/
-
-
-void ParameterEditor::resizeEvent(QResizeEvent *event)
+void ParameterEditor::on_selection_changed()
 {
-    //header.setGeometry(0, 0, width(), 25);
-    //QScrollArea::resizeEvent(event);
-    QWidget::resizeEvent(event);
-    size_grip.setGeometry(0, height() - 10, 10, 10);
+    auto selected_items = model->selectedItems();
+
+    if (selected_items.size() == 1)
+    {
+        auto selected = dynamic_cast<OperatorView*>(selected_items[0]);
+
+        if (selected)
+        {
+            if (parameters)
+            {
+                delete parameters;
+                parameters = nullptr;
+            }
+            parameters = new ParameterGroup(this, &selected->operator_model);
+            inner_layout.insertWidget(0, parameters);
+            if (!isVisible()) show();
+            setWindowTitle(selected->operator_model.type()->name.c_str());
+            return;
+        }
+    }
+    if (parameters)
+    {
+        delete parameters;
+        parameters = nullptr;
+        setWindowTitle("ZigZag");
+    }
 }

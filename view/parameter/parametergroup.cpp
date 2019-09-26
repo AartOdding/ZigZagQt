@@ -1,6 +1,7 @@
-#include "parameterpanelgroup.h"
+#include "parametergroup.h"
 
 #include "model/parameter/baseparameter.h"
+#include "model/parameter/buttonparameter.h"
 #include "model/parameter/parameterowner.h"
 #include "model/parameter/parameterrow.h"
 
@@ -10,28 +11,36 @@
 #include "model/parameter/parametercomponentdouble.h"
 #include "int64parameterbox.h"
 #include "doubleparameterbox.h"
-
+#include "buttonparameterbox.h"
 
 #include <QLabel>
 
 
 
-ParameterPanelGroup::ParameterPanelGroup(QWidget *parent, ParameterOwner* parameters)
+ParameterGroup::ParameterGroup(QWidget *parent, ParameterOwner* parameters)
     : QFrame(parent), parameter_owner(parameters)
 {
     Q_ASSERT(parent);
     Q_ASSERT(parameters);
 
-    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    if (parameters->is_operator())
+    {
+        setFrameStyle(QFrame::NoFrame);
+        layout.setMargin(0);
+    }
+    else
+    {
+        setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        layout.addRow(new QLabel(parameter_owner->get_name()));
+        layout.setMargin(10);
+    }
 
-    layout.setMargin(3);
-    layout.addRow(new QLabel(parameter_owner->get_name()));
 
     for (auto parameter : parameter_owner->get_parameters())
     {
         if (parameter->get_parameter_type() == ParameterType::ParameterOwner)
         {
-            layout.addRow(new ParameterPanelGroup(this, static_cast<ParameterOwner*>(parameter)));
+            layout.addRow(new ParameterGroup(this, static_cast<ParameterOwner*>(parameter)));
         }
         else
         {
@@ -41,13 +50,17 @@ ParameterPanelGroup::ParameterPanelGroup(QWidget *parent, ParameterOwner* parame
 }
 
 
-QWidget* ParameterPanelGroup::new_widget_for_parameter(BaseParameter* par)
+QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 {
     Q_ASSERT(par);
 
     if (par->get_parameter_type() == ParameterType::Enum)
     {
         return new EnumWidget(this, static_cast<EnumPar*>(par));
+    }
+    else if (par->get_parameter_type() == ParameterType::Button)
+    {
+        return new ButtonParameterBox(this, static_cast<ButtonPar*>(par));
     }
     else if (par->get_component(0)->get_type() == ParameterComponent::Int64)
     {

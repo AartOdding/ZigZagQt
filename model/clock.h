@@ -42,10 +42,18 @@ private:
 
     uint64_t frame_count = 0;
     uint64_t current_frame_count = 0;
+
     double target_frame_rate;
     double target_frame_period;
+
+    std::chrono::steady_clock actual_clock;
+    std::chrono::steady_clock::time_point time_begin;
+    std::chrono::steady_clock::time_point time_now;
+
     QTimer wakeup_timer;
+
     bool realtime = true;
     bool framerate_uncontrolled = false;
+
 
 };

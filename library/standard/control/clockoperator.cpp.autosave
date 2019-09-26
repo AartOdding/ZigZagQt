@@ -1,6 +1,0 @@
-#include "clockoperator.h"
-
-ClockOperator::ClockOperator()
-{
-
-}

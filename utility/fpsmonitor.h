@@ -1,8 +1,9 @@
 #pragma once
 
-
-
 #include <chrono>
+#include <cstdint>
+
+
 
 using namespace std::literals;
 
@@ -22,17 +23,24 @@ public:
     void frame()
     {
         auto now = clock.now();
-        ++frame_count;
+        ++current_frame_count;
+        ++every_frame_count;
 
         if (now > last_measurement + measurement_interval)
         {
             auto time_passed_micro = (now - last_measurement).count() / 1000;
             auto time_passed = time_passed_micro / 1'000'000.0;
-            framerate = static_cast<double>(frame_count) / time_passed;
+            framerate = static_cast<double>(current_frame_count) / time_passed;
 
-            frame_count = 0;
+            current_frame_count = 0;
             last_measurement = now;
         }
+    }
+
+
+    unsigned long long frame_count() const
+    {
+        return every_frame_count;
     }
 
 
@@ -46,7 +54,8 @@ public:
 private:
 
     double framerate = 0.0;
-    unsigned long long frame_count = 0;
+    unsigned long long current_frame_count = 0;
+    unsigned long long every_frame_count = 0;
 
     std::chrono::milliseconds measurement_interval;
     std::chrono::steady_clock::time_point last_measurement;

@@ -1,11 +1,13 @@
 #include "basedataview.h"
 #include "view/operatorview.h"
+#include "model/baseoperator.h"
 
 #include <QWidget>
 #include <QPainter>
 
 
-BaseDataView::BaseDataView()
+BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo *type)
+    : ParameterOwner(parent_operator, type->name.c_str()), type_info(type)
 {
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
 }

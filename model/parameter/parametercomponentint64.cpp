@@ -52,12 +52,6 @@ int64_t ParameterComponentInt64::get_max() const
 }
 
 
-bool ParameterComponentInt64::get_update_eager() const
-{
-    return update_eager;
-}
-
-
 void ParameterComponentInt64::set(int64_t value)
 {
     auto constrained_value = constrain(value, min_value, max_value);
@@ -119,14 +113,4 @@ void ParameterComponentInt64::set_later(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
-}
-
-
-void ParameterComponentInt64::set_update_eager(bool eagerness)
-{
-    if (update_eager != eagerness)
-    {
-        update_eager = eagerness;
-        emit update_eager_changed(update_eager);
-    }
 }

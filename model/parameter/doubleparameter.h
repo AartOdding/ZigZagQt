@@ -194,7 +194,7 @@ private:
 };
 
 
-using DoublePar = DoubleParameter<1>;
+using DoublePar  = DoubleParameter<1>;
 using Double2Par = DoubleParameter<2>;
 using Double3Par = DoubleParameter<3>;
 using Double4Par = DoubleParameter<4>;

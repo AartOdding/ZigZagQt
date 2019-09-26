@@ -51,10 +51,7 @@ void BaseParameter::process_parameter_changes()
 
         while(owner)
         {
-            if (owner->parameter_changed(this))
-            {
-                break;
-            }
+            owner->parameter_changed(this);
             owner = owner->get_parent();
         }
     }
