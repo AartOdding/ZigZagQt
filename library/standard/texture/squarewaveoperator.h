@@ -10,28 +10,29 @@
 
 
 
-class SineWaveOperator : public BaseOperator,
-                         public QOpenGLFunctions_3_3_Core
+class SquareWaveOperator : public BaseOperator,
+                           public QOpenGLFunctions_3_3_Core
 {
 
 public:
 
-    SineWaveOperator();
+    SquareWaveOperator();
 
     void run() override;
 
-    static BaseOperator * create() { return new SineWaveOperator(); }
+    static BaseOperator * create() { return new SquareWaveOperator(); }
 
     void parameter_changed(BaseParameter* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Flat Sine Wave", "Video Synthesis", {  },
+    static const inline OperatorTypeInfo Type { "Flat Square Wave", "Video Synthesis", {  },
                                               { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
 
     Double4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Double4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+    DoublePar duty_cyce{ this, "Duty Cycle", 0.5, -1, 1 };
 
     Double2Par translation{ this, "Translate", { 0, 0 } };
     DoublePar rotation{ this, "Rotate", 0 };

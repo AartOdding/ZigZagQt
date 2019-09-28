@@ -1,4 +1,4 @@
-#include "sinewaveoperator.h"
+#include "noiseoperator.h"
 
 #include <QMatrix>
 #include <glm/glm.hpp>
@@ -7,10 +7,10 @@
 #include <iostream>
 
 
-bool SineWaveOperator::gpu_resources_initialized = false;
-QOpenGLShaderProgram SineWaveOperator::shader;
-GLuint SineWaveOperator::vao;
-GLuint SineWaveOperator::vbo;
+bool NoiseOperator::gpu_resources_initialized = false;
+QOpenGLShaderProgram NoiseOperator::shader;
+GLuint NoiseOperator::vao;
+GLuint NoiseOperator::vbo;
 
 
 // Draws the whole screen with GL_TRIANGLE_STRIP
@@ -18,7 +18,7 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-SineWaveOperator::SineWaveOperator()
+NoiseOperator::NoiseOperator()
     : BaseOperator(Type)
 {
     initializeOpenGLFunctions();
@@ -26,14 +26,14 @@ SineWaveOperator::SineWaveOperator()
 }
 
 
-void SineWaveOperator::run()
+void NoiseOperator::run()
 {
     if (!gpu_resources_initialized)
     {
         gpu_resources_initialized = true;
         shader.create();
         shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/sine_wave.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/noise.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 
@@ -65,6 +65,8 @@ void SineWaveOperator::run()
 
         shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
         shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
+        shader.setUniformValue(shader.uniformLocation("use_z_value"), use_z_value.get_index());
+        shader.setUniformValue(shader.uniformLocation("z_value"), static_cast<float>(z_value.get()));
 
         auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));
         auto scaled = glm::scale(translated, glm::vec2(scale.x(), scale.y()));
@@ -79,7 +81,7 @@ void SineWaveOperator::run()
 }
 
 
-void SineWaveOperator::parameter_changed(BaseParameter* parameter)
+void NoiseOperator::parameter_changed(BaseParameter* parameter)
 {
     should_update = true;
 }

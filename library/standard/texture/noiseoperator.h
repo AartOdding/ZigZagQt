@@ -10,25 +10,27 @@
 
 
 
-class SineWaveOperator : public BaseOperator,
-                         public QOpenGLFunctions_3_3_Core
+class NoiseOperator : public BaseOperator,
+                      public QOpenGLFunctions_3_3_Core
 {
 
 public:
 
-    SineWaveOperator();
+    NoiseOperator();
 
     void run() override;
 
-    static BaseOperator * create() { return new SineWaveOperator(); }
+    static BaseOperator * create() { return new NoiseOperator(); }
 
     void parameter_changed(BaseParameter* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Flat Sine Wave", "Video Synthesis", {  },
+    static const inline OperatorTypeInfo Type { "Noise", "Video Synthesis", {  },
                                               { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
+
+    EnumDefinition BoolEnum { "BoolEnum", { "False", "True" } };
 
     Double4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Double4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
@@ -36,6 +38,9 @@ private:
     Double2Par translation{ this, "Translate", { 0, 0 } };
     DoublePar rotation{ this, "Rotate", 0 };
     Double2Par scale{ this, "Scale", { 1, 1 } };
+
+    EnumPar use_z_value{ this, "Use Z Value", BoolEnum, 0 };
+    DoublePar z_value{ this, "Z Value", 0 };
 
     TextureData output_texture{ this, "Texture" };
 

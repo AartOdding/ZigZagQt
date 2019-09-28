@@ -8,6 +8,7 @@ layout(location = 0) out vec4 output_color;
 
 uniform vec4 color_a;
 uniform vec4 color_b;
+uniform float phase;
 uniform float peak_position;
 uniform mat3 transformation;
 
@@ -16,7 +17,12 @@ void main()
 {
     vec3 p = transformation * vec3(pos, 1);
 
-    float value = fract(p.x / 6.28318530718);
+
+    float dist = sqrt(p.x * p.x + p.y * p.y) + phase;
+
+    float value = fract(dist / 6.28318530718);
+    //float ratio = 0.5 * (sin(value) + 1);
+    //output_color = mix(color_a, color_b, ratio);
 
     if (value > peak_position)
     {

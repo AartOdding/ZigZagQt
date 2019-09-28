@@ -10,28 +10,30 @@
 
 
 
-class SineWaveOperator : public BaseOperator,
-                         public QOpenGLFunctions_3_3_Core
+class ConcentricSineWaveOperator : public BaseOperator,
+                                   public QOpenGLFunctions_3_3_Core
 {
 
 public:
 
-    SineWaveOperator();
+    ConcentricSineWaveOperator();
 
     void run() override;
 
-    static BaseOperator * create() { return new SineWaveOperator(); }
+    static BaseOperator * create() { return new ConcentricSineWaveOperator(); }
 
     void parameter_changed(BaseParameter* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Flat Sine Wave", "Video Synthesis", {  },
+    static const inline OperatorTypeInfo Type { "Concentric Sine Wave", "Video Synthesis", {  },
                                               { &TextureData::Type }, &TextureView::Type, &create };
 
 private:
 
     Double4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Double4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+
+    DoublePar phase{ this, "Phase", 0 };
 
     Double2Par translation{ this, "Translate", { 0, 0 } };
     DoublePar rotation{ this, "Rotate", 0 };

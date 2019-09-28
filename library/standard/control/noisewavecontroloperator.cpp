@@ -1,5 +1,7 @@
 #include "noisewavecontroloperator.h"
 #include "glm/gtc/noise.hpp"
+#include "application.h"
+
 
 
 EnumDefinition NoiseWaveControlOperator::NoiseType{ "NoiseType", { "Simplex Noise", "Perlin Noise" } };
@@ -14,20 +16,23 @@ NoiseWaveControlOperator::NoiseWaveControlOperator()
 
 
 
-void NoiseWaveControlOperator::parameter_changed(BaseParameter*)
+void NoiseWaveControlOperator::run()
 {
     recalculate();
 }
 
-
-void NoiseWaveControlOperator::run()
-{
-
-}
-
 void NoiseWaveControlOperator::recalculate()
 {
-    glm::vec4 pos{ position.x(), position.y(), position.z(), position.w() };
+    glm::vec4 pos;
+
+    if (use_time.get_index() == 0)
+    {
+        pos = { application::clock()->get_elapsed_seconds() / slow_down.get(), 0, 0, 0 };
+    }
+    else
+    {
+        pos = { position.x(), position.y(), position.z(), position.w() };
+    }
 
     if (noise_type.get_index() == 0) // Simplex Noise
     {
@@ -35,6 +40,6 @@ void NoiseWaveControlOperator::recalculate()
     }
     else  // Perlin Noise
     {
-        output.set(glm::perlin(pos));
+        output.set(glm::perlin(pos) * amplitude.get() + offset.get());
     }
 }

@@ -40,7 +40,7 @@ public:
     void parameter_changed(BaseParameter* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Blend", "Texture",
+    static const inline OperatorTypeInfo Type { "Blend", "Video Edit",
         { &TextureData::Type, &TextureData::Type },
         { &TextureData::Type }, &TextureView::Type, &create };
 

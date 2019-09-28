@@ -15,6 +15,14 @@
         <file>shaders/blend.frag</file>
         <file>shaders/sawtooth_wave.frag</file>
         <file>shaders/square_wave.frag</file>
+        <file>shaders/noise.frag</file>
+        <file>shaders/fade.frag</file>
+        <file>shaders/radial_square_wave.frag</file>
+        <file>shaders/concentric_sawtooth_wave.frag</file>
+        <file>shaders/concentric_sine_wave.frag</file>
+        <file>shaders/concentric_square_wave.frag</file>
+        <file>shaders/radial_sawtooth_wave.frag</file>
+        <file>shaders/radial_sine_wave.frag</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

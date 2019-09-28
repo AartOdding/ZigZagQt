@@ -40,7 +40,12 @@ ParameterGroup::ParameterGroup(QWidget *parent, ParameterOwner* parameters)
     {
         if (parameter->get_parameter_type() == ParameterType::ParameterOwner)
         {
-            layout.addRow(new ParameterGroup(this, static_cast<ParameterOwner*>(parameter)));
+            auto owner = static_cast<ParameterOwner*>(parameter);
+
+            if (!owner->get_parameters().empty())
+            {
+                layout.addRow(new ParameterGroup(this, owner));
+            }
         }
         else
         {

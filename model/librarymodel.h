@@ -29,7 +29,7 @@ public:
     //bool contains_view_for(const DataTypeInfo& data_type) const;
 
 
-    std::vector<const char *> libraries() const;
+    std::vector<std::string> libraries() const;
     std::vector<const OperatorTypeInfo*> operators_for_library(const std::string& library) const;
     const OperatorTypeInfo* find_operator(const std::string& library, const std::string& name);
 

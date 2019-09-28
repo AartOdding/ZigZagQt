@@ -31,11 +31,11 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
 
     for (auto name : sub_libraries)
     {
-        ui.filter->addItem(name);
+        ui.filter->addItem(name.c_str());
     }
 
     ui.filter->setCurrentText("Texture");
-    auto ops = application::library_model()->operators_for_library("Texture");
+    auto ops = application::library_model()->operators_for_library("Control");
 
     for (auto op : ops)
     {

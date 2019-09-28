@@ -10,13 +10,23 @@
 #include "library/standard/test/testdataview.h"
 
 #include "library/standard/texture/blendoperator.h"
+#include "library/standard/texture/fadeoperator.h"
 #include "library/standard/texture/coloroperator.h"
+#include "library/standard/texture/sawtoothwaveoperator.h"
+#include "library/standard/texture/concentricsawtoothwaveoperator.h"
 #include "library/standard/texture/sinewaveoperator.h"
+#include "library/standard/texture/concentricsinewaveoperator.h"
+#include "library/standard/texture/radialsinewaveoperator.h"
+#include "library/standard/texture/squarewaveoperator.h"
+#include "library/standard/texture/radialsquarewaveoperator.h"
+#include "library/standard/texture/noiseoperator.h"
 #include "library/standard/texture/kinect2textureoperator.h"
+#include "library/standard/texture/cameraoperator.h"
 
 #include "library/standard/control/clockoperator.h"
 #include "library/standard/control/sinewavecontroloperator.h"
 #include "library/standard/control/noisewavecontroloperator.h"
+#include "library/standard/control/increasingvalueoperator.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -96,21 +106,33 @@ Application::Application(int &argc, char **argv)
     clock = std::make_unique<Clock>();
     library_model = std::make_unique<LibraryModel>();
 
-    library_model->register_data_type(TestData::Type);
+    //library_model->register_data_type(TestData::Type);
     library_model->register_data_type(TextureData::Type);
 
-    library_model->register_operator(TestOperator::Type);
+    //library_model->register_operator(TestOperator::Type);
     library_model->register_operator(BlendOperator::Type);
-    library_model->register_operator(ColorOperator::Type);
+    library_model->register_operator(FadeOperator::Type);
+    library_model->register_operator(NoiseOperator::Type);
+    //library_model->register_operator(ColorOperator::Type);
+    library_model->register_operator(SawtoothWaveOperator::Type);
+    library_model->register_operator(ConcentricSawtoothWaveOperator::Type);
+
     library_model->register_operator(SineWaveOperator::Type);
-    library_model->register_operator(Kinect2TextureOperator::Type);
+    library_model->register_operator(RadialSineWaveOperator::Type);
+    library_model->register_operator(ConcentricSineWaveOperator::Type);
+
+    library_model->register_operator(RadialSquareWaveOperator::Type);
+    library_model->register_operator(SquareWaveOperator::Type);
+    //library_model->register_operator(Kinect2TextureOperator::Type);
+    //library_model->register_operator(CameraOperator::Type);
 
     //library_model->register_data_view(TestDataView::Type);
     //library_model->register_data_view(TextureDataView::Type);
 
-    library_model->register_operator(ClockOperator::Type);
-    library_model->register_operator(SineWaveControlOperator::Type);
+    //library_model->register_operator(ClockOperator::Type);
+    library_model->register_operator(IncreasingValueOperator::Type);
     library_model->register_operator(NoiseWaveControlOperator::Type);
+    library_model->register_operator(SineWaveControlOperator::Type);
 
     // greenish color: { 205, 255, 0 }
 

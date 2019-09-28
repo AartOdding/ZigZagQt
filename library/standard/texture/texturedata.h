@@ -93,6 +93,7 @@ public:
 
     void bind_as_framebuffer();
     void bind_as_texture(int texture_index) const;
+    static void bind_empty_texture(int texture_index);
 
     void set_resolution(int x, int y);
     void set_num_channels(PixelNumChannelsEnum num);

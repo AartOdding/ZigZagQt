@@ -24,10 +24,10 @@ public:
 
     void run() override;
 
-    static BaseOperator * create() { return new Kinect2TextureOperator(); }
-
     void parameter_changed(BaseParameter* parameter) override;
 
+
+    static BaseOperator * create() { return new Kinect2TextureOperator(); }
 
     static const inline OperatorTypeInfo Type { "Kinect 2", "Texture", {  },
                                               { &TextureData::Type }, &TextureView::Type, &create };

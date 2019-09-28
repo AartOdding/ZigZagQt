@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets multimedia
 
 TARGET = ZigZag
 TEMPLATE = app
@@ -27,18 +25,29 @@ CONFIG += c++17 console
 SOURCES += \
         application.cpp \
         library/standard/control/clockoperator.cpp \
+        library/standard/control/increasingvalueoperator.cpp \
         library/standard/control/noisewavecontroloperator.cpp \
         library/standard/control/sinewavecontroloperator.cpp \
         library/standard/shadertop.cpp \
         library/standard/test/testdataview.cpp \
         library/standard/test/testoperator.cpp \
         library/standard/texture/blendoperator.cpp \
+        library/standard/texture/cameraoperator.cpp \
         library/standard/texture/coloroperator.cpp \
+        library/standard/texture/concentricsawtoothwaveoperator.cpp \
+        library/standard/texture/concentricsinewaveoperator.cpp \
+        library/standard/texture/fadeoperator.cpp \
         library/standard/texture/kinect2textureoperator.cpp \
+        library/standard/texture/noiseoperator.cpp \
+        library/standard/texture/radialsinewaveoperator.cpp \
+        library/standard/texture/radialsquarewaveoperator.cpp \
+        library/standard/texture/sawtoothwaveoperator.cpp \
         library/standard/texture/sinewaveoperator.cpp \
+        library/standard/texture/squarewaveoperator.cpp \
         library/standard/texture/texturedata.cpp \
         library/standard/texture/textureview.cpp \
         library/standard/texture/textureviewwindow.cpp \
+        library/standard/texture/thresholdoperator.cpp \
         model/basedatatype.cpp \
         model/clock.cpp \
         model/datainput.cpp \
@@ -89,6 +98,7 @@ HEADERS += \
         command/movecommand.h \
         command/removecommand.h \
         library/standard/control/clockoperator.h \
+        library/standard/control/increasingvalueoperator.h \
         library/standard/control/noisewavecontroloperator.h \
         library/standard/control/sinewavecontroloperator.h \
         library/standard/shadertop.h \
@@ -96,12 +106,22 @@ HEADERS += \
         library/standard/test/testdataview.h \
         library/standard/test/testoperator.h \
         library/standard/texture/blendoperator.h \
+        library/standard/texture/cameraoperator.h \
         library/standard/texture/coloroperator.h \
+        library/standard/texture/concentricsawtoothwaveoperator.h \
+        library/standard/texture/concentricsinewaveoperator.h \
+        library/standard/texture/fadeoperator.h \
         library/standard/texture/kinect2textureoperator.h \
+        library/standard/texture/noiseoperator.h \
+        library/standard/texture/radialsinewaveoperator.h \
+        library/standard/texture/radialsquarewaveoperator.h \
+        library/standard/texture/sawtoothwaveoperator.h \
         library/standard/texture/sinewaveoperator.h \
+        library/standard/texture/squarewaveoperator.h \
         library/standard/texture/texturedata.h \
         library/standard/texture/textureview.h \
         library/standard/texture/textureviewwindow.h \
+        library/standard/texture/thresholdoperator.h \
         model/basedatatype.h \
         model/clock.h \
         model/datainput.h \

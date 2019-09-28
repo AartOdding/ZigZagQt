@@ -1,6 +1,8 @@
 #include "texturedata.h"
 #include "application.h"
 #include <iostream>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 
 TextureData::TextureData(BaseOperator* parent_op, const char * name, bool has_fbo_)
@@ -104,6 +106,29 @@ void TextureData::bind_as_texture(int texture_index) const
 }
 
 
+void TextureData::bind_empty_texture(int texture_index)
+{
+    static bool first_time = true;
+    static std::array<unsigned char, 4> fill { 0, 0, 0, 1 };
+    static GLuint static_texture_handle = 0;
+
+    auto f = QOpenGLContext::currentContext()->functions();
+    f->glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + texture_index));
+
+    if (first_time)
+    {
+        f->glGenTextures(1, &static_texture_handle);
+        f->glBindTexture(GL_TEXTURE_2D, static_texture_handle);
+        f->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0,  GL_RGBA, GL_UNSIGNED_BYTE, fill.data());
+        first_time = false;
+    }
+    else
+    {
+        f->glBindTexture(GL_TEXTURE_2D, static_texture_handle);
+    }
+}
+
+
 void TextureData::set_resolution(int x, int y)
 {
     resolution.set(x, y);
@@ -154,7 +179,6 @@ void TextureData::reallocate()
         glTexImage2D(GL_TEXTURE_2D, 0, gl_format_for(pixel_format, pixel_channels), resolution.x(), resolution.y(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     }
 }
-
 
 
 GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_channels)

@@ -10,6 +10,7 @@ DoubleParameterBox::DoubleParameterBox(QWidget * parent, ParameterComponentDoubl
 {
     Q_ASSERT(par);
 
+    setMinimumWidth(50);
     setButtonSymbols(QAbstractSpinBox::NoButtons);
     setRange(par->get_min(), par->get_max());
     setValue(par->get());

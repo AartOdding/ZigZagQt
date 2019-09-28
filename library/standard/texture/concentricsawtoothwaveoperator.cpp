@@ -1,4 +1,4 @@
-#include "sinewaveoperator.h"
+#include "concentricsawtoothwaveoperator.h"
 
 #include <QMatrix>
 #include <glm/glm.hpp>
@@ -7,10 +7,10 @@
 #include <iostream>
 
 
-bool SineWaveOperator::gpu_resources_initialized = false;
-QOpenGLShaderProgram SineWaveOperator::shader;
-GLuint SineWaveOperator::vao;
-GLuint SineWaveOperator::vbo;
+bool ConcentricSawtoothWaveOperator::gpu_resources_initialized = false;
+QOpenGLShaderProgram ConcentricSawtoothWaveOperator::shader;
+GLuint ConcentricSawtoothWaveOperator::vao;
+GLuint ConcentricSawtoothWaveOperator::vbo;
 
 
 // Draws the whole screen with GL_TRIANGLE_STRIP
@@ -18,7 +18,7 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-SineWaveOperator::SineWaveOperator()
+ConcentricSawtoothWaveOperator::ConcentricSawtoothWaveOperator()
     : BaseOperator(Type)
 {
     initializeOpenGLFunctions();
@@ -26,14 +26,14 @@ SineWaveOperator::SineWaveOperator()
 }
 
 
-void SineWaveOperator::run()
+void ConcentricSawtoothWaveOperator::run()
 {
     if (!gpu_resources_initialized)
     {
         gpu_resources_initialized = true;
         shader.create();
         shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/sine_wave.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/concentric_sawtooth_wave.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 
@@ -63,12 +63,15 @@ void SineWaveOperator::run()
         glUseProgram(shader.programId());
         glBindVertexArray(vao);
 
+        shader.setUniformValue(shader.uniformLocation("phase"), static_cast<float>(phase.get()));
+        shader.setUniformValue(shader.uniformLocation("peak_position"), static_cast<float>(peak_position.get()));
         shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
         shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
 
         auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));
         auto scaled = glm::scale(translated, glm::vec2(scale.x(), scale.y()));
         auto rotated = glm::rotate(scaled, static_cast<float>(rotation.get()));
+        //auto translated = glm::translate(rotated, glm::vec2(translation.x(), translation.y()));
 
         glUniformMatrix3fv(shader.uniformLocation("transformation"), 1, GL_FALSE, (float*)(&rotated));
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -79,7 +82,7 @@ void SineWaveOperator::run()
 }
 
 
-void SineWaveOperator::parameter_changed(BaseParameter* parameter)
+void ConcentricSawtoothWaveOperator::parameter_changed(BaseParameter* parameter)
 {
     should_update = true;
 }

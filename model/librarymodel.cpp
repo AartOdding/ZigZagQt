@@ -64,15 +64,17 @@ bool LibraryModel::contains_view_for(const DataTypeInfo& data_type) const
 }*/
 
 
-std::vector<const char *> LibraryModel::libraries() const
+std::vector<std::string> LibraryModel::libraries() const
 {
-    std::vector<const char*> result;
+    std::vector<std::string> result;
     result.reserve(all_operators.size());
 
     for (auto& [k, v] : all_operators)
     {
-        result.emplace_back(k.c_str());
+        result.emplace_back(k);
     }
+    std::sort(result.begin(), result.end());
+
     return result;
 }
 
@@ -90,6 +92,8 @@ std::vector<const OperatorTypeInfo*> LibraryModel::operators_for_library(const s
         {
             result.push_back(v);
         }
+
+        std::sort(result.begin(), result.end(), [](auto a, auto b){ return *a < *b; });
     }
     return result;
 }
