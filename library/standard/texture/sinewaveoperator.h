@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
@@ -30,8 +31,15 @@ public:
 
 private:
 
+    EnumDefinition WaveType { "Wave Type", { "Flat", "Radial", "Concentric" } };
+
     Double4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Double4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+
+    EnumPar wave_type{ this, "Wave Type", WaveType };
+    DoublePar frequency{ this, "Frequency", 6, 0.5, 1000000 };
+    DoublePar phase{ this, "Phase", 0 };
+
 
     Double2Par translation{ this, "Translate", { 0, 0 } };
     DoublePar rotation{ this, "Rotate", 0 };
@@ -42,7 +50,10 @@ private:
     bool should_update = false;
 
     static bool gpu_resources_initialized;
-    static QOpenGLShaderProgram shader;
+    static QOpenGLShaderProgram flat_shader;
+    static QOpenGLShaderProgram radial_shader;
+    static QOpenGLShaderProgram concentric_shader;
+    static std::array<QOpenGLShaderProgram*, 3> shaders;
     static GLuint vao;
     static GLuint vbo;
 

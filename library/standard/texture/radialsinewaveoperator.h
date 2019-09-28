@@ -43,7 +43,7 @@ private:
     bool should_update = false;
 
     static bool gpu_resources_initialized;
-    static QOpenGLShaderProgram shader;
+    static QOpenGLShaderProgram radial_shader;
     static GLuint vao;
     static GLuint vbo;
 
