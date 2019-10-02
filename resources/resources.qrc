@@ -5,6 +5,7 @@
         <file>OpenSans-Regular.ttf</file>
         <file>OpenSans-SemiBold.ttf</file>
         <file>Roboto-Regular.ttf</file>
+        <file>shaders/displace.frag</file>
     </qresource>
     <qresource prefix="/shaders">
         <file>shaders/minimal.vert</file>

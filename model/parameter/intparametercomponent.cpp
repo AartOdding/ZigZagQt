@@ -1,20 +1,20 @@
-#include "parametercomponentint64.h"
+#include "intparametercomponent.h"
 #include "utility/numeric.h"
 
 #include <numeric>
 
 
 
-ParameterComponentInt64::ParameterComponentInt64(int64_t value, BaseParameter* parameter)
-    : ParameterComponentInt64(value, std::numeric_limits<int64_t>::lowest(),
+IntParameterComponent::IntParameterComponent(int64_t value, BaseParameter* parameter)
+    : IntParameterComponent(value, std::numeric_limits<int64_t>::lowest(),
                                      std::numeric_limits<int64_t>::max(), parameter)
 {
 
 }
 
 
-ParameterComponentInt64::ParameterComponentInt64(int64_t value, int64_t min, int64_t max, BaseParameter* parameter)
-    : ParameterComponent(parameter, ParameterComponent::Int64)
+IntParameterComponent::IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameter* parameter)
+    : BaseParameterComponent(parameter, BaseParameterComponent::Int64)
 {
     min_value = smallest(min, max);
     max_value = largest(min, max);
@@ -22,7 +22,7 @@ ParameterComponentInt64::ParameterComponentInt64(int64_t value, int64_t min, int
 }
 
 
-bool ParameterComponentInt64::process_changes()
+bool IntParameterComponent::process_changes()
 {
     if (new_value_pending && pending_value != current_value)
     {
@@ -34,25 +34,25 @@ bool ParameterComponentInt64::process_changes()
 }
 
 
-int64_t ParameterComponentInt64::get() const
+int64_t IntParameterComponent::get() const
 {
     return current_value;
 }
 
 
-int64_t ParameterComponentInt64::get_min() const
+int64_t IntParameterComponent::get_min() const
 {
     return min_value;
 }
 
 
-int64_t ParameterComponentInt64::get_max() const
+int64_t IntParameterComponent::get_max() const
 {
     return max_value;
 }
 
 
-void ParameterComponentInt64::set(int64_t value)
+void IntParameterComponent::set(int64_t value)
 {
     auto constrained_value = constrain(value, min_value, max_value);
     if (constrained_value != current_value)
@@ -64,7 +64,7 @@ void ParameterComponentInt64::set(int64_t value)
 }
 
 
-void ParameterComponentInt64::set_min(int64_t min)
+void IntParameterComponent::set_min(int64_t min)
 {
     // min_value shall be no larger than max_value
     auto new_min = smallest(min, max_value);
@@ -83,7 +83,7 @@ void ParameterComponentInt64::set_min(int64_t min)
 }
 
 
-void ParameterComponentInt64::set_max(int64_t max)
+void IntParameterComponent::set_max(int64_t max)
 {
     // max_value shall be no smaller than min_value
     auto new_max = largest(max, min_value);
@@ -102,14 +102,14 @@ void ParameterComponentInt64::set_max(int64_t max)
 }
 
 
-void ParameterComponentInt64::set_later(int64_t value)
+void IntParameterComponent::set_later(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void ParameterComponentInt64::set_later(double value)
+void IntParameterComponent::set_later(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

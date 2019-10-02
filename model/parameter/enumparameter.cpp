@@ -3,7 +3,7 @@
 
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, int i)
+EnumPar::EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& def, int i)
     : BaseParameter(owner, ParameterType::Enum, name),
       definition(&def),
       index(i, 0, def.size()-1, this)
@@ -11,7 +11,7 @@ EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition
 }
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition& def, const char* value)
+EnumPar::EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& def, const QString& value)
     : BaseParameter(owner, ParameterType::Enum, name),
       definition(&def),
       index(definition->index_of(value), 0, def.size()-1, this)
@@ -19,15 +19,15 @@ EnumPar::EnumPar(ParameterOwner * owner, const char * name, const EnumDefinition
 }
 
 
-int32_t EnumPar::get_index() const
+int EnumPar::get_index() const
 {
-    return index.get();
+    return static_cast<int>(index.get());
 }
 
 
-const char * EnumPar::get_text() const
+const QString& EnumPar::get_text() const
 {
-    return definition->text_of(index.get());
+    return definition->operator[](static_cast<int>(index.get()));
 }
 
 
@@ -43,7 +43,7 @@ void EnumPar::set(int new_index)
 }
 
 
-void EnumPar::set(const char* new_value)
+void EnumPar::set(const QString& new_value)
 {
     auto index = definition->index_of(new_value);
 
@@ -60,7 +60,7 @@ void EnumPar::operator=(int new_index)
 }
 
 
-void EnumPar::operator=(const char * new_value)
+void EnumPar::operator=(const QString& new_value)
 {
     set(new_value);
 }
@@ -72,7 +72,7 @@ int EnumPar::num_components() const
 }
 
 
-ParameterComponent* EnumPar::get_component(int i)
+BaseParameterComponent* EnumPar::get_component(int i)
 {
     if (i == 0)
     {
@@ -85,7 +85,7 @@ ParameterComponent* EnumPar::get_component(int i)
 }
 
 
-const ParameterComponent* EnumPar::get_component(int i) const
+const BaseParameterComponent* EnumPar::get_component(int i) const
 {
     if (i == 0)
     {

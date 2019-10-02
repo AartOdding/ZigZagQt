@@ -2,7 +2,7 @@
 
 #include "model/basedatatype.h"
 #include "model/baseoperator.h"
-#include "model/parameter/int64parameter.h"
+#include "model/parameter/intparameter.h"
 
 #include <iostream>
 

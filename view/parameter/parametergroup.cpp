@@ -7,8 +7,8 @@
 
 #include "enumwidget.h"
 
-#include "model/parameter/parametercomponentint64.h"
-#include "model/parameter/parametercomponentdouble.h"
+#include "model/parameter/intparametercomponent.h"
+#include "model/parameter/floatparametercomponent.h"
 #include "int64parameterbox.h"
 #include "doubleparameterbox.h"
 #include "buttonparameterbox.h"
@@ -67,11 +67,11 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
     {
         return new ButtonParameterBox(this, static_cast<ButtonPar*>(par));
     }
-    else if (par->get_component(0)->get_type() == ParameterComponent::Int64)
+    else if (par->get_component(0)->get_component_type() == BaseParameterComponent::Int64)
     {
         if (par->num_components() == 1)
         {
-            return new Int64ParameterBox(this, static_cast<ParameterComponentInt64*>(par->get_component(0)));
+            return new Int64ParameterBox(this, static_cast<IntParameterComponent*>(par->get_component(0)));
         }
         else
         {
@@ -81,16 +81,16 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
             for (int i = 0; i < par->num_components(); ++i)
             {
-                widget_layout->addWidget(new Int64ParameterBox(this, static_cast<ParameterComponentInt64*>(par->get_component(i))));
+                widget_layout->addWidget(new Int64ParameterBox(this, static_cast<IntParameterComponent*>(par->get_component(i))));
             }
             return widget;
         }
     }
-    else if (par->get_component(0)->get_type() == ParameterComponent::Double)
+    else if (par->get_component(0)->get_component_type() == BaseParameterComponent::Float64)
     {
         if (par->num_components() == 1)
         {
-            return new DoubleParameterBox(this, static_cast<ParameterComponentDouble*>(par->get_component(0)));
+            return new DoubleParameterBox(this, static_cast<FloatParameterComponent*>(par->get_component(0)));
         }
         else
         {
@@ -100,7 +100,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
             for (int i = 0; i < par->num_components(); ++i)
             {
-                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<ParameterComponentDouble*>(par->get_component(i))));
+                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<FloatParameterComponent*>(par->get_component(i))));
             }
             return widget;
         }

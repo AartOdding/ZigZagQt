@@ -157,13 +157,13 @@ void BaseOperator::register_data_output(BaseDataType* output)
 }
 
 
-const std::vector<ParameterComponent*>& BaseOperator::importing_parameters() const
+const std::vector<BaseParameterComponent*>& BaseOperator::importing_parameters() const
 {
     return m_importing_parameters;
 }
 
 
-const std::vector<ParameterComponent*>& BaseOperator::exporting_parameters() const
+const std::vector<BaseParameterComponent*>& BaseOperator::exporting_parameters() const
 {
     return m_exporting_parameters;
 }

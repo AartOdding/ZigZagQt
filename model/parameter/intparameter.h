@@ -3,30 +3,32 @@
 #include <array>
 #include <tuple>
 #include <optional>
+#include <cstdint>
 
 #include "baseparameter.h"
-#include "parametercomponentdouble.h"
+#include "intparametercomponent.h"
 
 
 
-using double_2 = std::array<double, 2>;
-using double_3 = std::array<double, 3>;
-using double_4 = std::array<double, 4>;
+using int64 = int64_t;
+using int64_2 = std::array<int64, 2>;
+using int64_3 = std::array<int64, 3>;
+using int64_4 = std::array<int64, 4>;
 
 
 
 template<int NUM_COMPONENTS>
-class DoubleParameter : public BaseParameter
+class IntParameter : public BaseParameter
 {
 public:
 
     static_assert(NUM_COMPONENTS >= 1 && NUM_COMPONENTS <= 4, "Invalid number of components!");
 
-    using interface_types = std::tuple<double, double_2, double_3, double_4>;
+    using interface_types = std::tuple<int64, int64_2, int64_3, int64_4>;
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    DoubleParameter(ParameterOwner * owner, const char * name, interface_type value = interface_type())
+    IntParameter(ParameterOwner * owner, const char * name, interface_type value = interface_type())
         : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
@@ -43,7 +45,7 @@ public:
     }
 
 
-    DoubleParameter(ParameterOwner * owner, const char * name, interface_type value, double min, double max)
+    IntParameter(ParameterOwner * owner, const char * name, interface_type value, int64 min, int64 max)
         : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
@@ -66,29 +68,23 @@ public:
     }
 
 
-    ParameterComponent* get_component(int index) override
+    BaseParameterComponent* get_component(int index) override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
             return &(*components[index]);
         }
-        else
-        {
-            return nullptr;
-        }
+        return nullptr;
     }
 
 
-    const ParameterComponent* get_component(int index) const override
+    const BaseParameterComponent* get_component(int index) const override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
             return &(*components[index]);
         }
-        else
-        {
-            return nullptr;
-        }
+        return nullptr;
     }
 
 
@@ -110,45 +106,45 @@ public:
     }
 
 
-    double get(int index) const
+    int64 get(int index) const
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
             return components[index]->get();
         }
-        return 0.0;
+        return 0;
     }
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 1), double> x() const
+    typename std::enable_if_t<(NUM > 1), int64> x() const
     {
         return components[0]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 1), double> y() const
+    typename std::enable_if_t<(NUM > 1), int64> y() const
     {
         return components[1]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 2), double> z() const
+    typename std::enable_if_t<(NUM > 2), int64> z() const
     {
         return components[2]->get();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 3), double> w() const
+    typename std::enable_if_t<(NUM > 3), int64> w() const
     {
         return components[3]->get();
     }
 
 
-    void set(double value)
+    void set(int64 value)
     {
         for (auto& component : components)
         {
@@ -158,7 +154,7 @@ public:
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 2), void> set(double x, double y)
+    typename std::enable_if_t<(NUM == 2), void> set(int64 x, int64 y)
     {
         components[0]->set(x);
         components[1]->set(y);
@@ -166,7 +162,7 @@ public:
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 3), void> set(double x, double y, double z)
+    typename std::enable_if_t<(NUM == 3), void> set(int64 x, int64 y, int64 z)
     {
         components[0]->set(x);
         components[1]->set(y);
@@ -175,7 +171,7 @@ public:
 
 
     template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 4), void> set(double x, double y, double z, double w)
+    typename std::enable_if_t<(NUM == 4), void> set(int64 x, int64 y, int64 z, int64 w)
     {
         components[0]->set(x);
         components[1]->set(y);
@@ -186,15 +182,15 @@ public:
 
 private:
 
-    static constexpr std::array parameter_types{ ParameterType::Float, ParameterType::Float2, ParameterType::Float3, ParameterType::Float4 };
+    static constexpr std::array parameter_types{ ParameterType::Int, ParameterType::Int2, ParameterType::Int3, ParameterType::Int4 };
 
-    std::array<std::optional<ParameterComponentDouble>, NUM_COMPONENTS> components;
+    std::array<std::optional<IntParameterComponent>, NUM_COMPONENTS> components;
 
 
 };
 
 
-using DoublePar  = DoubleParameter<1>;
-using Double2Par = DoubleParameter<2>;
-using Double3Par = DoubleParameter<3>;
-using Double4Par = DoubleParameter<4>;
+using IntPar  = IntParameter<1>;
+using Int2Par = IntParameter<2>;
+using Int3Par = IntParameter<3>;
+using Int4Par = IntParameter<4>;

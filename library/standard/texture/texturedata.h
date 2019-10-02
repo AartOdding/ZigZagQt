@@ -3,7 +3,7 @@
 #include "model/basedatatype.h"
 #include "model/enumdefinition.h"
 #include "model/parameter/enumparameter.h"
-#include "model/parameter/int64parameter.h"
+#include "model/parameter/intparameter.h"
 
 #include <QObject>
 #include <QOpenGLFunctions_3_2_Core>

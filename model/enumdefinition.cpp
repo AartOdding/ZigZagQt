@@ -8,22 +8,22 @@ static std::string null_string;
 
 
 
-EnumDefinition::EnumDefinition(const char* n)
-    : enum_name(n)
+EnumDefinition::EnumDefinition(const QString& name_)
+    : name(name_)
 { }
 
 
-EnumDefinition::EnumDefinition(const char* n, std::initializer_list<const char*> values)
-    : enum_name(n)
+EnumDefinition::EnumDefinition(const char* name_, std::initializer_list<const char*> values)
+    : name(name_)
 {
     for (const auto& value : values)
     {
-        add(value);
+        add_value(value);
     }
 }
 
 
-bool EnumDefinition::add(const char* value)
+bool EnumDefinition::add_value(const QString& value)
 {
     if (!contains(value))
     {
@@ -34,7 +34,7 @@ bool EnumDefinition::add(const char* value)
 }
 
 
-bool EnumDefinition::insert(const char* value, int index)
+bool EnumDefinition::insert_value(const QString& value, int index)
 {
     if (!contains(value))
     {
@@ -58,7 +58,7 @@ bool EnumDefinition::insert(const char* value, int index)
 }
 
 
-bool EnumDefinition::remove(int index)
+bool EnumDefinition::remove_value(int index)
 {
     if (contains(index))
     {
@@ -70,9 +70,9 @@ bool EnumDefinition::remove(int index)
 }
 
 
-bool EnumDefinition::remove(const char* value)
+bool EnumDefinition::remove_value(const QString& value)
 {
-    return remove(index_of(value));
+    return remove_value(index_of(value));
 }
 
 
@@ -82,19 +82,19 @@ bool EnumDefinition::contains(int index) const
 }
 
 
-bool EnumDefinition::contains(const char* value) const
+bool EnumDefinition::contains(const QString& value) const
 {
     return std::find(enum_values.begin(), enum_values.end(), value) != enum_values.end();
 }
 
 
-int EnumDefinition::index_of(const char* name) const
+int EnumDefinition::index_of(const QString& name) const
 {
     auto pos = std::find(enum_values.begin(), enum_values.end(), name);
 
     if (pos != enum_values.end())
     {
-        return pos - enum_values.begin();
+        return static_cast<int>(pos - enum_values.begin());
     }
     else
     {
@@ -103,44 +103,40 @@ int EnumDefinition::index_of(const char* name) const
 }
 
 
-const char * EnumDefinition::text_of(int index) const
+const QString& EnumDefinition::enum_name() const
 {
-    if (contains(index))
-    {
-        return enum_values[index].c_str();
-    }
-    else
-    {
-        return null_string.c_str();
-    }
-}
-
-
-const char * EnumDefinition::name() const
-{
-    return enum_name.c_str();
+    return name;
 }
 
 
 int EnumDefinition::size() const
 {
-    return enum_values.size();
+    return static_cast<int>(enum_values.size());
 }
 
 
-const char * EnumDefinition::operator[](int index) const
+const QString& EnumDefinition::operator[](int index) const
 {
-    return text_of(index);
+    static QString empty_string = "";
+
+    if (contains(index))
+    {
+        return enum_values[static_cast<std::vector<QString>::size_type>(index)];
+    }
+    else
+    {
+        return empty_string;
+    }
 }
 
 
-std::vector<std::string>::const_iterator EnumDefinition::begin() const
+std::vector<QString>::const_iterator EnumDefinition::begin() const
 {
     return enum_values.cbegin();
 }
 
 
-std::vector<std::string>::const_iterator EnumDefinition::end() const
+std::vector<QString>::const_iterator EnumDefinition::end() const
 {
     return enum_values.cend();
 }

@@ -36,9 +36,9 @@ public:
 
     virtual int num_components() const override { return 0; }
 
-    virtual ParameterComponent* get_component(int) override { return nullptr; }
+    virtual BaseParameterComponent* get_component(int) override { return nullptr; }
 
-    virtual const ParameterComponent* get_component(int) const override { return nullptr; }
+    virtual const BaseParameterComponent* get_component(int) const override { return nullptr; }
 
 
 private:

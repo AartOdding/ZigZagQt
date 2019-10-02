@@ -1,17 +1,17 @@
 #pragma once
 
-#include "parametercomponent.h"
+#include "baseparametercomponent.h"
 
 
 
-class ParameterComponentDouble : public ParameterComponent
+class FloatParameterComponent : public BaseParameterComponent
 {
     Q_OBJECT
 
 public:
 
-    ParameterComponentDouble(double value, BaseParameter* parameter);
-    ParameterComponentDouble(double value, double min, double max, BaseParameter* parameter);
+    FloatParameterComponent(double value, BaseParameter* parameter);
+    FloatParameterComponent(double value, double min, double max, BaseParameter* parameter);
 
     bool process_changes() override;
 

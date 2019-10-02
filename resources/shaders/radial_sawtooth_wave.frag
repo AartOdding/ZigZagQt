@@ -39,12 +39,5 @@ void main()
 
     }
 
-    if (sin(angle) > duty_cycle)
-    {
-        output_color = color_a;
-    }
-    else
-    {
-        output_color = color_b;
-    }
+    output_color = vec4(1, 0, 0, 1);
 }

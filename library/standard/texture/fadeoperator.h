@@ -33,7 +33,7 @@ public:
 
 private:
 
-    DoublePar position{ this, "Fade Position", 0, 0, 4 };
+    FloatPar position{ this, "Fade Position", 0, 0, 4 };
 
     DataInput texture_0{ this, "Input 0", TextureData::Type };
     DataInput texture_1{ this, "Input 1", TextureData::Type };

@@ -7,10 +7,10 @@
 SineWaveControlOperator::SineWaveControlOperator()
     : BaseOperator(Type)
 {
-    output.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    output.get_component(0)->set_flag(ParameterComponent::CanImport, false);
-    input.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    input.get_component(0)->set_flag(ParameterComponent::IsVisible, false);
+    output.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    output.get_component(0)->set_flag(BaseParameterComponent::CanImport, false);
+    input.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    input.get_component(0)->set_flag(BaseParameterComponent::IsVisible, false);
 }
 
 

@@ -49,7 +49,7 @@ void SineWaveOperator::run()
         // Radial sine wave shader
         radial_shader.create();
         radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/radial_square_wave.frag");
+        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/radial_sine_wave.frag");
         success = radial_shader.link();
         Q_ASSERT(success);
 
@@ -67,6 +67,7 @@ void SineWaveOperator::run()
         glUseProgram(concentric_shader.programId());
         concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
         concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
+
 
 
         glGenVertexArrays(1, &vao);

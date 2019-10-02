@@ -8,13 +8,13 @@
 ClockOperator::ClockOperator()
     : BaseOperator(Type)
 {
-    frames.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    seconds.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    minutes.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    hours.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    seconds_whole.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    minutes_whole.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
-    hours_whole.get_component(0)->set_flag(ParameterComponent::IsEditable, false);
+    frames.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    seconds.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    minutes.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    hours.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    seconds_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    minutes_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    hours_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
 }
 
 

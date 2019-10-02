@@ -1,17 +1,17 @@
 #pragma once
 
-#include "parametercomponent.h"
+#include "baseparametercomponent.h"
 
 
 
-class ParameterComponentInt64 : public ParameterComponent
+class IntParameterComponent : public BaseParameterComponent
 {
     Q_OBJECT
 
 public:
 
-    ParameterComponentInt64(int64_t value, BaseParameter* parameter);
-    ParameterComponentInt64(int64_t value, int64_t min, int64_t max, BaseParameter* parameter);
+    IntParameterComponent(int64_t value, BaseParameter* parameter);
+    IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameter* parameter);
 
     bool process_changes() override;
 

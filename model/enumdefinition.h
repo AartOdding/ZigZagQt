@@ -1,10 +1,11 @@
 #pragma once
 
-#include <string>
 #include <vector>
 #include <initializer_list>
 
 #include <QObject>
+#include <QString>
+
 
 
 class EnumDefinition : public QObject
@@ -13,28 +14,27 @@ class EnumDefinition : public QObject
 
 public:
 
-    EnumDefinition(const char* name);
-    EnumDefinition(const char* name, std::initializer_list<const char*> values);
+    EnumDefinition(const QString& enum_name);
+    EnumDefinition(const char* enum_name, std::initializer_list<const char*> enum_values);
 
-    bool add(const char* value);
-    bool insert(const char* value, int index);
+    bool add_value(const QString& value);
+    bool insert_value(const QString& value, int index);
 
-    bool remove(int index);
-    bool remove(const char* value);
+    bool remove_value(int index);
+    bool remove_value(const QString& value);
 
     bool contains(int index) const;
-    bool contains(const char* name) const;
+    bool contains(const QString& value) const;
 
-    int index_of(const char* name) const;
-    const char * text_of(int index) const;
+    int index_of(const QString& value) const;
 
-    const char * name() const;
+    const QString& enum_name() const;
     int size() const;
 
-    const char * operator[](int index) const;
+    const QString& operator[](int index) const;
 
-    std::vector<std::string>::const_iterator begin() const;
-    std::vector<std::string>::const_iterator end() const;
+    std::vector<QString>::const_iterator begin() const;
+    std::vector<QString>::const_iterator end() const;
 
 
 signals:
@@ -42,15 +42,16 @@ signals:
     /*
      * When new values are inserted, or values are removed the indexes of some values change.
      * this signal lets you know when indexes have changed. Indexes below first_invalid_index
-     * are gauranteed to still be valid.
+     * are gauranteed to still be valid. However any pointer or reference to an enum value is
+     * also invalidated, because the vector might have reallocated.
      */
     void invalidated_from(int first_invalid_index);
 
 
 private:
 
-    // Using std strings so that strngs will always be owned by the enum definition.
-    std::string enum_name;
-    std::vector<std::string> enum_values;
+    const QString name;
+
+    std::vector<QString> enum_values;
 
 };

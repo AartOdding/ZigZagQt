@@ -8,8 +8,8 @@
 
 
 
-BaseParameter::BaseParameter(ParameterOwner* owner_, ParameterType type_, const char * name_)
-    : parent(owner_), name(name_), parameter_type(type_)
+BaseParameter::BaseParameter(ParameterOwner* parent_, ParameterType type_, const QString& name_)
+    : name(name_), parent(parent_), parameter_type(type_)
 {
     // BaseOperator also inherits parameter so parent can be nullptr.
     if (parent)
@@ -58,7 +58,7 @@ void BaseParameter::process_parameter_changes()
 }
 
 
-const char * BaseParameter::get_name() const
+const QString& BaseParameter::get_name() const
 {
     return name;
 }

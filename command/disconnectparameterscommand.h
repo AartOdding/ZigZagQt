@@ -3,7 +3,7 @@
 #include <QUndoCommand>
 
 #include "model/baseoperator.h"
-#include "model/parameter/parametercomponent.h"
+#include "model/parameter/baseparametercomponent.h"
 
 #include "utility/std_containers_helpers.h"
 
@@ -14,7 +14,7 @@ class DisconnectParametersCommand : public QUndoCommand
 
 public:
 
-    DisconnectParametersCommand(ParameterComponent* exporter_, ParameterComponent* importer_)
+    DisconnectParametersCommand(BaseParameterComponent* exporter_, BaseParameterComponent* importer_)
         : exporter(exporter_), importer(importer_)
     {
         Q_ASSERT(exporter && importer && exporter != importer);
@@ -60,7 +60,7 @@ public:
 
 private:
 
-    ParameterComponent* const exporter;
-    ParameterComponent* const importer;
+    BaseParameterComponent* const exporter;
+    BaseParameterComponent* const importer;
 
 };

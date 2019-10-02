@@ -3,7 +3,7 @@
 #include <QUndoCommand>
 
 #include "model/baseoperator.h"
-#include "model/parameter/parametercomponent.h"
+#include "model/parameter/baseparametercomponent.h"
 
 #include "utility/std_containers_helpers.h"
 
@@ -14,7 +14,7 @@ class ConnectParametersCommand : public QUndoCommand
 
 public:
 
-    ConnectParametersCommand(ParameterComponent* exporter, ParameterComponent* importer_)
+    ConnectParametersCommand(BaseParameterComponent* exporter, BaseParameterComponent* importer_)
         : importer(importer_), new_exporter(exporter), initial_exporter(importer->import)
     {
         Q_ASSERT(exporter && importer && exporter != importer);
@@ -57,7 +57,7 @@ public:
 
 private:
 
-    void make_connection(ParameterComponent* exporter_, ParameterComponent* importer_) const
+    void make_connection(BaseParameterComponent* exporter_, BaseParameterComponent* importer_) const
     {
         // Add the importing/ exporting pointers in the parameters.
         importer_->import = exporter_;
@@ -67,21 +67,21 @@ private:
         importer_->get_parameter()->get_operator()->m_importing_parameters.push_back(importer_);
         exporter_->get_parameter()->get_operator()->m_exporting_parameters.push_back(exporter_);
 
-        switch (exporter_->get_type())
+        switch (exporter_->get_component_type())
         {
-        case ParameterComponent::Int64:
-            QObject::connect(exporter_, qOverload<int64_t>(&ParameterComponent::value_changed), importer_, qOverload<int64_t>(&ParameterComponent::set_later));
-            importer_->set_later(static_cast<ParameterComponentInt64*>(exporter_)->get());
+        case BaseParameterComponent::Int64:
+            QObject::connect(exporter_, qOverload<int64_t>(&BaseParameterComponent::value_changed), importer_, qOverload<int64_t>(&BaseParameterComponent::set_later));
+            importer_->set_later(static_cast<IntParameterComponent*>(exporter_)->get());
             break;
-        case ParameterComponent::Double:
-            QObject::connect(exporter_, qOverload<double>(&ParameterComponent::value_changed), importer_, qOverload<double>(&ParameterComponent::set_later));
-            importer_->set_later(static_cast<ParameterComponentDouble*>(exporter_)->get());
+        case BaseParameterComponent::Float64:
+            QObject::connect(exporter_, qOverload<double>(&BaseParameterComponent::value_changed), importer_, qOverload<double>(&BaseParameterComponent::set_later));
+            importer_->set_later(static_cast<FloatParameterComponent*>(exporter_)->get());
             break;
-        case ParameterComponent::Text:
-            QObject::connect(exporter_, qOverload<const QString&>(&ParameterComponent::value_changed), importer_, qOverload<const QString&>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Text:
+            QObject::connect(exporter_, qOverload<const QString&>(&BaseParameterComponent::value_changed), importer_, qOverload<const QString&>(&BaseParameterComponent::set_later));
             break;
-        case ParameterComponent::Reference:
-            QObject::connect(exporter_, qOverload<QObject*>(&ParameterComponent::value_changed), importer_, qOverload<QObject*>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Reference:
+            QObject::connect(exporter_, qOverload<QObject*>(&BaseParameterComponent::value_changed), importer_, qOverload<QObject*>(&BaseParameterComponent::set_later));
             break;
         }
 
@@ -90,7 +90,7 @@ private:
         emit exporter_->started_exporting_to(importer_);
     }
 
-    void break_connection(ParameterComponent* exporter_, ParameterComponent* importer_) const
+    void break_connection(BaseParameterComponent* exporter_, BaseParameterComponent* importer_) const
     {
         // Add the importing/ exporting pointers in the parameters.
         importer_->import = nullptr;
@@ -100,19 +100,19 @@ private:
         erase(importer_->get_parameter()->get_operator()->m_importing_parameters, importer_);
         erase(exporter_->get_parameter()->get_operator()->m_exporting_parameters, exporter_);
 
-        switch (exporter_->get_type())
+        switch (exporter_->get_component_type())
         {
-        case ParameterComponent::Int64:
-            QObject::disconnect(exporter_, qOverload<int64_t>(&ParameterComponent::value_changed), importer_, qOverload<int64_t>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Int64:
+            QObject::disconnect(exporter_, qOverload<int64_t>(&BaseParameterComponent::value_changed), importer_, qOverload<int64_t>(&BaseParameterComponent::set_later));
             break;
-        case ParameterComponent::Double:
-            QObject::disconnect(exporter_, qOverload<double>(&ParameterComponent::value_changed), importer_, qOverload<double>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Float64:
+            QObject::disconnect(exporter_, qOverload<double>(&BaseParameterComponent::value_changed), importer_, qOverload<double>(&BaseParameterComponent::set_later));
             break;
-        case ParameterComponent::Text:
-            QObject::disconnect(exporter_, qOverload<const QString&>(&ParameterComponent::value_changed), importer_, qOverload<const QString&>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Text:
+            QObject::disconnect(exporter_, qOverload<const QString&>(&BaseParameterComponent::value_changed), importer_, qOverload<const QString&>(&BaseParameterComponent::set_later));
             break;
-        case ParameterComponent::Reference:
-            QObject::disconnect(exporter_, qOverload<QObject*>(&ParameterComponent::value_changed), importer_, qOverload<QObject*>(&ParameterComponent::set_later));
+        case BaseParameterComponent::Reference:
+            QObject::disconnect(exporter_, qOverload<QObject*>(&BaseParameterComponent::value_changed), importer_, qOverload<QObject*>(&BaseParameterComponent::set_later));
             break;
         }
 
@@ -121,8 +121,8 @@ private:
         emit exporter_->stopped_exporting_to(importer_);
     }
 
-    ParameterComponent* const importer;
-    ParameterComponent* const new_exporter;
-    ParameterComponent* const initial_exporter;
+    BaseParameterComponent* const importer;
+    BaseParameterComponent* const new_exporter;
+    BaseParameterComponent* const initial_exporter;
 
 };

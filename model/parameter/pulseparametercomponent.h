@@ -1,16 +1,16 @@
 #pragma once
 
-#include "parametercomponent.h"
+#include "baseparametercomponent.h"
 
 
 
-class ParameterComponentSignal : public ParameterComponent
+class PulseParameterComponent : public BaseParameterComponent
 {
     Q_OBJECT
 
 public:
 
-    ParameterComponentSignal(BaseParameter* parameter);
+    PulseParameterComponent(BaseParameter* parameter);
 
     bool process_changes() override;
 

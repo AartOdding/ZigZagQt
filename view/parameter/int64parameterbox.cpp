@@ -1,11 +1,11 @@
 #include "int64parameterbox.h"
-#include "model/parameter/parametercomponentint64.h"
+#include "model/parameter/intparametercomponent.h"
 #include "utility/numeric.h"
 
 #include <numeric>
 
 
-Int64ParameterBox::Int64ParameterBox(QWidget * parent, ParameterComponentInt64* par)
+Int64ParameterBox::Int64ParameterBox(QWidget * parent, IntParameterComponent* par)
     : QSpinBox(parent), parameter(par)
 {
     Q_ASSERT(par);
@@ -16,17 +16,17 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, ParameterComponentInt64* 
     setValue(par->get());
     setEnabled(!parameter->is_importing());
 
-    connect(parameter, qOverload<int64_t>(&ParameterComponent::value_changed), this, &Int64ParameterBox::on_parameter_changed);
+    connect(parameter, qOverload<int64_t>(&BaseParameterComponent::value_changed), this, &Int64ParameterBox::on_parameter_changed);
 
-    connect(parameter, &ParameterComponent::flags_changed, this, &Int64ParameterBox::on_parameter_flags_changed);
-    connect(parameter, &ParameterComponent::started_importing_from, this, &Int64ParameterBox::on_parameter_started_importing);
-    connect(parameter, &ParameterComponent::stopped_importing_from, this, &Int64ParameterBox::on_parameters_stopped_importing);
-    connect(parameter, &ParameterComponentInt64::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
-    connect(parameter, &ParameterComponentInt64::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
+    connect(parameter, &BaseParameterComponent::flags_changed, this, &Int64ParameterBox::on_parameter_flags_changed);
+    connect(parameter, &BaseParameterComponent::started_importing_from, this, &Int64ParameterBox::on_parameter_started_importing);
+    connect(parameter, &BaseParameterComponent::stopped_importing_from, this, &Int64ParameterBox::on_parameters_stopped_importing);
+    connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
+    connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
 
-    if (par->has_flag(ParameterComponent::IsUpdateEager))
+    if (par->has_flag(BaseParameterComponent::IsUpdateEager))
     {
-        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&ParameterComponent::set_later));
+        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseParameterComponent::set_later));
     }
     else
     {
@@ -35,13 +35,13 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, ParameterComponentInt64* 
 }
 
 
-void Int64ParameterBox::on_parameter_started_importing(ParameterComponent *)
+void Int64ParameterBox::on_parameter_started_importing(BaseParameterComponent *)
 {
     setEnabled(false);
 }
 
 
-void Int64ParameterBox::on_parameters_stopped_importing(ParameterComponent *)
+void Int64ParameterBox::on_parameters_stopped_importing(BaseParameterComponent *)
 {
     setEnabled(true);
 }
@@ -73,18 +73,18 @@ void Int64ParameterBox::on_parameter_max_changed(int64_t new_max)
 
 void Int64ParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
 {
-    if ((old_flags & ParameterComponent::IsUpdateEager) != (new_flags & ParameterComponent::IsUpdateEager))
+    if ((old_flags & BaseParameterComponent::IsUpdateEager) != (new_flags & BaseParameterComponent::IsUpdateEager))
     {
-        if (parameter->has_flag(ParameterComponent::IsUpdateEager))
+        if (parameter->has_flag(BaseParameterComponent::IsUpdateEager))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
-            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&ParameterComponent::set_later));
+            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseParameterComponent::set_later));
         }
         else
         {
-            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&ParameterComponent::set_later));
+            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseParameterComponent::set_later));
             connect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
         }
     }
-    setEnabled(parameter->has_flag(ParameterComponent::IsEditable) && !parameter->is_importing());
+    setEnabled(parameter->has_flag(BaseParameterComponent::IsEditable) && !parameter->is_importing());
 }

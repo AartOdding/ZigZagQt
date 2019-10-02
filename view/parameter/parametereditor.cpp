@@ -3,13 +3,18 @@
 #include "view/operatorview.h"
 
 #include <QGraphicsScene>
-
+#include <QtGlobal>
 
 
 ParameterEditor::ParameterEditor(QWidget* parent)
     : QWidget(parent)
 {
     setWindowFlag(Qt::Window);
+
+#ifdef Q_OS_MAC
+    setParent(nullptr);
+    setWindowFlags(Qt::WindowStaysOnTopHint);
+#endif
 
     outer_layout.setMargin(0);
     outer_layout.setSpacing(0);

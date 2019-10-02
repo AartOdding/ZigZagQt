@@ -1,42 +1,41 @@
-#include "fadeoperator.h"
+#include "displacementoperator.h"
 
 
 #include <iostream>
 #include <cmath>
 
-bool FadeOperator::gpu_resources_initialized = false;
-QOpenGLShaderProgram FadeOperator::shader;
-GLuint FadeOperator::vao;
-GLuint FadeOperator::vbo;
+bool DisplacementOperator::gpu_resources_initialized = false;
+QOpenGLShaderProgram DisplacementOperator::shader;
+GLuint DisplacementOperator::vao;
+GLuint DisplacementOperator::vbo;
 
 
 // Draws the whole screen with GL_TRIANGLE_STRIP
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
-FadeOperator::FadeOperator()
+DisplacementOperator::DisplacementOperator()
     : BaseOperator(Type)
 {
     initializeOpenGLFunctions();
 }
 
 
-void FadeOperator::run()
+void DisplacementOperator::run()
 {
     if (!gpu_resources_initialized)
     {
         gpu_resources_initialized = true;
         shader.create();
         shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/fade.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/displace.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 
         glUseProgram(shader.programId());
         shader.setUniformValue(shader.uniformLocation("output_range_x"), 0.0f, 1.0f);
         shader.setUniformValue(shader.uniformLocation("output_range_y"), 0.0f, 1.0f);
-        shader.setUniformValue(shader.uniformLocation("input_a"), 0);
-        shader.setUniformValue(shader.uniformLocation("input_b"), 1);
+        shader.setUniformValue(shader.uniformLocation("input_texture"), 0);
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -53,12 +52,7 @@ void FadeOperator::run()
         glBindVertexArray(0);
     }
 
-    int index_a = std::floor(position.get());
-    int index_b = std::ceil(position.get());
-    double whole;
-    float fract = modf(position.get(), &whole);
-
-
+    /*
     const TextureData* tex_a = static_cast<const TextureData*>(textures[index_a]->get_connection());
     const TextureData* tex_b = static_cast<const TextureData*>(textures[index_b]->get_connection());
 
@@ -87,10 +81,12 @@ void FadeOperator::run()
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     update_view();
+
+    */
 }
 
 
-void FadeOperator::parameter_changed(BaseParameter* parameter)
+void DisplacementOperator::parameter_changed(BaseParameter* parameter)
 {
 
 }

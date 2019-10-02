@@ -5,9 +5,9 @@
 #include "testdata.h"
 #include "library/standard/texture/texturedata.h"
 #include "model/datainput.h"
-#include "model/parameter/int64parameter.h"
+#include "model/parameter/intparameter.h"
 #include "model/parameter/enumparameter.h"
-#include "model/parameter/doubleparameter.h"
+#include "model/parameter/floatparameter.h"
 #include "library/standard/test/testdataview.h"
 
 
@@ -37,7 +37,7 @@ public:
 
     void parameter_changed(BaseParameter* par) override
     {
-        std::cout << "par changed " << par->get_name() << "\n";
+        std::cout << "par changed " << par->get_name().toStdString() << "\n";
     }
 
 
@@ -66,7 +66,7 @@ private:
     IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };
     IntPar resolution_y{ this, "Resolution Y", 600, 0, 255 };
     IntPar resolution_z{ this, "Resolution Z", 300, 0, 255 };
-    DoublePar test_float{ this, "test float", 0.3 };
+    FloatPar test_float{ this, "test float", 0.3 };
 
     //DataInput input1{ this, TestData::Type };
     //DataInput input2{ this, TestData::Type };

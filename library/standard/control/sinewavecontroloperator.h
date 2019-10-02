@@ -19,10 +19,10 @@ public:
 
 private:
 
-    DoublePar output   { this, "Output",    0 };
-    DoublePar input    { this, "Input",     0 };
-    DoublePar amplitude{ this, "Amplitude", 1 };
-    DoublePar offset   { this, "Offset",    0 };
-    DoublePar period   { this, "Period",    5, 0, INT_MAX };
+    FloatPar output   { this, "Output",    0 };
+    FloatPar input    { this, "Input",     0 };
+    FloatPar amplitude{ this, "Amplitude", 1 };
+    FloatPar offset   { this, "Offset",    0 };
+    FloatPar period   { this, "Period",    5, 0, INT_MAX };
 
 };

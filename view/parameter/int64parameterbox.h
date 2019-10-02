@@ -3,8 +3,8 @@
 #include <QSpinBox>
 
 
-class ParameterComponent;
-class ParameterComponentInt64;
+class BaseParameterComponent;
+class IntParameterComponent;
 
 
 
@@ -14,13 +14,13 @@ class Int64ParameterBox : public QSpinBox
 
 public:
 
-    Int64ParameterBox(QWidget * parent, ParameterComponentInt64 * parameter);
+    Int64ParameterBox(QWidget * parent, IntParameterComponent * parameter);
 
 
 public slots:
 
-    void on_parameter_started_importing(ParameterComponent * exporter);
-    void on_parameters_stopped_importing(ParameterComponent * exporter);
+    void on_parameter_started_importing(BaseParameterComponent * exporter);
+    void on_parameters_stopped_importing(BaseParameterComponent * exporter);
 
     void on_editing_finished();
 
@@ -32,6 +32,6 @@ public slots:
 
 private:
 
-    ParameterComponentInt64 * parameter;
+    IntParameterComponent * parameter;
 
 };

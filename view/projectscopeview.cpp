@@ -8,7 +8,7 @@
 #include "view/parameterconnector.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
-#include "model/parameter/parametercomponent.h"
+#include "model/parameter/baseparametercomponent.h"
 
 #include <QPointer>
 #include <QKeyEvent>
@@ -182,7 +182,7 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 }
 
 
-void ProjectScopeView::on_parameters_connected(ParameterComponent * exporter, ParameterComponent * importer)
+void ProjectScopeView::on_parameters_connected(BaseParameterComponent * exporter, BaseParameterComponent * importer)
 {
     OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
     OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];
@@ -209,7 +209,7 @@ void ProjectScopeView::on_parameters_connected(ParameterComponent * exporter, Pa
 }
 
 
-void ProjectScopeView::on_parameter_disconnected(ParameterComponent * exporter, ParameterComponent * importer)
+void ProjectScopeView::on_parameter_disconnected(BaseParameterComponent * exporter, BaseParameterComponent * importer)
 {
     OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
     OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];

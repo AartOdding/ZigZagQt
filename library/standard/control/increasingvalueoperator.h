@@ -24,9 +24,9 @@ private:
 
     void recalculate();
 
-    DoublePar value   { this, "Value", 0 };
+    FloatPar value   { this, "Value", 0 };
     ButtonPar reset    { this, "Reset"    };
-    DoublePar speed    { this, "Speed", 0 };
+    FloatPar speed    { this, "Speed", 0 };
 
     float last_frame_time = 0;
 

@@ -36,6 +36,7 @@ SOURCES += \
         library/standard/texture/coloroperator.cpp \
         library/standard/texture/concentricsawtoothwaveoperator.cpp \
         library/standard/texture/concentricsinewaveoperator.cpp \
+        library/standard/texture/displacementoperator.cpp \
         library/standard/texture/fadeoperator.cpp \
         library/standard/texture/kinect2textureoperator.cpp \
         library/standard/texture/noiseoperator.cpp \
@@ -55,14 +56,14 @@ SOURCES += \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
         model/parameter/baseparameter.cpp \
+        model/parameter/baseparametercomponent.cpp \
         model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
-        model/parameter/parametercomponent.cpp \
-        model/parameter/parametercomponentdouble.cpp \
-        model/parameter/parametercomponentint64.cpp \
-        model/parameter/parametercomponentsignal.cpp \
+        model/parameter/floatparametercomponent.cpp \
+        model/parameter/intparametercomponent.cpp \
         model/parameter/parameterowner.cpp \
         model/parameter/parameterrow.cpp \
+        model/parameter/pulseparametercomponent.cpp \
         model/parameter/transform.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
         library/standard/texture/coloroperator.h \
         library/standard/texture/concentricsawtoothwaveoperator.h \
         library/standard/texture/concentricsinewaveoperator.h \
+        library/standard/texture/displacementoperator.h \
         library/standard/texture/fadeoperator.h \
         library/standard/texture/kinect2textureoperator.h \
         library/standard/texture/noiseoperator.h \
@@ -130,16 +132,16 @@ HEADERS += \
         model/enumdefinition.h \
         model/namemanager.h \
         model/parameter/baseparameter.h \
+        model/parameter/baseparametercomponent.h \
         model/parameter/buttonparameter.h \
-        model/parameter/doubleparameter.h \
         model/parameter/enumparameter.h \
-        model/parameter/int64parameter.h \
-        model/parameter/parametercomponent.h \
-        model/parameter/parametercomponentdouble.h \
-        model/parameter/parametercomponentint64.h \
-        model/parameter/parametercomponentsignal.h \
+        model/parameter/floatparameter.h \
+        model/parameter/floatparametercomponent.h \
+        model/parameter/intparameter.h \
+        model/parameter/intparametercomponent.h \
         model/parameter/parameterowner.h \
         model/parameter/parameterrow.h \
+        model/parameter/pulseparametercomponent.h \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \

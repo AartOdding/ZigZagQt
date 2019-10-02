@@ -23,9 +23,9 @@ private:
 
     ButtonPar reset_button{ this, "Reset" };
     IntPar frames{ this, "Frames" };
-    DoublePar seconds{ this, "Seconds", 0 };
-    DoublePar minutes{ this, "Minutes", 0 };
-    DoublePar hours{ this, "Hours", 0 };
+    FloatPar seconds{ this, "Seconds", 0 };
+    FloatPar minutes{ this, "Minutes", 0 };
+    FloatPar hours{ this, "Hours", 0 };
     IntPar seconds_whole{ this, "Seconds Whole", 0 };
     IntPar minutes_whole{ this, "Minutes Whole", 0 };
     IntPar hours_whole{ this, "Hours Whole", 0 };

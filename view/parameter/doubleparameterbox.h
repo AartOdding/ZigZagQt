@@ -3,8 +3,8 @@
 #include <QDoubleSpinBox>
 
 
-class ParameterComponent;
-class ParameterComponentDouble;
+class BaseParameterComponent;
+class FloatParameterComponent;
 
 
 
@@ -14,13 +14,13 @@ class DoubleParameterBox : public QDoubleSpinBox
 
 public:
 
-    DoubleParameterBox(QWidget * parent, ParameterComponentDouble * parameter);
+    DoubleParameterBox(QWidget * parent, FloatParameterComponent * parameter);
 
 
 public slots:
 
-    void on_parameter_started_importing(ParameterComponent * exporter);
-    void on_parameters_stopped_importing(ParameterComponent * exporter);
+    void on_parameter_started_importing(BaseParameterComponent * exporter);
+    void on_parameters_stopped_importing(BaseParameterComponent * exporter);
 
     void on_editing_finished();
 
@@ -32,6 +32,6 @@ public slots:
 
 private:
 
-    ParameterComponentDouble * parameter;
+    FloatParameterComponent * parameter;
 
 };

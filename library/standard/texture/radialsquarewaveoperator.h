@@ -30,14 +30,14 @@ public:
 
 private:
 
-    Double4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
-    Double4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
-    DoublePar duty_cycle{ this, "Duty Cycle", 0, -1, 1 };
-    DoublePar frequency{ this, "Frequency", 6, 0.5, 1000000 };
+    Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
+    Float4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+    FloatPar duty_cycle{ this, "Duty Cycle", 0, -1, 1 };
+    FloatPar frequency{ this, "Frequency", 6, 0.5, 1000000 };
 
-    Double2Par translation{ this, "Translate", { 0, 0 } };
-    DoublePar rotation{ this, "Rotate", 0 };
-    Double2Par scale{ this, "Scale", { 1, 1 } };
+    Float2Par translation{ this, "Translate", { 0, 0 } };
+    FloatPar rotation{ this, "Rotate", 0 };
+    Float2Par scale{ this, "Scale", { 1, 1 } };
 
     TextureData output_texture{ this, "Texture" };
 

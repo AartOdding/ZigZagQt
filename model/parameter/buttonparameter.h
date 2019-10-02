@@ -1,7 +1,7 @@
 #pragma once
 
 #include "baseparameter.h"
-#include "parametercomponentsignal.h"
+#include "pulseparametercomponent.h"
 
 
 
@@ -15,13 +15,13 @@ public:
 
     int num_components() const { return 1; }
 
-    ParameterComponent* get_component(int index) { return index == 0 ? &signal_component : nullptr; }
+    BaseParameterComponent* get_component(int index) { return index == 0 ? &signal_component : nullptr; }
 
-    const ParameterComponent* get_component(int index) const { return index == 0 ? &signal_component : nullptr; }
+    const BaseParameterComponent* get_component(int index) const { return index == 0 ? &signal_component : nullptr; }
 
 
 private:
 
-    ParameterComponentSignal signal_component;
+    PulseParameterComponent signal_component;
 
 };
