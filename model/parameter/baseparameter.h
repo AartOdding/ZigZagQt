@@ -9,23 +9,28 @@ class BaseOperator;
 class ParameterOwner;
 class BaseParameterComponent;
 
+class XmlSerializer;
+class QXmlStreamReader;
 
 
-enum class ParameterType : int64_t // Use 8 byte int for better alignment.
+
+enum class ParameterType : qint64 // 8 Byte int for better alignment.
 {
-    Float,
-    Float2,
-    Float3,
-    Float4,
-    Int,
-    Int2,
-    Int3,
-    Int4,
-    Enum,
-    Button,
-    Matrix3x3,
-    Matrix4x4,
-    ParameterOwner,
+    Int  = 0,
+    Int2 = 1,
+    Int3 = 2,
+    Int4 = 3,
+    Float  = 4,
+    Float2 = 5,
+    Float3 = 6,
+    Float4 = 7,
+    Enum   = 8,
+    Button = 9,
+    Matrix3x3 = 10,
+    Matrix4x4 = 11,
+    // Add more here
+
+    ParameterOwner = 500,
 };
 
 
@@ -60,17 +65,9 @@ public:
     BaseOperator * get_operator() const;
 
 
-    // The default implementation of set_from_xml will loop through all the components and set them from the xml file.
-    // If you decide to override this function you need to make sure that either you deserialize all the parameters
-    // yourself, or that you only deserialize the non parameter members, and call the set_from_xml function in the base
-    // implementation, "BaseParameter::set_from_xml();"
-    //virtual void set_from_xml();
+    virtual void set_from_xml(QXmlStreamReader& xml);
 
-    // The default implementation of get_as_xml will loop through all the components and return them as xml.
-    // If you decide to override this function you need to make sure that either you serialize all the parameters
-    // yourself, or that you only serialize the non parameter members, and call the get_as_xml function in the base
-    // implementation, "BaseParameter::get_as_xml();"
-    //virtual void get_as_xml();
+    virtual void write_to_xml(XmlSerializer& xml);
 
 
 private:

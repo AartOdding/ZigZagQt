@@ -5,6 +5,8 @@
 
 class BaseParameter;
 
+class XmlSerializer;
+class QXmlStreamReader;
 
 
 
@@ -14,7 +16,7 @@ class BaseParameterComponent : public QObject
 
 public:
 
-    enum ParameterComponentType : int32_t
+    enum ParameterComponentType : qint32
     {
         Int64,
         Float64,
@@ -22,7 +24,7 @@ public:
         Reference
     };
 
-    enum ParameterFlags : int32_t   // Consequence when false.
+    enum ParameterFlags : quint32   // Consequence when false.
     {
         CanImport     =  1<<0,       // When false parameter will be hidden from import menu.
         CanExport     =  1<<1,       // When false arameter will be hidden from export menu.
@@ -63,6 +65,10 @@ public:
     // Should return true if the value was changed, because the owning parameter has to know.
     virtual bool process_changes() = 0;
 
+
+    virtual void set_from_xml(QXmlStreamReader& xml);
+
+    virtual void write_to_xml(XmlSerializer& xml);
 
 public slots:
 

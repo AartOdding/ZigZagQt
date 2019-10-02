@@ -1,8 +1,11 @@
 #include "baseparametercomponent.h"
 #include "application.h"
+#include "model/xmlserializer.h"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
 
+
+#include <QXmlStreamReader>
 
 
 BaseParameterComponent::BaseParameterComponent(BaseParameter * parameter_, ParameterComponentType type_)
@@ -116,3 +119,49 @@ void BaseParameterComponent::stop_exporting()
         exports.back()->stop_importing();
     }
 }
+
+
+void BaseParameterComponent::set_from_xml(QXmlStreamReader& xml)
+{
+
+}
+
+
+void BaseParameterComponent::write_to_xml(XmlSerializer& xml)
+{
+    xml.begin_element("BaseParameterComponent");
+    xml.add_int_attribute("id", xml.id(this));
+
+        xml.add_int_element("component_type", static_cast<qint32>(component_type));
+        xml.add_int_element("flags", static_cast<quint32>(flags));
+        xml.add_int_element("import", xml.id(import));
+
+        xml.begin_element("exports");
+        xml.add_int_attribute("size", exports.size());
+
+            for (auto e : exports)
+            {
+                xml.add_int_element("export", xml.id(e));
+            }
+
+        xml.end_element(); // ends exports
+
+    xml.end_element(); // ends BaseParameterComponent
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

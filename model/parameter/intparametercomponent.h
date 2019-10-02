@@ -19,6 +19,9 @@ public:
     int64_t get_min() const;
     int64_t get_max() const;
 
+    void set_from_xml(QXmlStreamReader& xml) override;
+    void write_to_xml(XmlSerializer& xml) override;
+
 public slots:
 
     void set(int64_t value);

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cmath>
 
+
+
 bool FadeOperator::gpu_resources_initialized = false;
 QOpenGLShaderProgram FadeOperator::shader;
 GLuint FadeOperator::vao;

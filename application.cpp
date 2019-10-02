@@ -103,10 +103,10 @@ Application::Application(int &argc, char **argv)
     clock = std::make_unique<Clock>();
     library_model = std::make_unique<LibraryModel>();
 
-    //library_model->register_data_type(TestData::Type);
+    library_model->register_data_type(TestData::Type);
     library_model->register_data_type(TextureData::Type);
 
-    //library_model->register_operator(TestOperator::Type);
+    library_model->register_operator(TestOperator::Type);
     library_model->register_operator(BlendOperator::Type);
     library_model->register_operator(FadeOperator::Type);
     //library_model->register_operator(ColorOperator::Type);

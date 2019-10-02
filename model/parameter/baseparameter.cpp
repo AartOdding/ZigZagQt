@@ -1,10 +1,14 @@
 #include "baseparameter.h"
 #include "parameterowner.h"
 #include "application.h"
+
 #include "model/baseoperator.h"
+#include "model/xmlserializer.h"
 
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
+
+#include <QXmlStreamWriter>
 
 
 
@@ -87,3 +91,50 @@ BaseOperator * BaseParameter::get_operator() const
         return parent->get_operator();
     }
 }
+
+
+void BaseParameter::set_from_xml(QXmlStreamReader& xml)
+{
+
+}
+
+
+void BaseParameter::write_to_xml(XmlSerializer& xml)
+{
+    xml.begin_element("BaseParameter");
+    xml.add_int_attribute("id", xml.id(this));
+
+        xml.add_int_element("parameter_type", static_cast<qint64>(parameter_type));
+        xml.add_text_element("name", name);
+
+        xml.begin_element("components");
+        xml.add_int_attribute("size", num_components());
+
+            for (int i = 0; i < num_components(); ++i)
+            {
+                get_component(i)->write_to_xml(xml);
+            }
+
+        xml.end_element(); // ends components
+
+    xml.end_element(); // ends BaseParameter
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -67,6 +67,7 @@ SOURCES += \
         model/parameter/transform.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
+        model/xmlserializer.cpp \
         view/baseconnector.cpp \
         view/basedataview.cpp \
         view/cable.cpp \
@@ -145,6 +146,7 @@ HEADERS += \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \
+        model/xmlserializer.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         utility/numeric.h \

@@ -14,6 +14,7 @@
 // Implementation in testoperator.cpp
 BaseOperator * create_test_operator();
 
+#include "model/xmlserializer.h"
 
 
 class TestOperator : public BaseOperator
@@ -32,6 +33,16 @@ public:
         std::cout << "TestOperator - constructor\n";
         //resolution_x.set_minimal_updates(true);
         //resolution_y.set_minimal_updates(true);
+
+        XmlSerializer xml;
+
+        write_to_xml(xml);
+
+        int4test.write_to_xml(xml);
+
+        xml.xml_stream.writeEndDocument();
+
+        std::cout << xml.test_string.toStdString() << "\n";
     }
 
 
@@ -66,6 +77,7 @@ private:
     IntPar resolution_x{ this, "Resolution X", 600, 0, 255 };
     IntPar resolution_y{ this, "Resolution Y", 600, 0, 255 };
     IntPar resolution_z{ this, "Resolution Z", 300, 0, 255 };
+    Int4Par int4test{ this, "int4test", { 10, 11, 12, 13 }, -10, 30 };
     FloatPar test_float{ this, "test float", 0.3 };
 
     //DataInput input1{ this, TestData::Type };

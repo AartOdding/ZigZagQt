@@ -1,5 +1,6 @@
 #include "intparametercomponent.h"
 #include "utility/numeric.h"
+#include "model/xmlserializer.h"
 
 #include <numeric>
 
@@ -113,4 +114,26 @@ void IntParameterComponent::set_later(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
+}
+
+
+void IntParameterComponent::set_from_xml(QXmlStreamReader& xml)
+{
+
+}
+
+
+void IntParameterComponent::write_to_xml(XmlSerializer& xml)
+{
+    xml.begin_element("IntParameterComponent");
+
+        BaseParameterComponent::write_to_xml(xml);
+
+        xml.add_int_element("current_value", current_value);
+        xml.add_int_element("min_value", min_value);
+        xml.add_int_element("max_value", max_value);
+        xml.add_int_element("pending_value", pending_value);
+        xml.add_int_element("new_value_pending", new_value_pending);
+
+    xml.end_element();
 }
