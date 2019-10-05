@@ -28,8 +28,8 @@ public:
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    IntParameter(ParameterOwner * owner, const char * name, interface_type value = interface_type())
-        : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
+    IntParameter(BaseParameter * parent, const char * name, interface_type value = interface_type())
+        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -45,8 +45,8 @@ public:
     }
 
 
-    IntParameter(ParameterOwner * owner, const char * name, interface_type value, int64 min, int64 max)
-        : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
+    IntParameter(BaseParameter * parent, const char * name, interface_type value, int64 min, int64 max)
+        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {

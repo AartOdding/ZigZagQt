@@ -1,6 +1,6 @@
 #include "viewport.h"
 
-
+#include <QMoveEvent>
 #include <QWheelEvent>
 
 #include <iostream>
@@ -21,6 +21,9 @@ Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
     setResizeAnchor(QGraphicsView::AnchorViewCenter);
     setViewport(gl);
     setRenderHint(QPainter::Antialiasing);
+
+    parameter_editor.move(width() - 260, 100);
+    parameter_editor.resize(250, 300);
 
     viewport()->setCursor(Qt::ArrowCursor);
 }
@@ -157,7 +160,12 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
 
 void Viewport::resizeEvent(QResizeEvent *event)
 {
-    //std::cout << width() << "\n";
-    //parameter_editor.setGeometry(width() - 401, 1, 400, 400);
     QGraphicsView::resizeEvent(event);
+}
+
+
+void Viewport::moveEvent(QMoveEvent* event)
+{
+    auto movement = event->pos() - event->oldPos();
+    parameter_editor.move(parameter_editor.pos() + movement);
 }

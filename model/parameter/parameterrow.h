@@ -1,7 +1,6 @@
 #pragma once
 
 #include "baseparameter.h"
-#include "parameterowner.h"
 
 /*
 class ParameterRow : public BaseParameter,

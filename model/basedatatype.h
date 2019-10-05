@@ -5,10 +5,9 @@
 #include <QColor>
 #include <QObject>
 
-#include "model/parameter/parameterowner.h"
+#include "model/parameter/baseparameter.h"
 
 class BaseOperator;
-class BaseParameter;
 class DataInput;
 
 
@@ -34,7 +33,7 @@ inline bool operator==(const DataTypeInfo& t1, const DataTypeInfo& t2)
 
 
 class BaseDataType : public QObject,
-                     public ParameterOwner
+                     public BaseParameter
 {
     Q_OBJECT
 

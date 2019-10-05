@@ -9,7 +9,6 @@
 #include "model/parameter/floatparameter.h"
 #include "model/parameter/enumparameter.h"
 #include "model/parameter/buttonparameter.h"
-#include "model/parameter/parameterowner.h"
 
 
 struct DataTypeInfo;
@@ -46,7 +45,7 @@ inline bool operator<(const OperatorTypeInfo& t1, const OperatorTypeInfo& t2)
 
 
 class BaseOperator : public QObject,
-                     public ParameterOwner
+                     public BaseParameter
 {
     Q_OBJECT
 

@@ -31,14 +31,11 @@ public:
         : BaseOperator(Type)
     {
         std::cout << "TestOperator - constructor\n";
-        //resolution_x.set_minimal_updates(true);
-        //resolution_y.set_minimal_updates(true);
-
         XmlSerializer xml;
 
         write_to_xml(xml);
 
-        int4test.write_to_xml(xml);
+        //int4test.write_to_xml(xml);
 
         xml.xml_stream.writeEndDocument();
 

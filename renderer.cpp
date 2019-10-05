@@ -6,6 +6,7 @@
 #include "model/projectmodel.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
+#include "model/basedatatype.h"
 #include "utility/std_containers_helpers.h"
 
 #include <QThread>

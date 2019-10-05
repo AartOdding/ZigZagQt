@@ -6,7 +6,6 @@
 
 
 class BaseOperator;
-class ParameterOwner;
 class BaseParameterComponent;
 
 class XmlSerializer;
@@ -30,7 +29,10 @@ enum class ParameterType : qint64 // 8 Byte int for better alignment.
     Matrix4x4 = 11,
     // Add more here
 
-    ParameterOwner = 500,
+    Operator = 500,
+    DataInput = 501,
+    DataOutput = 502,
+    DataView = 503
 };
 
 
@@ -39,43 +41,38 @@ class BaseParameter
 {
 public:
 
-    BaseParameter(ParameterOwner* parent, ParameterType parameter_type, const QString& name);
+    BaseParameter(BaseParameter* parent_parameter, ParameterType parameter_type, const QString& name);
 
     virtual ~BaseParameter();
 
+    virtual int num_components() const { return 0; }
+    virtual BaseParameterComponent* get_component(int index) { return nullptr; }
+    virtual const BaseParameterComponent* get_component(int index) const { return nullptr; }
 
-    virtual int num_components() const = 0;
+    virtual void remove_imports_exports();
 
-    virtual BaseParameterComponent* get_component(int index) = 0;
+    virtual void process_parameter_changes();
+    virtual void parameter_changed(BaseParameter*) { }
 
-    virtual const BaseParameterComponent* get_component(int index) const = 0;
-
-
-    virtual void remove_imports_exports();  // Overrides from ParameterOwner, removes imports/ exports for every component.
-
-    virtual void process_parameter_changes();  // Notifies parent operator if changed.
-
-
-    const QString & get_name() const;
-
+    const QString& get_name() const;
     ParameterType get_parameter_type() const;
 
-    ParameterOwner * get_parent() const;
-
+    bool is_operator() const;
     BaseOperator * get_operator() const;
 
+    bool has_parent_parameter() const;
+    BaseParameter * get_parent_parameter() const;
+    bool has_child_parameters() const;
+    const std::vector<BaseParameter*>& get_child_parameters() const;
 
     virtual void set_from_xml(QXmlStreamReader& xml);
-
     virtual void write_to_xml(XmlSerializer& xml);
-
 
 private:
 
+    BaseParameter * parent_parameter;
+    std::vector<BaseParameter*> child_parameters;
     QString name;
-
-    ParameterOwner * parent;
-
     ParameterType parameter_type;
 
 };

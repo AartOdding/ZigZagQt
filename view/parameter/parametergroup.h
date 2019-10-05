@@ -15,14 +15,14 @@ class ParameterGroup : public QFrame
 
 public:
 
-    explicit ParameterGroup(QWidget *parent, ParameterOwner* parameters);
+    ParameterGroup(QWidget *parent, BaseParameter* parameters);
 
 
 private:
 
     QWidget* new_widget_for_parameter(BaseParameter * parameter);
 
-    ParameterOwner * parameter_owner;
+    BaseParameter * parameters;
     QFormLayout layout{ this };
 
 };

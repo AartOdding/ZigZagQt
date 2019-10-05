@@ -107,18 +107,18 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         auto op_menu = menu->addMenu(operator_view()->operator_model.type()->name.c_str());
 
-        for (auto par : operator_view()->operator_model.get_parameters())
+        for (auto par : operator_view()->operator_model.get_child_parameters())
         {
             op_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
         }
 
         for (auto output : operator_view()->operator_model.data_outputs())
         {
-            if (output->get_parameters().size() > 0)
+            if (output->get_child_parameters().size() > 0)
             {
                 auto output_menu = menu->addMenu(output->get_name());
 
-                for (auto par : output->get_parameters())
+                for (auto par : output->get_child_parameters())
                 {
                     output_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
                 }
@@ -127,11 +127,11 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         for (auto input : operator_view()->operator_model.data_inputs())
         {
-            if (input->get_parameters().size() > 0)
+            if (input->get_child_parameters().size() > 0)
             {
                 auto input_menu = menu->addMenu(input->get_name());
 
-                for (auto par : input->get_parameters())
+                for (auto par : input->get_child_parameters())
                 {
                     input_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
                 }

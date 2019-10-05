@@ -3,16 +3,16 @@
 
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& def, int i)
-    : BaseParameter(owner, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& def, int i)
+    : BaseParameter(parent, ParameterType::Enum, name),
       definition(&def),
       index(i, 0, def.size()-1, this)
 {
 }
 
 
-EnumPar::EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& def, const QString& value)
-    : BaseParameter(owner, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& def, const QString& value)
+    : BaseParameter(parent, ParameterType::Enum, name),
       definition(&def),
       index(definition->index_of(value), 0, def.size()-1, this)
 {

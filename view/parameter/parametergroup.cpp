@@ -2,7 +2,6 @@
 
 #include "model/parameter/baseparameter.h"
 #include "model/parameter/buttonparameter.h"
-#include "model/parameter/parameterowner.h"
 #include "model/parameter/parameterrow.h"
 
 #include "enumwidget.h"
@@ -17,8 +16,8 @@
 
 
 
-ParameterGroup::ParameterGroup(QWidget *parent, ParameterOwner* parameters)
-    : QFrame(parent), parameter_owner(parameters)
+ParameterGroup::ParameterGroup(QWidget *parent, BaseParameter* parameters_)
+    : QFrame(parent), parameters(parameters_)
 {
     Q_ASSERT(parent);
     Q_ASSERT(parameters);
@@ -31,21 +30,15 @@ ParameterGroup::ParameterGroup(QWidget *parent, ParameterOwner* parameters)
     else
     {
         setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-        layout.addRow(new QLabel(parameter_owner->get_name()));
+        layout.addRow(new QLabel(parameters->get_name()));
         layout.setMargin(10);
     }
 
-
-    for (auto parameter : parameter_owner->get_parameters())
+    for (auto parameter : parameters->get_child_parameters())
     {
-        if (parameter->get_parameter_type() == ParameterType::ParameterOwner)
+        if (static_cast<int64_t>(parameter->get_parameter_type()) >= 500)
         {
-            auto owner = static_cast<ParameterOwner*>(parameter);
-
-            if (!owner->get_parameters().empty())
-            {
-                layout.addRow(new ParameterGroup(this, owner));
-            }
+            layout.addRow(new ParameterGroup(this, parameter));
         }
         else
         {

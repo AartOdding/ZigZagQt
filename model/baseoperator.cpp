@@ -1,4 +1,5 @@
 #include "baseoperator.h"
+#include "basedatatype.h"
 #include "application.h"
 
 #include "command/movecommand.h"
@@ -14,7 +15,7 @@
 
 
 BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
-    : ParameterOwner(nullptr, type_.name.c_str()), type_info(&type_)
+    : BaseParameter(nullptr, ParameterType::Operator, type_.name.c_str()), type_info(&type_)
 {
 
 }

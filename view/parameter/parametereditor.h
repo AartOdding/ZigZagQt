@@ -6,7 +6,7 @@
 
 #include "parametergroup.h"
 
-
+class Viewport;
 class BaseOperator;
 class QGraphicsScene;
 
@@ -18,9 +18,10 @@ class ParameterEditor : public QWidget
 
 public:
 
-    ParameterEditor(QWidget* parent = nullptr);
+    ParameterEditor(Viewport* viewport);
 
     void set_scene(QGraphicsScene* scene);
+
 
 public slots:
 
@@ -36,7 +37,7 @@ private:
     ParameterGroup * parameters = nullptr;
 
     QGraphicsScene* model = nullptr;
-
+    Viewport* viewport = nullptr;
 
 };
 

@@ -61,7 +61,6 @@ SOURCES += \
         model/parameter/enumparameter.cpp \
         model/parameter/floatparametercomponent.cpp \
         model/parameter/intparametercomponent.cpp \
-        model/parameter/parameterowner.cpp \
         model/parameter/parameterrow.cpp \
         model/parameter/pulseparametercomponent.cpp \
         model/parameter/transform.cpp \
@@ -140,7 +139,6 @@ HEADERS += \
         model/parameter/floatparametercomponent.h \
         model/parameter/intparameter.h \
         model/parameter/intparametercomponent.h \
-        model/parameter/parameterowner.h \
         model/parameter/parameterrow.h \
         model/parameter/pulseparametercomponent.h \
         model/parameter/transform.h \

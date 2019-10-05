@@ -2,17 +2,15 @@
 
 #include <QObject>
 
-#include "model/basedatatype.h"
-#include "model/parameter/parameterowner.h"
+#include "model/parameter/baseparameter.h"
+#include "basedatatype.h"
 
 class BaseOperator;
-class BaseParameter;
-class BaseDataType;
 
 
 
 class DataInput : public QObject,
-                  public ParameterOwner
+                  public BaseParameter
 {
     Q_OBJECT
 

@@ -1,19 +1,27 @@
 #include "parametereditor.h"
 #include "model/baseoperator.h"
+#include "view/viewport.h"
 #include "view/operatorview.h"
 
-#include <QGraphicsScene>
+#include <QIcon>
 #include <QtGlobal>
+#include <QMoveEvent>
+#include <QResizeEvent>
+#include <QGraphicsScene>
 
 
-ParameterEditor::ParameterEditor(QWidget* parent)
-    : QWidget(parent)
+ParameterEditor::ParameterEditor(Viewport* viewport_)
+    : viewport(viewport_)
 {
-    setWindowFlag(Qt::Window);
+    Q_ASSERT(viewport);
 
 #ifdef Q_OS_MAC
     setParent(nullptr);
     setWindowFlags(Qt::WindowStaysOnTopHint);
+#else
+    setParent(viewport_);
+    setWindowFlags(Qt::Window |Qt::CustomizeWindowHint | Qt::WindowTitleHint
+                   /*| Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint*/);
 #endif
 
     outer_layout.setMargin(0);
@@ -26,6 +34,9 @@ ParameterEditor::ParameterEditor(QWidget* parent)
     inner_layout.setMargin(10);
     inner_layout.setSpacing(10);
     inner_layout.addStretch();
+
+
+    scroll_area.setFrameShape(QFrame::NoFrame);
 }
 
 

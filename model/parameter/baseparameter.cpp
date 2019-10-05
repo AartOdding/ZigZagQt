@@ -1,39 +1,43 @@
 #include "baseparameter.h"
-#include "parameterowner.h"
-#include "application.h"
 
 #include "model/baseoperator.h"
 #include "model/xmlserializer.h"
+#include <QXmlStreamWriter>     // TODO replace for XmlDeserializer
 
-#include "command/connectparameterscommand.h"
-#include "command/disconnectparameterscommand.h"
-
-#include <QXmlStreamWriter>
+#include "utility/std_containers_helpers.h"
 
 
 
-BaseParameter::BaseParameter(ParameterOwner* parent_, ParameterType type_, const QString& name_)
-    : name(name_), parent(parent_), parameter_type(type_)
+
+BaseParameter::BaseParameter(BaseParameter* parent_, ParameterType type_, const QString& name_)
+    : parent_parameter(parent_), name(name_), parameter_type(type_)
 {
-    // BaseOperator also inherits parameter so parent can be nullptr.
-    if (parent)
+    if (parent_parameter)
     {
-        parent->register_parameter(this);
+        Q_ASSERT(parent_parameter != this);
+        Q_ASSERT(!contains(parent_parameter->child_parameters, this));
+        parent_parameter->child_parameters.push_back(this);
     }
 }
 
 
 BaseParameter::~BaseParameter()
 {
-    if (parent)
+    if (parent_parameter)
     {
-        parent->deregister_parameter(this);
+        auto pos = std::find(parent_parameter->child_parameters.begin(), parent_parameter->child_parameters.end(), this);
+        Q_ASSERT(pos != parent_parameter->child_parameters.end());
+        parent_parameter->child_parameters.erase(pos);
     }
 }
 
 
 void BaseParameter::remove_imports_exports()
 {
+    for (auto child : child_parameters)
+    {
+        child->remove_imports_exports();
+    }
     for (int i = 0; i < num_components(); ++i)
     {
         get_component(i)->stop_importing();
@@ -44,19 +48,26 @@ void BaseParameter::remove_imports_exports()
 
 void BaseParameter::process_parameter_changes()
 {
+    for (auto child : child_parameters)
+    {
+        child->process_parameter_changes();
+    }
+
     bool changed = false;
+
     for (int i = 0; i < num_components(); ++i)
     {
         changed |= get_component(i)->process_changes();
     }
+
     if (changed)
     {
-        ParameterOwner * owner = get_parent();
+        auto p = parent_parameter;
 
-        while(owner)
+        while(p)
         {
-            owner->parameter_changed(this);
-            owner = owner->get_parent();
+            p->parameter_changed(this);
+            p = p->get_parent_parameter();
         }
     }
 }
@@ -74,22 +85,46 @@ ParameterType BaseParameter::get_parameter_type() const
 }
 
 
-ParameterOwner * BaseParameter::get_parent() const
+bool BaseParameter::is_operator() const
 {
-    return parent;
+    return dynamic_cast<const BaseOperator*>(this);
 }
 
 
 BaseOperator * BaseParameter::get_operator() const
 {
-    if (parent->is_operator())
+    if (parent_parameter->is_operator())
     {
-        return static_cast<BaseOperator*>(parent);
+        return static_cast<BaseOperator*>(parent_parameter);
     }
     else
     {
-        return parent->get_operator();
+        return parent_parameter->get_operator();
     }
+}
+
+
+bool BaseParameter::has_parent_parameter() const
+{
+    return parent_parameter;
+}
+
+
+BaseParameter * BaseParameter::get_parent_parameter() const
+{
+    return parent_parameter;
+}
+
+
+bool BaseParameter::has_child_parameters() const
+{
+    return !child_parameters.empty();
+}
+
+
+const std::vector<BaseParameter*>& BaseParameter::get_child_parameters() const
+{
+    return child_parameters;
 }
 
 
@@ -106,6 +141,16 @@ void BaseParameter::write_to_xml(XmlSerializer& xml)
 
         xml.add_int_element("parameter_type", static_cast<qint64>(parameter_type));
         xml.add_text_element("name", name);
+
+        xml.begin_element("child_parameters");
+        xml.add_int_attribute("size", child_parameters.size());
+
+            for (auto child : child_parameters)
+            {
+                child->write_to_xml(xml);
+            }
+
+        xml.end_element(); // ends child_parameters
 
         xml.begin_element("components");
         xml.add_int_attribute("size", num_components());

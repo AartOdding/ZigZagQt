@@ -7,7 +7,7 @@
 
 
 BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo *type)
-    : ParameterOwner(parent_operator, type->name.c_str()), type_info(type)
+    : BaseParameter(parent_operator, ParameterType::DataView, type->name.c_str()), type_info(type)
 {
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
 }

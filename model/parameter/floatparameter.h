@@ -26,8 +26,8 @@ public:
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    FloatParameter(ParameterOwner * owner, const char * name, interface_type value = interface_type())
-        : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseParameter * parent, const char * name, interface_type value = interface_type())
+        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -43,8 +43,8 @@ public:
     }
 
 
-    FloatParameter(ParameterOwner * owner, const char * name, interface_type value, double min, double max)
-        : BaseParameter(owner, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseParameter * parent, const char * name, interface_type value, double min, double max)
+        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {

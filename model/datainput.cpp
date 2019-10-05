@@ -1,7 +1,6 @@
 #include "datainput.h"
 
 #include "application.h"
-#include "model/basedatatype.h"
 #include "model/baseoperator.h"
 #include "model/projectmodel.h"
 #include "command/connectcommand.h"
@@ -9,7 +8,7 @@
 
 
 DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : ParameterOwner(parent_op, name), data_type(&type_info)
+    : BaseParameter(parent_op, ParameterType::DataInput, name), data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_input(this);

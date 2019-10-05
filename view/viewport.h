@@ -33,7 +33,7 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 
     void resizeEvent(QResizeEvent *event) override;
-
+    void moveEvent(QMoveEvent* event) override;
 
 public slots:
 

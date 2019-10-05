@@ -11,7 +11,7 @@
 
 
 BaseDataType::BaseDataType(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : ParameterOwner(parent_op, name), data_type(&type_info)
+    : BaseParameter(parent_op, ParameterType::DataOutput, name), data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_output(this);

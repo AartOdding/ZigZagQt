@@ -1,7 +1,8 @@
 #pragma once
 
 #include <QGraphicsItem>
-#include "model/parameter/parameterowner.h"
+
+#include "model/parameter/baseparameter.h"
 
 
 class OperatorView;
@@ -39,7 +40,7 @@ inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
 }
 
 class BaseDataView : public QGraphicsItem,
-                     public ParameterOwner
+                     public BaseParameter
 {
 
 public:

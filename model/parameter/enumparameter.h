@@ -5,16 +5,14 @@
 #include "intparametercomponent.h"
 #include "model/enumdefinition.h"
 
-class ParameterOwner;
-
 
 
 class EnumPar : public BaseParameter
 {
 public:
 
-    EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& definition, int index = 0);
-    EnumPar(ParameterOwner * owner, const QString& name, const EnumDefinition& definition, const QString& value);
+    EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& definition, int index = 0);
+    EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& definition, const QString& value);
 
     int get_index() const;
     const QString& get_text() const;
