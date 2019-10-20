@@ -7,6 +7,8 @@
 #include "model/projectmodel.h"
 #include "model/datainput.h"
 
+#include "zigzaglib/xmlserializer.h"
+
 #include <QPointer>
 
 #include <algorithm>
@@ -169,3 +171,38 @@ const std::vector<BaseParameterComponent*>& BaseOperator::exporting_parameters()
     return m_exporting_parameters;
 }
 
+
+void BaseOperator::set_from_xml(QXmlStreamReader& xml)
+{
+
+}
+
+
+void BaseOperator::write_to_xml(XmlSerializer& xml)
+{
+    xml.begin_element("BaseOperator");
+    xml.add_int_attribute("id", xml.id(this));
+
+        BaseParameter::write_to_xml(xml);
+
+        xml.add_int_element("position_x", position_x);
+        xml.add_int_element("position_y", position_y);
+
+        xml.begin_element("inputs");
+        xml.add_int_attribute("size", inputs.size());
+            for (auto in : inputs)
+            {
+                in->write_to_xml(xml);
+            }
+        xml.end_element(); // ends inputs
+
+        xml.begin_element("outputs");
+        xml.add_int_attribute("size", outputs.size());
+            for (auto out : outputs)
+            {
+                out->write_to_xml(xml);
+            }
+        xml.end_element(); // ends outputs
+
+    xml.end_element();
+}

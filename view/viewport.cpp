@@ -10,6 +10,10 @@
 #include "application.h"
 
 
+extern QAction zoom_in_action;
+extern QAction zoom_out_action;
+extern QAction reset_zoom_action;
+
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
     : QGraphicsView(parent), parameter_editor(this)

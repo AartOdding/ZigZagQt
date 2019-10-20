@@ -14,7 +14,7 @@
 // Implementation in testoperator.cpp
 BaseOperator * create_test_operator();
 
-#include "model/xmlserializer.h"
+#include "zigzaglib/xmlserializer.h"
 
 
 class TestOperator : public BaseOperator
@@ -31,15 +31,18 @@ public:
         : BaseOperator(Type)
     {
         std::cout << "TestOperator - constructor\n";
-        XmlSerializer xml;
+
+        QString xml_string;
+
+        XmlSerializer xml{ xml_string };
 
         write_to_xml(xml);
 
         //int4test.write_to_xml(xml);
 
-        xml.xml_stream.writeEndDocument();
+        xml.finish();
 
-        std::cout << xml.test_string.toStdString() << "\n";
+        std::cout << xml_string.toStdString() << "\n";
     }
 
 

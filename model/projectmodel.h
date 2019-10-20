@@ -41,6 +41,11 @@ public slots:
     void remove_operator(BaseOperator* operator_ptr);
 
 
+    void save_to_file(const QString& path);
+
+    void load_from_file(const QString& path);
+
+
     //void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);
     //void connect_data_undoable(BaseDataBlock* output, DataBlockInput* input);
     //void disconnect_data_undoable(BaseDataBlock* output, DataBlockInput* input);

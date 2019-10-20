@@ -1,8 +1,8 @@
 #include "baseparametercomponent.h"
 #include "application.h"
-#include "model/xmlserializer.h"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
+#include "zigzaglib/xmlserializer.h"
 
 
 #include <QXmlStreamReader>

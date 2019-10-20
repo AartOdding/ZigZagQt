@@ -8,13 +8,13 @@
 #include "command/addcommand.h"
 #include "command/removecommand.h"
 
+#include <QFile>
 #include <QString>
 #include <QPointer>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
 #include <iostream>
-
 
 
 
@@ -137,4 +137,18 @@ void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
 const std::vector<BaseOperator*>& ProjectModel::all_operators() const
 {
     return operators;
+}
+
+
+void ProjectModel::save_to_file(const QString& path)
+{
+    QFile file(path);
+    file.open(QFile::WriteOnly | QFile::Truncate);
+    std::cout << "SAVEEEE\n";
+}
+
+
+void ProjectModel::load_from_file(const QString& path)
+{
+
 }

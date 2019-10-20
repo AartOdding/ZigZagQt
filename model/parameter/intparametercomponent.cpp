@@ -1,6 +1,6 @@
 #include "intparametercomponent.h"
 #include "utility/numeric.h"
-#include "model/xmlserializer.h"
+#include "zigzaglib/xmlserializer.h"
 
 #include <numeric>
 
@@ -8,7 +8,7 @@
 
 IntParameterComponent::IntParameterComponent(int64_t value, BaseParameter* parameter)
     : IntParameterComponent(value, std::numeric_limits<int64_t>::lowest(),
-                                     std::numeric_limits<int64_t>::max(), parameter)
+                                   std::numeric_limits<int64_t>::max(), parameter)
 {
 
 }

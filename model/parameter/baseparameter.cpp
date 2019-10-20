@@ -1,7 +1,7 @@
 #include "baseparameter.h"
 
 #include "model/baseoperator.h"
-#include "model/xmlserializer.h"
+#include "zigzaglib/xmlserializer.h"
 #include <QXmlStreamWriter>     // TODO replace for XmlDeserializer
 
 #include "utility/std_containers_helpers.h"

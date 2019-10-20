@@ -28,6 +28,8 @@ public:
 
     const DataTypeInfo * type() const;
 
+    virtual void set_from_xml(QXmlStreamReader& xml);
+    virtual void write_to_xml(XmlSerializer& xml);
 
 public slots:
 

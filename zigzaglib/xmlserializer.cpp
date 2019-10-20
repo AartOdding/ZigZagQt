@@ -1,10 +1,18 @@
 #include "xmlserializer.h"
-#include <QHash>
+
+#include <QFile>
 
 
+XmlSerializer::XmlSerializer(QFile& target_file)
+    : xml_stream(&target_file)
+{
+    xml_stream.setAutoFormatting(true);
+    xml_stream.writeStartDocument();
+}
 
-XmlSerializer::XmlSerializer()
-    : xml_stream(&test_string)
+
+XmlSerializer::XmlSerializer(QString& target_string)
+    : xml_stream(&target_string)
 {
     xml_stream.setAutoFormatting(true);
     xml_stream.writeStartDocument();
@@ -38,6 +46,12 @@ void XmlSerializer::add_text_element(const QString& element_name, const QString&
 void XmlSerializer::add_double_element(const QString& element_name, double value)
 {
     xml_stream.writeTextElement(element_name, QString::number(value));
+}
+
+
+void XmlSerializer::finish()
+{
+    xml_stream.writeEndDocument();
 }
 
 

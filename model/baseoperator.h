@@ -83,6 +83,8 @@ public:
     const std::vector<BaseParameterComponent*>& importing_parameters() const;
     const std::vector<BaseParameterComponent*>& exporting_parameters() const;
 
+    virtual void set_from_xml(QXmlStreamReader& xml);
+    virtual void write_to_xml(XmlSerializer& xml);
 
 public slots:
 
@@ -129,8 +131,6 @@ private:
 
     int position_x = 0;
     int position_y = 0;
-
-    bool input_has_changed = false;
 
     std::vector<DataInput*> inputs;
     std::vector<BaseDataType*> outputs;

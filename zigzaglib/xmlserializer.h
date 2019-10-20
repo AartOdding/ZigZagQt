@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <QXmlStreamWriter>
 
+class QFile;
 
 
 class XmlSerializer
@@ -11,7 +12,10 @@ class XmlSerializer
 
 public:
 
-    XmlSerializer();
+    XmlSerializer(QFile& target_file);
+
+    XmlSerializer(QString& target_string);
+
 
     void begin_element(const QString& element_name);
 
@@ -37,15 +41,16 @@ public:
         xml_stream.writeTextElement(element_name, QString::number(value));
     }
 
+    void finish();
+
     quint32 id(const void *);
 
-    QString test_string;
-
-    QXmlStreamWriter xml_stream;
 
 private:
 
     std::unordered_map<const void *, quint32> ids;
     quint32 current_id = 1337;
+
+    QXmlStreamWriter xml_stream;
 
 };

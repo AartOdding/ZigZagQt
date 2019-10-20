@@ -6,6 +6,8 @@
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
 
+#include "zigzaglib/xmlserializer.h"
+
 #include "application.h"
 
 
@@ -111,4 +113,27 @@ bool BaseDataType::remove_connection(DataInput* data_input)
         return true;
     }
     return false;
+}
+
+
+void BaseDataType::set_from_xml(QXmlStreamReader& xml)
+{
+
+}
+
+
+void BaseDataType::write_to_xml(XmlSerializer& xml)
+{
+    xml.begin_element("BaseDataType");
+    xml.add_int_attribute("id", xml.id(this));
+        BaseParameter::write_to_xml(xml);
+        xml.begin_element("connections");
+        xml.add_int_attribute("size", connections.size());
+            for (auto connection : connections)
+            {
+                xml.add_int_element("connection", xml.id(connection));
+            }
+        xml.end_element();
+
+    xml.end_element();
 }

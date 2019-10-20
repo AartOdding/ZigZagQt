@@ -1,12 +1,18 @@
 #pragma once
 
 #include <QWidget>
+#include <QAction>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
 
 #include "view/projectscopeview.h"
 #include "view/parameter/parametereditor.h"
 
+
+
+extern QAction zoom_in_action;
+extern QAction zoom_out_action;
+extern QAction reset_zoom_action;
 
 
 class Viewport : public QGraphicsView

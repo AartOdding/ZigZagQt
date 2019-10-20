@@ -66,7 +66,7 @@ SOURCES += \
         model/parameter/transform.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
-        model/xmlserializer.cpp \
+        model/types.cpp \
         view/baseconnector.cpp \
         view/basedataview.cpp \
         view/cable.cpp \
@@ -87,7 +87,12 @@ SOURCES += \
         view/projectscopeview.cpp \
         view/viewport.cpp \
         main.cpp \
-        renderer.cpp
+        renderer.cpp \
+        zigzaglib/xmldeserializer.cpp \
+        zigzaglib/xmlserializer.cpp \
+    zigzaglib/zz_functional.cpp \
+        zigzaglib/zz_object.cpp \
+        zigzaglib/zz_type.cpp \
 
 HEADERS += \
         application.h \
@@ -144,7 +149,7 @@ HEADERS += \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \
-        model/xmlserializer.h \
+        model/types.h \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         utility/numeric.h \
@@ -169,7 +174,12 @@ HEADERS += \
         view/parameterconnector.h \
         view/projectscopeview.h \
         view/viewport.h \
-        renderer.h
+        renderer.h \
+        zigzaglib/xmldeserializer.h \
+        zigzaglib/xmlserializer.h \
+        zigzaglib/zz_functional.h \
+        zigzaglib/zz_object.h \
+        zigzaglib/zz_type.h
 
 FORMS += \
         librarydialogpanel.ui \
