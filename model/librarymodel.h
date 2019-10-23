@@ -9,6 +9,23 @@ struct DataViewTypeInfo;
 struct OperatorTypeInfo;
 
 
+namespace Library
+{
+
+    struct RegisterOperator
+    {
+        RegisterOperator(const OperatorTypeInfo& type);
+        RegisterOperator(const OperatorTypeInfo* type);
+    };
+
+    struct RegisterDataType
+    {
+        RegisterDataType(const DataTypeInfo& type);
+        RegisterDataType(const DataTypeInfo* type);
+    };
+
+}
+
 
 class LibraryModel
 {
