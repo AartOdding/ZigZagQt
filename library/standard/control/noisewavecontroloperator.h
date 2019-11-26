@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
+#include "library/standard/control/ParameterPreview.hpp"
 
 
 
@@ -17,7 +18,7 @@ public:
 
     static BaseOperator * create() { return new NoiseWaveControlOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Noise Wave", "Control", { }, { }, nullptr, &create };
+    static const inline OperatorTypeInfo Type { "Noise Wave", "Control", { }, { }, &ParameterPreview::Type, &create };
 
 private:
 

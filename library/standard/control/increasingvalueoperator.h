@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
+#include "library/standard/control/ParameterPreview.hpp"
 
 
 
@@ -18,15 +19,15 @@ public:
 
     static BaseOperator * create() { return new IncreasingValueOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Increasing Value", "Control", { }, { }, nullptr, &create };
+    static const inline OperatorTypeInfo Type { "Increasing Value", "Control", { }, { }, &ParameterPreview::Type, &create };
 
 private:
 
     void recalculate();
 
-    FloatPar value   { this, "Value", 0 };
-    ButtonPar reset    { this, "Reset"    };
-    FloatPar speed    { this, "Speed", 0 };
+    FloatPar value  { this, "Value", 0 };
+    ButtonPar reset { this, "Reset"    };
+    FloatPar speed  { this, "Speed", 0 };
 
     float last_frame_time = 0;
 

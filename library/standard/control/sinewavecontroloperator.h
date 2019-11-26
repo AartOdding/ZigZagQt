@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
+#include "library/standard/control/ParameterPreview.hpp"
 
 
 
@@ -15,7 +16,7 @@ public:
 
     static BaseOperator * create() { return new SineWaveControlOperator(); }
 
-    static const inline OperatorTypeInfo Type { "Sine Wave", "Control", { }, { }, nullptr, &create };
+    static const inline OperatorTypeInfo Type { "Sine Wave", "Control", { }, { }, &ParameterPreview::Type , &create };
 
 private:
 
