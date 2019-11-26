@@ -33,6 +33,8 @@ ParameterGroup::ParameterGroup(QWidget *parent, BaseParameter* parameters_)
         layout.addRow(new QLabel(parameters->get_name()));
         layout.setMargin(10);
     }
+    layout.setVerticalSpacing(4);
+    layout.setHorizontalSpacing(7);
 
     for (auto parameter : parameters->get_child_parameters())
     {
@@ -71,6 +73,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
             auto widget = new QWidget(this);
             auto widget_layout = new QHBoxLayout(widget);
             widget_layout->setMargin(0);
+            widget_layout->setSpacing(0);
 
             for (int i = 0; i < par->num_components(); ++i)
             {
@@ -90,6 +93,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
             auto widget = new QWidget(this);
             auto widget_layout = new QHBoxLayout(widget);
             widget_layout->setMargin(0);
+            widget_layout->setSpacing(0);
 
             for (int i = 0; i < par->num_components(); ++i)
             {
