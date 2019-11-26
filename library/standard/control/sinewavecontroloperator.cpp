@@ -28,4 +28,5 @@ void SineWaveControlOperator::run()
     }
 
     output.set(amplitude.get() * std::sin(val / period.get()) + offset.get());
+    update_view();
 }

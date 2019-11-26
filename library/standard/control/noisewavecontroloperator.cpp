@@ -42,4 +42,5 @@ void NoiseWaveControlOperator::recalculate()
     {
         output.set(glm::perlin(pos) * amplitude.get() + offset.get());
     }
+    update_view();
 }

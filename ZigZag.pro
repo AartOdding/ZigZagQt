@@ -24,6 +24,7 @@ CONFIG += c++17 console
 
 SOURCES += \
         application.cpp \
+    library/standard/control/ParameterPreview.cpp \
         library/standard/control/clockoperator.cpp \
         library/standard/control/increasingvalueoperator.cpp \
         library/standard/control/noisewavecontroloperator.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
         command/disconnectparameterscommand.h \
         command/movecommand.h \
         command/removecommand.h \
+        library/standard/control/ParameterPreview.hpp \
         library/standard/control/clockoperator.h \
         library/standard/control/increasingvalueoperator.h \
         library/standard/control/noisewavecontroloperator.h \

@@ -31,4 +31,5 @@ void IncreasingValueOperator::recalculate()
     double increase = dt * speed.get();
     value.set(value.get() + increase);
     last_frame_time = time_now;
+    update_view();
 }
