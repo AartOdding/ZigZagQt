@@ -141,10 +141,9 @@ Application::Application(int &argc, char **argv)
     //auto gl = new QOpenGLWidget();
 
     main_opengl_widget = new QOpenGLWidget();
-
-    renderer = std::make_unique<Renderer>();
-
     viewport = std::make_unique<Viewport>(main_opengl_widget);
+    renderer = std::make_unique<Renderer>(main_opengl_widget);
+
     //viewport->
 
     viewport->set_view(project_view_model.get());

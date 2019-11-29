@@ -22,7 +22,7 @@ class Renderer : public QObject,
 
 public:
 
-    Renderer();
+    Renderer(QOpenGLWidget* main_opengl);
 
     ~Renderer();
 
@@ -39,8 +39,8 @@ private:
     ProjectModel* model;
 
     QOpenGLWidget opengl_widget;
-    //QOffscreenSurface opengl_surface;
-    //QOpenGLContext opengl_context;
+    QOffscreenSurface opengl_surface;
+    QOpenGLContext opengl_context;
 
     FpsMonitor fps_monitor{ 500ms };
 

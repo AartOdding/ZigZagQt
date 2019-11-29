@@ -15,12 +15,21 @@
 #include <deque>
 
 
-Renderer::Renderer()
+Renderer::Renderer(QOpenGLWidget* main_opengl)
 {
-    opengl_widget.show();
-    opengl_widget.close();
+    opengl_context.setFormat(main_opengl->format());
+    opengl_surface.setFormat(main_opengl->format());
+    opengl_context.setShareContext(main_opengl->context());
 
-    opengl_widget.makeCurrent();
+    opengl_context.create();
+    opengl_surface.create();
+
+    opengl_context.makeCurrent(&opengl_surface);
+
+    //opengl_widget.show();
+    //opengl_widget.close();
+
+    //opengl_widget.makeCurrent();
     initializeOpenGLFunctions();
 }
 
@@ -69,7 +78,8 @@ void Renderer::render_frame()
 {
     fps_monitor.frame();
 
-    opengl_widget.makeCurrent();
+    opengl_context.makeCurrent(&opengl_surface);
+    //opengl_widget.makeCurrent();
 
     std::deque<BaseOperator*> open_list;
     std::unordered_set<const BaseOperator*> closed_list;
@@ -127,4 +137,5 @@ void Renderer::render_frame()
         std::cout << fps_monitor.fps() << " fps in renderer.\n";
     }
     glFlush();
+    opengl_context.doneCurrent();
 }
