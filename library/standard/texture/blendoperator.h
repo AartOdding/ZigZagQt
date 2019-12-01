@@ -10,19 +10,7 @@
 #include "library/standard/texture/textureview.h"
 
 
-const inline EnumDefinition BlendMode
-{
-    "BlendMode",
-    {
-        "Over",
-        "Add",
-        "Subtract",
-        "Multiply",
-        "Divide",
-        "Average",
-        "Difference",
-    }
-};
+
 
 
 class BlendOperator : public BaseOperator,
@@ -35,14 +23,14 @@ public:
 
     void run() override;
 
-    static BaseOperator* create() { return new BlendOperator(); }
-
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Blend", "Video Edit",
-        { &TextureData::Type, &TextureData::Type },
-        { &TextureData::Type }, &TextureView::Type, &create };
+    static BaseOperator* create();
+
+    static const OperatorDescription description;
+
+    static const EnumDefinition BlendMode;
 
 private:
 

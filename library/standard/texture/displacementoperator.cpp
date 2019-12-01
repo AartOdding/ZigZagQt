@@ -14,6 +14,25 @@ GLuint DisplacementOperator::vbo;
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
+
+
+BaseOperator* DisplacementOperator::create()
+{
+    return new DisplacementOperator();
+}
+
+
+const OperatorDescription DisplacementOperator::Type
+{
+    "Displace",
+    "Video Edit",
+    &create,
+    { &TextureData::Type, &TextureData::Type },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
+
 DisplacementOperator::DisplacementOperator()
     : BaseOperator(Type)
 {
@@ -86,7 +105,7 @@ void DisplacementOperator::run()
 }
 
 
-void DisplacementOperator::parameter_changed(BaseParameter* parameter)
+void DisplacementOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

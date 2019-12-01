@@ -8,13 +8,12 @@
 #include "view/parameterconnector.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
-#include "model/parameter/baseparametercomponent.h"
+#include "model/parameter/BaseComponent.hpp"
 
 #include <QPointer>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include "library/standard/test/testoperator.h"
 
 
 ProjectScopeView::ProjectScopeView(QObject *parent)
@@ -182,10 +181,10 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 }
 
 
-void ProjectScopeView::on_parameters_connected(BaseParameterComponent * exporter, BaseParameterComponent * importer)
+void ProjectScopeView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
-    OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];
+    OperatorView* export_op = operator_views[exporter->getParameter()->get_operator()];
+    OperatorView* import_op = operator_views[importer->getParameter()->get_operator()];
 
     if (export_op && import_op)
     {
@@ -209,10 +208,10 @@ void ProjectScopeView::on_parameters_connected(BaseParameterComponent * exporter
 }
 
 
-void ProjectScopeView::on_parameter_disconnected(BaseParameterComponent * exporter, BaseParameterComponent * importer)
+void ProjectScopeView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->get_parameter()->get_operator()];
-    OperatorView* import_op = operator_views[importer->get_parameter()->get_operator()];
+    OperatorView* export_op = operator_views[exporter->getParameter()->get_operator()];
+    OperatorView* import_op = operator_views[importer->getParameter()->get_operator()];
 
     if (export_op && import_op)
     {

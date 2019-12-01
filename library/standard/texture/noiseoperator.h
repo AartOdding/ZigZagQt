@@ -20,13 +20,12 @@ public:
 
     void run() override;
 
-    static BaseOperator * create() { return new NoiseOperator(); }
-
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Noise", "Video Synthesis", {  },
-                                              { &TextureData::Type }, &TextureView::Type, &create };
+    static BaseOperator * create();
+
+    static const OperatorDescription description;
 
 private:
 

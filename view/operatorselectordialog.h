@@ -11,7 +11,7 @@
 
 class Viewport;
 struct DataTypeInfo;
-struct OperatorTypeInfo;
+struct OperatorDescription;
 
 
 class OperatorSelectorDialog : public QDialog
@@ -25,7 +25,7 @@ public:
 
 signals:
 
-    void operator_requested(const OperatorTypeInfo* op_type, const QPointF& where);
+    void operator_requested(const OperatorDescription* op_type, const QPointF& where);
 
 
 public slots:

@@ -37,7 +37,7 @@ private:
 
     bool is_int = true;
 
-    BaseParameterComponent * viewed_pararmeter_component;
+    BaseComponent * viewed_pararmeter_component;
 
     double floatValue = 0;
     int64_t intValue = 0;

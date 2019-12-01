@@ -9,7 +9,7 @@
 
 
 DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : BaseParameter(parent_op, ParameterType::DataInput, name), data_type(&type_info)
+    : BaseParameterOld(parent_op, ParameterType::DataInput, name), data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_input(this);
@@ -134,7 +134,7 @@ void DataInput::write_to_xml(XmlSerializer& xml)
 {
     xml.begin_element("DataInput");
     xml.add_int_attribute("id", xml.id(this));
-        BaseParameter::write_to_xml(xml);
+        BaseParameterOld::write_to_xml(xml);
         xml.add_int_element("connection", xml.id(connection));
     xml.end_element();
 }

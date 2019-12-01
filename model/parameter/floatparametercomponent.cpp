@@ -5,7 +5,7 @@
 
 
 
-FloatParameterComponent::FloatParameterComponent(double value, BaseParameter* parameter)
+FloatParameterComponent::FloatParameterComponent(double value, BaseParameterOld* parameter)
     : FloatParameterComponent(value, std::numeric_limits<double>::lowest(),
                                       std::numeric_limits<double>::max(), parameter)
 {
@@ -13,8 +13,8 @@ FloatParameterComponent::FloatParameterComponent(double value, BaseParameter* pa
 }
 
 
-FloatParameterComponent::FloatParameterComponent(double value, double min, double max, BaseParameter* parameter)
-    : BaseParameterComponent(parameter, BaseParameterComponent::Float64)
+FloatParameterComponent::FloatParameterComponent(double value, double min, double max, BaseParameterOld* parameter)
+    : BaseComponent(parameter, BaseComponent::Float64)
 {
     min_value = smallest(min, max);
     max_value = largest(min, max);
@@ -22,11 +22,11 @@ FloatParameterComponent::FloatParameterComponent(double value, double min, doubl
 }
 
 
-bool FloatParameterComponent::process_changes()
+bool FloatParameterComponent::update()
 {
     if (new_value_pending && pending_value != current_value)
     {
-        set(pending_value);
+        set_value(pending_value);
         new_value_pending = false;
         return true;
     }
@@ -34,7 +34,7 @@ bool FloatParameterComponent::process_changes()
 }
 
 
-double FloatParameterComponent::get() const
+double FloatParameterComponent::get_value() const
 {
     return current_value;
 }
@@ -52,14 +52,14 @@ double FloatParameterComponent::get_max() const
 }
 
 
-void FloatParameterComponent::set(double value)
+void FloatParameterComponent::set_value(double value)
 {
     auto constrained_value = constrain(value, min_value, max_value);
     if (constrained_value != current_value)
     {
         current_value = constrained_value;
-        emit value_changed(current_value);
-        emit value_changed(static_cast<int64_t>(current_value));
+        emit valueChanged(current_value);
+        emit valueChanged(static_cast<int64_t>(current_value));
     }
 }
 
@@ -74,7 +74,7 @@ void FloatParameterComponent::set_min(double min)
         min_value = new_min;
 
         // If min_value increased it could have become higher than current_value.
-        set(current_value);
+        set_value(current_value);
 
         // Emit after value changed is emitted, otherwise we can get a situation where value
         // can be lower than min.
@@ -93,7 +93,7 @@ void FloatParameterComponent::set_max(double max)
         max_value = new_max;
 
         // If max_value decreased it could have become lower than current_value.
-        set(current_value);
+        set_value(current_value);
 
         // Emit after value changed is emitted, otherwise we can get a situation where value
         // can be higher than max.
@@ -102,14 +102,14 @@ void FloatParameterComponent::set_max(double max)
 }
 
 
-void FloatParameterComponent::set_later(int64_t value)
+void FloatParameterComponent::set(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void FloatParameterComponent::set_later(double value)
+void FloatParameterComponent::set(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

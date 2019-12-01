@@ -1,23 +1,23 @@
 #pragma once
 
-#include "baseparametercomponent.h"
+#include "BaseComponent.hpp"
 
 
 
-class PulseParameterComponent : public BaseParameterComponent
+class PulseParameterComponent : public BaseComponent
 {
     Q_OBJECT
 
 public:
 
-    PulseParameterComponent(BaseParameter* parameter);
+    PulseParameterComponent(BaseParameterOld* parameter);
 
-    bool process_changes() override;
+    bool update() override;
 
 public slots:
 
-    void set_later(int64_t value) override;
-    void set_later(double value) override;
+    void set(int64_t value) override;
+    void set(double value) override;
 
 private:
 

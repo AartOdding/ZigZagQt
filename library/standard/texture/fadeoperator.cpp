@@ -16,8 +16,28 @@ GLuint FadeOperator::vbo;
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
+
+BaseOperator* FadeOperator::create()
+{
+    return new FadeOperator();
+}
+
+
+const OperatorDescription FadeOperator::description
+{
+    "Fade",
+    "Video Edit",
+    &create,
+    { &TextureData::Type, &TextureData::Type },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
+
+
+
 FadeOperator::FadeOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
 }
@@ -92,7 +112,7 @@ void FadeOperator::run()
 }
 
 
-void FadeOperator::parameter_changed(BaseParameter* parameter)
+void FadeOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

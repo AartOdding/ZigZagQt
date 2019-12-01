@@ -43,7 +43,7 @@ protected:
 
 public slots:
 
-    void on_operator_requested(const OperatorTypeInfo* op_type, const QPointF& where);
+    void on_operator_requested(const OperatorDescription* op_type, const QPointF& where);
 
 
 private:

@@ -6,7 +6,7 @@
 
 
 
-IntParameterComponent::IntParameterComponent(int64_t value, BaseParameter* parameter)
+IntParameterComponent::IntParameterComponent(int64_t value, BaseParameterOld* parameter)
     : IntParameterComponent(value, std::numeric_limits<int64_t>::lowest(),
                                    std::numeric_limits<int64_t>::max(), parameter)
 {
@@ -14,8 +14,8 @@ IntParameterComponent::IntParameterComponent(int64_t value, BaseParameter* param
 }
 
 
-IntParameterComponent::IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameter* parameter)
-    : BaseParameterComponent(parameter, BaseParameterComponent::Int64)
+IntParameterComponent::IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameterOld* parameter)
+    : BaseComponent(parameter, BaseComponent::Int64)
 {
     min_value = smallest(min, max);
     max_value = largest(min, max);
@@ -23,11 +23,11 @@ IntParameterComponent::IntParameterComponent(int64_t value, int64_t min, int64_t
 }
 
 
-bool IntParameterComponent::process_changes()
+bool IntParameterComponent::update()
 {
     if (new_value_pending && pending_value != current_value)
     {
-        set(pending_value);
+        set_value(pending_value);
         new_value_pending = false;
         return true;
     }
@@ -53,14 +53,14 @@ int64_t IntParameterComponent::get_max() const
 }
 
 
-void IntParameterComponent::set(int64_t value)
+void IntParameterComponent::set_value(int64_t value)
 {
     auto constrained_value = constrain(value, min_value, max_value);
     if (constrained_value != current_value)
     {
         current_value = constrained_value;
-        emit value_changed(current_value);
-        emit value_changed(static_cast<double>(current_value));
+        emit valueChanged(current_value);
+        emit valueChanged(static_cast<double>(current_value));
     }
 }
 
@@ -75,7 +75,7 @@ void IntParameterComponent::set_min(int64_t min)
         min_value = new_min;
 
         // If min_value increased it could have become higher than current_value.
-        set(current_value);
+        set_value(current_value);
 
         // Emit after value changed is emitted, otherwise we can get a situation where value
         // can be lower than min.
@@ -94,7 +94,7 @@ void IntParameterComponent::set_max(int64_t max)
         max_value = new_max;
 
         // If max_value decreased it could have become lower than current_value.
-        set(current_value);
+        set_value(current_value);
 
         // Emit after value changed is emitted, otherwise we can get a situation where value
         // can be higher than max.
@@ -103,31 +103,31 @@ void IntParameterComponent::set_max(int64_t max)
 }
 
 
-void IntParameterComponent::set_later(int64_t value)
+void IntParameterComponent::set(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void IntParameterComponent::set_later(double value)
+void IntParameterComponent::set(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void IntParameterComponent::set_from_xml(QXmlStreamReader& xml)
+void IntParameterComponent::readXml(QXmlStreamReader& xml)
 {
 
 }
 
 
-void IntParameterComponent::write_to_xml(XmlSerializer& xml)
+void IntParameterComponent::writeXml(XmlSerializer& xml)
 {
     xml.begin_element("IntParameterComponent");
 
-        BaseParameterComponent::write_to_xml(xml);
+        BaseComponent::writeXml(xml);
 
         xml.add_int_element("current_value", current_value);
         xml.add_int_element("min_value", min_value);

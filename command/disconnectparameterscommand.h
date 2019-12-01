@@ -3,7 +3,7 @@
 #include <QUndoCommand>
 
 #include "model/baseoperator.h"
-#include "model/parameter/baseparametercomponent.h"
+#include "model/parameter/BaseComponent.hpp"
 
 #include "utility/std_containers_helpers.h"
 
@@ -14,7 +14,7 @@ class DisconnectParametersCommand : public QUndoCommand
 
 public:
 
-    DisconnectParametersCommand(BaseParameterComponent* exporter_, BaseParameterComponent* importer_)
+    DisconnectParametersCommand(BaseComponent* exporter_, BaseComponent* importer_)
         : exporter(exporter_), importer(importer_)
     {
         Q_ASSERT(exporter && importer && exporter != importer);
@@ -30,12 +30,12 @@ public:
         erase(exporter->exports, importer);
 
         // Erase the parameters from their parent's list of importing/ exporting parameters.
-        erase(importer->get_parameter()->get_operator()->m_importing_parameters, importer);
-        erase(exporter->get_parameter()->get_operator()->m_exporting_parameters, exporter);
+        erase(importer->getParameter()->get_operator()->m_importing_parameters, importer);
+        erase(exporter->getParameter()->get_operator()->m_exporting_parameters, exporter);
 
-        emit importer->get_parameter()->get_operator()->parameter_stopped_importing(exporter, importer);
-        emit importer->stopped_importing_from(exporter);
-        emit exporter->stopped_exporting_to(importer);
+        emit importer->getParameter()->get_operator()->parameter_stopped_importing(exporter, importer);
+        emit importer->stoppedImportingFrom(exporter);
+        emit exporter->stoppedExportingTo(importer);
     }
 
 
@@ -49,18 +49,18 @@ public:
         exporter->exports.push_back(importer);
 
         // Add the parameters to their parent's list of importing/ exporting parameters.
-        importer->get_parameter()->get_operator()->m_importing_parameters.push_back(importer);
-        exporter->get_parameter()->get_operator()->m_exporting_parameters.push_back(exporter);
+        importer->getParameter()->get_operator()->m_importing_parameters.push_back(importer);
+        exporter->getParameter()->get_operator()->m_exporting_parameters.push_back(exporter);
 
-        emit importer->get_parameter()->get_operator()->parameter_started_importing(exporter, importer);
-        emit importer->started_importing_from(exporter);
-        emit exporter->started_exporting_to(importer);
+        emit importer->getParameter()->get_operator()->parameter_started_importing(exporter, importer);
+        emit importer->startedImportingFrom(exporter);
+        emit exporter->startedExportingTo(importer);
     }
 
 
 private:
 
-    BaseParameterComponent* const exporter;
-    BaseParameterComponent* const importer;
+    BaseComponent* const exporter;
+    BaseComponent* const importer;
 
 };

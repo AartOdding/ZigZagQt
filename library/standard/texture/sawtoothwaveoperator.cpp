@@ -21,8 +21,36 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
+
+BaseOperator * SawtoothWaveOperator::create()
+{
+    return new SawtoothWaveOperator();
+}
+
+const OperatorDescription SawtoothWaveOperator::description
+{
+    "Sawtooth Wave",
+    "Video Synthesis",
+    &create,
+    { },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
+
+const EnumDefinition SawtoothWaveOperator::WaveType
+{
+    "Wave Type",
+    {
+        "Flat",
+        "Radial",
+        "Concentric"
+    }
+};
+
+
 SawtoothWaveOperator::SawtoothWaveOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
     should_update = true;
@@ -119,7 +147,7 @@ void SawtoothWaveOperator::run()
 }
 
 
-void SawtoothWaveOperator::parameter_changed(BaseParameter* parameter)
+void SawtoothWaveOperator::parameter_changed(BaseParameterOld* parameter)
 {
     should_update = true;
 }

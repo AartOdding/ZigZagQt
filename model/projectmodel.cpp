@@ -18,8 +18,7 @@
 
 
 
-ProjectModel::ProjectModel(LibraryModel& library)
-    : operator_library(library)
+ProjectModel::ProjectModel()
 { }
 
 
@@ -41,7 +40,7 @@ void ProjectModel::undo()
 }
 
 
-void ProjectModel::add_operator(const OperatorTypeInfo& op_type, int x, int y)
+void ProjectModel::add_operator(const OperatorDescription& op_type, int x, int y)
 {
     auto op = op_type.construct();
     op->set_position(x, y);

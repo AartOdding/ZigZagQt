@@ -20,13 +20,12 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static BaseOperator* create() { return new ThresholdOperator(); }
+    static BaseOperator* create();
 
-    static const inline OperatorTypeInfo Type { "Threshold", "Texture",
-        { &TextureData::Type }, { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription description;
 
 private:
 

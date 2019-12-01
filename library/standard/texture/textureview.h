@@ -27,7 +27,7 @@ public:
 
     void paint_opengl(int res_x, int res_y) override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
     static BaseDataView* create(BaseOperator* parent_operator);
 

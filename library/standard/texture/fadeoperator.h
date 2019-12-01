@@ -22,14 +22,12 @@ public:
 
     void run() override;
 
-    static BaseOperator* create() { return new FadeOperator(); }
-
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static const inline OperatorTypeInfo Type { "Fade", "Video Edit",
-        { &TextureData::Type, &TextureData::Type },
-        { &TextureData::Type }, &TextureView::Type, &create };
+    static BaseOperator* create();
+
+    static const OperatorDescription description;
 
 private:
 

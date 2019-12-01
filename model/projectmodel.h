@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/librarymodel.h"
+#include "model/operatorlibrary.h"
 
 
 class ProjectModel;
@@ -21,7 +21,7 @@ class ProjectModel : public QObject
 
 public:
 
-    ProjectModel(LibraryModel& operator_library);
+    ProjectModel();
 
     QUndoStack* get_undo_stack();
 
@@ -35,7 +35,7 @@ public slots:
     void undo();
 
     // Undoable action
-    void add_operator(const OperatorTypeInfo& op_type, int x, int y);
+    void add_operator(const OperatorDescription& op_type, int x, int y);
 
     // Undoable action
     void remove_operator(BaseOperator* operator_ptr);
@@ -67,8 +67,6 @@ private:
 
 
     QUndoStack undo_stack;
-
-    LibraryModel& operator_library;
 
     std::vector<BaseOperator*> operators;
 

@@ -4,7 +4,7 @@
 #include <QFormLayout>
 
 
-class BaseParameter;
+class BaseParameterOld;
 class ParameterOwner;
 class ParameterRow;
 
@@ -15,14 +15,14 @@ class ParameterGroup : public QFrame
 
 public:
 
-    ParameterGroup(QWidget *parent, BaseParameter* parameters);
+    ParameterGroup(QWidget *parent, BaseParameterOld* parameters);
 
 
 private:
 
-    QWidget* new_widget_for_parameter(BaseParameter * parameter);
+    QWidget* new_widget_for_parameter(BaseParameterOld * parameter);
 
-    BaseParameter * parameters;
+    BaseParameterOld * parameters;
     QFormLayout layout{ this };
 
 };

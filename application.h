@@ -13,7 +13,6 @@ class Renderer;
 class Application;
 class ProjectModel;
 class ProjectScopeView;
-class LibraryModel;
 class NameManager;
 
 class QMainWindow;
@@ -27,7 +26,6 @@ namespace application
     Renderer*          renderer();
     NameManager *      name_manager();
     ProjectModel *     project_model();
-    LibraryModel *     library_model();
     ProjectScopeView * project_view_model();
     QOpenGLContext *   main_opengl_context();
 }
@@ -46,7 +44,6 @@ public:
     Clock *            get_clock();
     Renderer*          get_renderer();
     ProjectModel *     get_project_model();
-    LibraryModel *     get_library_model();
     ProjectScopeView * get_project_view_model();
     QOpenGLContext *   get_main_opengl_context();
 
@@ -56,7 +53,6 @@ private:
     std::unique_ptr<Clock>            clock;
     std::unique_ptr<Renderer>         renderer;
     std::unique_ptr<ProjectModel>     project_model;
-    std::unique_ptr<LibraryModel>     library_model;
     std::unique_ptr<ProjectScopeView> project_view_model;
 
     std::unique_ptr<Viewport> viewport;

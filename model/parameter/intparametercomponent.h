@@ -1,35 +1,35 @@
 #pragma once
 
-#include "baseparametercomponent.h"
+#include "BaseComponent.hpp"
 
 
 
-class IntParameterComponent : public BaseParameterComponent
+class IntParameterComponent : public BaseComponent
 {
     Q_OBJECT
 
 public:
 
-    IntParameterComponent(int64_t value, BaseParameter* parameter);
-    IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameter* parameter);
+    IntParameterComponent(int64_t value, BaseParameterOld* parameter);
+    IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameterOld* parameter);
 
-    bool process_changes() override;
+    bool update() override;
 
     int64_t get() const;
     int64_t get_min() const;
     int64_t get_max() const;
 
-    void set_from_xml(QXmlStreamReader& xml) override;
-    void write_to_xml(XmlSerializer& xml) override;
+    void readXml(QXmlStreamReader& xml) override;
+    void writeXml(XmlSerializer& xml) override;
 
 public slots:
 
-    void set(int64_t value);
+    void set_value(int64_t value);
     void set_min(int64_t min);
     void set_max(int64_t max);
 
-    void set_later(int64_t value) override;
-    void set_later(double value) override;
+    void set(int64_t value) override;
+    void set(double value) override;
 
 signals:
 

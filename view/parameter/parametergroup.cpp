@@ -1,6 +1,6 @@
 #include "parametergroup.h"
 
-#include "model/parameter/baseparameter.h"
+#include "model/parameter/baseparameterold.h"
 #include "model/parameter/buttonparameter.h"
 #include "model/parameter/parameterrow.h"
 
@@ -16,7 +16,7 @@
 
 
 
-ParameterGroup::ParameterGroup(QWidget *parent, BaseParameter* parameters_)
+ParameterGroup::ParameterGroup(QWidget *parent, BaseParameterOld* parameters_)
     : QFrame(parent), parameters(parameters_)
 {
     Q_ASSERT(parent);
@@ -50,7 +50,7 @@ ParameterGroup::ParameterGroup(QWidget *parent, BaseParameter* parameters_)
 }
 
 
-QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
+QWidget* ParameterGroup::new_widget_for_parameter(BaseParameterOld* par)
 {
     Q_ASSERT(par);
 
@@ -62,7 +62,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
     {
         return new ButtonParameterBox(this, static_cast<ButtonPar*>(par));
     }
-    else if (par->get_component(0)->get_component_type() == BaseParameterComponent::Int64)
+    else if (par->get_component(0)->getComponentType() == BaseComponent::Int64)
     {
         if (par->num_components() == 1)
         {
@@ -82,7 +82,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
             return widget;
         }
     }
-    else if (par->get_component(0)->get_component_type() == BaseParameterComponent::Float64)
+    else if (par->get_component(0)->getComponentType() == BaseComponent::Float64)
     {
         if (par->num_components() == 1)
         {

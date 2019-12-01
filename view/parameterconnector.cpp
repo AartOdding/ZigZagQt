@@ -1,7 +1,7 @@
 #include "parameterconnector.h"
 #include "application.h"
 #include "operatorview.h"
-#include "model/parameter/baseparameter.h"
+#include "model/parameter/baseparameterold.h"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 #include "model/basedatatype.h"
@@ -53,7 +53,7 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
             int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
             for (int i = 0; i < num_components; ++i)
             {
-                last_selected_parameter->get_component(i)->set_import(o->last_selected_parameter->get_component(i));
+                last_selected_parameter->get_component(i)->setImport(o->last_selected_parameter->get_component(i));
             }
             return true;
         }
@@ -62,7 +62,7 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
             int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
             for (int i = 0; i < num_components; ++i)
             {
-                o->last_selected_parameter->get_component(i)->set_import(last_selected_parameter->get_component(i));
+                o->last_selected_parameter->get_component(i)->setImport(last_selected_parameter->get_component(i));
             }
             return true;
         }
@@ -89,7 +89,7 @@ void ParameterConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void ParameterConnector::item_selected(QAction *action)
 {
-    auto par = action->data().value<BaseParameter*>();
+    auto par = action->data().value<BaseParameterOld*>();
     Q_ASSERT(par);
     last_selected_parameter = par;
     try_connect();

@@ -20,17 +20,17 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static BaseOperator * create() { return new SawtoothWaveOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Sawtooth Wave", "Video Synthesis", {  },
-                                              { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription description;
+
+    static const EnumDefinition WaveType;
 
 private:
 
-    EnumDefinition WaveType { "Wave Type", { "Flat", "Radial", "Concentric" } };
 
     Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
     Float4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };

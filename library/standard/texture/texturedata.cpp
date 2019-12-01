@@ -18,7 +18,7 @@ TextureData::~TextureData()
 }
 
 
-void TextureData::parameter_changed(BaseParameter*)
+void TextureData::parameter_changed(BaseParameterOld*)
 {
     needs_reallocation = true;
 }

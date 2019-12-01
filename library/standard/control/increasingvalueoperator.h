@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
-#include "library/standard/control/ParameterPreview.hpp"
+#include "library/standard/control/parameterpreview.h"
 
 
 
@@ -14,12 +14,12 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameter * parameter) override;
+    void parameter_changed(BaseParameterOld * parameter) override;
 
 
-    static BaseOperator * create() { return new IncreasingValueOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Increasing Value", "Control", { }, { }, &ParameterPreview::Type, &create };
+    static const OperatorDescription description;
 
 private:
 

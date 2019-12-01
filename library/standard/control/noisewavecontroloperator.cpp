@@ -4,12 +4,37 @@
 
 
 
-EnumDefinition NoiseWaveControlOperator::NoiseType{ "NoiseType", { "Simplex Noise", "Perlin Noise" } };
+BaseOperator * NoiseWaveControlOperator::create()
+{
+    return new NoiseWaveControlOperator();
+}
+
+
+const OperatorDescription NoiseWaveControlOperator::description
+{
+    "Noise Wave",
+    "Control",
+    &create,
+    { },
+    { },
+    &ParameterPreview::Type
+};
+
+
+
+const EnumDefinition NoiseWaveControlOperator::NoiseType
+{
+    "NoiseType",
+    {
+        "Simplex Noise",
+        "Perlin Noise"
+    }
+};
 
 
 
 NoiseWaveControlOperator::NoiseWaveControlOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     recalculate();
 }

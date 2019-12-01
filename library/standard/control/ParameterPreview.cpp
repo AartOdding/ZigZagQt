@@ -1,4 +1,4 @@
-#include "ParameterPreview.hpp"
+#include "parameterpreview.h"
 #include "model/baseoperator.h"
 
 #include <QPainter>
@@ -18,16 +18,16 @@ ParameterPreview::ParameterPreview(BaseOperator* parent_operator)
             viewed_pararmeter_component = par->get_component(0);
             connect(parent_operator, &BaseOperator::update_view_requested, this, &ParameterPreview::onUpdateNecessary);
 
-            if (viewed_pararmeter_component->get_component_type() == BaseParameterComponent::ParameterComponentType::Int64)
+            if (viewed_pararmeter_component->getComponentType() == BaseComponent::ComponentType::Int64)
             {
                 is_int = true;
-                connect(viewed_pararmeter_component, qOverload<int64_t>(&BaseParameterComponent::value_changed),
+                connect(viewed_pararmeter_component, qOverload<int64_t>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedInt);
             }
-            else if (viewed_pararmeter_component->get_component_type() == BaseParameterComponent::ParameterComponentType::Float64)
+            else if (viewed_pararmeter_component->getComponentType() == BaseComponent::ComponentType::Float64)
             {
                 is_int = false;
-                connect(viewed_pararmeter_component, qOverload<double>(&BaseParameterComponent::value_changed),
+                connect(viewed_pararmeter_component, qOverload<double>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedDouble);
             }
         }

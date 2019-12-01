@@ -13,9 +13,9 @@ public:
 
     void run() override;
 
-    static BaseOperator * create() { return new ClockOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Clock", "Control", { }, { }, nullptr, &create };
+    static const OperatorDescription description;
 
 private:
 

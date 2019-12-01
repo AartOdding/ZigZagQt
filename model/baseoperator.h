@@ -18,14 +18,24 @@ class BaseDataType;
 class DataInput;
 
 
-struct OperatorTypeInfo
+struct OperatorDescription
 {
+    OperatorDescription() = delete;
+
+    OperatorDescription(const std::string& name,
+                        const std::string& package,
+                        std::function<BaseOperator*()> construct,
+                        const std::vector<const DataTypeInfo*>& inputs = {},
+                        const std::vector<const DataTypeInfo*>& outputs = {},
+                        const DataViewTypeInfo * view = nullptr);
+
     std::string name;
-    std::string library;
-    std::vector<const DataTypeInfo*> input_data_types;
-    std::vector<const DataTypeInfo*> output_data_types;
-    const DataViewTypeInfo * view_type;
+    std::string package;
     std::function<BaseOperator*()> construct;
+    std::vector<const DataTypeInfo*> inputs;
+    std::vector<const DataTypeInfo*> outputs;
+    const DataViewTypeInfo * view;
+
     // USe OpenGL
     // Library
     // Image
@@ -37,7 +47,7 @@ struct OperatorTypeInfo
 };
 
 
-inline bool operator<(const OperatorTypeInfo& t1, const OperatorTypeInfo& t2)
+inline bool operator<(const OperatorDescription& t1, const OperatorDescription& t2)
 {
     return t1.name < t2.name;
 }
@@ -45,7 +55,7 @@ inline bool operator<(const OperatorTypeInfo& t1, const OperatorTypeInfo& t2)
 
 
 class BaseOperator : public QObject,
-                     public BaseParameter
+                     public BaseParameterOld
 {
     Q_OBJECT
 
@@ -54,7 +64,7 @@ class BaseOperator : public QObject,
 
 public:
 
-    BaseOperator(const OperatorTypeInfo& type);
+    BaseOperator(const OperatorDescription& type);
 
     virtual ~BaseOperator();
 
@@ -66,7 +76,7 @@ public:
 
     void update_view();
 
-    const OperatorTypeInfo * type() const;
+    const OperatorDescription * type() const;
 
 
     const std::vector<DataInput*>& data_inputs() const;
@@ -80,8 +90,8 @@ public:
     void register_data_input(DataInput* input);
     void register_data_output(BaseDataType* output);
 
-    const std::vector<BaseParameterComponent*>& importing_parameters() const;
-    const std::vector<BaseParameterComponent*>& exporting_parameters() const;
+    const std::vector<BaseComponent*>& importing_parameters() const;
+    const std::vector<BaseComponent*>& exporting_parameters() const;
 
     virtual void set_from_xml(QXmlStreamReader& xml);
     virtual void write_to_xml(XmlSerializer& xml);
@@ -104,8 +114,8 @@ signals:
     void data_input_added(DataInput * new_data_input);
     void data_output_added(BaseDataType * new_data_output);
 
-    void parameter_started_importing(BaseParameterComponent* exporter, BaseParameterComponent* importer);
-    void parameter_stopped_importing(BaseParameterComponent* exporter, BaseParameterComponent* importer);
+    void parameter_started_importing(BaseComponent* exporter, BaseComponent* importer);
+    void parameter_stopped_importing(BaseComponent* exporter, BaseComponent* importer);
 
 
 protected:
@@ -135,9 +145,9 @@ private:
     std::vector<DataInput*> inputs;
     std::vector<BaseDataType*> outputs;
 
-    std::vector<BaseParameterComponent*> m_importing_parameters;
-    std::vector<BaseParameterComponent*> m_exporting_parameters;
+    std::vector<BaseComponent*> m_importing_parameters;
+    std::vector<BaseComponent*> m_exporting_parameters;
 
-    const OperatorTypeInfo * type_info;
+    const OperatorDescription * type_info;
 
 };

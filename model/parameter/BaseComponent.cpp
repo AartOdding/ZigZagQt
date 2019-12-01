@@ -1,4 +1,4 @@
-#include "baseparametercomponent.h"
+#include "BaseComponent.hpp"
 #include "application.h"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
@@ -8,75 +8,75 @@
 #include <QXmlStreamReader>
 
 
-BaseParameterComponent::BaseParameterComponent(BaseParameter * parameter_, ParameterComponentType type_)
-    : parameter(parameter_), component_type(type_)
+BaseComponent::BaseComponent(BaseParameterOld * parameter_, ComponentType type_)
+    : parameter(parameter_), m_componentType(type_)
 {
 
 }
 
 
-BaseParameterComponent::ParameterComponentType BaseParameterComponent::get_component_type() const
+BaseComponent::ComponentType BaseComponent::getComponentType() const
 {
-    return component_type;
+    return m_componentType;
 }
 
 
-BaseParameter * BaseParameterComponent::get_parameter() const
+BaseParameterOld * BaseComponent::getParameter() const
 {
     return parameter;
 }
 
 
-int BaseParameterComponent::get_flags() const
+int BaseComponent::getFlags() const
 {
     return flags;
 }
 
 
-bool BaseParameterComponent::has_flag(ParameterFlags flag) const
+bool BaseComponent::hasFlag(ParameterFlags flag) const
 {
     return (flags & flag) != 0;
 }
 
 
-bool BaseParameterComponent::is_importing() const
+bool BaseComponent::isImporting() const
 {
     return import != nullptr;
 }
 
 
-bool BaseParameterComponent::is_exporting() const
+bool BaseComponent::isExporting() const
 {
     return !exports.empty();
 }
 
 
-BaseParameterComponent * BaseParameterComponent::get_import() const
+BaseComponent * BaseComponent::getImport() const
 {
     return import;
 }
 
 
-const std::vector<BaseParameterComponent *>& BaseParameterComponent::get_exports() const
+const std::vector<BaseComponent *>& BaseComponent::getExports() const
 {
     return exports;
 }
 
 
-void BaseParameterComponent::set_flags(ParameterFlags new_flags)
+void BaseComponent::setFlags(ParameterFlags new_flags)
 {
     if (flags != new_flags)
     {
         ParameterFlags old_flags = flags;
         flags = new_flags;
-        emit flags_changed(old_flags, new_flags);
+        emit flagsChanged(old_flags, new_flags);
     }
 }
 
 
-void BaseParameterComponent::set_flag(ParameterFlags flag, bool value)
+void BaseComponent::setFlag(ParameterFlags flag, bool value)
 {
-    auto current_value = has_flag(flag);
+    auto current_value = hasFlag(flag);
 
     if (current_value != value)
     {
@@ -90,19 +90,19 @@ void BaseParameterComponent::set_flag(ParameterFlags flag, bool value)
         {
             flags = static_cast<ParameterFlags>(flags & ~flag);
         }
-        emit flags_changed(old_flags, flags);
+        emit flagsChanged(old_flags, flags);
     }
 }
 
 
-void BaseParameterComponent::set_import(BaseParameterComponent * exporting_import)
+void BaseComponent::setImport(BaseComponent * exporting_import)
 {
     auto undo_stack = application::project_model()->get_undo_stack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
 }
 
 
-void BaseParameterComponent::stop_importing()
+void BaseComponent::stopImporting()
 {
     if (import)
     {
@@ -112,27 +112,27 @@ void BaseParameterComponent::stop_importing()
 }
 
 
-void BaseParameterComponent::stop_exporting()
+void BaseComponent::stopExporting()
 {
     while (!exports.empty())
     {
-        exports.back()->stop_importing();
+        exports.back()->stopImporting();
     }
 }
 
 
-void BaseParameterComponent::set_from_xml(QXmlStreamReader& xml)
+void BaseComponent::readXml(QXmlStreamReader& xml)
 {
 
 }
 
 
-void BaseParameterComponent::write_to_xml(XmlSerializer& xml)
+void BaseComponent::writeXml(XmlSerializer& xml)
 {
     xml.begin_element("BaseParameterComponent");
     xml.add_int_attribute("id", xml.id(this));
 
-        xml.add_int_element("component_type", static_cast<qint32>(component_type));
+        xml.add_int_element("component_type", static_cast<qint32>(m_componentType));
         xml.add_int_element("flags", static_cast<quint32>(flags));
         xml.add_int_element("import", xml.id(import));
 

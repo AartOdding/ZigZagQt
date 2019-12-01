@@ -1,7 +1,7 @@
 #include "operatorselectordialog.h"
 
 #include "view/viewport.h"
-#include "model/librarymodel.h"
+#include "model/operatorlibrary.h"
 #include "application.h"
 #include "model/baseoperator.h"
 
@@ -25,9 +25,9 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
     ui.operator_list->setFont(MontSerrat);
     ui.accept_button->setDefault(true);
 
-    auto library = application::library_model();
+    auto library = OperatorLibrary::instance();
 
-    auto sub_libraries = library->libraries();
+    auto sub_libraries = library->packages();
 
     for (auto name : sub_libraries)
     {
@@ -35,7 +35,7 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
     }
 
     ui.filter->setCurrentText("Texture");
-    auto ops = application::library_model()->operators_for_library("Control");
+    auto ops = library->get_package("Control");
 
     for (auto op : ops)
     {
@@ -56,7 +56,7 @@ void OperatorSelectorDialog::on_different_library_selected(const QString& new_li
     ui.operator_list->clear();
     auto name = new_library.toStdString();
 
-    auto operators = application::library_model()->operators_for_library(name.c_str());
+    auto operators = OperatorLibrary::instance()->get_package(name.c_str());
     for (auto op : operators)
     {
         ui.operator_list->addItem(op->name.c_str());
@@ -68,7 +68,7 @@ void OperatorSelectorDialog::accept_clicked()
 {
     if (ui.operator_list->currentItem())
     {
-        auto op = application::library_model()->find_operator(
+        auto op = OperatorLibrary::instance()->get_operator(
                     ui.filter->currentText().toStdString(),
                     ui.operator_list->currentItem()->text().toStdString());
         if (op)

@@ -4,17 +4,25 @@
 #include "application.h"
 
 
+const OperatorDescription ClockOperator::description { "Clock", "Control", &create };
+
+
+BaseOperator * ClockOperator::create()
+{
+    return new ClockOperator();
+}
+
 
 ClockOperator::ClockOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
-    frames.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    seconds.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    minutes.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    hours.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    seconds_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    minutes_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
-    hours_whole.get_component(0)->set_flag(BaseParameterComponent::IsEditable, false);
+    frames.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    seconds.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    minutes.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    hours.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    seconds_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    minutes_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    hours_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
 }
 
 

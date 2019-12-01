@@ -8,8 +8,29 @@ GLuint ThresholdOperator::vao;
 GLuint ThresholdOperator::vbo;
 
 
+
+
+
+BaseOperator* ThresholdOperator::create()
+{
+    return new ThresholdOperator();
+}
+
+
+const OperatorDescription ThresholdOperator::description
+{
+    "Threshold",
+    "Texture",
+    &create,
+    { &TextureData::Type },
+    { &TextureData::Type },
+    &TextureView::Type,
+};
+
+
+
 ThresholdOperator::ThresholdOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
 }
@@ -21,7 +42,7 @@ void ThresholdOperator::run()
 }
 
 
-void ThresholdOperator::parameter_changed(BaseParameter* parameter)
+void ThresholdOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

@@ -15,22 +15,22 @@
 #endif
 
 
-class Kinect2TextureOperator : public BaseOperator,
-                               public QOpenGLFunctions_3_3_Core
+class KinectTwoTextureOperator : public BaseOperator,
+                                 public QOpenGLFunctions_3_3_Core
 {
 public:
 
-    Kinect2TextureOperator();
+    KinectTwoTextureOperator();
 
     void run() override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static BaseOperator * create() { return new Kinect2TextureOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Kinect 2", "Texture", {  },
-                                              { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription description;
+
 
 private:
 

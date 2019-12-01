@@ -5,7 +5,7 @@
 #include <optional>
 #include <cstdint>
 
-#include "baseparameter.h"
+#include "baseparameterold.h"
 #include "intparametercomponent.h"
 
 
@@ -18,7 +18,7 @@ using int64_4 = std::array<int64, 4>;
 
 
 template<int NUM_COMPONENTS>
-class IntParameter : public BaseParameter
+class IntParameter : public BaseParameterOld
 {
 public:
 
@@ -28,8 +28,8 @@ public:
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    IntParameter(BaseParameter * parent, const char * name, interface_type value = interface_type())
-        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    IntParameter(BaseParameterOld * parent, const char * name, interface_type value = interface_type())
+        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -45,8 +45,8 @@ public:
     }
 
 
-    IntParameter(BaseParameter * parent, const char * name, interface_type value, int64 min, int64 max)
-        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    IntParameter(BaseParameterOld * parent, const char * name, interface_type value, int64 min, int64 max)
+        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -68,7 +68,7 @@ public:
     }
 
 
-    BaseParameterComponent* get_component(int index) override
+    BaseComponent* get_component(int index) override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
@@ -78,7 +78,7 @@ public:
     }
 
 
-    const BaseParameterComponent* get_component(int index) const override
+    const BaseComponent* get_component(int index) const override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {

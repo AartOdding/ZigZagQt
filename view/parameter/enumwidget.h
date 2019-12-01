@@ -5,7 +5,7 @@
 #include "model/parameter/enumparameter.h"
 
 
-class BaseParameterComponent;
+class BaseComponent;
 class IntParameterComponent;
 
 
@@ -20,8 +20,8 @@ public:
 
 private slots:
 
-    void on_parameter_started_importing(BaseParameterComponent *);
-    void on_parameters_stopped_importing(BaseParameterComponent *);
+    void on_parameter_started_importing(BaseComponent *);
+    void on_parameters_stopped_importing(BaseComponent *);
 
 private:
 

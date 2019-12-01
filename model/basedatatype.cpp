@@ -13,7 +13,7 @@
 
 
 BaseDataType::BaseDataType(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : BaseParameter(parent_op, ParameterType::DataOutput, name), data_type(&type_info)
+    : BaseParameterOld(parent_op, ParameterType::DataOutput, name), data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_output(this);
@@ -126,7 +126,7 @@ void BaseDataType::write_to_xml(XmlSerializer& xml)
 {
     xml.begin_element("BaseDataType");
     xml.add_int_attribute("id", xml.id(this));
-        BaseParameter::write_to_xml(xml);
+        BaseParameterOld::write_to_xml(xml);
         xml.begin_element("connections");
         xml.add_int_attribute("size", connections.size());
             for (auto connection : connections)

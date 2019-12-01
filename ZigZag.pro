@@ -29,20 +29,13 @@ SOURCES += \
         library/standard/control/increasingvalueoperator.cpp \
         library/standard/control/noisewavecontroloperator.cpp \
         library/standard/control/sinewavecontroloperator.cpp \
-        library/standard/shadertop.cpp \
-        library/standard/test/testdataview.cpp \
-        library/standard/test/testoperator.cpp \
         library/standard/texture/blendoperator.cpp \
         library/standard/texture/cameraoperator.cpp \
         library/standard/texture/coloroperator.cpp \
-        library/standard/texture/concentricsawtoothwaveoperator.cpp \
-        library/standard/texture/concentricsinewaveoperator.cpp \
         library/standard/texture/displacementoperator.cpp \
         library/standard/texture/fadeoperator.cpp \
-        library/standard/texture/kinect2textureoperator.cpp \
+    library/standard/texture/kinecttwotextureoperator.cpp \
         library/standard/texture/noiseoperator.cpp \
-        library/standard/texture/radialsinewaveoperator.cpp \
-        library/standard/texture/radialsquarewaveoperator.cpp \
         library/standard/texture/sawtoothwaveoperator.cpp \
         library/standard/texture/sinewaveoperator.cpp \
         library/standard/texture/squarewaveoperator.cpp \
@@ -50,14 +43,16 @@ SOURCES += \
         library/standard/texture/textureview.cpp \
         library/standard/texture/textureviewwindow.cpp \
         library/standard/texture/thresholdoperator.cpp \
+    model/BaseZigZagObject.cpp \
         model/basedatatype.cpp \
         model/clock.cpp \
         model/datainput.cpp \
-        model/librarymodel.cpp \
         model/baseoperator.cpp \
         model/enumdefinition.cpp \
-        model/parameter/baseparameter.cpp \
-        model/parameter/baseparametercomponent.cpp \
+    model/operatorlibrary.cpp \
+    model/parameter/BaseComponent.cpp \
+    model/parameter/BaseParameter.cpp \
+    model/parameter/baseparameterold.cpp \
         model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
         model/parameter/floatparametercomponent.cpp \
@@ -104,26 +99,18 @@ HEADERS += \
         command/disconnectparameterscommand.h \
         command/movecommand.h \
         command/removecommand.h \
-        library/standard/control/ParameterPreview.hpp \
         library/standard/control/clockoperator.h \
         library/standard/control/increasingvalueoperator.h \
         library/standard/control/noisewavecontroloperator.h \
+        library/standard/control/parameterpreview.h \
         library/standard/control/sinewavecontroloperator.h \
-        library/standard/shadertop.h \
-        library/standard/test/testdata.h \
-        library/standard/test/testdataview.h \
-        library/standard/test/testoperator.h \
         library/standard/texture/blendoperator.h \
         library/standard/texture/cameraoperator.h \
         library/standard/texture/coloroperator.h \
-        library/standard/texture/concentricsawtoothwaveoperator.h \
-        library/standard/texture/concentricsinewaveoperator.h \
         library/standard/texture/displacementoperator.h \
         library/standard/texture/fadeoperator.h \
-        library/standard/texture/kinect2textureoperator.h \
+        library/standard/texture/kinecttwotextureoperator.h \
         library/standard/texture/noiseoperator.h \
-        library/standard/texture/radialsinewaveoperator.h \
-        library/standard/texture/radialsquarewaveoperator.h \
         library/standard/texture/sawtoothwaveoperator.h \
         library/standard/texture/sinewaveoperator.h \
         library/standard/texture/squarewaveoperator.h \
@@ -131,15 +118,17 @@ HEADERS += \
         library/standard/texture/textureview.h \
         library/standard/texture/textureviewwindow.h \
         library/standard/texture/thresholdoperator.h \
+        model/BaseZigZagObject.hpp \
         model/basedatatype.h \
         model/clock.h \
         model/datainput.h \
-        model/librarymodel.h \
         model/baseoperator.h \
         model/enumdefinition.h \
         model/namemanager.h \
-        model/parameter/baseparameter.h \
-        model/parameter/baseparametercomponent.h \
+        model/operatorlibrary.h \
+        model/parameter/BaseComponent.hpp \
+        model/parameter/BaseParameter.hpp \
+        model/parameter/baseparameterold.h \
         model/parameter/buttonparameter.h \
         model/parameter/enumparameter.h \
         model/parameter/floatparameter.h \

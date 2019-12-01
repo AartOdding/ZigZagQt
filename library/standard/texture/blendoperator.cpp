@@ -8,13 +8,47 @@ QOpenGLShaderProgram BlendOperator::shader;
 GLuint BlendOperator::vao;
 GLuint BlendOperator::vbo;
 
-
 // Draws the whole screen with GL_TRIANGLE_STRIP
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
+
+const EnumDefinition BlendOperator::BlendMode
+{
+    "BlendMode",
+    {
+        "Over",
+        "Add",
+        "Subtract",
+        "Multiply",
+        "Divide",
+        "Average",
+        "Difference",
+    }
+};
+
+
+
+const OperatorDescription BlendOperator::description {
+    "Blend",
+    "Video Edit",
+    &create,
+    { &TextureData::Type, &TextureData::Type },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
+
+
+BaseOperator* BlendOperator::create()
+{
+    return new BlendOperator();
+}
+
+
+
 BlendOperator::BlendOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
 }
@@ -76,7 +110,7 @@ void BlendOperator::run()
 }
 
 
-void BlendOperator::parameter_changed(BaseParameter* parameter)
+void BlendOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

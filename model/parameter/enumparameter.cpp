@@ -3,16 +3,16 @@
 
 
 
-EnumPar::EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& def, int i)
-    : BaseParameter(parent, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& def, int i)
+    : BaseParameterOld(parent, ParameterType::Enum, name),
       definition(&def),
       index(i, 0, def.size()-1, this)
 {
 }
 
 
-EnumPar::EnumPar(BaseParameter * parent, const QString& name, const EnumDefinition& def, const QString& value)
-    : BaseParameter(parent, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& def, const QString& value)
+    : BaseParameterOld(parent, ParameterType::Enum, name),
       definition(&def),
       index(definition->index_of(value), 0, def.size()-1, this)
 {
@@ -39,7 +39,7 @@ const EnumDefinition * EnumPar::get_enum() const
 
 void EnumPar::set(int new_index)
 {
-    index.set(new_index);
+    index.set((int64_t)new_index);
 }
 
 
@@ -72,7 +72,7 @@ int EnumPar::num_components() const
 }
 
 
-BaseParameterComponent* EnumPar::get_component(int i)
+BaseComponent* EnumPar::get_component(int i)
 {
     if (i == 0)
     {
@@ -85,7 +85,7 @@ BaseParameterComponent* EnumPar::get_component(int i)
 }
 
 
-const BaseParameterComponent* EnumPar::get_component(int i) const
+const BaseComponent* EnumPar::get_component(int i) const
 {
     if (i == 0)
     {

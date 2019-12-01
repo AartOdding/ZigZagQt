@@ -25,13 +25,12 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static BaseOperator * create() { return new CameraOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Camera", "Texture", {  },
-                                              { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription description;
 
 public slots:
 

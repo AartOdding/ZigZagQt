@@ -1,32 +1,32 @@
 #pragma once
 
-#include "baseparametercomponent.h"
+#include "BaseComponent.hpp"
 
 
 
-class FloatParameterComponent : public BaseParameterComponent
+class FloatParameterComponent : public BaseComponent
 {
     Q_OBJECT
 
 public:
 
-    FloatParameterComponent(double value, BaseParameter* parameter);
-    FloatParameterComponent(double value, double min, double max, BaseParameter* parameter);
+    FloatParameterComponent(double value, BaseParameterOld* parameter);
+    FloatParameterComponent(double value, double min, double max, BaseParameterOld* parameter);
 
-    bool process_changes() override;
+    bool update() override;
 
-    double get() const;
+    double get_value() const;
     double get_min() const;
     double get_max() const;
 
 public slots:
 
-    void set(double value);
+    void set_value(double value);
     void set_min(double min);
     void set_max(double max);
 
-    void set_later(int64_t value) override;
-    void set_later(double value) override;
+    void set(int64_t value) override;
+    void set(double value) override;
 
 signals:
 

@@ -82,7 +82,7 @@ public:
 
     ~TextureData() override;
 
-    void parameter_changed(BaseParameter*) override;
+    void parameter_changed(BaseParameterOld*) override;
 
     // Note, num channels and format describe the image data as it resides in memory at the pixel_data
     // pointer, it is not a description of the storage method on the gpu!

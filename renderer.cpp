@@ -17,19 +17,16 @@
 
 Renderer::Renderer(QOpenGLWidget* main_opengl)
 {
-    opengl_context.setFormat(main_opengl->format());
-    opengl_surface.setFormat(main_opengl->format());
-    opengl_context.setShareContext(main_opengl->context());
+    std::cout << QOpenGLContext::globalShareContext() << std::endl;
+    //opengl_context.setFormat(main_opengl->format());
+    //opengl_context.setShareContext(main_opengl->context());
+    //opengl_context.create();
 
-    opengl_context.create();
+    opengl_surface.setFormat(QOpenGLContext::globalShareContext()->format());
     opengl_surface.create();
 
-    opengl_context.makeCurrent(&opengl_surface);
 
-    //opengl_widget.show();
-    //opengl_widget.close();
-
-    //opengl_widget.makeCurrent();
+    QOpenGLContext::globalShareContext()->makeCurrent(&opengl_surface);
     initializeOpenGLFunctions();
 }
 
@@ -62,7 +59,7 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
     for (auto par : op->importing_parameters())
     {
-        if (closed_list.count(par->get_import()->get_parameter()->get_operator()) == 0)
+        if (closed_list.count(par->getImport()->getParameter()->get_operator()) == 0)
         {
             return false;
         }
@@ -78,7 +75,8 @@ void Renderer::render_frame()
 {
     fps_monitor.frame();
 
-    opengl_context.makeCurrent(&opengl_surface);
+    QOpenGLContext::globalShareContext()->makeCurrent(&opengl_surface);
+    //opengl_context.makeCurrent(&opengl_surface);
     //opengl_widget.makeCurrent();
 
     std::deque<BaseOperator*> open_list;
@@ -117,11 +115,11 @@ void Renderer::render_frame()
             }
             for (auto par : current->exporting_parameters())
             {
-                for (auto importer : par->get_exports())
+                for (auto importer : par->getExports())
                 {
-                    if (!contains(open_list, importer->get_parameter()->get_operator()))
+                    if (!contains(open_list, importer->getParameter()->get_operator()))
                     {
-                        open_list.push_back(importer->get_parameter()->get_operator());
+                        open_list.push_back(importer->getParameter()->get_operator());
                     }
                 }
             }
@@ -137,5 +135,4 @@ void Renderer::render_frame()
         std::cout << fps_monitor.fps() << " fps in renderer.\n";
     }
     glFlush();
-    opengl_context.doneCurrent();
 }

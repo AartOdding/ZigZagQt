@@ -9,7 +9,7 @@
 
 
 class BaseOperator;
-class BaseParameter;
+class BaseParameterOld;
 class BaseDataType;
 class DataInput;
 class OperatorView;
@@ -17,7 +17,7 @@ class DataConnector;
 class ParameterConnector;
 class Cable;
 class ParameterOwner;
-class BaseParameterComponent;
+class BaseComponent;
 
 
 class ProjectScopeView : public QGraphicsScene,
@@ -42,8 +42,8 @@ public slots:
     void on_input_connected(BaseDataType* output, DataInput* input);
     void on_input_disconnected(BaseDataType* output, DataInput* input);
 
-    void on_parameters_connected(BaseParameterComponent * exporter, BaseParameterComponent * importer);
-    void on_parameter_disconnected(BaseParameterComponent * exporter, BaseParameterComponent * importer);
+    void on_parameters_connected(BaseComponent * exporter, BaseComponent * importer);
+    void on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer);
 
 
 protected:

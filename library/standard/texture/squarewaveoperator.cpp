@@ -20,9 +20,25 @@ GLuint SquareWaveOperator::vbo;
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
+BaseOperator * SquareWaveOperator::create()
+{
+    return new SquareWaveOperator();
+}
+
+
+const OperatorDescription SquareWaveOperator::description
+{
+    "Square Wave",
+    "Video Synthesis",
+    &create,
+    {  },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
 
 SquareWaveOperator::SquareWaveOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
     should_update = true;
@@ -118,7 +134,7 @@ void SquareWaveOperator::run()
 }
 
 
-void SquareWaveOperator::parameter_changed(BaseParameter* parameter)
+void SquareWaveOperator::parameter_changed(BaseParameterOld* parameter)
 {
     should_update = true;
 }

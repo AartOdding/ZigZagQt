@@ -2,14 +2,14 @@
 
 
 
-PulseParameterComponent::PulseParameterComponent(BaseParameter* parameter)
-    : BaseParameterComponent(parameter, BaseParameterComponent::Int64)
+PulseParameterComponent::PulseParameterComponent(BaseParameterOld* parameter)
+    : BaseComponent(parameter, BaseComponent::Int64)
 {
 
 }
 
 
-bool PulseParameterComponent::process_changes()
+bool PulseParameterComponent::update()
 {
     if (received_signal)
     {
@@ -20,13 +20,13 @@ bool PulseParameterComponent::process_changes()
 }
 
 
-void PulseParameterComponent::set_later(int64_t)
+void PulseParameterComponent::set(int64_t)
 {
     received_signal = true;
 }
 
 
-void PulseParameterComponent::set_later(double)
+void PulseParameterComponent::set(double)
 {
     received_signal = true;
 }

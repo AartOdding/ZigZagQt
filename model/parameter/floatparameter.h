@@ -4,7 +4,7 @@
 #include <tuple>
 #include <optional>
 
-#include "baseparameter.h"
+#include "baseparameterold.h"
 #include "floatparametercomponent.h"
 
 
@@ -16,7 +16,7 @@ using double_4 = std::array<double, 4>;
 
 
 template<int NUM_COMPONENTS>
-class FloatParameter : public BaseParameter
+class FloatParameter : public BaseParameterOld
 {
 public:
 
@@ -26,8 +26,8 @@ public:
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    FloatParameter(BaseParameter * parent, const char * name, interface_type value = interface_type())
-        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseParameterOld * parent, const char * name, interface_type value = interface_type())
+        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -43,8 +43,8 @@ public:
     }
 
 
-    FloatParameter(BaseParameter * parent, const char * name, interface_type value, double min, double max)
-        : BaseParameter(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseParameterOld * parent, const char * name, interface_type value, double min, double max)
+        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
@@ -66,7 +66,7 @@ public:
     }
 
 
-    BaseParameterComponent* get_component(int index) override
+    BaseComponent* get_component(int index) override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
@@ -79,7 +79,7 @@ public:
     }
 
 
-    const BaseParameterComponent* get_component(int index) const override
+    const BaseComponent* get_component(int index) const override
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
@@ -96,14 +96,14 @@ public:
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            return components[0]->get();
+            return components[0]->get_value();
         }
         else
         {
             interface_type return_value;
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                return_value[i] = components[i]->get();
+                return_value[i] = components[i]->get_value();
             }
             return return_value;
         }
@@ -114,7 +114,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return components[index]->get();
+            return components[index]->get_value();
         }
         return 0.0;
     }
@@ -123,28 +123,28 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> x() const
     {
-        return components[0]->get();
+        return components[0]->get_value();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> y() const
     {
-        return components[1]->get();
+        return components[1]->get_value();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 2), double> z() const
     {
-        return components[2]->get();
+        return components[2]->get_value();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 3), double> w() const
     {
-        return components[3]->get();
+        return components[3]->get_value();
     }
 
 

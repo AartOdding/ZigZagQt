@@ -1,4 +1,4 @@
-  #pragma once
+#pragma once
 
 #include "model/baseoperator.h"
 #include "model/parameter/intparameter.h"
@@ -27,8 +27,7 @@ public:
 
     static BaseOperator* create();
 
-    static const inline OperatorTypeInfo Type { "Uniform Fill", "Texture",
-        {  }, { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription Type;
 
 private:
 

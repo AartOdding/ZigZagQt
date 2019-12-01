@@ -2,7 +2,7 @@
 
 #include <QGraphicsItem>
 
-#include "model/parameter/baseparameter.h"
+#include "model/parameter/baseparameterold.h"
 
 
 class OperatorView;
@@ -40,7 +40,7 @@ inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
 }
 
 class BaseDataView : public QGraphicsItem,
-                     public BaseParameter
+                     public BaseParameterOld
 {
 
 public:

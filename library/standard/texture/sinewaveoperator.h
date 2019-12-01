@@ -21,13 +21,12 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameter* parameter) override;
+    void parameter_changed(BaseParameterOld* parameter) override;
 
 
-    static BaseOperator * create() { return new SineWaveOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Sine Wave", "Video Synthesis", {  },
-                                              { &TextureData::Type }, &TextureView::Type, &create };
+    static const OperatorDescription description;
 
 private:
 

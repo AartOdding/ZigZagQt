@@ -16,8 +16,25 @@
 
 
 
-BaseOperator::BaseOperator(const OperatorTypeInfo& type_)
-    : BaseParameter(nullptr, ParameterType::Operator, type_.name.c_str()), type_info(&type_)
+OperatorDescription::OperatorDescription(const std::string& name_,
+                                         const std::string& package_,
+                                         std::function<BaseOperator*()> construct_,
+                                         const std::vector<const DataTypeInfo*>& inputs_,
+                                         const std::vector<const DataTypeInfo*>& outputs_,
+                                         const DataViewTypeInfo * view_)
+    : name(name_),
+      package(package_),
+      construct(construct_),
+      inputs(inputs_),
+      outputs(outputs_),
+      view(view_)
+{
+    OperatorLibrary::instance()->add(this);
+}
+
+
+BaseOperator::BaseOperator(const OperatorDescription& type_)
+    : BaseParameterOld(nullptr, ParameterType::Operator, type_.name.c_str()), type_info(&type_)
 {
 
 }
@@ -47,7 +64,7 @@ int BaseOperator::get_position_y() const
 }
 
 
-const OperatorTypeInfo * BaseOperator::type() const
+const OperatorDescription * BaseOperator::type() const
 {
     return type_info;
 }
@@ -160,13 +177,13 @@ void BaseOperator::register_data_output(BaseDataType* output)
 }
 
 
-const std::vector<BaseParameterComponent*>& BaseOperator::importing_parameters() const
+const std::vector<BaseComponent*>& BaseOperator::importing_parameters() const
 {
     return m_importing_parameters;
 }
 
 
-const std::vector<BaseParameterComponent*>& BaseOperator::exporting_parameters() const
+const std::vector<BaseComponent*>& BaseOperator::exporting_parameters() const
 {
     return m_exporting_parameters;
 }
@@ -183,7 +200,7 @@ void BaseOperator::write_to_xml(XmlSerializer& xml)
     xml.begin_element("BaseOperator");
     xml.add_int_attribute("id", xml.id(this));
 
-        BaseParameter::write_to_xml(xml);
+        BaseParameterOld::write_to_xml(xml);
 
         xml.add_int_element("position_x", position_x);
         xml.add_int_element("position_y", position_y);

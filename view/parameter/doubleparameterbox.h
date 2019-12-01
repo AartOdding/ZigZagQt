@@ -3,7 +3,7 @@
 #include <QDoubleSpinBox>
 
 
-class BaseParameterComponent;
+class BaseComponent;
 class FloatParameterComponent;
 
 
@@ -19,8 +19,8 @@ public:
 
 public slots:
 
-    void on_parameter_started_importing(BaseParameterComponent * exporter);
-    void on_parameters_stopped_importing(BaseParameterComponent * exporter);
+    void on_parameter_started_importing(BaseComponent * exporter);
+    void on_parameters_stopped_importing(BaseComponent * exporter);
 
     void on_editing_finished();
 

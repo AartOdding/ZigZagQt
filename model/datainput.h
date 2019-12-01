@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "model/parameter/baseparameter.h"
+#include "model/parameter/baseparameterold.h"
 #include "basedatatype.h"
 
 class BaseOperator;
@@ -10,7 +10,7 @@ class BaseOperator;
 
 
 class DataInput : public QObject,
-                  public BaseParameter
+                  public BaseParameterOld
 {
     Q_OBJECT
 

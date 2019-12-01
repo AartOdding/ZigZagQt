@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
-#include "library/standard/control/ParameterPreview.hpp"
+#include "library/standard/control/parameterpreview.h"
 
 
 
@@ -14,9 +14,9 @@ public:
 
     void run() override;
 
-    static BaseOperator * create() { return new SineWaveControlOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Sine Wave", "Control", { }, { }, &ParameterPreview::Type , &create };
+    static const OperatorDescription description;
 
 private:
 

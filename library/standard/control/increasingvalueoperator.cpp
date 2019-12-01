@@ -2,8 +2,26 @@
 #include "application.h"
 
 
+
+BaseOperator * IncreasingValueOperator::create()
+{
+    return new IncreasingValueOperator();
+}
+
+
+const OperatorDescription IncreasingValueOperator::description
+{
+    "Increasing Value",
+    "Control",
+    &create,
+    { },
+    { },
+    &ParameterPreview::Type
+};
+
+
 IncreasingValueOperator::IncreasingValueOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
 
 }
@@ -15,7 +33,7 @@ void IncreasingValueOperator::run()
 }
 
 
-void IncreasingValueOperator::parameter_changed(BaseParameter * parameter)
+void IncreasingValueOperator::parameter_changed(BaseParameterOld * parameter)
 {
     if (parameter == &reset)
     {

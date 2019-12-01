@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
-#include "library/standard/control/ParameterPreview.hpp"
+#include "library/standard/control/parameterpreview.h"
 
 
 
@@ -16,9 +16,11 @@ public:
 
     void run() override;
 
-    static BaseOperator * create() { return new NoiseWaveControlOperator(); }
+    static BaseOperator * create();
 
-    static const inline OperatorTypeInfo Type { "Noise Wave", "Control", { }, { }, &ParameterPreview::Type, &create };
+    static const OperatorDescription description;
+
+    static const EnumDefinition NoiseType;
 
 private:
 
@@ -26,7 +28,6 @@ private:
 
     void recalculate();
 
-    static EnumDefinition NoiseType;
 
     FloatPar output   { this, "Output",    0 };
     EnumPar noise_type { this, "Noise Type", NoiseType };

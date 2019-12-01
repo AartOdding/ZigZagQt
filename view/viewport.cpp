@@ -93,7 +93,7 @@ void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
 
 
 
-void Viewport::on_operator_requested(const OperatorTypeInfo* op_type, const QPointF& where)
+void Viewport::on_operator_requested(const OperatorDescription* op_type, const QPointF& where)
 {
     std::cout << "succes: " << op_type->name << "\n";
     std::cout << application::project_model() << "\n";

@@ -18,8 +18,27 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
+
+BaseOperator * NoiseOperator::create()
+{
+    return new NoiseOperator();
+}
+
+
+const OperatorDescription NoiseOperator::description
+{
+    "Noise",
+    "Video Synthesis",
+    &create,
+    { },
+    { &TextureData::Type },
+    &TextureView::Type,
+};
+
+
+
 NoiseOperator::NoiseOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
     should_update = true;
@@ -81,7 +100,7 @@ void NoiseOperator::run()
 }
 
 
-void NoiseOperator::parameter_changed(BaseParameter* parameter)
+void NoiseOperator::parameter_changed(BaseParameterOld* parameter)
 {
     should_update = true;
 }

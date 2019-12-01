@@ -1,7 +1,7 @@
 #include "buttonparameter.h"
 
-ButtonPar::ButtonPar(BaseParameter * parent, const char * name)
-    : BaseParameter(parent, ParameterType::Button, name), pulse_component(this)
+ButtonPar::ButtonPar(BaseParameterOld * parent, const char * name)
+    : BaseParameterOld(parent, ParameterType::Button, name), pulse_component(this)
 {
 
 }

@@ -14,19 +14,19 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, IntParameterComponent* pa
     setMinimum(largest<int64_t>(par->get_min(), std::numeric_limits<int>::min()));
     setMaximum(smallest<int64_t>(par->get_max(), std::numeric_limits<int>::max()));
     setValue(par->get());
-    setEnabled(!parameter->is_importing());
+    setEnabled(!parameter->isImporting());
 
-    connect(parameter, qOverload<int64_t>(&BaseParameterComponent::value_changed), this, &Int64ParameterBox::on_parameter_changed);
+    connect(parameter, qOverload<int64_t>(&BaseComponent::valueChanged), this, &Int64ParameterBox::on_parameter_changed);
 
-    connect(parameter, &BaseParameterComponent::flags_changed, this, &Int64ParameterBox::on_parameter_flags_changed);
-    connect(parameter, &BaseParameterComponent::started_importing_from, this, &Int64ParameterBox::on_parameter_started_importing);
-    connect(parameter, &BaseParameterComponent::stopped_importing_from, this, &Int64ParameterBox::on_parameters_stopped_importing);
+    connect(parameter, &BaseComponent::flagsChanged, this, &Int64ParameterBox::on_parameter_flags_changed);
+    connect(parameter, &BaseComponent::startedImportingFrom, this, &Int64ParameterBox::on_parameter_started_importing);
+    connect(parameter, &BaseComponent::stoppedImportingFrom, this, &Int64ParameterBox::on_parameters_stopped_importing);
     connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
     connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
 
-    if (par->has_flag(BaseParameterComponent::IsUpdateEager))
+    if (par->hasFlag(BaseComponent::IsUpdateEager))
     {
-        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseParameterComponent::set_later));
+        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseComponent::set));
     }
     else
     {
@@ -35,13 +35,13 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, IntParameterComponent* pa
 }
 
 
-void Int64ParameterBox::on_parameter_started_importing(BaseParameterComponent *)
+void Int64ParameterBox::on_parameter_started_importing(BaseComponent *)
 {
     setEnabled(false);
 }
 
 
-void Int64ParameterBox::on_parameters_stopped_importing(BaseParameterComponent *)
+void Int64ParameterBox::on_parameters_stopped_importing(BaseComponent *)
 {
     setEnabled(true);
 }
@@ -49,7 +49,7 @@ void Int64ParameterBox::on_parameters_stopped_importing(BaseParameterComponent *
 
 void Int64ParameterBox::on_editing_finished()
 {
-    parameter->set_later(static_cast<int64_t>(value()));
+    parameter->set(static_cast<int64_t>(value()));
 }
 
 
@@ -73,18 +73,18 @@ void Int64ParameterBox::on_parameter_max_changed(int64_t new_max)
 
 void Int64ParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
 {
-    if ((old_flags & BaseParameterComponent::IsUpdateEager) != (new_flags & BaseParameterComponent::IsUpdateEager))
+    if ((old_flags & BaseComponent::IsUpdateEager) != (new_flags & BaseComponent::IsUpdateEager))
     {
-        if (parameter->has_flag(BaseParameterComponent::IsUpdateEager))
+        if (parameter->hasFlag(BaseComponent::IsUpdateEager))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
-            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseParameterComponent::set_later));
+            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::set));
         }
         else
         {
-            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseParameterComponent::set_later));
+            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::set));
             connect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
         }
     }
-    setEnabled(parameter->has_flag(BaseParameterComponent::IsEditable) && !parameter->is_importing());
+    setEnabled(parameter->hasFlag(BaseComponent::IsEditable) && !parameter->isImporting());
 }

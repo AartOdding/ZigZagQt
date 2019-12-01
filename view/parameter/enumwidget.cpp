@@ -11,23 +11,23 @@ EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
         addItem(value);
     }
     auto component = par->get_component(0);
-    connect(this, qOverload<int>(&QComboBox::currentIndexChanged), component, qOverload<int64_t>(&BaseParameterComponent::set_later));
-    connect(component, qOverload<int64_t>(&BaseParameterComponent::value_changed), this, &QComboBox::setCurrentIndex);
-    connect(component, &BaseParameterComponent::started_importing_from, this, &EnumWidget::on_parameter_started_importing);
-    connect(component, &BaseParameterComponent::stopped_importing_from, this, &EnumWidget::on_parameters_stopped_importing);
+    connect(this, qOverload<int>(&QComboBox::currentIndexChanged), component, qOverload<int64_t>(&BaseComponent::set));
+    connect(component, qOverload<int64_t>(&BaseComponent::valueChanged), this, &QComboBox::setCurrentIndex);
+    connect(component, &BaseComponent::startedImportingFrom, this, &EnumWidget::on_parameter_started_importing);
+    connect(component, &BaseComponent::stoppedImportingFrom, this, &EnumWidget::on_parameters_stopped_importing);
 
-    setEnabled(!component->is_importing());
+    setEnabled(!component->isImporting());
     setCurrentIndex(par->get_index());
 }
 
 
-void EnumWidget::on_parameter_started_importing(BaseParameterComponent *)
+void EnumWidget::on_parameter_started_importing(BaseComponent *)
 {
     setEnabled(false);
 }
 
 
-void EnumWidget::on_parameters_stopped_importing(BaseParameterComponent *)
+void EnumWidget::on_parameters_stopped_importing(BaseComponent *)
 {
     setEnabled(true);
 }

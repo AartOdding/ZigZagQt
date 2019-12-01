@@ -74,9 +74,9 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
 
-    if (operator_model.type()->view_type)
+    if (operator_model.type()->view)
     {
-        data_view = operator_model.type()->view_type->construct(&operator_model);
+        data_view = operator_model.type()->view->construct(&operator_model);
         data_view->set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
         data_view->setParentItem(this);
     }

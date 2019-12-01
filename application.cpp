@@ -3,27 +3,7 @@
 
 #include "model/clock.h"
 #include "model/projectmodel.h"
-#include "model/librarymodel.h"
 #include "view/projectscopeview.h"
-
-#include "library/standard/test/testoperator.h"
-#include "library/standard/test/testdataview.h"
-
-#include "library/standard/texture/blendoperator.h"
-#include "library/standard/texture/fadeoperator.h"
-
-#include "library/standard/texture/noiseoperator.h"
-#include "library/standard/texture/sawtoothwaveoperator.h"
-#include "library/standard/texture/sinewaveoperator.h"
-#include "library/standard/texture/squarewaveoperator.h"
-
-#include "library/standard/texture/kinect2textureoperator.h"
-#include "library/standard/texture/cameraoperator.h"
-
-#include "library/standard/control/clockoperator.h"
-#include "library/standard/control/sinewavecontroloperator.h"
-#include "library/standard/control/noisewavecontroloperator.h"
-#include "library/standard/control/increasingvalueoperator.h"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -33,6 +13,8 @@
 #include <QBoxLayout>
 #include <QMenuBar>
 #include <QMenu>
+
+#include <iostream>
 
 
 namespace application
@@ -62,11 +44,6 @@ namespace application
         return instance()->get_project_model();
     }
 
-    LibraryModel * library_model()
-    {
-        return instance()->get_library_model();
-    }
-
     ProjectScopeView * project_view_model()
     {
         return instance()->get_project_view_model();
@@ -77,8 +54,6 @@ namespace application
         return instance()->get_main_opengl_context();
     }
 }
-
-#include <QVariant>
 
 
 Application::Application(int &argc, char **argv)
@@ -101,35 +76,10 @@ Application::Application(int &argc, char **argv)
     std::cout << QFontDatabase::applicationFontFamilies(montserrat).at(0).toStdString() << "\n";
 
     clock = std::make_unique<Clock>();
-    library_model = std::make_unique<LibraryModel>();
-
-    library_model->register_data_type(TestData::Type);
-    library_model->register_data_type(TextureData::Type);
-
-    library_model->register_operator(TestOperator::Type);
-    library_model->register_operator(BlendOperator::Type);
-    library_model->register_operator(FadeOperator::Type);
-    //library_model->register_operator(ColorOperator::Type);
-
-    library_model->register_operator(NoiseOperator::Type);
-    library_model->register_operator(SawtoothWaveOperator::Type);
-    library_model->register_operator(SineWaveOperator::Type);
-    library_model->register_operator(SquareWaveOperator::Type);
-
-    //library_model->register_operator(Kinect2TextureOperator::Type);
-    //library_model->register_operator(CameraOperator::Type);
-
-    //library_model->register_data_view(TestDataView::Type);
-    //library_model->register_data_view(TextureDataView::Type);
-
-    //library_model->register_operator(ClockOperator::Type);
-    library_model->register_operator(IncreasingValueOperator::Type);
-    library_model->register_operator(NoiseWaveControlOperator::Type);
-    library_model->register_operator(SineWaveControlOperator::Type);
 
     // greenish color: { 205, 255, 0 }
 
-    project_model = std::make_unique<ProjectModel>(*library_model);
+    project_model = std::make_unique<ProjectModel>();
 
     project_view_model = std::make_unique<ProjectScopeView>();
     project_view_model->set_model(project_model.get());
@@ -142,6 +92,9 @@ Application::Application(int &argc, char **argv)
 
     main_opengl_widget = new QOpenGLWidget();
     viewport = std::make_unique<Viewport>(main_opengl_widget);
+    auto context = main_opengl_widget->context();
+    main_opengl_widget->doneCurrent();
+
     renderer = std::make_unique<Renderer>(main_opengl_widget);
 
     //viewport->
@@ -205,12 +158,6 @@ Renderer * Application::get_renderer()
 ProjectModel * Application::get_project_model()
 {
     return project_model.get();
-}
-
-
-LibraryModel * Application::get_library_model()
-{
-    return library_model.get();
 }
 
 

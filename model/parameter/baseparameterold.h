@@ -6,7 +6,7 @@
 
 
 class BaseOperator;
-class BaseParameterComponent;
+class BaseComponent;
 
 class XmlSerializer;
 class QXmlStreamReader;
@@ -37,22 +37,22 @@ enum class ParameterType : qint64 // 8 Byte int for better alignment.
 
 
 
-class BaseParameter
+class BaseParameterOld
 {
 public:
 
-    BaseParameter(BaseParameter* parent_parameter, ParameterType parameter_type, const QString& name);
+    BaseParameterOld(BaseParameterOld* parent_parameter, ParameterType parameter_type, const QString& name);
 
-    virtual ~BaseParameter();
+    virtual ~BaseParameterOld();
 
     virtual int num_components() const { return 0; }
-    virtual BaseParameterComponent* get_component(int index) { return nullptr; }
-    virtual const BaseParameterComponent* get_component(int index) const { return nullptr; }
+    virtual BaseComponent* get_component(int index) { return nullptr; }
+    virtual const BaseComponent* get_component(int index) const { return nullptr; }
 
     virtual void remove_imports_exports();
 
     virtual void process_parameter_changes();
-    virtual void parameter_changed(BaseParameter*) { }
+    virtual void parameter_changed(BaseParameterOld*) { }
 
     const QString& get_name() const;
     ParameterType get_parameter_type() const;
@@ -61,21 +61,21 @@ public:
     BaseOperator * get_operator() const;
 
     bool has_parent_parameter() const;
-    BaseParameter * get_parent_parameter() const;
+    BaseParameterOld * get_parent_parameter() const;
     bool has_child_parameters() const;
-    const std::vector<BaseParameter*>& get_child_parameters() const;
+    const std::vector<BaseParameterOld*>& get_child_parameters() const;
 
     virtual void set_from_xml(QXmlStreamReader& xml);
     virtual void write_to_xml(XmlSerializer& xml);
 
 private:
 
-    BaseParameter * parent_parameter;
-    std::vector<BaseParameter*> child_parameters;
+    BaseParameterOld * parent_parameter;
+    std::vector<BaseParameterOld*> child_parameters;
     QString name;
     ParameterType parameter_type;
 
 };
 
 
-Q_DECLARE_METATYPE(BaseParameter*);
+Q_DECLARE_METATYPE(BaseParameterOld*);

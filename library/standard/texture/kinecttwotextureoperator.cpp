@@ -1,4 +1,4 @@
-#include "kinect2textureoperator.h"
+#include "kinecttwotextureoperator.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "utility/stb_image_write.h"
@@ -7,8 +7,25 @@
 
 
 
-Kinect2TextureOperator::Kinect2TextureOperator()
-    : BaseOperator(Type)
+BaseOperator * KinectTwoTextureOperator::create()
+{
+    return new KinectTwoTextureOperator();
+}
+
+const OperatorDescription KinectTwoTextureOperator::description
+{
+    "Kinect 2",
+    "Texture",
+    &create,
+    {  },
+    { &TextureData::Type },
+    &TextureView::Type,
+};
+
+
+
+KinectTwoTextureOperator::KinectTwoTextureOperator()
+    : BaseOperator(description)
 {
     output_texture.set_resolution(512, 424);
     output_texture.set_num_channels(PixelNumChannelsEnum::one_channel);
@@ -37,7 +54,7 @@ Kinect2TextureOperator::Kinect2TextureOperator()
 }
 
 
-void Kinect2TextureOperator::run()
+void KinectTwoTextureOperator::run()
 {
 
 #ifdef Q_OS_WIN
@@ -103,7 +120,7 @@ void Kinect2TextureOperator::run()
 }
 
 
-void Kinect2TextureOperator::parameter_changed(BaseParameter* parameter)
+void KinectTwoTextureOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

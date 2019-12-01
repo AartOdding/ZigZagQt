@@ -1,4 +1,4 @@
-#include "baseparameter.h"
+#include "baseparameterold.h"
 
 #include "model/baseoperator.h"
 #include "zigzaglib/xmlserializer.h"
@@ -9,7 +9,7 @@
 
 
 
-BaseParameter::BaseParameter(BaseParameter* parent_, ParameterType type_, const QString& name_)
+BaseParameterOld::BaseParameterOld(BaseParameterOld* parent_, ParameterType type_, const QString& name_)
     : parent_parameter(parent_), name(name_), parameter_type(type_)
 {
     if (parent_parameter)
@@ -21,7 +21,7 @@ BaseParameter::BaseParameter(BaseParameter* parent_, ParameterType type_, const 
 }
 
 
-BaseParameter::~BaseParameter()
+BaseParameterOld::~BaseParameterOld()
 {
     if (parent_parameter)
     {
@@ -32,7 +32,7 @@ BaseParameter::~BaseParameter()
 }
 
 
-void BaseParameter::remove_imports_exports()
+void BaseParameterOld::remove_imports_exports()
 {
     for (auto child : child_parameters)
     {
@@ -40,13 +40,13 @@ void BaseParameter::remove_imports_exports()
     }
     for (int i = 0; i < num_components(); ++i)
     {
-        get_component(i)->stop_importing();
-        get_component(i)->stop_exporting();
+        get_component(i)->stopImporting();
+        get_component(i)->stopExporting();
     }
 }
 
 
-void BaseParameter::process_parameter_changes()
+void BaseParameterOld::process_parameter_changes()
 {
     for (auto child : child_parameters)
     {
@@ -57,7 +57,7 @@ void BaseParameter::process_parameter_changes()
 
     for (int i = 0; i < num_components(); ++i)
     {
-        changed |= get_component(i)->process_changes();
+        changed |= get_component(i)->update();
     }
 
     if (changed)
@@ -73,25 +73,25 @@ void BaseParameter::process_parameter_changes()
 }
 
 
-const QString& BaseParameter::get_name() const
+const QString& BaseParameterOld::get_name() const
 {
     return name;
 }
 
 
-ParameterType BaseParameter::get_parameter_type() const
+ParameterType BaseParameterOld::get_parameter_type() const
 {
     return parameter_type;
 }
 
 
-bool BaseParameter::is_operator() const
+bool BaseParameterOld::is_operator() const
 {
     return dynamic_cast<const BaseOperator*>(this);
 }
 
 
-BaseOperator * BaseParameter::get_operator() const
+BaseOperator * BaseParameterOld::get_operator() const
 {
     if (parent_parameter->is_operator())
     {
@@ -104,37 +104,37 @@ BaseOperator * BaseParameter::get_operator() const
 }
 
 
-bool BaseParameter::has_parent_parameter() const
+bool BaseParameterOld::has_parent_parameter() const
 {
     return parent_parameter;
 }
 
 
-BaseParameter * BaseParameter::get_parent_parameter() const
+BaseParameterOld * BaseParameterOld::get_parent_parameter() const
 {
     return parent_parameter;
 }
 
 
-bool BaseParameter::has_child_parameters() const
+bool BaseParameterOld::has_child_parameters() const
 {
     return !child_parameters.empty();
 }
 
 
-const std::vector<BaseParameter*>& BaseParameter::get_child_parameters() const
+const std::vector<BaseParameterOld*>& BaseParameterOld::get_child_parameters() const
 {
     return child_parameters;
 }
 
 
-void BaseParameter::set_from_xml(QXmlStreamReader& xml)
+void BaseParameterOld::set_from_xml(QXmlStreamReader& xml)
 {
 
 }
 
 
-void BaseParameter::write_to_xml(XmlSerializer& xml)
+void BaseParameterOld::write_to_xml(XmlSerializer& xml)
 {
     xml.begin_element("BaseParameter");
     xml.add_int_attribute("id", xml.id(this));
@@ -157,7 +157,7 @@ void BaseParameter::write_to_xml(XmlSerializer& xml)
 
             for (int i = 0; i < num_components(); ++i)
             {
-                get_component(i)->write_to_xml(xml);
+                get_component(i)->writeXml(xml);
             }
 
         xml.end_element(); // ends components

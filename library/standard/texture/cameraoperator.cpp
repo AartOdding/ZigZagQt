@@ -4,8 +4,25 @@
 #include <iostream>
 
 
+BaseOperator * CameraOperator::create()
+{
+    return new CameraOperator();
+}
+
+
+const OperatorDescription CameraOperator::description
+{
+    "Camera",
+    "Texture",
+    &create,
+    { },
+    { &TextureData::Type },
+    &TextureView::Type
+};
+
+
 CameraOperator::CameraOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     capture.setCaptureDestination(QCameraImageCapture::CaptureToBuffer);
     camera.setCaptureMode(QCamera::CaptureStillImage);
@@ -78,7 +95,7 @@ void CameraOperator::on_image_captured(int, const QVideoFrame& buffer)
     has_frame = true;
 }
 
-void CameraOperator::parameter_changed(BaseParameter* parameter)
+void CameraOperator::parameter_changed(BaseParameterOld* parameter)
 {
 
 }

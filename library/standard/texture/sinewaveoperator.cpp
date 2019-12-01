@@ -21,8 +21,26 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
+
+BaseOperator * SineWaveOperator::create()
+{
+    return new SineWaveOperator();
+}
+
+
+const OperatorDescription SineWaveOperator::description
+{
+    "Sine Wave",
+    "Video Synthesis",
+    &create,
+    { },
+    { &TextureData::Type },
+    &TextureView::Type,
+};
+
+
 SineWaveOperator::SineWaveOperator()
-    : BaseOperator(Type)
+    : BaseOperator(description)
 {
     initializeOpenGLFunctions();
     should_update = true;
@@ -118,7 +136,7 @@ void SineWaveOperator::run()
 }
 
 
-void SineWaveOperator::parameter_changed(BaseParameter* parameter)
+void SineWaveOperator::parameter_changed(BaseParameterOld* parameter)
 {
     should_update = true;
 }
