@@ -4,7 +4,7 @@
 
 
 class BaseComponent;
-class FloatParameterComponent;
+class FloatComponent;
 
 
 
@@ -14,7 +14,7 @@ class DoubleParameterBox : public QDoubleSpinBox
 
 public:
 
-    DoubleParameterBox(QWidget * parent, FloatParameterComponent * parameter);
+    DoubleParameterBox(QWidget * parent, FloatComponent * parameter);
 
 
 public slots:
@@ -32,6 +32,6 @@ public slots:
 
 private:
 
-    FloatParameterComponent * parameter;
+    FloatComponent * parameter;
 
 };

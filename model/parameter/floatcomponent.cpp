@@ -1,19 +1,19 @@
-#include "floatparametercomponent.h"
+#include "floatcomponent.h"
 #include "utility/numeric.h"
 
 #include <numeric>
 
 
 
-FloatParameterComponent::FloatParameterComponent(double value, BaseParameterOld* parameter)
-    : FloatParameterComponent(value, std::numeric_limits<double>::lowest(),
+FloatComponent::FloatComponent(double value, BaseParameterOld* parameter)
+    : FloatComponent(value, std::numeric_limits<double>::lowest(),
                                       std::numeric_limits<double>::max(), parameter)
 {
 
 }
 
 
-FloatParameterComponent::FloatParameterComponent(double value, double min, double max, BaseParameterOld* parameter)
+FloatComponent::FloatComponent(double value, double min, double max, BaseParameterOld* parameter)
     : BaseComponent(parameter, BaseComponent::Float64)
 {
     min_value = smallest(min, max);
@@ -22,7 +22,7 @@ FloatParameterComponent::FloatParameterComponent(double value, double min, doubl
 }
 
 
-bool FloatParameterComponent::update()
+bool FloatComponent::update()
 {
     if (new_value_pending && pending_value != current_value)
     {
@@ -34,25 +34,25 @@ bool FloatParameterComponent::update()
 }
 
 
-double FloatParameterComponent::get_value() const
+double FloatComponent::get_value() const
 {
     return current_value;
 }
 
 
-double FloatParameterComponent::get_min() const
+double FloatComponent::get_min() const
 {
     return min_value;
 }
 
 
-double FloatParameterComponent::get_max() const
+double FloatComponent::get_max() const
 {
     return max_value;
 }
 
 
-void FloatParameterComponent::set_value(double value)
+void FloatComponent::set_value(double value)
 {
     auto constrained_value = constrain(value, min_value, max_value);
     if (constrained_value != current_value)
@@ -64,7 +64,7 @@ void FloatParameterComponent::set_value(double value)
 }
 
 
-void FloatParameterComponent::set_min(double min)
+void FloatComponent::set_min(double min)
 {
     // min_value shall be no larger than max_value
     auto new_min = smallest(min, max_value);
@@ -83,7 +83,7 @@ void FloatParameterComponent::set_min(double min)
 }
 
 
-void FloatParameterComponent::set_max(double max)
+void FloatComponent::set_max(double max)
 {
     // max_value shall be no smaller than min_value
     auto new_max = largest(max, min_value);
@@ -102,14 +102,14 @@ void FloatParameterComponent::set_max(double max)
 }
 
 
-void FloatParameterComponent::set(int64_t value)
+void FloatComponent::feed(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void FloatParameterComponent::set(double value)
+void FloatComponent::feed(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

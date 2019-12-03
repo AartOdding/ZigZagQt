@@ -55,7 +55,7 @@ SOURCES += \
     model/parameter/baseparameterold.cpp \
         model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
-        model/parameter/floatparametercomponent.cpp \
+    model/parameter/floatcomponent.cpp \
         model/parameter/intparametercomponent.cpp \
         model/parameter/parameterrow.cpp \
         model/parameter/pulseparametercomponent.cpp \
@@ -131,8 +131,8 @@ HEADERS += \
         model/parameter/baseparameterold.h \
         model/parameter/buttonparameter.h \
         model/parameter/enumparameter.h \
+        model/parameter/floatcomponent.h \
         model/parameter/floatparameter.h \
-        model/parameter/floatparametercomponent.h \
         model/parameter/intparameter.h \
         model/parameter/intparametercomponent.h \
         model/parameter/parameterrow.h \

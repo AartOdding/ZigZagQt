@@ -24,9 +24,9 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, IntParameterComponent* pa
     connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
     connect(parameter, &IntParameterComponent::min_changed, this, &Int64ParameterBox::on_parameter_min_changed);
 
-    if (par->hasFlag(BaseComponent::IsUpdateEager))
+    if (!par->hasFlag(BaseComponent::MinimalUpdates))
     {
-        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseComponent::set));
+        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseComponent::feed));
     }
     else
     {
@@ -49,7 +49,7 @@ void Int64ParameterBox::on_parameters_stopped_importing(BaseComponent *)
 
 void Int64ParameterBox::on_editing_finished()
 {
-    parameter->set(static_cast<int64_t>(value()));
+    parameter->feed(static_cast<int64_t>(value()));
 }
 
 
@@ -73,16 +73,16 @@ void Int64ParameterBox::on_parameter_max_changed(int64_t new_max)
 
 void Int64ParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
 {
-    if ((old_flags & BaseComponent::IsUpdateEager) != (new_flags & BaseComponent::IsUpdateEager))
+    if ((old_flags & BaseComponent::MinimalUpdates) != (new_flags & BaseComponent::MinimalUpdates))
     {
-        if (parameter->hasFlag(BaseComponent::IsUpdateEager))
+        if (!parameter->hasFlag(BaseComponent::MinimalUpdates))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
-            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::set));
+            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::feed));
         }
         else
         {
-            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::set));
+            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::feed));
             connect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
         }
     }

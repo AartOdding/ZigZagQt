@@ -103,14 +103,14 @@ void IntParameterComponent::set_max(int64_t max)
 }
 
 
-void IntParameterComponent::set(int64_t value)
+void IntParameterComponent::feed(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void IntParameterComponent::set(double value)
+void IntParameterComponent::feed(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

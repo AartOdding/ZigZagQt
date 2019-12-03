@@ -7,7 +7,7 @@
 #include "enumwidget.h"
 
 #include "model/parameter/intparametercomponent.h"
-#include "model/parameter/floatparametercomponent.h"
+#include "model/parameter/floatcomponent.h"
 #include "int64parameterbox.h"
 #include "doubleparameterbox.h"
 #include "buttonparameterbox.h"
@@ -86,7 +86,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameterOld* par)
     {
         if (par->num_components() == 1)
         {
-            return new DoubleParameterBox(this, static_cast<FloatParameterComponent*>(par->get_component(0)));
+            return new DoubleParameterBox(this, static_cast<FloatComponent*>(par->get_component(0)));
         }
         else
         {
@@ -97,7 +97,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameterOld* par)
 
             for (int i = 0; i < par->num_components(); ++i)
             {
-                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<FloatParameterComponent*>(par->get_component(i))));
+                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<FloatComponent*>(par->get_component(i))));
             }
             return widget;
         }

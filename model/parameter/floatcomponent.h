@@ -4,14 +4,14 @@
 
 
 
-class FloatParameterComponent : public BaseComponent
+class FloatComponent : public BaseComponent
 {
     Q_OBJECT
 
 public:
 
-    FloatParameterComponent(double value, BaseParameterOld* parameter);
-    FloatParameterComponent(double value, double min, double max, BaseParameterOld* parameter);
+    FloatComponent(double value, BaseParameterOld* parameter);
+    FloatComponent(double value, double min, double max, BaseParameterOld* parameter);
 
     bool update() override;
 
@@ -25,8 +25,8 @@ public slots:
     void set_min(double min);
     void set_max(double max);
 
-    void set(int64_t value) override;
-    void set(double value) override;
+    void feed(int64_t value) override;
+    void feed(double value) override;
 
 signals:
 

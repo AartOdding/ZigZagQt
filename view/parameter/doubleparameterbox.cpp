@@ -1,11 +1,11 @@
 #include "doubleparameterbox.h"
-#include "model/parameter/floatparametercomponent.h"
+#include "model/parameter/floatcomponent.h"
 #include "utility/numeric.h"
 
 #include <numeric>
 
 
-DoubleParameterBox::DoubleParameterBox(QWidget * parent, FloatParameterComponent* par)
+DoubleParameterBox::DoubleParameterBox(QWidget * parent, FloatComponent* par)
     : QDoubleSpinBox(parent), parameter(par)
 {
     Q_ASSERT(par);
@@ -21,12 +21,12 @@ DoubleParameterBox::DoubleParameterBox(QWidget * parent, FloatParameterComponent
     connect(parameter, &BaseComponent::flagsChanged, this, &DoubleParameterBox::on_parameter_flags_changed);
     connect(parameter, &BaseComponent::startedImportingFrom, this, &DoubleParameterBox::on_parameter_started_importing);
     connect(parameter, &BaseComponent::stoppedImportingFrom, this, &DoubleParameterBox::on_parameters_stopped_importing);
-    connect(parameter, &FloatParameterComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
-    connect(parameter, &FloatParameterComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
+    connect(parameter, &FloatComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
+    connect(parameter, &FloatComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
 
-    if (par->hasFlag(BaseComponent::IsUpdateEager))
+    if (!par->hasFlag(BaseComponent::MinimalUpdates))
     {
-        connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), par, qOverload<double>(&BaseComponent::set));
+        connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), par, qOverload<double>(&BaseComponent::feed));
     }
     else
     {
@@ -50,7 +50,7 @@ void DoubleParameterBox::on_parameters_stopped_importing(BaseComponent *)
 
 void DoubleParameterBox::on_editing_finished()
 {
-    parameter->set(value());
+    parameter->feed(value());
 }
 
 
@@ -74,16 +74,16 @@ void DoubleParameterBox::on_parameter_max_changed(double new_max)
 
 void DoubleParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
 {
-    if ((old_flags & BaseComponent::IsUpdateEager) != (new_flags & BaseComponent::IsUpdateEager))
+    if ((old_flags & BaseComponent::MinimalUpdates) != (new_flags & BaseComponent::MinimalUpdates))
     {
-        if (parameter->hasFlag(BaseComponent::IsUpdateEager))
+        if (!parameter->hasFlag(BaseComponent::MinimalUpdates))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
-            connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::set));
+            connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::feed));
         }
         else
         {
-            disconnect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::set));
+            disconnect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::feed));
             connect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
         }
     }

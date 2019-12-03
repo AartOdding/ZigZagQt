@@ -16,8 +16,8 @@ public:
 
 public slots:
 
-    void set(int64_t value) override;
-    void set(double value) override;
+    void feed(int64_t value) override;
+    void feed(double value) override;
 
 private:
 
