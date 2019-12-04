@@ -70,18 +70,18 @@ private:
         switch (exporter_->getComponentType())
         {
         case BaseComponent::Int64:
-            QObject::connect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged), importer_, qOverload<int64_t>(&BaseComponent::feed));
-            importer_->feed(static_cast<IntParameterComponent*>(exporter_)->get());
+            QObject::connect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged), importer_, qOverload<int64_t>(&BaseComponent::store));
+            importer_->store(static_cast<IntParameterComponent*>(exporter_)->get());
             break;
         case BaseComponent::Float64:
-            QObject::connect(exporter_, qOverload<double>(&BaseComponent::valueChanged), importer_, qOverload<double>(&BaseComponent::feed));
-            importer_->feed(static_cast<FloatComponent*>(exporter_)->get_value());
+            QObject::connect(exporter_, qOverload<double>(&BaseComponent::valueChanged), importer_, qOverload<double>(&BaseComponent::store));
+            importer_->store(static_cast<FloatComponent*>(exporter_)->get_value());
             break;
         case BaseComponent::Text:
-            QObject::connect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged), importer_, qOverload<const QString&>(&BaseComponent::feed));
+            QObject::connect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged), importer_, qOverload<const QString&>(&BaseComponent::store));
             break;
         case BaseComponent::Reference:
-            QObject::connect(exporter_, qOverload<QObject*>(&BaseComponent::valueChanged), importer_, qOverload<QObject*>(&BaseComponent::feed));
+            QObject::connect(exporter_, qOverload<QObject*>(&BaseComponent::valueChanged), importer_, qOverload<QObject*>(&BaseComponent::store));
             break;
         }
 
@@ -103,16 +103,16 @@ private:
         switch (exporter_->getComponentType())
         {
         case BaseComponent::Int64:
-            QObject::disconnect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged), importer_, qOverload<int64_t>(&BaseComponent::feed));
+            QObject::disconnect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged), importer_, qOverload<int64_t>(&BaseComponent::store));
             break;
         case BaseComponent::Float64:
-            QObject::disconnect(exporter_, qOverload<double>(&BaseComponent::valueChanged), importer_, qOverload<double>(&BaseComponent::feed));
+            QObject::disconnect(exporter_, qOverload<double>(&BaseComponent::valueChanged), importer_, qOverload<double>(&BaseComponent::store));
             break;
         case BaseComponent::Text:
-            QObject::disconnect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged), importer_, qOverload<const QString&>(&BaseComponent::feed));
+            QObject::disconnect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged), importer_, qOverload<const QString&>(&BaseComponent::store));
             break;
         case BaseComponent::Reference:
-            QObject::disconnect(exporter_, qOverload<QObject*>(&BaseComponent::valueChanged), importer_, qOverload<QObject*>(&BaseComponent::feed));
+            QObject::disconnect(exporter_, qOverload<QObject*>(&BaseComponent::valueChanged), importer_, qOverload<QObject*>(&BaseComponent::store));
             break;
         }
 

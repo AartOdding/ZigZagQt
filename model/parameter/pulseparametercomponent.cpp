@@ -20,13 +20,13 @@ bool PulseParameterComponent::update()
 }
 
 
-void PulseParameterComponent::feed(int64_t)
+void PulseParameterComponent::store(int64_t)
 {
     received_signal = true;
 }
 
 
-void PulseParameterComponent::feed(double)
+void PulseParameterComponent::store(double)
 {
     received_signal = true;
 }

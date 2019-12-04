@@ -26,7 +26,7 @@ Int64ParameterBox::Int64ParameterBox(QWidget * parent, IntParameterComponent* pa
 
     if (!par->hasFlag(BaseComponent::MinimalUpdates))
     {
-        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseComponent::feed));
+        connect(this, qOverload<int>(&QSpinBox::valueChanged), par, qOverload<int64_t>(&BaseComponent::store));
     }
     else
     {
@@ -49,7 +49,7 @@ void Int64ParameterBox::on_parameters_stopped_importing(BaseComponent *)
 
 void Int64ParameterBox::on_editing_finished()
 {
-    parameter->feed(static_cast<int64_t>(value()));
+    parameter->store(static_cast<int64_t>(value()));
 }
 
 
@@ -78,11 +78,11 @@ void Int64ParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
         if (!parameter->hasFlag(BaseComponent::MinimalUpdates))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
-            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::feed));
+            connect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::store));
         }
         else
         {
-            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::feed));
+            disconnect(this, qOverload<int>(&QSpinBox::valueChanged), parameter, qOverload<int64_t>(&BaseComponent::store));
             connect(this, &QAbstractSpinBox::editingFinished, this, &Int64ParameterBox::on_editing_finished);
         }
     }

@@ -39,7 +39,7 @@ const EnumDefinition * EnumPar::get_enum() const
 
 void EnumPar::set(int new_index)
 {
-    index.feed((int64_t)new_index);
+    index.store((int64_t)new_index);
 }
 
 

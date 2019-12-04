@@ -28,8 +28,8 @@ public slots:
     void set_min(int64_t min);
     void set_max(int64_t max);
 
-    void feed(int64_t value) override;
-    void feed(double value) override;
+    void store(int64_t value) override;
+    void store(double value) override;
 
 signals:
 
