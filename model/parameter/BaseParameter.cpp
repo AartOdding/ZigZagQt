@@ -33,7 +33,7 @@ bool BaseParameter::update(bool silent)
 
     for (auto component : m_components)
     {
-        changed |= component->update();
+        changed |= component->run();
     }
     for (auto parameter : getParameters())
     {

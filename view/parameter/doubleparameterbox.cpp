@@ -26,7 +26,7 @@ DoubleParameterBox::DoubleParameterBox(QWidget * parent, FloatComponent* par)
 
     if (!par->hasFlag(BaseComponent::MinimalUpdates))
     {
-        connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), par, qOverload<double>(&BaseComponent::store));
+        connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), par, qOverload<double>(&BaseComponent::change));
     }
     else
     {
@@ -50,7 +50,7 @@ void DoubleParameterBox::on_parameters_stopped_importing(BaseComponent *)
 
 void DoubleParameterBox::on_editing_finished()
 {
-    parameter->store(value());
+    parameter->change(value());
 }
 
 
@@ -79,11 +79,11 @@ void DoubleParameterBox::on_parameter_flags_changed(int old_flags, int new_flags
         if (!parameter->hasFlag(BaseComponent::MinimalUpdates))
         {
             disconnect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
-            connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::store));
+            connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::change));
         }
         else
         {
-            disconnect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::store));
+            disconnect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::change));
             connect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
         }
     }

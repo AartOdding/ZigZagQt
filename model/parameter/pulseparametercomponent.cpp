@@ -9,7 +9,7 @@ PulseParameterComponent::PulseParameterComponent(BaseParameterOld* parameter)
 }
 
 
-bool PulseParameterComponent::update()
+bool PulseParameterComponent::run()
 {
     if (received_signal)
     {
@@ -20,13 +20,13 @@ bool PulseParameterComponent::update()
 }
 
 
-void PulseParameterComponent::store(int64_t)
+void PulseParameterComponent::change(int64_t)
 {
     received_signal = true;
 }
 
 
-void PulseParameterComponent::store(double)
+void PulseParameterComponent::change(double)
 {
     received_signal = true;
 }

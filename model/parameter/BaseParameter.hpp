@@ -37,10 +37,10 @@ private:
 
     friend class BaseComponent;
 
-    ParameterType m_parameterType;
-
     // components will add and remove themselves in their constructor/ destructor
     std::vector<BaseComponent*> m_components;
+
+    ParameterType m_parameterType;
 
 };
 

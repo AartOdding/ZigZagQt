@@ -23,7 +23,7 @@ IntParameterComponent::IntParameterComponent(int64_t value, int64_t min, int64_t
 }
 
 
-bool IntParameterComponent::update()
+bool IntParameterComponent::run()
 {
     if (new_value_pending && pending_value != current_value)
     {
@@ -103,14 +103,14 @@ void IntParameterComponent::set_max(int64_t max)
 }
 
 
-void IntParameterComponent::store(int64_t value)
+void IntParameterComponent::change(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void IntParameterComponent::store(double value)
+void IntParameterComponent::change(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

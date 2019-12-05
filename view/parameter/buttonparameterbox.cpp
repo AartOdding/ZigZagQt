@@ -13,5 +13,5 @@ ButtonParameterBox::ButtonParameterBox(QWidget * parent, ButtonPar* b)
 
 void ButtonParameterBox::on_button_clicked()
 {
-    button->get_component(0)->store(static_cast<int64_t>(1));
+    button->get_component(0)->change(static_cast<int64_t>(1));
 }

@@ -12,12 +12,12 @@ public:
 
     PulseParameterComponent(BaseParameterOld* parameter);
 
-    bool update() override;
+    bool run() override;
 
 public slots:
 
-    void store(int64_t value) override;
-    void store(double value) override;
+    void change(int64_t value) override;
+    void change(double value) override;
 
 private:
 

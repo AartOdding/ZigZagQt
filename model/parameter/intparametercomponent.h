@@ -13,7 +13,7 @@ public:
     IntParameterComponent(int64_t value, BaseParameterOld* parameter);
     IntParameterComponent(int64_t value, int64_t min, int64_t max, BaseParameterOld* parameter);
 
-    bool update() override;
+    bool run() override;
 
     int64_t get() const;
     int64_t get_min() const;
@@ -28,8 +28,8 @@ public slots:
     void set_min(int64_t min);
     void set_max(int64_t max);
 
-    void store(int64_t value) override;
-    void store(double value) override;
+    void change(int64_t value) override;
+    void change(double value) override;
 
 signals:
 

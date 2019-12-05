@@ -13,7 +13,7 @@ public:
     FloatComponent(double value, BaseParameterOld* parameter);
     FloatComponent(double value, double min, double max, BaseParameterOld* parameter);
 
-    bool update() override;
+    bool run() override;
 
     double get_value() const;
     double get_min() const;
@@ -25,8 +25,8 @@ public slots:
     void set_min(double min);
     void set_max(double max);
 
-    void store(int64_t value) override;
-    void store(double value) override;
+    void change(int64_t value) override;
+    void change(double value) override;
 
 signals:
 

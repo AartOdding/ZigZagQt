@@ -16,14 +16,7 @@ class BaseComponent : public QObject
 
 public:
 
-    enum ComponentType : qint32
-    {
-        Int64,
-        Float64,
-        Text
-    };
-
-    enum ParameterFlags : quint32
+    enum ParameterFlags
     {
         CanImport      =  1<<0,
         CanExport      =  1<<1,
@@ -34,7 +27,7 @@ public:
         DefaultFlags = CanImport | CanExport | IsEditable | IsVisible
     };
 
-    BaseComponent(BaseParameterOld * parameter, ComponentType componentType);
+    BaseComponent(BaseParameterOld * parameter);
 
     virtual ~BaseComponent() = default;
 
@@ -43,8 +36,6 @@ public:
     bool hasFlag(ParameterFlags flag) const;
 
     BaseParameterOld * getParameter() const;
-
-    ComponentType getComponentType() const;
 
     bool isImporting() const;
     bool isExporting() const;
@@ -55,7 +46,7 @@ public:
     /*
      * Should process any pending changes, should return true if value of the component changed.
      */
-    virtual bool update() = 0;
+    virtual bool run() = 0;
 
     void setFlags(ParameterFlags flags);
     void setFlag(ParameterFlags flag, bool value);
@@ -65,19 +56,20 @@ public:
     void stopExporting();
 
     virtual void readXml(QXmlStreamReader& xml);
-
     virtual void writeXml(XmlSerializer& xml);
 
 public slots:
 
     /*
-     * The idea of the store functions is that they don't directly change the value, but instead
-     * store the value, so it can actually be changed in the update function. Their base implementation
-     * is empty and does nothing, deriving classes can choose which feed methods to implement.
+     * The idea of the change functions is that they don't directly change the value, but instead
+     * store the value, so it can actually be changed during the run function. Their base implementation
+     * is empty and does nothing, deriving classes can choose which update methods to implement.
+     * This means a component can choose to ignore updates from certain types, but listen to others.
      */
-    virtual void store(int64_t)        { }
-    virtual void store(double)         { }
-    virtual void store(const QString&) { }
+    virtual void change()               { }
+    virtual void change(int64_t)        { }
+    virtual void change(double)         { }
+    virtual void change(const QString&) { }
 
 signals:
 
@@ -98,6 +90,7 @@ signals:
      * Can be used by deriving classes to signal that the components value has changed.
      * When importing exporting components these signals are connected to the store slots.
      */
+    void valueChanged();
     void valueChanged(int64_t value);
     void valueChanged(double value);
     void valueChanged(const QString& value);
@@ -110,8 +103,6 @@ private:
     BaseParameterOld * parameter = nullptr;
     BaseComponent * import = nullptr;
     std::vector<BaseComponent *> exports;
-
-    ComponentType m_componentType;
 
     ParameterFlags flags = DefaultFlags;
 

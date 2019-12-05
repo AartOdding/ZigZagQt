@@ -22,7 +22,7 @@ FloatComponent::FloatComponent(double value, double min, double max, BaseParamet
 }
 
 
-bool FloatComponent::update()
+bool FloatComponent::run()
 {
     if (new_value_pending && pending_value != current_value)
     {
@@ -102,14 +102,14 @@ void FloatComponent::set_max(double max)
 }
 
 
-void FloatComponent::store(int64_t value)
+void FloatComponent::change(int64_t value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;
 }
 
 
-void FloatComponent::store(double value)
+void FloatComponent::change(double value)
 {
     pending_value = value;
     new_value_pending = pending_value != current_value;

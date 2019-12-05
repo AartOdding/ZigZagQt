@@ -57,7 +57,7 @@ void BaseParameterOld::process_parameter_changes()
 
     for (int i = 0; i < num_components(); ++i)
     {
-        changed |= get_component(i)->update();
+        changed |= get_component(i)->run();
     }
 
     if (changed)
