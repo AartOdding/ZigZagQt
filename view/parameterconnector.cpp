@@ -53,7 +53,7 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
             int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
             for (int i = 0; i < num_components; ++i)
             {
-                last_selected_parameter->get_component(i)->setImport(o->last_selected_parameter->get_component(i));
+                last_selected_parameter->get_component(i)->startImporting(o->last_selected_parameter->get_component(i));
             }
             return true;
         }
@@ -62,7 +62,7 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
             int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
             for (int i = 0; i < num_components; ++i)
             {
-                o->last_selected_parameter->get_component(i)->setImport(last_selected_parameter->get_component(i));
+                o->last_selected_parameter->get_component(i)->startImporting(last_selected_parameter->get_component(i));
             }
             return true;
         }

@@ -6,7 +6,7 @@
 
 
 class BaseComponent;
-class IntParameterComponent;
+class Int64Component;
 
 
 

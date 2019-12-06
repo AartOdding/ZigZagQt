@@ -5,7 +5,7 @@
 #include <optional>
 
 #include "baseparameterold.h"
-#include "floatcomponent.h"
+#include "Float64Component.hpp"
 
 
 
@@ -188,7 +188,7 @@ private:
 
     static constexpr std::array parameter_types{ ParameterType::Float, ParameterType::Float2, ParameterType::Float3, ParameterType::Float4 };
 
-    std::array<std::optional<FloatComponent>, NUM_COMPONENTS> components;
+    std::array<std::optional<Float64Component>, NUM_COMPONENTS> components;
 
 
 };

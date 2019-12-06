@@ -52,13 +52,14 @@ SOURCES += \
     model/operatorlibrary.cpp \
     model/parameter/BaseComponent.cpp \
     model/parameter/BaseParameter.cpp \
+    model/parameter/Float64Component.cpp \
+    model/parameter/Int64Component.cpp \
+    model/parameter/TextComponent.cpp \
+    model/parameter/TriggerComponent.cpp \
     model/parameter/baseparameterold.cpp \
         model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
-    model/parameter/floatcomponent.cpp \
-        model/parameter/intparametercomponent.cpp \
         model/parameter/parameterrow.cpp \
-        model/parameter/pulseparametercomponent.cpp \
         model/parameter/transform.cpp \
         model/projectmodel.cpp \
         model/projectscope.cpp \
@@ -128,15 +129,16 @@ HEADERS += \
         model/operatorlibrary.h \
         model/parameter/BaseComponent.hpp \
         model/parameter/BaseParameter.hpp \
+        model/parameter/Float64Component.hpp \
+        model/parameter/Int64Component.hpp \
+        model/parameter/TextComponent.hpp \
+        model/parameter/TriggerComponent.hpp \
         model/parameter/baseparameterold.h \
         model/parameter/buttonparameter.h \
         model/parameter/enumparameter.h \
-        model/parameter/floatcomponent.h \
         model/parameter/floatparameter.h \
         model/parameter/intparameter.h \
-        model/parameter/intparametercomponent.h \
         model/parameter/parameterrow.h \
-        model/parameter/pulseparametercomponent.h \
         model/parameter/transform.h \
         model/projectmodel.h \
         model/projectscope.h \

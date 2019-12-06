@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #include "baseparameterold.h"
-#include "intparametercomponent.h"
+#include "Int64Component.hpp"
 
 
 
@@ -184,7 +184,7 @@ private:
 
     static constexpr std::array parameter_types{ ParameterType::Int, ParameterType::Int2, ParameterType::Int3, ParameterType::Int4 };
 
-    std::array<std::optional<IntParameterComponent>, NUM_COMPONENTS> components;
+    std::array<std::optional<Int64Component>, NUM_COMPONENTS> components;
 
 
 };

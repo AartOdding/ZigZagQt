@@ -4,7 +4,7 @@
 
 
 class BaseComponent;
-class IntParameterComponent;
+class Int64Component;
 
 
 
@@ -14,7 +14,7 @@ class Int64ParameterBox : public QSpinBox
 
 public:
 
-    Int64ParameterBox(QWidget * parent, IntParameterComponent * parameter);
+    Int64ParameterBox(QWidget * parent, Int64Component * parameter);
 
 
 public slots:
@@ -32,6 +32,6 @@ public slots:
 
 private:
 
-    IntParameterComponent * parameter;
+    Int64Component * parameter;
 
 };

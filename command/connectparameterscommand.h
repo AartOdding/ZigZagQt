@@ -15,10 +15,10 @@ class ConnectParametersCommand : public QUndoCommand
 public:
 
     ConnectParametersCommand(BaseComponent* exporter, BaseComponent* importer_)
-        : importer(importer_), new_exporter(exporter), initial_exporter(importer->import)
+        : importer(importer_), new_exporter(exporter), initial_exporter(importer->m_import)
     {
         Q_ASSERT(exporter && importer && exporter != importer);
-        Q_ASSERT(new_exporter != importer->import);
+        Q_ASSERT(new_exporter != importer->m_import);
     }
 
 
@@ -26,13 +26,13 @@ public:
     {
         if (initial_exporter)
         {
-            Q_ASSERT(importer->import == initial_exporter);
-            Q_ASSERT(contains(initial_exporter->exports, importer));
+            Q_ASSERT(importer->m_import == initial_exporter);
+            Q_ASSERT(contains(initial_exporter->m_exports, importer));
 
             break_connection(initial_exporter, importer);
         }
-        Q_ASSERT(importer->import == nullptr);
-        Q_ASSERT(!contains(new_exporter->exports, importer));
+        Q_ASSERT(importer->m_import == nullptr);
+        Q_ASSERT(!contains(new_exporter->m_exports, importer));
 
         make_connection(new_exporter, importer);
     }
@@ -40,15 +40,15 @@ public:
 
     void undo() override
     {
-        Q_ASSERT(importer->import == new_exporter);
-        Q_ASSERT(contains(new_exporter->exports, importer));
+        Q_ASSERT(importer->m_import == new_exporter);
+        Q_ASSERT(contains(new_exporter->m_exports, importer));
 
         break_connection(new_exporter, importer);
 
         if (initial_exporter)
         {
-            Q_ASSERT(importer->import == nullptr);
-            Q_ASSERT(!contains(initial_exporter->exports, importer));
+            Q_ASSERT(importer->m_import == nullptr);
+            Q_ASSERT(!contains(initial_exporter->m_exports, importer));
 
             make_connection(initial_exporter, importer);
         }
@@ -60,8 +60,8 @@ private:
     void make_connection(BaseComponent* exporter_, BaseComponent* importer_) const
     {
         // Add the importing/ exporting pointers in the parameters.
-        importer_->import = exporter_;
-        exporter_->exports.push_back(importer_);
+        importer_->m_import = exporter_;
+        exporter_->m_exports.push_back(importer_);
 
         // Add the parameters to their parent's list of importing/ exporting parameters.
         importer_->getParameter()->get_operator()->m_importing_parameters.push_back(importer_);
@@ -71,11 +71,11 @@ private:
         {
         case BaseComponent::Int64:
             QObject::connect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged), importer_, qOverload<int64_t>(&BaseComponent::change));
-            importer_->change(static_cast<IntParameterComponent*>(exporter_)->get());
+            importer_->change(static_cast<Int64Component*>(exporter_)->getValue());
             break;
         case BaseComponent::Float64:
             QObject::connect(exporter_, qOverload<double>(&BaseComponent::valueChanged), importer_, qOverload<double>(&BaseComponent::change));
-            importer_->change(static_cast<FloatComponent*>(exporter_)->get_value());
+            importer_->change(static_cast<Float64Component*>(exporter_)->getValue());
             break;
         case BaseComponent::Text:
             QObject::connect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged), importer_, qOverload<const QString&>(&BaseComponent::change));
@@ -93,8 +93,8 @@ private:
     void break_connection(BaseComponent* exporter_, BaseComponent* importer_) const
     {
         // Add the importing/ exporting pointers in the parameters.
-        importer_->import = nullptr;
-        erase(exporter_->exports, importer_);
+        importer_->m_import = nullptr;
+        erase(exporter_->m_exports, importer_);
 
         // Erase the parameters from their parent's list of importing/ exporting parameters.
         erase(importer_->getParameter()->get_operator()->m_importing_parameters, importer_);

@@ -1,28 +1,28 @@
 #include "doubleparameterbox.h"
-#include "model/parameter/floatcomponent.h"
+#include "model/parameter/Float64Component.hpp"
 #include "utility/numeric.h"
 
 #include <numeric>
 
 
-DoubleParameterBox::DoubleParameterBox(QWidget * parent, FloatComponent* par)
+DoubleParameterBox::DoubleParameterBox(QWidget * parent, Float64Component* par)
     : QDoubleSpinBox(parent), parameter(par)
 {
     Q_ASSERT(par);
 
     setMinimumWidth(50);
     setButtonSymbols(QAbstractSpinBox::NoButtons);
-    setRange(par->get_min(), par->get_max());
-    setValue(par->get_value());
+    setRange(par->getMin(), par->getMax());
+    setValue(par->getValue());
     setSingleStep(0.1);
 
     connect(parameter, qOverload<double>(&BaseComponent::valueChanged), this, &DoubleParameterBox::on_parameter_value_changed);
 
-    connect(parameter, &BaseComponent::flagsChanged, this, &DoubleParameterBox::on_parameter_flags_changed);
+    connect(parameter, &BaseComponent::flagChanged, this, &DoubleParameterBox::on_parameter_flags_changed);
     connect(parameter, &BaseComponent::startedImportingFrom, this, &DoubleParameterBox::on_parameter_started_importing);
     connect(parameter, &BaseComponent::stoppedImportingFrom, this, &DoubleParameterBox::on_parameters_stopped_importing);
-    connect(parameter, &FloatComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
-    connect(parameter, &FloatComponent::min_changed, this, &DoubleParameterBox::on_parameter_min_changed);
+    connect(parameter, &Float64Component::minChanged, this, &DoubleParameterBox::on_parameter_min_changed);
+    connect(parameter, &Float64Component::minChanged, this, &DoubleParameterBox::on_parameter_min_changed);
 
     if (!par->hasFlag(BaseComponent::MinimalUpdates))
     {

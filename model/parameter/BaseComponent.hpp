@@ -1,12 +1,33 @@
 #pragma once
 
+#include <array>
 #include <vector>
+#include <bitset>
 #include <QObject>
 
-class BaseParameterOld;
+class BaseParameter;
 
 class XmlSerializer;
 class QXmlStreamReader;
+
+
+
+enum class ParameterFlags
+{
+    CanImport      =  0,
+    CanExport      =  1,
+    IsEditable     =  2, // When false The widget will appear in the gui but not be user editable.
+    IsVisible      =  3, // When false The widget will not appear in the gui at all.
+    MinimalUpdates =  4  // When true only receive one update when the widget is deselected, when false update a often as possible.
+};
+
+static constexpr std::array<ParameterFlags, 4> defaultParameterFlags
+{
+    ParameterFlags::CanImport,
+    ParameterFlags::CanExport,
+    ParameterFlags::IsEditable,
+    ParameterFlags::IsVisible
+};
 
 
 
@@ -16,44 +37,34 @@ class BaseComponent : public QObject
 
 public:
 
-    enum ParameterFlags
-    {
-        CanImport      =  1<<0,
-        CanExport      =  1<<1,
-        IsEditable     =  1<<2, // When false The widget will appear in the gui but not be user editable.
-        IsVisible      =  1<<3, // When false The widget will not appear in the gui at all.
-        MinimalUpdates =  1<<4, // When true only receive one update when the widget is deselected, when false update a often as possible.
-
-        DefaultFlags = CanImport | CanExport | IsEditable | IsVisible
-    };
-
-    BaseComponent(BaseParameterOld * parameter);
+    BaseComponent(BaseParameter * parameter);
 
     virtual ~BaseComponent() = default;
 
 
-    int getFlags() const;
-    bool hasFlag(ParameterFlags flag) const;
+    /*
+     * Should process any pending changes, should return true if value of the component changed.
+     */
+    virtual bool update() = 0;
 
-    BaseParameterOld * getParameter() const;
 
     bool isImporting() const;
     bool isExporting() const;
 
+    void startImporting(BaseComponent * exportingComponent);
+    void stopImporting();
+    void stopExporting();
+
     BaseComponent * getImport() const;
     const std::vector<BaseComponent *>& getExports() const;
 
-    /*
-     * Should process any pending changes, should return true if value of the component changed.
-     */
-    virtual bool run() = 0;
 
-    void setFlags(ParameterFlags flags);
+    bool hasFlag(ParameterFlags flag) const;
     void setFlag(ParameterFlags flag, bool value);
 
-    void setImport(BaseComponent * exporter);
-    void stopImporting();
-    void stopExporting();
+
+    BaseParameter * getParameter() const;
+
 
     virtual void readXml(QXmlStreamReader& xml);
     virtual void writeXml(XmlSerializer& xml);
@@ -76,7 +87,7 @@ signals:
     /*
      * Send out when the components flags have been changed.
      */
-    void flagsChanged(ParameterFlags old_flags, ParameterFlags new_flags);
+    void flagChanged(ParameterFlags flag, bool value);
 
     /*
      * Signals send out when import/ export connections are made/ destroyed.
@@ -100,10 +111,10 @@ private:
     friend class ConnectParametersCommand;
     friend class DisconnectParametersCommand;
 
-    BaseParameterOld * parameter = nullptr;
-    BaseComponent * import = nullptr;
-    std::vector<BaseComponent *> exports;
+    BaseParameter * m_parameter = nullptr;
+    BaseComponent * m_import = nullptr;
+    std::vector<BaseComponent *> m_exports;
 
-    ParameterFlags flags = DefaultFlags;
+    std::bitset<32> m_flags;
 
 };

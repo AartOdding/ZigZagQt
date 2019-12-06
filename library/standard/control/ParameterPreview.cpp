@@ -18,13 +18,13 @@ ParameterPreview::ParameterPreview(BaseOperator* parent_operator)
             viewed_pararmeter_component = par->get_component(0);
             connect(parent_operator, &BaseOperator::update_view_requested, this, &ParameterPreview::onUpdateNecessary);
 
-            if (viewed_pararmeter_component->getComponentType() == BaseComponent::ComponentType::Int64)
+            if (dynamic_cast<Int64Component*>(viewed_pararmeter_component))
             {
                 is_int = true;
                 connect(viewed_pararmeter_component, qOverload<int64_t>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedInt);
             }
-            else if (viewed_pararmeter_component->getComponentType() == BaseComponent::ComponentType::Float64)
+            if (dynamic_cast<Float64Component*>(viewed_pararmeter_component))
             {
                 is_int = false;
                 connect(viewed_pararmeter_component, qOverload<double>(&BaseComponent::valueChanged),

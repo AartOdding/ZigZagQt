@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include "baseparameterold.h"
-#include "intparametercomponent.h"
+#include "Int64Component.hpp"
 #include "model/enumdefinition.h"
 
 
@@ -34,7 +34,7 @@ private:
 
     const EnumDefinition * definition;
 
-    IntParameterComponent index;
+    Int64Component index;
 
 };
 

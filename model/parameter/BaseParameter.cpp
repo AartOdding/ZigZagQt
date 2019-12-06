@@ -9,10 +9,12 @@ BaseParameter::BaseParameter(ParameterType parameterType, BaseZigZagObject * par
 }
 
 
+
 std::vector<BaseComponent*> BaseParameter::getComponents()
 {
     return m_components;
 }
+
 
 
 const std::vector<BaseComponent*>& BaseParameter::getComponents() const
@@ -21,10 +23,12 @@ const std::vector<BaseComponent*>& BaseParameter::getComponents() const
 }
 
 
+
 ParameterType BaseParameter::getParameterType() const
 {
     return m_parameterType;
 }
+
 
 
 bool BaseParameter::update(bool silent)
@@ -33,7 +37,7 @@ bool BaseParameter::update(bool silent)
 
     for (auto component : m_components)
     {
-        changed |= component->run();
+        changed |= component->update();
     }
     for (auto parameter : getParameters())
     {
@@ -45,6 +49,7 @@ bool BaseParameter::update(bool silent)
     }
     return changed;
 }
+
 
 
 void BaseParameter::disconnectParameters(bool recursive)

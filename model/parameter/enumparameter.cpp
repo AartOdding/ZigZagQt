@@ -21,13 +21,13 @@ EnumPar::EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefin
 
 int EnumPar::get_index() const
 {
-    return static_cast<int>(index.get());
+    return static_cast<int>(index.getValue());
 }
 
 
 const QString& EnumPar::get_text() const
 {
-    return definition->operator[](static_cast<int>(index.get()));
+    return definition->operator[](static_cast<int>(index.getValue()));
 }
 
 

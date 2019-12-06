@@ -1,4 +1,5 @@
 #include "BaseComponent.hpp"
+#include "BaseParameter.hpp"
 #include "application.h"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
@@ -8,117 +9,98 @@
 #include <QXmlStreamReader>
 
 
-BaseComponent::BaseComponent(BaseParameterOld * parameter_, ComponentType type_)
-    : parameter(parameter_), m_componentType(type_)
-{
 
+BaseComponent::BaseComponent(BaseParameter * parameter)
+    : m_parameter(parameter)
+{
+    for (ParameterFlags flag : defaultParameterFlags)
+    {
+        m_flags.set(static_cast<int>(flag), true);
+    }
 }
 
-
-BaseComponent::ComponentType BaseComponent::getComponentType() const
-{
-    return m_componentType;
-}
-
-
-BaseParameterOld * BaseComponent::getParameter() const
-{
-    return parameter;
-}
-
-
-int BaseComponent::getFlags() const
-{
-    return flags;
-}
-
-
-bool BaseComponent::hasFlag(ParameterFlags flag) const
-{
-    return (flags & flag) != 0;
-}
 
 
 bool BaseComponent::isImporting() const
 {
-    return import != nullptr;
+    return m_import != nullptr;
 }
+
 
 
 bool BaseComponent::isExporting() const
 {
-    return !exports.empty();
+    return !m_exports.empty();
 }
 
 
-BaseComponent * BaseComponent::getImport() const
-{
-    return import;
-}
 
-
-const std::vector<BaseComponent *>& BaseComponent::getExports() const
-{
-    return exports;
-}
-
-
-void BaseComponent::setFlags(ParameterFlags new_flags)
-{
-    if (flags != new_flags)
-    {
-        ParameterFlags old_flags = flags;
-        flags = new_flags;
-        emit flagsChanged(old_flags, new_flags);
-    }
-}
-
-
-void BaseComponent::setFlag(ParameterFlags flag, bool value)
-{
-    auto current_value = hasFlag(flag);
-
-    if (current_value != value)
-    {
-        ParameterFlags old_flags = flags;
-
-        if (value)
-        {
-            flags = static_cast<ParameterFlags>(flags | flag);
-        }
-        else
-        {
-            flags = static_cast<ParameterFlags>(flags & ~flag);
-        }
-        emit flagsChanged(old_flags, flags);
-    }
-}
-
-
-void BaseComponent::setImport(BaseComponent * exporting_import)
+void BaseComponent::startImporting(BaseComponent * exporting_import)
 {
     auto undo_stack = application::project_model()->get_undo_stack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
 }
 
 
+
 void BaseComponent::stopImporting()
 {
-    if (import)
+    if (m_import)
     {
         auto undo_stack = application::project_model()->get_undo_stack();
-        undo_stack->push(new DisconnectParametersCommand(import, this));
+        undo_stack->push(new DisconnectParametersCommand(m_import, this));
     }
 }
+
 
 
 void BaseComponent::stopExporting()
 {
-    while (!exports.empty())
+    while (!m_exports.empty())
     {
-        exports.back()->stopImporting();
+        m_exports.back()->stopImporting();
     }
 }
+
+
+
+BaseComponent * BaseComponent::getImport() const
+{
+    return m_import;
+}
+
+
+
+const std::vector<BaseComponent *>& BaseComponent::getExports() const
+{
+    return m_exports;
+}
+
+
+
+bool BaseComponent::hasFlag(ParameterFlags flag) const
+{
+    return m_flags.test(static_cast<int>(flag));
+}
+
+
+
+void BaseComponent::setFlag(ParameterFlags flag, bool value)
+{
+    if (m_flags.test(static_cast<int>(flag)) != value)
+    {
+        m_flags.set(static_cast<int>(flag), value);
+        emit flagChanged(flag, value);
+    }
+}
+
+
+
+BaseParameter * BaseComponent::getParameter() const
+{
+    return m_parameter;
+}
+
 
 
 void BaseComponent::readXml(QXmlStreamReader& xml)
@@ -127,19 +109,20 @@ void BaseComponent::readXml(QXmlStreamReader& xml)
 }
 
 
+
 void BaseComponent::writeXml(XmlSerializer& xml)
 {
     xml.begin_element("BaseParameterComponent");
     xml.add_int_attribute("id", xml.id(this));
 
-        xml.add_int_element("component_type", static_cast<qint32>(m_componentType));
-        xml.add_int_element("flags", static_cast<quint32>(flags));
-        xml.add_int_element("import", xml.id(import));
+        //xml.add_int_element("component_type", static_cast<qint32>(m_componentType));
+        //xml.add_int_element("flags", static_cast<quint32>(m_flags));
+        xml.add_int_element("import", xml.id(m_import));
 
         xml.begin_element("exports");
-        xml.add_int_attribute("size", exports.size());
+        xml.add_int_attribute("size", m_exports.size());
 
-            for (auto e : exports)
+            for (auto e : m_exports)
             {
                 xml.add_int_element("export", xml.id(e));
             }
@@ -148,20 +131,3 @@ void BaseComponent::writeXml(XmlSerializer& xml)
 
     xml.end_element(); // ends BaseParameterComponent
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

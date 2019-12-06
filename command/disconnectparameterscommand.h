@@ -23,11 +23,11 @@ public:
 
     void redo() override
     {
-        Q_ASSERT(importer->import == exporter);
-        Q_ASSERT(contains(exporter->exports, importer));
+        Q_ASSERT(importer->m_import == exporter);
+        Q_ASSERT(contains(exporter->m_exports, importer));
 
-        importer->import = nullptr;
-        erase(exporter->exports, importer);
+        importer->m_import = nullptr;
+        erase(exporter->m_exports, importer);
 
         // Erase the parameters from their parent's list of importing/ exporting parameters.
         erase(importer->getParameter()->get_operator()->m_importing_parameters, importer);
@@ -41,12 +41,12 @@ public:
 
     void undo() override
     {
-        Q_ASSERT(importer->import == nullptr);
-        Q_ASSERT(!contains(exporter->exports, importer));
+        Q_ASSERT(importer->m_import == nullptr);
+        Q_ASSERT(!contains(exporter->m_exports, importer));
 
         // Add the importing/ exporting pointers in the parameters.
-        importer->import = exporter;
-        exporter->exports.push_back(importer);
+        importer->m_import = exporter;
+        exporter->m_exports.push_back(importer);
 
         // Add the parameters to their parent's list of importing/ exporting parameters.
         importer->getParameter()->get_operator()->m_importing_parameters.push_back(importer);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "baseparameterold.h"
-#include "pulseparametercomponent.h"
+#include "TriggerComponent.hpp"
 
 
 
@@ -22,6 +22,6 @@ public:
 
 private:
 
-    PulseParameterComponent pulse_component;
+    TriggerComponent pulse_component;
 
 };
