@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSpinBox>
+#include "model/parameter/BaseComponent.hpp"
 
 
 class BaseComponent;
@@ -24,11 +25,11 @@ public slots:
 
     void on_editing_finished();
 
-    void on_parameter_changed(int64_t new_value);
+    void on_parameterChangeEvent(int64_t new_value);
     void on_parameter_min_changed(int64_t new_min);
     void on_parameter_max_changed(int64_t new_max);
-    void on_parameter_flags_changed(int old_flags, int new_flags);
 
+    void onFlagsChanged(ParameterFlags flag, bool value);
 
 private:
 

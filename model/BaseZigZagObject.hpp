@@ -6,6 +6,8 @@
 
 
 class BaseParameter;
+class QXmlStreamReader;
+class XmlSerializer;
 
 
 
@@ -23,11 +25,21 @@ public:
     BaseZigZagObject * getParent();
     const BaseZigZagObject * getParent() const;
 
+    BaseZigZagObject * getTopParent();
+    const BaseZigZagObject * getTopParent() const;
+
+    template<typename Type>
+    Type * findParent();
+    template<typename Type>
+    const Type * findParent() const;
+
     std::vector<BaseZigZagObject*> getChildren();
     const std::vector<BaseZigZagObject*>& getChildren() const;
 
     std::vector<BaseParameter*> getParameters();
     const std::vector<BaseParameter*>& getParameters() const;
+
+    const QString& getName() const;
 
     /*
      * updateParameters() will call the update() function on every parameter that it has.
@@ -61,3 +73,50 @@ private:
 
 };
 
+
+
+
+template<typename Type>
+Type * BaseZigZagObject::findParent()
+{
+    BaseZigZagObject * parent = m_parent;
+    Type * typeParent;
+
+    while (parent)
+    {
+        typeParent = dynamic_cast<Type*>(parent);
+
+        if (typeParent)
+        {
+            break;
+        }
+        else
+        {
+            parent = parent->m_parent;
+        }
+    }
+    return typeParent;
+}
+
+
+template<typename Type>
+const Type * BaseZigZagObject::findParent() const
+{
+    const BaseZigZagObject * parent = m_parent;
+    const Type * typeParent;
+
+    while (parent)
+    {
+        typeParent = dynamic_cast<Type*>(parent);
+
+        if (typeParent)
+        {
+            break;
+        }
+        else
+        {
+            parent = parent->m_parent;
+        }
+    }
+    return typeParent;
+}

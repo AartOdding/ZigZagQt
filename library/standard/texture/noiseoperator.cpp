@@ -100,7 +100,7 @@ void NoiseOperator::run()
 }
 
 
-void NoiseOperator::parameter_changed(BaseParameterOld* parameter)
+void NoiseOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

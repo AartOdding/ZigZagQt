@@ -13,7 +13,9 @@
 
 
 BaseDataType::BaseDataType(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : BaseParameterOld(parent_op, ParameterType::DataOutput, name), data_type(&type_info)
+    : BaseZigZagObject(parent_op, name),
+      m_parent_operator(parent_op),
+      data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_output(this);
@@ -121,12 +123,17 @@ void BaseDataType::set_from_xml(QXmlStreamReader& xml)
 
 }
 
+BaseOperator* BaseDataType::get_operator() const
+{
+    return m_parent_operator;
+}
+
 
 void BaseDataType::write_to_xml(XmlSerializer& xml)
 {
     xml.begin_element("BaseDataType");
     xml.add_int_attribute("id", xml.id(this));
-        BaseParameterOld::write_to_xml(xml);
+        //BaseParameter::write_to_xml(xml);
         xml.begin_element("connections");
         xml.add_int_attribute("size", connections.size());
             for (auto connection : connections)

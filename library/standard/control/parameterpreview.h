@@ -1,9 +1,11 @@
 #pragma once
 
 #include "view/basedataview.h"
+#include "model/parameter/BaseComponent.hpp"
 #include <QObject>
 
 
+class BaseOperator;
 
 class ParameterPreview : public QObject,
                          public BaseDataView
@@ -37,7 +39,7 @@ private:
 
     bool is_int = true;
 
-    BaseComponent * viewed_pararmeter_component;
+    BaseComponent * viewedComponent;
 
     double floatValue = 0;
     int64_t intValue = 0;

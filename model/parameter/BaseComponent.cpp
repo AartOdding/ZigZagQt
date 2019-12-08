@@ -17,8 +17,19 @@ BaseComponent::BaseComponent(BaseParameter * parameter)
     {
         m_flags.set(static_cast<int>(flag), true);
     }
+    m_parameter->m_components.push_back(this);
 }
 
+
+BaseComponent::~BaseComponent()
+{
+    auto pos = std::find(m_parameter->m_components.begin(), m_parameter->m_components.end(), this);
+
+    if (pos != m_parameter->m_components.end())
+    {
+        m_parameter->m_components.erase(pos);
+    }
+}
 
 
 bool BaseComponent::isImporting() const

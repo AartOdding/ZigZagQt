@@ -110,7 +110,7 @@ void BlendOperator::run()
 }
 
 
-void BlendOperator::parameter_changed(BaseParameterOld* parameter)
+void BlendOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

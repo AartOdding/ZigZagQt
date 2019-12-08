@@ -33,7 +33,7 @@ void IncreasingValueOperator::run()
 }
 
 
-void IncreasingValueOperator::parameter_changed(BaseParameterOld * parameter)
+void IncreasingValueOperator::parameterChangeEvent(const BaseParameter * parameter)
 {
     if (parameter == &reset)
     {

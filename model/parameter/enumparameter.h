@@ -1,18 +1,18 @@
 #pragma once
 
 #include <QObject>
-#include "baseparameterold.h"
+#include "BaseParameter.hpp"
 #include "Int64Component.hpp"
 #include "model/enumdefinition.h"
 
 
 
-class EnumPar : public BaseParameterOld
+class EnumPar : public BaseParameter
 {
 public:
 
-    EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& definition, int index = 0);
-    EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& definition, const QString& value);
+    EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& definition, int index = 0);
+    EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& definition, const QString& value);
 
     int get_index() const;
     const QString& get_text() const;
@@ -24,10 +24,6 @@ public:
     void operator=(const QString& value);
 
     const EnumDefinition * get_enum() const;
-
-    int num_components() const override;
-    BaseComponent* get_component(int index) override;
-    const BaseComponent* get_component(int index) const override;
 
 
 private:

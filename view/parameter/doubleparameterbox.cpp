@@ -18,13 +18,13 @@ DoubleParameterBox::DoubleParameterBox(QWidget * parent, Float64Component* par)
 
     connect(parameter, qOverload<double>(&BaseComponent::valueChanged), this, &DoubleParameterBox::on_parameter_value_changed);
 
-    connect(parameter, &BaseComponent::flagChanged, this, &DoubleParameterBox::on_parameter_flags_changed);
+    connect(parameter, &BaseComponent::flagChanged, this, &DoubleParameterBox::onFlagsChanged);
     connect(parameter, &BaseComponent::startedImportingFrom, this, &DoubleParameterBox::on_parameter_started_importing);
     connect(parameter, &BaseComponent::stoppedImportingFrom, this, &DoubleParameterBox::on_parameters_stopped_importing);
     connect(parameter, &Float64Component::minChanged, this, &DoubleParameterBox::on_parameter_min_changed);
     connect(parameter, &Float64Component::minChanged, this, &DoubleParameterBox::on_parameter_min_changed);
 
-    if (!par->hasFlag(BaseComponent::MinimalUpdates))
+    if (!par->hasFlag(ParameterFlags::MinimalUpdates))
     {
         connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), par, qOverload<double>(&BaseComponent::change));
     }
@@ -32,7 +32,7 @@ DoubleParameterBox::DoubleParameterBox(QWidget * parent, Float64Component* par)
     {
         connect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
     }
-    setEnabled(parameter->hasFlag(BaseComponent::IsEditable) && !parameter->isImporting());
+    setEnabled(parameter->hasFlag(ParameterFlags::IsEditable) && !parameter->isImporting());
 }
 
 
@@ -44,7 +44,7 @@ void DoubleParameterBox::on_parameter_started_importing(BaseComponent *)
 
 void DoubleParameterBox::on_parameters_stopped_importing(BaseComponent *)
 {
-    setEnabled(true);
+    setEnabled(parameter->hasFlag(ParameterFlags::IsEditable));
 }
 
 
@@ -72,6 +72,28 @@ void DoubleParameterBox::on_parameter_max_changed(double new_max)
 }
 
 
+void DoubleParameterBox::onFlagsChanged(ParameterFlags flag, bool value)
+{
+    if (flag == ParameterFlags::IsEditable)
+    {
+        setEnabled(value && !parameter->isImporting());
+    }
+    else if (flag == ParameterFlags::MinimalUpdates)
+    {
+        if (value)
+        {
+            disconnect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
+            connect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::change));
+        }
+        else
+        {
+            disconnect(this, qOverload<double>(&QDoubleSpinBox::valueChanged), parameter, qOverload<double>(&BaseComponent::change));
+            connect(this, &QAbstractSpinBox::editingFinished, this, &DoubleParameterBox::on_editing_finished);
+        }
+    }
+}
+
+/*
 void DoubleParameterBox::on_parameter_flags_changed(int old_flags, int new_flags)
 {
     if ((old_flags & BaseComponent::MinimalUpdates) != (new_flags & BaseComponent::MinimalUpdates))
@@ -88,4 +110,4 @@ void DoubleParameterBox::on_parameter_flags_changed(int old_flags, int new_flags
         }
     }
     setEnabled(parameter->hasFlag(BaseComponent::IsEditable) && !parameter->isImporting());
-}
+}*/

@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "model/parameter/baseparameterold.h"
+#include "model/BaseZigZagObject.hpp"
 #include "basedatatype.h"
 
 class BaseOperator;
@@ -10,7 +10,7 @@ class BaseOperator;
 
 
 class DataInput : public QObject,
-                  public BaseParameterOld
+                  public BaseZigZagObject
 {
     Q_OBJECT
 
@@ -30,6 +30,9 @@ public:
 
     virtual void set_from_xml(QXmlStreamReader& xml);
     virtual void write_to_xml(XmlSerializer& xml);
+
+
+    BaseOperator* get_operator() const;
 
 public slots:
 
@@ -57,6 +60,8 @@ private:
     bool set_connection(BaseDataType* data_block);
 
     BaseDataType* connection = nullptr;
+
+    BaseOperator* m_parent_operator;
 
     const DataTypeInfo * data_type;
 

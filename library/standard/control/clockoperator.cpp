@@ -16,13 +16,13 @@ BaseOperator * ClockOperator::create()
 ClockOperator::ClockOperator()
     : BaseOperator(description)
 {
-    frames.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    seconds.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    minutes.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    hours.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    seconds_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    minutes_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
-    hours_whole.get_component(0)->setFlag(BaseComponent::IsEditable, false);
+    frames.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    seconds.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    minutes.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    hours.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    seconds_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    minutes_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    hours_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
 }
 
 

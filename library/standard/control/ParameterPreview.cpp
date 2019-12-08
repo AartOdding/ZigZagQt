@@ -9,25 +9,25 @@
 ParameterPreview::ParameterPreview(BaseOperator* parent_operator)
     : BaseDataView(parent_operator, &Type)
 {
-    if (parent_operator->has_child_parameters())
+    if (parent_operator->getParameters().size() > 0)
     {
-        auto par = parent_operator->get_child_parameters().at(0);
+        auto par = parent_operator->getParameters()[0];
 
-        if (par->num_components() != 0)
+        if (par->getComponents().size() > 0)
         {
-            viewed_pararmeter_component = par->get_component(0);
+            viewedComponent = par->getComponents()[0];
             connect(parent_operator, &BaseOperator::update_view_requested, this, &ParameterPreview::onUpdateNecessary);
 
-            if (dynamic_cast<Int64Component*>(viewed_pararmeter_component))
+            if (qobject_cast<Int64Component*>(viewedComponent))
             {
                 is_int = true;
-                connect(viewed_pararmeter_component, qOverload<int64_t>(&BaseComponent::valueChanged),
+                connect(viewedComponent, qOverload<int64_t>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedInt);
             }
-            if (dynamic_cast<Float64Component*>(viewed_pararmeter_component))
+            if (qobject_cast<Float64Component*>(viewedComponent))
             {
                 is_int = false;
-                connect(viewed_pararmeter_component, qOverload<double>(&BaseComponent::valueChanged),
+                connect(viewedComponent, qOverload<double>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedDouble);
             }
         }

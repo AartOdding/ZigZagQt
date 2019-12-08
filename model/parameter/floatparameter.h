@@ -4,7 +4,7 @@
 #include <tuple>
 #include <optional>
 
-#include "baseparameterold.h"
+#include "BaseParameter.hpp"
 #include "Float64Component.hpp"
 
 
@@ -16,7 +16,7 @@ using double_4 = std::array<double, 4>;
 
 
 template<int NUM_COMPONENTS>
-class FloatParameter : public BaseParameterOld
+class FloatParameter : public BaseParameter
 {
 public:
 
@@ -26,68 +26,36 @@ public:
     using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
 
 
-    FloatParameter(BaseParameterOld * parent, const char * name, interface_type value = interface_type())
-        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseZigZagObject * parent, const char * name, interface_type value = interface_type())
+        : BaseParameter(parameter_types[NUM_COMPONENTS - 1], parent, name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            components[0].emplace(value, this);
+            components[0].emplace(this, value);
         }
         else
         {
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                components[i].emplace(value[i], this);
+                components[i].emplace(this, value[i]);
             }
         }
     }
 
 
-    FloatParameter(BaseParameterOld * parent, const char * name, interface_type value, double min, double max)
-        : BaseParameterOld(parent, parameter_types[NUM_COMPONENTS - 1], name)
+    FloatParameter(BaseZigZagObject * parent, const char * name, interface_type value, double min, double max)
+        : BaseParameter(parameter_types[NUM_COMPONENTS - 1], parent, name)
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            components[0].emplace(value, min, max, this);
+            components[0].emplace(this, value, min, max);
         }
         else
         {
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                components[i].emplace(value[i], min, max, this);
+                components[i].emplace(this, value[i], min, max);
             }
-        }
-    }
-
-
-    int num_components() const override
-    {
-        return NUM_COMPONENTS;
-    }
-
-
-    BaseComponent* get_component(int index) override
-    {
-        if (index >= 0 && index < NUM_COMPONENTS)
-        {
-            return &(*components[index]);
-        }
-        else
-        {
-            return nullptr;
-        }
-    }
-
-
-    const BaseComponent* get_component(int index) const override
-    {
-        if (index >= 0 && index < NUM_COMPONENTS)
-        {
-            return &(*components[index]);
-        }
-        else
-        {
-            return nullptr;
         }
     }
 
@@ -96,14 +64,14 @@ public:
     {
         if constexpr(NUM_COMPONENTS == 1)
         {
-            return components[0]->get_value();
+            return components[0]->getValue();
         }
         else
         {
             interface_type return_value;
             for (int i = 0; i < NUM_COMPONENTS; ++i)
             {
-                return_value[i] = components[i]->get_value();
+                return_value[i] = components[i]->getValue();
             }
             return return_value;
         }
@@ -114,7 +82,7 @@ public:
     {
         if (index >= 0 && index < NUM_COMPONENTS)
         {
-            return components[index]->get_value();
+            return components[index]->getValue();
         }
         return 0.0;
     }
@@ -123,28 +91,28 @@ public:
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> x() const
     {
-        return components[0]->get_value();
+        return components[0]->getValue();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 1), double> y() const
     {
-        return components[1]->get_value();
+        return components[1]->getValue();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 2), double> z() const
     {
-        return components[2]->get_value();
+        return components[2]->getValue();
     }
 
 
     template<int NUM = NUM_COMPONENTS>
     typename std::enable_if_t<(NUM > 3), double> w() const
     {
-        return components[3]->get_value();
+        return components[3]->getValue();
     }
 
 
@@ -152,7 +120,7 @@ public:
     {
         for (auto& component : components)
         {
-            component->set(value);
+            component->setValue(value);
         }
     }
 

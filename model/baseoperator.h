@@ -55,7 +55,7 @@ inline bool operator<(const OperatorDescription& t1, const OperatorDescription& 
 
 
 class BaseOperator : public QObject,
-                     public BaseParameterOld
+                     public BaseZigZagObject
 {
     Q_OBJECT
 

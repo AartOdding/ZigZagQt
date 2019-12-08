@@ -14,12 +14,14 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameterOld * parameter) override;
-
-
     static BaseOperator * create();
 
     static const OperatorDescription description;
+
+protected:
+
+    void parameterChangeEvent(const BaseParameter * parameter) override;
+
 
 private:
 

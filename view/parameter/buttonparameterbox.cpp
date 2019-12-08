@@ -3,7 +3,7 @@
 
 
 ButtonParameterBox::ButtonParameterBox(QWidget * parent, ButtonPar* b)
-    : QPushButton(b->get_name(), parent), button(b)
+    : QPushButton(b->getName(), parent), button(b)
 {
     setAutoDefault(false);
     setAutoRepeat(false);
@@ -13,5 +13,5 @@ ButtonParameterBox::ButtonParameterBox(QWidget * parent, ButtonPar* b)
 
 void ButtonParameterBox::on_button_clicked()
 {
-    button->get_component(0)->change(static_cast<int64_t>(1));
+    button->getComponents()[0]->change(static_cast<int64_t>(1));
 }

@@ -56,7 +56,6 @@ SOURCES += \
     model/parameter/Int64Component.cpp \
     model/parameter/TextComponent.cpp \
     model/parameter/TriggerComponent.cpp \
-    model/parameter/baseparameterold.cpp \
         model/parameter/buttonparameter.cpp \
         model/parameter/enumparameter.cpp \
         model/parameter/parameterrow.cpp \
@@ -133,7 +132,6 @@ HEADERS += \
         model/parameter/Int64Component.hpp \
         model/parameter/TextComponent.hpp \
         model/parameter/TriggerComponent.hpp \
-        model/parameter/baseparameterold.h \
         model/parameter/buttonparameter.h \
         model/parameter/enumparameter.h \
         model/parameter/floatparameter.h \

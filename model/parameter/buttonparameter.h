@@ -1,23 +1,16 @@
 #pragma once
 
-#include "baseparameterold.h"
+#include "BaseParameter.hpp"
 #include "TriggerComponent.hpp"
 
 
 
-class ButtonPar : public BaseParameterOld
+class ButtonPar : public BaseParameter
 {
 
 public:
 
-    ButtonPar(BaseParameterOld * parent, const char * name);
-
-
-    int num_components() const { return 1; }
-
-    BaseComponent* get_component(int index) { return index == 0 ? &pulse_component : nullptr; }
-
-    const BaseComponent* get_component(int index) const { return index == 0 ? &pulse_component : nullptr; }
+    ButtonPar(BaseZigZagObject * parent, const char * name);
 
 
 private:

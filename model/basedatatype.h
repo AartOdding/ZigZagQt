@@ -5,7 +5,7 @@
 #include <QColor>
 #include <QObject>
 
-#include "model/parameter/baseparameterold.h"
+#include "model/parameter/BaseParameter.hpp"
 
 class BaseOperator;
 class DataInput;
@@ -33,7 +33,7 @@ inline bool operator==(const DataTypeInfo& t1, const DataTypeInfo& t2)
 
 
 class BaseDataType : public QObject,
-                     public BaseParameterOld
+                     public BaseZigZagObject
 {
     Q_OBJECT
 
@@ -62,6 +62,8 @@ public:
 
     virtual void set_from_xml(QXmlStreamReader& xml);
     virtual void write_to_xml(XmlSerializer& xml);
+
+    BaseOperator* get_operator() const;
 
 public slots:
 
@@ -96,6 +98,8 @@ private:
 
 
     std::vector<DataInput*> connections;
+
+    BaseOperator* m_parent_operator;
 
     const DataTypeInfo * data_type;
 

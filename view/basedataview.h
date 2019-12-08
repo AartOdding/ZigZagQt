@@ -2,10 +2,11 @@
 
 #include <QGraphicsItem>
 
-#include "model/parameter/baseparameterold.h"
+#include "model/BaseZigZagObject.hpp"
 
 
 class OperatorView;
+class BaseOperator;
 class BaseDataType;
 class BaseDataView;
 
@@ -40,7 +41,7 @@ inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
 }
 
 class BaseDataView : public QGraphicsItem,
-                     public BaseParameterOld
+                     public BaseZigZagObject
 {
 
 public:

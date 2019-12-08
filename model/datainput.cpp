@@ -9,7 +9,9 @@
 
 
 DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
-    : BaseParameterOld(parent_op, ParameterType::DataInput, name), data_type(&type_info)
+    : BaseZigZagObject(parent_op, name),
+      m_parent_operator(parent_op),
+      data_type(&type_info)
 {
     Q_ASSERT(parent_op);
     parent_op->register_data_input(this);
@@ -21,6 +23,10 @@ DataInput::~DataInput()
 
 }
 
+BaseOperator* DataInput::get_operator() const
+{
+    return m_parent_operator;
+}
 
 const DataTypeInfo * DataInput::type() const
 {
@@ -134,7 +140,7 @@ void DataInput::write_to_xml(XmlSerializer& xml)
 {
     xml.begin_element("DataInput");
     xml.add_int_attribute("id", xml.id(this));
-        BaseParameterOld::write_to_xml(xml);
+        //BaseParameter::write_to_xml(xml);
         xml.add_int_element("connection", xml.id(connection));
     xml.end_element();
 }

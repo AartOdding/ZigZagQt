@@ -10,7 +10,7 @@ EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
     {
         addItem(value);
     }
-    auto component = par->get_component(0);
+    auto component = par->getComponents()[0];//(0);
     connect(this, qOverload<int>(&QComboBox::currentIndexChanged), component, qOverload<int64_t>(&BaseComponent::change));
     connect(component, qOverload<int64_t>(&BaseComponent::valueChanged), this, &QComboBox::setCurrentIndex);
     connect(component, &BaseComponent::startedImportingFrom, this, &EnumWidget::on_parameter_started_importing);

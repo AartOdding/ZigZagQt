@@ -1,7 +1,7 @@
 #include "parameterconnector.h"
 #include "application.h"
 #include "operatorview.h"
-#include "model/parameter/baseparameterold.h"
+#include "model/parameter/BaseParameter.hpp"
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 #include "model/basedatatype.h"
@@ -50,19 +50,19 @@ bool ParameterConnector::connection_requested_event(BaseConnector* other)
     {
         if (is_input())
         {
-            int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
+            int num_components = std::min(last_selected_parameter->getComponents().size(), o->last_selected_parameter->getComponents().size());
             for (int i = 0; i < num_components; ++i)
             {
-                last_selected_parameter->get_component(i)->startImporting(o->last_selected_parameter->get_component(i));
+                last_selected_parameter->getComponents()[i]->startImporting(o->last_selected_parameter->getComponents()[i]);
             }
             return true;
         }
         else
         {
-            int num_components = std::min(last_selected_parameter->num_components(), o->last_selected_parameter->num_components());
+            int num_components = std::min(last_selected_parameter->getComponents().size(), o->last_selected_parameter->getComponents().size());
             for (int i = 0; i < num_components; ++i)
             {
-                o->last_selected_parameter->get_component(i)->startImporting(last_selected_parameter->get_component(i));
+                o->last_selected_parameter->getComponents()[i]->startImporting(last_selected_parameter->getComponents()[i]);
             }
             return true;
         }
@@ -89,7 +89,7 @@ void ParameterConnector::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void ParameterConnector::item_selected(QAction *action)
 {
-    auto par = action->data().value<BaseParameterOld*>();
+    auto par = action->data().value<BaseParameter*>();
     Q_ASSERT(par);
     last_selected_parameter = par;
     try_connect();
@@ -107,33 +107,33 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         auto op_menu = menu->addMenu(operator_view()->operator_model.type()->name.c_str());
 
-        for (auto par : operator_view()->operator_model.get_child_parameters())
+        for (auto par : operator_view()->operator_model.getParameters())
         {
-            op_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
+            op_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
         }
 
         for (auto output : operator_view()->operator_model.data_outputs())
         {
-            if (output->get_child_parameters().size() > 0)
+            if (output->getParameters().size() > 0)
             {
-                auto output_menu = menu->addMenu(output->get_name());
+                auto output_menu = menu->addMenu(output->getName());
 
-                for (auto par : output->get_child_parameters())
+                for (auto par : output->getParameters())
                 {
-                    output_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
+                    output_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
                 }
             }
         }
 
         for (auto input : operator_view()->operator_model.data_inputs())
         {
-            if (input->get_child_parameters().size() > 0)
+            if (input->getParameters().size() > 0)
             {
-                auto input_menu = menu->addMenu(input->get_name());
+                auto input_menu = menu->addMenu(input->getName());
 
-                for (auto par : input->get_child_parameters())
+                for (auto par : input->getParameters())
                 {
-                    input_menu->addAction(par->get_name())->setData(QVariant::fromValue(par));
+                    input_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
                 }
             }
         }

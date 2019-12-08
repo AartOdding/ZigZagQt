@@ -112,7 +112,7 @@ void FadeOperator::run()
 }
 
 
-void FadeOperator::parameter_changed(BaseParameterOld* parameter)
+void FadeOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

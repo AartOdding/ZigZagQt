@@ -34,7 +34,8 @@ OperatorDescription::OperatorDescription(const std::string& name_,
 
 
 BaseOperator::BaseOperator(const OperatorDescription& type_)
-    : BaseParameterOld(nullptr, ParameterType::Operator, type_.name.c_str()), type_info(&type_)
+    : BaseZigZagObject(nullptr, type_.name.c_str()),
+      type_info(&type_)
 {
 
 }
@@ -200,7 +201,7 @@ void BaseOperator::write_to_xml(XmlSerializer& xml)
     xml.begin_element("BaseOperator");
     xml.add_int_attribute("id", xml.id(this));
 
-        BaseParameterOld::write_to_xml(xml);
+        //BaseParameter::write_to_xml(xml);
 
         xml.add_int_element("position_x", position_x);
         xml.add_int_element("position_y", position_y);

@@ -147,7 +147,7 @@ void SawtoothWaveOperator::run()
 }
 
 
-void SawtoothWaveOperator::parameter_changed(BaseParameterOld* parameter)
+void SawtoothWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

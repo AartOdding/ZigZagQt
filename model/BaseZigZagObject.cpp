@@ -15,7 +15,10 @@ BaseZigZagObject::BaseZigZagObject(BaseZigZagObject * parent, const QString& nam
     }
     else
     {
-        m_parent->m_children.push_back(this);
+        if (m_parent)
+        {
+            m_parent->m_children.push_back(this);
+        }
     }
 }
 
@@ -49,6 +52,30 @@ BaseZigZagObject * BaseZigZagObject::getParent()
 const BaseZigZagObject * BaseZigZagObject::getParent() const
 {
     return m_parent;
+}
+
+
+BaseZigZagObject * BaseZigZagObject::getTopParent()
+{
+    BaseZigZagObject * topParent = this;
+
+    while (topParent->m_parent)
+    {
+        topParent = m_parent;
+    }
+    return topParent;
+}
+
+
+const BaseZigZagObject * BaseZigZagObject::getTopParent() const
+{
+    const BaseZigZagObject * topParent = this;
+
+    while (topParent->m_parent)
+    {
+        topParent = m_parent;
+    }
+    return topParent;
 }
 
 
@@ -114,4 +141,9 @@ void BaseZigZagObject::parameterChangeEvent(const BaseParameter* parameter)
     {
         m_parent->parameterChangeEvent(parameter);
     }
+}
+
+const QString& BaseZigZagObject::getName() const
+{
+    return m_name;
 }

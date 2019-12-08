@@ -7,7 +7,8 @@
 
 
 BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo *type)
-    : BaseParameterOld(parent_operator, ParameterType::DataView, type->name.c_str()), type_info(type)
+    : BaseZigZagObject(parent_operator, type->name.c_str()),
+      type_info(type)
 {
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
 }

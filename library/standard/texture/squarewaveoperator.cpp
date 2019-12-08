@@ -134,7 +134,7 @@ void SquareWaveOperator::run()
 }
 
 
-void SquareWaveOperator::parameter_changed(BaseParameterOld* parameter)
+void SquareWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

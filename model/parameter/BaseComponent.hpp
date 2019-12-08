@@ -39,7 +39,7 @@ public:
 
     BaseComponent(BaseParameter * parameter);
 
-    virtual ~BaseComponent() = default;
+    virtual ~BaseComponent();
 
 
     /*

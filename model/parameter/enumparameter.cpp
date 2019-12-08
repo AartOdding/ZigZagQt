@@ -3,18 +3,18 @@
 
 
 
-EnumPar::EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& def, int i)
-    : BaseParameterOld(parent, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, int i)
+    : BaseParameter(ParameterType::Enum, parent, name),
       definition(&def),
-      index(i, 0, def.size()-1, this)
+      index(this, i, 0, def.size()-1)
 {
 }
 
 
-EnumPar::EnumPar(BaseParameterOld * parent, const QString& name, const EnumDefinition& def, const QString& value)
-    : BaseParameterOld(parent, ParameterType::Enum, name),
+EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, const QString& value)
+    : BaseParameter(ParameterType::Enum, parent, name),
       definition(&def),
-      index(definition->index_of(value), 0, def.size()-1, this)
+      index(this, definition->index_of(value), 0, def.size()-1)
 {
 }
 
@@ -63,36 +63,4 @@ void EnumPar::operator=(int new_index)
 void EnumPar::operator=(const QString& new_value)
 {
     set(new_value);
-}
-
-
-int EnumPar::num_components() const
-{
-    return 1;
-}
-
-
-BaseComponent* EnumPar::get_component(int i)
-{
-    if (i == 0)
-    {
-        return &index;
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-
-const BaseComponent* EnumPar::get_component(int i) const
-{
-    if (i == 0)
-    {
-        return &index;
-    }
-    else
-    {
-        return nullptr;
-    }
 }

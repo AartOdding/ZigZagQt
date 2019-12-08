@@ -24,7 +24,7 @@ public:
 
     void run() override;
 
-    void parameter_changed(BaseParameterOld* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create();

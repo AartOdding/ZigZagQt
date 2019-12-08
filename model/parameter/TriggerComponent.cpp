@@ -23,6 +23,11 @@ bool TriggerComponent::update()
 }
 
 
+void TriggerComponent::change()
+{
+    m_triggerReceived = true;
+}
+
 
 void TriggerComponent::change(int64_t)
 {
@@ -30,8 +35,13 @@ void TriggerComponent::change(int64_t)
 }
 
 
-
 void TriggerComponent::change(double)
+{
+    m_triggerReceived = true;
+}
+
+
+void TriggerComponent::change(const QString&)
 {
     m_triggerReceived = true;
 }

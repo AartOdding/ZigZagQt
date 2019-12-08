@@ -4,7 +4,8 @@
 #include <QFormLayout>
 
 
-class BaseParameterOld;
+class BaseZigZagObject;
+class BaseParameter;
 class ParameterOwner;
 class ParameterRow;
 
@@ -15,14 +16,14 @@ class ParameterGroup : public QFrame
 
 public:
 
-    ParameterGroup(QWidget *parent, BaseParameterOld* parameters);
+    ParameterGroup(QWidget *parent, BaseZigZagObject* parameters);
 
 
 private:
 
-    QWidget* new_widget_for_parameter(BaseParameterOld * parameter);
+    QWidget* new_widget_for_parameter(BaseParameter * parameter);
 
-    BaseParameterOld * parameters;
+    BaseZigZagObject * parameters;
     QFormLayout layout{ this };
 
 };

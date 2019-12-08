@@ -55,16 +55,16 @@ void ProjectModel::remove_operator(BaseOperator * operator_ptr)
     {
         undo_stack.beginMacro("Remove Operator");
 
-        operator_ptr->remove_imports_exports();
+        operator_ptr->disconnectParameters();
 
         for (auto& input : operator_ptr->data_inputs())
         {
-            input->remove_imports_exports();
+            //input->remove_imports_exports();
             input->disconnect();
         }
         for (auto& output : operator_ptr->data_outputs())
         {
-            output->remove_imports_exports();
+            //output->remove_imports_exports();
             output->disconnect_all();
         }
         undo_stack.push(new RemoveCommand(*this, operator_ptr));

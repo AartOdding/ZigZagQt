@@ -4,9 +4,26 @@
 #include <QString>
 
 #include "model/BaseZigZagObject.hpp"
-#include "model/parameter/baseparameterold.h"
+
 
 class BaseComponent;
+
+
+enum class ParameterType
+{
+    Int,
+    Int2,
+    Int3,
+    Int4,
+    Float,
+    Float2,
+    Float3,
+    Float4,
+    Enum,
+    Button,
+    Matrix3x3,
+    Matrix4x4,
+};
 
 
 
@@ -15,8 +32,10 @@ class BaseParameter : public BaseZigZagObject
 public:
 
     BaseParameter() = delete;
-    BaseParameter(BaseParameter&&) = default;
     BaseParameter(const BaseParameter&) = delete;
+
+    BaseParameter(BaseParameter&&) = default;
+
     BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name);
 
     std::vector<BaseComponent*> getComponents();
@@ -26,7 +45,7 @@ public:
 
     /*
      * Shall update the child parameters and components. Will return true if atleast one parameter/
-     * component changed. If silent is true no events will be generated fromthe changes.
+     * component changed. If silent is true no events will be generated from the changes.
      */
     virtual bool update(bool silent = false);
 
@@ -43,4 +62,6 @@ private:
     ParameterType m_parameterType;
 
 };
+
+Q_DECLARE_METATYPE(BaseParameter*);
 

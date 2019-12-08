@@ -9,7 +9,7 @@
 
 
 class BaseOperator;
-class BaseParameterOld;
+class BaseParameter;
 class BaseDataType;
 class DataInput;
 class OperatorView;

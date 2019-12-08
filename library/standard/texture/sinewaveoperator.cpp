@@ -136,7 +136,7 @@ void SineWaveOperator::run()
 }
 
 
-void SineWaveOperator::parameter_changed(BaseParameterOld* parameter)
+void SineWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

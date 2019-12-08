@@ -105,7 +105,7 @@ void DisplacementOperator::run()
 }
 
 
-void DisplacementOperator::parameter_changed(BaseParameterOld* parameter)
+void DisplacementOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

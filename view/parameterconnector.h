@@ -3,7 +3,7 @@
 #include "baseconnector.h"
 
 class OperatorView;
-class BaseParameterOld;
+class BaseParameter;
 
 
 
@@ -50,6 +50,6 @@ private:
 
     bool is_input_;
     bool hovered = false;
-    BaseParameterOld * last_selected_parameter = nullptr;
+    BaseParameter * last_selected_parameter = nullptr;
 
 };
