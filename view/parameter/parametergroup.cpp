@@ -37,16 +37,14 @@ ParameterGroup::ParameterGroup(QWidget *parent, BaseZigZagObject* parameters_)
     layout.setVerticalSpacing(4);
     layout.setHorizontalSpacing(7);
 
+    for (auto par : parameters->getParameters())
+    {
+        layout.addRow(par->getName(), new_widget_for_parameter(par));
+    }
+
     for (auto child : parameters->getChildren())
     {
-        if (dynamic_cast<BaseParameter*>(child))
-        {
-            layout.addRow(child->getName(), new_widget_for_parameter(static_cast<BaseParameter*>(child)));
-        }
-        else
-        {
-            layout.addRow(new ParameterGroup(this, child));
-        }
+        layout.addRow(new ParameterGroup(this, child));
     }
 }
 

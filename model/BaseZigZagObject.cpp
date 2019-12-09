@@ -4,14 +4,15 @@
 
 
 
-BaseZigZagObject::BaseZigZagObject(BaseZigZagObject * parent, const QString& name)
+BaseZigZagObject::BaseZigZagObject(BaseZigZagObject * parent, const QString& name, bool isParameter)
     : m_parent(parent), m_name(name)
 {
-    BaseParameter* parameter = dynamic_cast<BaseParameter*>(this);
-
-    if (parameter)
+    if (isParameter)
     {
-        m_parent->m_parameters.push_back(parameter);
+        if (m_parent)
+        {
+            m_parent->m_parameters.push_back(static_cast<BaseParameter*>(this));
+        }
     }
     else
     {

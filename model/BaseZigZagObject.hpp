@@ -18,7 +18,7 @@ public:
     BaseZigZagObject() = delete;
     BaseZigZagObject(BaseZigZagObject&&) = default;
     BaseZigZagObject(const BaseZigZagObject&) = delete;
-    BaseZigZagObject(BaseZigZagObject * parent, const QString& name);
+    BaseZigZagObject(BaseZigZagObject * parent, const QString& name, bool isParameter = false);
 
     virtual ~BaseZigZagObject();
 

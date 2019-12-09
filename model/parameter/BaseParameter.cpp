@@ -3,7 +3,7 @@
 
 
 BaseParameter::BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name)
-    : BaseZigZagObject(parent, name), m_parameterType(parameterType)
+    : BaseZigZagObject(parent, name, true), m_parameterType(parameterType)
 {
 
 }
