@@ -1,6 +1,7 @@
 #include "BaseComponent.hpp"
 #include "BaseParameter.hpp"
 #include "application.h"
+#include "model/projectmodel.h"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
 #include "zigzaglib/xmlserializer.h"

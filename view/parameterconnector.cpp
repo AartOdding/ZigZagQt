@@ -5,6 +5,7 @@
 #include "model/baseoperator.h"
 #include "model/datainput.h"
 #include "model/basedatatype.h"
+#include "view/projectscopeview.h"
 
 #include <QMenu>
 #include <QGraphicsSceneResizeEvent>

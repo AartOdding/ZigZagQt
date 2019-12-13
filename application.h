@@ -5,6 +5,7 @@
 
 #include "renderer.h"
 #include "view/viewport.h"
+#include "view/ProjectScopeView.h"
 #include "model/clock.h"
 
 

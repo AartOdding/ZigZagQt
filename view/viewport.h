@@ -1,18 +1,14 @@
 #pragma once
 
-#include <QWidget>
 #include <QAction>
 #include <QGraphicsView>
-#include <QOpenGLWidget>
 
-#include "view/projectscopeview.h"
 #include "view/parameter/parametereditor.h"
 
 
-
-extern QAction zoom_in_action;
-extern QAction zoom_out_action;
-extern QAction reset_zoom_action;
+class QOpenGLWidget;
+class ProjectScopeView;
+struct OperatorDescription;
 
 
 class Viewport : public QGraphicsView
@@ -33,9 +29,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
-
     void wheelEvent(QWheelEvent *event) override;
 
     void resizeEvent(QResizeEvent *event) override;
@@ -43,29 +36,39 @@ protected:
 
 public slots:
 
+    void zoomIn();
+    void zoomOut();
+    void resetZoom();
+    void zoomDegrees(int degrees);
+
     void on_operator_requested(const OperatorDescription* op_type, const QPointF& where);
 
 
 private:
 
-    QAction zoomInAction{ "Zoom In", this };
-    QAction zoomOutAction{ "Zoom Out", this };
-    QAction resetZoomAction { "Reset Zoom", this };
+    /* actions */
 
-    void zoom_in();
+    QAction m_zoomInAction{ "Zoom In", this };
+    QAction m_zoomOutAction{ "Zoom Out", this };
+    QAction m_resetZoomAction{ "Reset Zoom", this };
 
-    void zoom_out();
+    /* configuration */
 
-    double zoom_exponent = 1.2;
-    bool zoom_inverted = false;
+    bool m_zoomInverted = false;
+    bool m_zoomTowardsMouse = true;
 
-    double current_zoom = 1.0;
-    double zoom_limit = 0.12;
+    double m_zoomFactor = 1.2;
+    double m_zoomFactorDegree = 1.012;
+
+    double m_zoomInLimit = 10.0;
+    double m_zoomOutLimit = 0.10;
+
+    /* member variables */
 
     ProjectScopeView* view_model;
 
     ParameterEditor parameter_editor;
 
-    //QOpenGLWidget gl_widget;
+    double m_currentZoomLevel = 1.0;
 
 };
