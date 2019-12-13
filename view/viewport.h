@@ -48,6 +48,10 @@ public slots:
 
 private:
 
+    QAction zoomInAction{ "Zoom In", this };
+    QAction zoomOutAction{ "Zoom Out", this };
+    QAction resetZoomAction { "Reset Zoom", this };
+
     void zoom_in();
 
     void zoom_out();

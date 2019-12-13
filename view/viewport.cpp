@@ -30,6 +30,14 @@ Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
     parameter_editor.resize(250, 300);
 
     viewport()->setCursor(Qt::ArrowCursor);
+
+    zoomInAction.setAutoRepeat(false);
+    zoomOutAction.setAutoRepeat(false);
+    resetZoomAction.setAutoRepeat(false);
+
+    zoomInAction.setShortcut(QKeySequence::ZoomIn);
+    zoomOutAction.setShortcut(QKeySequence::ZoomOut);
+    resetZoomAction.setShortcut(QKeySequence(Qt::CTRL + Qt::Key_0));
 }
 
 
