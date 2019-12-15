@@ -26,6 +26,3 @@ enum class IDs : zz::TypeID
     TextParComponent  = 3002,
     RefParComponent   = 3003
 };
-
-
-

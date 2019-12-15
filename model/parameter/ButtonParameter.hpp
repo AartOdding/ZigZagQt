@@ -15,6 +15,6 @@ public:
 
 private:
 
-    TriggerComponent pulse_component;
+    TriggerComponent m_triggerComponent;
 
 };

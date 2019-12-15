@@ -9,9 +9,10 @@
 ParameterPreview::ParameterPreview(BaseOperator* parent_operator)
     : BaseDataView(parent_operator, &Type)
 {
-    if (parent_operator->getParameters().size() > 0)
+    auto parameters = parent_operator->findChildren<BaseParameter*>(QString(), Qt::FindDirectChildrenOnly);
+    if (parameters.size() > 0)
     {
-        auto par = parent_operator->getParameters()[0];
+        auto par = parameters[0];
 
         if (par->getComponents().size() > 0)
         {

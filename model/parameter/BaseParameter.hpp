@@ -23,6 +23,8 @@ enum class ParameterType
     Button,
     Matrix3x3,
     Matrix4x4,
+    Transform2D,
+    Transform3D
 };
 
 
@@ -41,13 +43,17 @@ public:
     ParameterType getParameterType() const;
 
     /*
-     * Shall update the child parameters and components. Will return true if atleast one parameter/
-     * component changed. If silent is true no events will be generated from the changes.
+     * Shall update all the components and create parameterChange events on any changes.
+     * More complex parameter types with multuiple sub parameters as children should override
+     * this method to make sure
      */
-    virtual bool update(bool silent = false);
+    virtual void updateParameters() override;
 
-    // Shall disconnect all parameters
-    void disconnectParameters(bool recursive = true);
+    /*
+     * Will disconnect all owned components, and then call disconnectParameters() on base class to
+     * to ensure that all children also have their disconnectParameters() method called.
+     */
+    virtual void disconnectParameters() override;
 
 private:
 
@@ -60,5 +66,4 @@ private:
 
 };
 
-//Q_DECLARE_METATYPE(BaseParameter*);
 

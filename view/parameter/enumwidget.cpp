@@ -6,7 +6,7 @@
 EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
     : QComboBox(parent), parameter(par)
 {
-    for (const auto& value : *(par->get_enum()))
+    for (const auto& value : *(par->getEnum()))
     {
         addItem(value);
     }
@@ -17,7 +17,7 @@ EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
     connect(component, &BaseComponent::stoppedImportingFrom, this, &EnumWidget::on_parameters_stopped_importing);
 
     setEnabled(!component->isImporting());
-    setCurrentIndex(par->get_index());
+    setCurrentIndex(par->getIndex());
 }
 
 

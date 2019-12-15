@@ -3,7 +3,8 @@
 
 
 BaseParameter::BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name)
-    : BaseZigZagObject(parent, name, true), m_parameterType(parameterType)
+    : BaseZigZagObject(parent, name),
+      m_parameterType(parameterType)
 {
 
 }
@@ -31,7 +32,7 @@ ParameterType BaseParameter::getParameterType() const
 
 
 
-bool BaseParameter::update(bool silent)
+void BaseParameter::updateParameters()
 {
     bool changed = false;
 
@@ -39,25 +40,20 @@ bool BaseParameter::update(bool silent)
     {
         changed |= component->update();
     }
-    for (auto parameter : getParameters())
-    {
-        changed |= parameter->update(false);
-    }
-    if (!silent && changed)
+    if (changed)
     {
         parameterChangeEvent(this);
     }
-    return changed;
 }
 
 
 
-void BaseParameter::disconnectParameters(bool recursive)
+void BaseParameter::disconnectParameters()
 {
     for (auto component : m_components)
     {
         component->stopImporting();
         component->stopExporting();
     }
-    BaseZigZagObject::disconnectParameters(recursive);
+    BaseZigZagObject::disconnectParameters();
 }

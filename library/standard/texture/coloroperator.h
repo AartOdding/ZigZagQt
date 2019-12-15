@@ -1,8 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
-#include "model/parameter/intparameter.h"
-#include "model/parameter/parameterrow.h"
+#include "model/parameter/IntParameter.hpp"
 
 #include "library/standard/texture/texturedata.h"
 #include "library/standard/texture/textureview.h"

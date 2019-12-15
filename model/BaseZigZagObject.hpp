@@ -21,34 +21,25 @@ public:
 
     virtual ~BaseZigZagObject();
 
-    template<typename Type>
-    Type * findParent();
 
-    template<typename Type>
-    const Type * findParent() const;
+    template<typename PtrType>
+    PtrType findParent(bool directParentOnly = false) const;
 
     /*
-    std::vector<BaseZigZagObject*> getChildren();
-    const std::vector<BaseZigZagObject*>& getChildren() const;
-
-    std::vector<BaseParameter*> getParameters();
-    const std::vector<BaseParameter*>& getParameters() const;
-
-    const QString& getName() const;
-    */
-    /*
-     * updateParameters() will call the update() function on every parameter that it has.
-     * If 'recursive' is true, it will also recursively call updateParameters() on all of
-     * its children.
+     * When calling updateParameters(), it will be called recursively for all children of
+     * this object. The default implementation will only do that (call updateParameters()
+     * on all the children), however parameter objects can overload this method to
+     * update all their components, and fire of parameterChange events on changes.
      */
-    void updateParameters(bool recursive = true);
+    virtual void updateParameters();
 
     /*
-     * disconnectParameters() will call the disconnect() function on every parameter it has.
-     * If 'recursive' is true it will also recursively call disconnectParameters() on all of
-     * its children.
+     * When calling disconnectParameters() it will be called recursively for all children of
+     * this object. The default implementation does not actually disconnect anything, but only
+     * ensures that disconnectParameters is called for all the children. Overloaded versions
+     * of this method can make sure components are actually diconnected.
      */
-    void disconnectParameters(bool recursive = true);
+    virtual void disconnectParameters();
 
 protected:
 
@@ -59,59 +50,27 @@ protected:
      */
     virtual void parameterChangeEvent(const BaseParameter* parameter);
 
-    /*
-private:
-
-    BaseZigZagObject * m_parent = nullptr;
-    std::vector<BaseParameter*> m_parameters;
-    std::vector<BaseZigZagObject*> m_children;
-    QString m_name; */
-
 };
 
 
 
-
-template<typename Type>
-Type * BaseZigZagObject::findParent()
+template<typename PtrType>
+PtrType BaseZigZagObject::findParent(bool directParentOnly) const
 {
-    QObject * prnt = parent();
-    Type * typeParent;
+    QObject * p = parent();
+    PtrType typeParent;
 
-    while (prnt)
+    while (p)
     {
-        typeParent = qobject_cast<Type*>(prnt);
+        typeParent = qobject_cast<PtrType>(p);
 
-        if (typeParent)
+        if (typeParent || directParentOnly)
         {
             break;
         }
         else
         {
-            prnt = prnt->parent();
-        }
-    }
-    return typeParent;
-}
-
-
-template<typename Type>
-const Type * BaseZigZagObject::findParent() const
-{
-    const QObject * prnt = parent();
-    const Type * typeParent;
-
-    while (parent)
-    {
-        typeParent = qobject_cast<Type*>(parent);
-
-        if (typeParent)
-        {
-            break;
-        }
-        else
-        {
-            parent = parent->m_parent;
+            p = p->parent();
         }
     }
     return typeParent;

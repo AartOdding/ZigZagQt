@@ -5,10 +5,10 @@
 #include <vector>
 #include <functional>
 
-#include "model/parameter/intparameter.h"
-#include "model/parameter/floatparameter.h"
-#include "model/parameter/enumparameter.h"
-#include "model/parameter/buttonparameter.h"
+#include "model/parameter/IntParameter.hpp"
+#include "model/parameter/FloatParameter.hpp"
+#include "model/parameter/EnumParameter.hpp"
+#include "model/parameter/ButtonParameter.hpp"
 
 
 struct DataTypeInfo;

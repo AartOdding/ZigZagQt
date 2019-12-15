@@ -59,7 +59,7 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
     for (auto par : op->importing_parameters())
     {
-        if (closed_list.count(par->getImport()->getParameter()->findParent<BaseOperator>()) == 0)
+        if (closed_list.count(par->getImport()->getParameter()->findParent<BaseOperator*>()) == 0)
         {
             return false;
         }
@@ -117,9 +117,9 @@ void Renderer::render_frame()
             {
                 for (auto importer : par->getExports())
                 {
-                    if (!contains(open_list, importer->getParameter()->findParent<BaseOperator>()))
+                    if (!contains(open_list, importer->getParameter()->findParent<BaseOperator*>()))
                     {
-                        open_list.push_back(importer->getParameter()->findParent<BaseOperator>());
+                        open_list.push_back(importer->getParameter()->findParent<BaseOperator*>());
                     }
                 }
             }

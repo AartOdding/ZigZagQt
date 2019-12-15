@@ -2,8 +2,7 @@
 
 #include "model/baseoperator.h"
 #include "model/parameter/BaseParameter.hpp"
-#include "model/parameter/buttonparameter.h"
-#include "model/parameter/parameterrow.h"
+#include "model/parameter/ButtonParameter.hpp"
 
 #include "enumwidget.h"
 
@@ -31,20 +30,25 @@ ParameterGroup::ParameterGroup(QWidget *parent, BaseZigZagObject* parameters_)
     else
     {
         setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-        layout.addRow(new QLabel(parameters->getName()));
+        layout.addRow(new QLabel(parameters->objectName()));
         layout.setMargin(10);
     }
     layout.setVerticalSpacing(4);
     layout.setHorizontalSpacing(7);
 
-    for (auto par : parameters->getParameters())
+    for (auto child : parameters->findChildren<BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly))
     {
-        layout.addRow(par->getName(), new_widget_for_parameter(par));
-    }
+        BaseParameter* par = qobject_cast<BaseParameter*>(child);
 
-    for (auto child : parameters->getChildren())
-    {
-        layout.addRow(new ParameterGroup(this, child));
+        if (par)
+        {
+            layout.addRow(par->objectName(), new_widget_for_parameter(par));
+        }
+        else
+        {
+            layout.addRow(new ParameterGroup(this, child));
+        }
+
     }
 }
 

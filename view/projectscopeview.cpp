@@ -183,8 +183,8 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 
 void ProjectScopeView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator>()];
-    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator>()];
+    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];
 
     if (export_op && import_op)
     {
@@ -210,8 +210,8 @@ void ProjectScopeView::on_parameters_connected(BaseComponent * exporter, BaseCom
 
 void ProjectScopeView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator>()];
-    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator>()];
+    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];
 
     if (export_op && import_op)
     {

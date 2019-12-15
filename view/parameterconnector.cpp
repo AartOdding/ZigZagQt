@@ -108,33 +108,33 @@ void ParameterConnector::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         auto op_menu = menu->addMenu(operator_view()->operator_model.type()->name.c_str());
 
-        for (auto par : operator_view()->operator_model.getParameters())
+        for (auto par : operator_view()->operator_model.findChildren<BaseParameter*>(QString(), Qt::FindDirectChildrenOnly))
         {
-            op_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
+            op_menu->addAction(par->objectName())->setData(QVariant::fromValue(par));
         }
 
         for (auto output : operator_view()->operator_model.data_outputs())
         {
-            if (output->getParameters().size() > 0)
+            if (output->findChildren<BaseParameter*>().size() > 0)
             {
-                auto output_menu = menu->addMenu(output->getName());
+                auto output_menu = menu->addMenu(output->objectName());
 
-                for (auto par : output->getParameters())
+                for (auto par : output->findChildren<BaseParameter*>(QString(), Qt::FindDirectChildrenOnly))
                 {
-                    output_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
+                    output_menu->addAction(par->objectName())->setData(QVariant::fromValue(par));
                 }
             }
         }
 
         for (auto input : operator_view()->operator_model.data_inputs())
         {
-            if (input->getParameters().size() > 0)
+            if (input->findChildren<BaseParameter*>().size() > 0)
             {
-                auto input_menu = menu->addMenu(input->getName());
+                auto input_menu = menu->addMenu(input->objectName());
 
-                for (auto par : input->getParameters())
+                for (auto par : input->findChildren<BaseParameter*>(QString(), Qt::FindDirectChildrenOnly))
                 {
-                    input_menu->addAction(par->getName())->setData(QVariant::fromValue(par));
+                    input_menu->addAction(par->objectName())->setData(QVariant::fromValue(par));
                 }
             }
         }

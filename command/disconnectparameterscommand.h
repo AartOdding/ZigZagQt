@@ -56,7 +56,7 @@ public:
         //erase(importer->getParameter()->get_operator()->m_importing_parameters, importer);
         //erase(exporter->getParameter()->get_operator()->m_exporting_parameters, exporter);
 
-        emit importer->getParameter()->findParent<BaseOperator>()->parameter_stopped_importing(exporter, importer);
+        emit importer->getParameter()->findParent<BaseOperator*>()->parameter_stopped_importing(exporter, importer);
         emit importer->stoppedImportingFrom(exporter);
         emit exporter->stoppedExportingTo(importer);
     }
@@ -100,7 +100,7 @@ public:
         //importer->getParameter()->get_operator()->m_importing_parameters.push_back(importer);
         //exporter->getParameter()->get_operator()->m_exporting_parameters.push_back(exporter);
 
-        emit importer->getParameter()->findParent<BaseOperator>()->parameter_started_importing(exporter, importer);
+        emit importer->getParameter()->findParent<BaseOperator*>()->parameter_started_importing(exporter, importer);
         emit importer->startedImportingFrom(exporter);
         emit exporter->startedExportingTo(importer);
     }

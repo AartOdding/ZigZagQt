@@ -93,7 +93,7 @@ private:
             importer_->change(static_cast<TextComponent*>(exporter_)->getText());
         }
 
-        emit importer_->getParameter()->findParent<BaseOperator>()->parameter_started_importing(exporter_, importer_);
+        emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_started_importing(exporter_, importer_);
         emit importer_->startedImportingFrom(exporter_);
         emit exporter_->startedExportingTo(importer_);
     }
@@ -129,7 +129,7 @@ private:
                                 importer_, qOverload<const QString&>(&BaseComponent::change));
         }
 
-        emit importer_->getParameter()->findParent<BaseOperator>()->parameter_stopped_importing(exporter_, importer_);
+        emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_stopped_importing(exporter_, importer_);
         emit importer_->stoppedImportingFrom(exporter_);
         emit exporter_->stoppedExportingTo(importer_);
     }

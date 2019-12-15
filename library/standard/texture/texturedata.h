@@ -2,8 +2,8 @@
 
 #include "model/basedatatype.h"
 #include "model/enumdefinition.h"
-#include "model/parameter/enumparameter.h"
-#include "model/parameter/intparameter.h"
+#include "model/parameter/EnumParameter.hpp"
+#include "model/parameter/IntParameter.hpp"
 
 #include <QObject>
 #include <QOpenGLFunctions_3_2_Core>

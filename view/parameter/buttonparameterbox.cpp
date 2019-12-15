@@ -1,9 +1,9 @@
 #include "buttonparameterbox.h"
-#include "model/parameter/buttonparameter.h"
+#include "model/parameter/ButtonParameter.hpp"
 
 
 ButtonParameterBox::ButtonParameterBox(QWidget * parent, ButtonPar* b)
-    : QPushButton(b->getName(), parent), button(b)
+    : QPushButton(b->objectName(), parent), button(b)
 {
     setAutoDefault(false);
     setAutoRepeat(false);

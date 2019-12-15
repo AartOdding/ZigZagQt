@@ -8,7 +8,7 @@
 #include <QPointer>
 #include <QOpenGLShaderProgram>
 
-#include "model/parameter/buttonparameter.h"
+#include "model/parameter/ButtonParameter.hpp"
 
 
 class OperatorView;

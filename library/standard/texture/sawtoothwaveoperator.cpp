@@ -115,7 +115,7 @@ void SawtoothWaveOperator::run()
 
     if (should_update)
     {
-        auto shader = shaders[wave_type.get_index()];
+        auto shader = shaders[wave_type.getIndex()];
 
         output_texture.bind_as_framebuffer();
 
@@ -131,11 +131,11 @@ void SawtoothWaveOperator::run()
         auto rotated = glm::rotate(scaled, static_cast<float>(rotation.get()));
         glUniformMatrix3fv(shader->uniformLocation("transformation"), 1, GL_FALSE, (float*)(&rotated));
 
-        if (wave_type.get_index()  == 1) // Radial
+        if (wave_type.getIndex()  == 1) // Radial
         {
             radial_shader.setUniformValue(radial_shader.uniformLocation("frequency"), static_cast<float>(frequency.get()));
         }
-        else if (wave_type.get_index() == 2) // Conncentric
+        else if (wave_type.getIndex() == 2) // Conncentric
         {
             concentric_shader.setUniformValue(concentric_shader.uniformLocation("phase"), static_cast<float>(phase.get()));
         }

@@ -84,7 +84,7 @@ void NoiseOperator::run()
 
         shader.setUniformValue(shader.uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
         shader.setUniformValue(shader.uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
-        shader.setUniformValue(shader.uniformLocation("use_z_value"), use_z_value.get_index());
+        shader.setUniformValue(shader.uniformLocation("use_z_value"), use_z_value.getIndex());
         shader.setUniformValue(shader.uniformLocation("z_value"), static_cast<float>(z_value.get()));
 
         auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));

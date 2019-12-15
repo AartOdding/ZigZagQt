@@ -2,7 +2,7 @@
 
 #include <QComboBox>
 
-#include "model/parameter/enumparameter.h"
+#include "model/parameter/EnumParameter.hpp"
 
 
 class BaseComponent;
