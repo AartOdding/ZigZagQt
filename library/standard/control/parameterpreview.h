@@ -7,8 +7,7 @@
 
 class BaseOperator;
 
-class ParameterPreview : public QObject,
-                         public BaseDataView
+class ParameterPreview : public BaseDataView
 {
     Q_OBJECT
 

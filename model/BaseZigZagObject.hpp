@@ -11,28 +11,23 @@ class XmlSerializer;
 
 
 
-class BaseZigZagObject
+class BaseZigZagObject : public QObject
 {
+    Q_OBJECT
+
 public:
 
-    BaseZigZagObject() = delete;
-    BaseZigZagObject(BaseZigZagObject&&) = default;
-    BaseZigZagObject(const BaseZigZagObject&) = delete;
-    BaseZigZagObject(BaseZigZagObject * parent, const QString& name, bool isParameter = false);
+    BaseZigZagObject(BaseZigZagObject * parent, const QString& name);
 
     virtual ~BaseZigZagObject();
 
-    BaseZigZagObject * getParent();
-    const BaseZigZagObject * getParent() const;
-
-    BaseZigZagObject * getTopParent();
-    const BaseZigZagObject * getTopParent() const;
-
     template<typename Type>
     Type * findParent();
+
     template<typename Type>
     const Type * findParent() const;
 
+    /*
     std::vector<BaseZigZagObject*> getChildren();
     const std::vector<BaseZigZagObject*>& getChildren() const;
 
@@ -40,7 +35,7 @@ public:
     const std::vector<BaseParameter*>& getParameters() const;
 
     const QString& getName() const;
-
+    */
     /*
      * updateParameters() will call the update() function on every parameter that it has.
      * If 'recursive' is true, it will also recursively call updateParameters() on all of
@@ -64,12 +59,13 @@ protected:
      */
     virtual void parameterChangeEvent(const BaseParameter* parameter);
 
+    /*
 private:
 
     BaseZigZagObject * m_parent = nullptr;
     std::vector<BaseParameter*> m_parameters;
     std::vector<BaseZigZagObject*> m_children;
-    QString m_name;
+    QString m_name; */
 
 };
 
@@ -79,12 +75,12 @@ private:
 template<typename Type>
 Type * BaseZigZagObject::findParent()
 {
-    BaseZigZagObject * parent = m_parent;
+    QObject * prnt = parent();
     Type * typeParent;
 
-    while (parent)
+    while (prnt)
     {
-        typeParent = dynamic_cast<Type*>(parent);
+        typeParent = qobject_cast<Type*>(prnt);
 
         if (typeParent)
         {
@@ -92,7 +88,7 @@ Type * BaseZigZagObject::findParent()
         }
         else
         {
-            parent = parent->m_parent;
+            prnt = prnt->parent();
         }
     }
     return typeParent;
@@ -102,12 +98,12 @@ Type * BaseZigZagObject::findParent()
 template<typename Type>
 const Type * BaseZigZagObject::findParent() const
 {
-    const BaseZigZagObject * parent = m_parent;
+    const QObject * prnt = parent();
     const Type * typeParent;
 
     while (parent)
     {
-        typeParent = dynamic_cast<Type*>(parent);
+        typeParent = qobject_cast<Type*>(parent);
 
         if (typeParent)
         {

@@ -29,12 +29,9 @@ enum class ParameterType
 
 class BaseParameter : public BaseZigZagObject
 {
+    Q_OBJECT
+
 public:
-
-    BaseParameter() = delete;
-    BaseParameter(const BaseParameter&) = delete;
-
-    BaseParameter(BaseParameter&&) = default;
 
     BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name);
 
@@ -63,5 +60,5 @@ private:
 
 };
 
-Q_DECLARE_METATYPE(BaseParameter*);
+//Q_DECLARE_METATYPE(BaseParameter*);
 

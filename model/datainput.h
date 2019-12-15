@@ -9,8 +9,7 @@ class BaseOperator;
 
 
 
-class DataInput : public QObject,
-                  public BaseZigZagObject
+class DataInput : public BaseZigZagObject
 {
     Q_OBJECT
 

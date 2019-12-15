@@ -43,7 +43,7 @@ BaseZigZagObject::~BaseZigZagObject()
     }
 }
 
-
+/*
 BaseZigZagObject * BaseZigZagObject::getParent()
 {
     return m_parent;
@@ -78,7 +78,7 @@ const BaseZigZagObject * BaseZigZagObject::getTopParent() const
     }
     return topParent;
 }
-
+*/
 
 std::vector<BaseZigZagObject*> BaseZigZagObject::getChildren()
 {

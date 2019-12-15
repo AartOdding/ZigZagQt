@@ -32,8 +32,7 @@ inline bool operator==(const DataTypeInfo& t1, const DataTypeInfo& t2)
 }
 
 
-class BaseDataType : public QObject,
-                     public BaseZigZagObject
+class BaseDataType : public BaseZigZagObject
 {
     Q_OBJECT
 

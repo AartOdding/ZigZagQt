@@ -14,8 +14,7 @@
 class OperatorView;
 
 
-class TextureView : public QObject,
-                    public OpenGLDataView
+class TextureView : public OpenGLDataView
 {
     Q_OBJECT
 

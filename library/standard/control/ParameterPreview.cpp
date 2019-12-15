@@ -16,18 +16,18 @@ ParameterPreview::ParameterPreview(BaseOperator* parent_operator)
         if (par->getComponents().size() > 0)
         {
             viewedComponent = par->getComponents()[0];
-            connect(parent_operator, &BaseOperator::update_view_requested, this, &ParameterPreview::onUpdateNecessary);
+            QObject::connect(parent_operator, &BaseOperator::update_view_requested, this, &ParameterPreview::onUpdateNecessary);
 
             if (qobject_cast<Int64Component*>(viewedComponent))
             {
                 is_int = true;
-                connect(viewedComponent, qOverload<int64_t>(&BaseComponent::valueChanged),
+                QObject::connect(viewedComponent, qOverload<int64_t>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedInt);
             }
             if (qobject_cast<Float64Component*>(viewedComponent))
             {
                 is_int = false;
-                connect(viewedComponent, qOverload<double>(&BaseComponent::valueChanged),
+                QObject::connect(viewedComponent, qOverload<double>(&BaseComponent::valueChanged),
                             this, &ParameterPreview::onValueChangedDouble);
             }
         }
