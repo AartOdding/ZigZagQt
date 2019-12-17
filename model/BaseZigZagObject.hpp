@@ -58,7 +58,7 @@ template<typename PtrType>
 PtrType BaseZigZagObject::findParent(bool directParentOnly) const
 {
     QObject * p = parent();
-    PtrType typeParent;
+    PtrType typeParent = nullptr;
 
     while (p)
     {
