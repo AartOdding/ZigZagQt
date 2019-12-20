@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 
 #include "view/parameter/parametereditor.h"
+#include "view/connection/ConnectionEditor.hpp"
 
 
 class QOpenGLWidget;
@@ -68,6 +69,7 @@ private:
     ProjectScopeView* view_model;
 
     ParameterEditor parameter_editor;
+    ConnectionEditor connection_editor;
 
     double m_currentZoomLevel = 1.0;
 

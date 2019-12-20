@@ -20,12 +20,12 @@ public:
 
     ParameterEditor(Viewport* viewport);
 
-    void set_scene(QGraphicsScene* scene);
+    void setScene(QGraphicsScene* scene);
 
 
 public slots:
 
-    void on_selection_changed();
+    void onSelectionChanged();
 
 private:
 

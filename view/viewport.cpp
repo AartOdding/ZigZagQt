@@ -15,7 +15,9 @@
 
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
-    : QGraphicsView(parent), parameter_editor(this)
+    : QGraphicsView(parent),
+      parameter_editor(this),
+      connection_editor(this)
 {
     //setViewport(&gl_widget);
     setDragMode(QGraphicsView::ScrollHandDrag);
@@ -26,6 +28,9 @@ Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
     setRenderHint(QPainter::Antialiasing);
 
     parameter_editor.move(width() - 260, 100);
+    parameter_editor.resize(250, 300);
+
+    parameter_editor.move(width() - 560, 400);
     parameter_editor.resize(250, 300);
 
     viewport()->setCursor(Qt::ArrowCursor);
@@ -55,7 +60,8 @@ void Viewport::set_view(ProjectScopeView* view_mdl /* , ProgramScope scope */)
 {
     view_model = view_mdl;
     setScene(view_model);
-    parameter_editor.set_scene(view_model);
+    parameter_editor.setScene(view_model);
+    connection_editor.setScene(view_model);
 
     //connect(view_model, &ProjectSurface::focus_operator_changed,
            // &parameter_editor, &ParameterEditor::on_focus_operator_changed);

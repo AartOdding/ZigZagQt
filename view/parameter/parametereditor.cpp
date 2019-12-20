@@ -40,24 +40,24 @@ ParameterEditor::ParameterEditor(Viewport* viewport_)
 }
 
 
-void ParameterEditor::set_scene(QGraphicsScene* new_model)
+void ParameterEditor::setScene(QGraphicsScene* new_model)
 {
     if (model != new_model)
     {
         if (model != nullptr)
         {
-            disconnect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::on_selection_changed);
+            disconnect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::onSelectionChanged);
         }
         if (new_model)
         {
             model = new_model;
-            connect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::on_selection_changed);
+            connect(model, &QGraphicsScene::selectionChanged, this, &ParameterEditor::onSelectionChanged);
         }
     }
 }
 
 
-void ParameterEditor::on_selection_changed()
+void ParameterEditor::onSelectionChanged()
 {
     auto selected_items = model->selectedItems();
 
