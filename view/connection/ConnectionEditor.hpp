@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QWidget>
+#include <QPushButton>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QTreeWidget>
 
@@ -32,9 +34,16 @@ private:
     static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* treeItem);
 
     Viewport* m_viewport = nullptr;
-    QVBoxLayout m_layout;
-    QTreeWidget m_treeWidget;
-
     QGraphicsScene * m_model = nullptr;
+
+    QVBoxLayout m_mainLayout{ this };
+
+    QHBoxLayout m_buttonsLayout{ this };
+    QPushButton m_connectButton{ this };
+    QPushButton m_disconnectButton{ this };
+
+    QHBoxLayout m_treeWidgetsLayout{ this };
+    QTreeWidget m_treeWidgetLeft{ this };
+    QTreeWidget m_treeWidgetRight{ this };
 
 };

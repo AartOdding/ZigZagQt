@@ -9,6 +9,7 @@
 #include "model/parameter/FloatParameter.hpp"
 #include "model/parameter/EnumParameter.hpp"
 #include "model/parameter/ButtonParameter.hpp"
+#include "model/parameter/ColorParameter.hpp"
 
 
 struct DataTypeInfo;

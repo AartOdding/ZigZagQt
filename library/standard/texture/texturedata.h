@@ -113,7 +113,7 @@ private:
 
     static GLenum gl_format_for(const EnumPar& format, const EnumPar& num_channels);
 
-    Int2Par resolution{ this, "Resolution", { 256, 256 }, 1, 16384 };
+    Int2Par resolution{ this, "Resolution", { 256, 256 }, { 1, 1 }, { 16384, 16384 } };
     EnumPar pixel_format{ this, "Format", PixelDataFormat, 0 };
     EnumPar pixel_channels{ this, "Num Channels", PixelNumChannels, 3 };
 

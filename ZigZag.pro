@@ -22,6 +22,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++17 console
 
+include( ext/phantom/phantom.pri )
+
 SOURCES += \
         application.cpp \
     library/standard/control/ParameterPreview.cpp \
@@ -53,9 +55,12 @@ SOURCES += \
     model/parameter/BaseComponent.cpp \
     model/parameter/BaseParameter.cpp \
     model/parameter/ButtonParameter.cpp \
+    model/parameter/ColorParameter.cpp \
     model/parameter/EnumParameter.cpp \
     model/parameter/Float64Component.cpp \
+    model/parameter/FloatParameter.cpp \
     model/parameter/Int64Component.cpp \
+    model/parameter/IntParameter.cpp \
     model/parameter/TextComponent.cpp \
     model/parameter/Transform2DParameter.cpp \
     model/parameter/TriggerComponent.cpp \
@@ -129,6 +134,7 @@ HEADERS += \
         model/parameter/BaseComponent.hpp \
         model/parameter/BaseParameter.hpp \
         model/parameter/ButtonParameter.hpp \
+        model/parameter/ColorParameter.hpp \
         model/parameter/EnumParameter.hpp \
         model/parameter/Float64Component.hpp \
         model/parameter/FloatParameter.hpp \

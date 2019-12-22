@@ -10,11 +10,11 @@ BaseParameter::BaseParameter(ParameterType parameterType, BaseZigZagObject * par
 }
 
 
-
+/*
 std::vector<BaseComponent*> BaseParameter::getComponents()
 {
     return m_components;
-}
+}*/
 
 
 

@@ -112,8 +112,8 @@ void SineWaveOperator::run()
         glUseProgram(shader->programId());
         glBindVertexArray(vao);
 
-        shader->setUniformValue(shader->uniformLocation("color_a"), color_a.x(), color_a.y(), color_a.z(), color_a.w());
-        shader->setUniformValue(shader->uniformLocation("color_b"), color_b.x(), color_b.y(), color_b.z(), color_b.w());
+        shader->setUniformValue(shader->uniformLocation("color_a"), color_a.get());
+        shader->setUniformValue(shader->uniformLocation("color_b"), color_b.get());
 
         auto translated = glm::translate(glm::mat3(1), glm::vec2(translation.x(), translation.y()));
         auto scaled = glm::scale(translated, glm::vec2(scale.x(), scale.y()));

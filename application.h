@@ -20,6 +20,7 @@ class QMainWindow;
 class QOpenGLContext;
 
 
+
 namespace application
 {
     Application *      instance();

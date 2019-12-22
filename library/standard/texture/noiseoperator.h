@@ -31,8 +31,10 @@ private:
 
     EnumDefinition BoolEnum { "BoolEnum", { "False", "True" } };
 
-    Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
-    Float4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+    ColorParameter m_highColor{ this, "High Color" };
+    ColorParameter m_lowColor{ this, "Low Color" };
+    // color_a{ this, "High Color", { 1, 1, 1, 1 }, 0, 1 };
+    //Float4Par color_b{ this, "Low Color", { 0, 0, 0, 1 }, 0, 1 };
 
     Float2Par translation{ this, "Translate", { 0, 0 } };
     FloatPar rotation{ this, "Rotate", 0 };

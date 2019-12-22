@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model/baseoperator.h"
-#include "model/parameter/IntParameter.hpp"
+#include "model/parameter/ColorParameter.hpp"
 
 #include "library/standard/texture/texturedata.h"
 #include "library/standard/texture/textureview.h"
@@ -31,10 +31,7 @@ public:
 private:
 
     //ParameterRow row  { this, "Color RGBA" };
-    IntPar red_value  { this, "Red", 0, 0, 255 };
-    IntPar green_value{ this, "Green", 0, 0, 255 };
-    IntPar blue_value { this, "Blue",  0, 0, 255 };
-    IntPar alpha_value{ this, "Alpha", 255, 0, 255 };
+    ColorParameter m_color{ this, "Color" };
 
     //parameter::Float4 color { this, "Color", {0, 0, 0, 0}, { -1000, -1000, -1000, -1000 }, {1000, 1000, 1000, 1000} };
 

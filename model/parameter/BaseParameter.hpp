@@ -21,6 +21,7 @@ enum class ParameterType
     Float4,
     Enum,
     Button,
+    Color,
     Matrix3x3,
     Matrix4x4,
     Transform2D,
@@ -37,7 +38,6 @@ public:
 
     BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name);
 
-    std::vector<BaseComponent*> getComponents();
     const std::vector<BaseComponent*>& getComponents() const;
 
     ParameterType getParameterType() const;

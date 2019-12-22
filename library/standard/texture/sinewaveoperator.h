@@ -32,8 +32,8 @@ private:
 
     EnumDefinition WaveType { "Wave Type", { "Flat", "Radial", "Concentric" } };
 
-    Float4Par color_a{ this, "Color A", { 1, 1, 1, 1 }, 0, 1 };
-    Float4Par color_b{ this, "Color B", { 0, 0, 0, 1 }, 0, 1 };
+    ColorPar color_a{ this, "High Color", Qt::white };
+    ColorPar color_b{ this, "Low Color", Qt::black };
 
     EnumPar wave_type{ this, "Wave Type", WaveType };
     FloatPar frequency{ this, "Frequency", 6, 0.5, 1000000 };

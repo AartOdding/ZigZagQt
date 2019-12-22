@@ -1,8 +1,6 @@
 #pragma once
 
 #include <array>
-#include <tuple>
-#include <optional>
 #include <cstdint>
 
 #include "BaseParameter.hpp"
@@ -17,154 +15,111 @@ using int64_4 = std::array<int64, 4>;
 
 
 
-template<int NUM_COMPONENTS>
 class IntParameter : public BaseParameter
 {
 public:
 
-    static_assert(NUM_COMPONENTS >= 1 && NUM_COMPONENTS <= 4, "Invalid number of components!");
+    IntParameter(BaseZigZagObject * parent, const QString& name, int64 value = 0);
+    IntParameter(BaseZigZagObject * parent, const QString& name, int64 value, int64 min, int64 max);
 
-    using interface_types = std::tuple<int64, int64_2, int64_3, int64_4>;
-    using interface_type = typename std::tuple_element<NUM_COMPONENTS - 1, interface_types>::type;
+    int64 get() const;
+    int64 value() const;
 
-
-    IntParameter(BaseZigZagObject * parent, const char * name, interface_type value = interface_type())
-        : BaseParameter(parameter_types[NUM_COMPONENTS - 1], parent, name)
-    {
-        if constexpr(NUM_COMPONENTS == 1)
-        {
-            components[0].emplace(this, value);
-        }
-        else
-        {
-            for (int i = 0; i < NUM_COMPONENTS; ++i)
-            {
-                components[i].emplace(this, value[i]);
-            }
-        }
-    }
-
-
-    IntParameter(BaseZigZagObject * parent, const char * name, interface_type value, int64 min, int64 max)
-        : BaseParameter(parameter_types[NUM_COMPONENTS - 1], parent, name)
-    {
-        if constexpr(NUM_COMPONENTS == 1)
-        {
-            components[0].emplace(this, value, min, max);
-        }
-        else
-        {
-            for (int i = 0; i < NUM_COMPONENTS; ++i)
-            {
-                components[i].emplace(this, value[i], min, max);
-            }
-        }
-    }
-
-
-    interface_type get() const
-    {
-        if constexpr(NUM_COMPONENTS == 1)
-        {
-            return components[0]->getValue();
-        }
-        else
-        {
-            interface_type return_value;
-            for (int i = 0; i < NUM_COMPONENTS; ++i)
-            {
-                return_value[i] = components[i]->getValue();
-            }
-            return return_value;
-        }
-    }
-
-
-    int64 get(int index) const
-    {
-        if (index >= 0 && index < NUM_COMPONENTS)
-        {
-            return components[index]->getValue();
-        }
-        return 0;
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 1), int64> x() const
-    {
-        return components[0]->getValue();
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 1), int64> y() const
-    {
-        return components[1]->getValue();
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 2), int64> z() const
-    {
-        return components[2]->getValue();
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM > 3), int64> w() const
-    {
-        return components[3]->getValue();
-    }
-
-
-    void set(int64 value)
-    {
-        for (auto& component : components)
-        {
-            component->setValue(value);
-        }
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 2), void> set(int64 x, int64 y)
-    {
-        components[0]->setValue(x);
-        components[1]->setValue(y);
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 3), void> set(int64 x, int64 y, int64 z)
-    {
-        components[0]->setValue(x);
-        components[1]->setValue(y);
-        components[2]->setValue(z);
-    }
-
-
-    template<int NUM = NUM_COMPONENTS>
-    typename std::enable_if_t<(NUM == 4), void> set(int64 x, int64 y, int64 z, int64 w)
-    {
-        components[0]->setValue(x);
-        components[1]->setValue(y);
-        components[2]->setValue(z);
-        components[3]->setValue(w);
-    }
-
+    void set(int64 value);
 
 private:
 
-    static constexpr std::array parameter_types{ ParameterType::Int, ParameterType::Int2, ParameterType::Int3, ParameterType::Int4 };
-
-    std::array<std::optional<Int64Component>, NUM_COMPONENTS> components;
-
+    Int64Component m_value;
 
 };
 
 
-using IntPar  = IntParameter<1>;
-using Int2Par = IntParameter<2>;
-using Int3Par = IntParameter<3>;
-using Int4Par = IntParameter<4>;
+
+
+class Int2Parameter : public BaseParameter
+{
+public:
+
+    Int2Parameter(BaseZigZagObject * parent, const QString& name, int64_2 value = int64_2());
+    Int2Parameter(BaseZigZagObject * parent, const QString& name, int64_2 value, int64_2 min, int64_2 max);
+
+    int64 x() const;
+    int64 y() const;
+
+    void setX(int64 x);
+    void setY(int64 y);
+
+    void set(int64 x, int64 y);
+
+private:
+
+    Int64Component m_xValue;
+    Int64Component m_yValue;
+
+};
+
+
+
+
+class Int3Parameter : public BaseParameter
+{
+public:
+
+    Int3Parameter(BaseZigZagObject * parent, const QString& name, int64_3 value = int64_3());
+    Int3Parameter(BaseZigZagObject * parent, const QString& name, int64_3 value, int64_3 min, int64_3 max);
+
+    int64 x() const;
+    int64 y() const;
+    int64 z() const;
+
+    void setX(int64 x);
+    void setY(int64 y);
+    void setZ(int64 z);
+
+    void set(int64 x, int64 y, int64 z);
+
+private:
+
+    Int64Component m_xValue;
+    Int64Component m_yValue;
+    Int64Component m_zValue;
+
+};
+
+
+
+
+class Int4Parameter : public BaseParameter
+{
+public:
+
+    Int4Parameter(BaseZigZagObject * parent, const QString& name, int64_4 value = int64_4());
+    Int4Parameter(BaseZigZagObject * parent, const QString& name, int64_4 value, int64_4 min, int64_4 max);
+
+    int64 x() const;
+    int64 y() const;
+    int64 z() const;
+    int64 w() const;
+
+    void setX(int64 x);
+    void setY(int64 y);
+    void setZ(int64 z);
+    void setW(int64 w);
+
+    void set(int64 x, int64 y, int64 z, int64 w);
+
+private:
+
+    Int64Component m_xValue;
+    Int64Component m_yValue;
+    Int64Component m_zValue;
+    Int64Component m_wValue;
+
+};
+
+
+
+using IntPar  = IntParameter;
+using Int2Par = Int2Parameter;
+using Int3Par = Int3Parameter;
+using Int4Par = Int4Parameter;
