@@ -71,6 +71,7 @@ SOURCES += \
         view/basedataview.cpp \
         view/cable.cpp \
     view/connection/ConnectionEditor.cpp \
+    view/connection/ConnectionTreeView.cpp \
         view/connectionmanager.cpp \
         view/dataconnector.cpp \
         view/opengldataview.cpp \
@@ -155,6 +156,7 @@ HEADERS += \
         view/basedataview.h \
         view/cable.h \
         view/connection/ConnectionEditor.hpp \
+        view/connection/ConnectionTreeView.hpp \
         view/connectionmanager.h \
         view/dataconnector.h \
         view/opengldataview.h \

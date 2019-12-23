@@ -1,5 +1,4 @@
 #include "application.h"
-#include "view/DarkStyle.hpp"
 #include "phantomstyle.h"
 
 

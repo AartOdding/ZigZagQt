@@ -6,6 +6,8 @@
 #include <QVBoxLayout>
 #include <QTreeWidget>
 
+#include "view/connection/ConnectionTreeView.hpp"
+
 class BaseZigZagObject;
 class Viewport;
 class QGraphicsScene;
@@ -22,16 +24,8 @@ public:
 
     void setScene(QGraphicsScene* scene);
 
-public slots:
-
-    void onSelectionChanged();
-
-signals:
-
 
 private:
-
-    static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* treeItem);
 
     Viewport* m_viewport = nullptr;
     QGraphicsScene * m_model = nullptr;
@@ -42,8 +36,6 @@ private:
     QPushButton m_connectButton{ this };
     QPushButton m_disconnectButton{ this };
 
-    QHBoxLayout m_treeWidgetsLayout{ this };
-    QTreeWidget m_treeWidgetLeft{ this };
-    QTreeWidget m_treeWidgetRight{ this };
+    ConnectionTreeView m_connectionTreeView{ this };
 
 };
