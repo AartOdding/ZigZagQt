@@ -1,0 +1,7 @@
+
+ConnectionTreeView
+{
+    background-color: palette(base);
+    border: 1px solid white;
+}
+

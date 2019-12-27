@@ -52,8 +52,8 @@ void NoiseOperator::run()
     {
         gpu_resources_initialized = true;
         shader.create();
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/noise.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/noise.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 

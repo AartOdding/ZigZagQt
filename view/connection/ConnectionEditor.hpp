@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <QDialog>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -20,22 +20,26 @@ class ConnectionEditor : public QWidget
 
 public:
 
-    explicit ConnectionEditor(Viewport* viewport);
+    explicit ConnectionEditor(QWidget * parent = nullptr);
 
-    void setScene(QGraphicsScene* scene);
+    ConnectionEditor(BaseZigZagObject * output, BaseZigZagObject * input, QWidget * parent = nullptr);
 
+public slots:
+
+    void connectButtonPressed();
+
+    void disconnectButtonPressed();
 
 private:
 
-    Viewport* m_viewport = nullptr;
     QGraphicsScene * m_model = nullptr;
 
     QVBoxLayout m_mainLayout{ this };
 
-    QHBoxLayout m_buttonsLayout{ this };
+    QHBoxLayout m_buttonsLayout;
     QPushButton m_connectButton{ this };
     QPushButton m_disconnectButton{ this };
 
-    ConnectionTreeView m_connectionTreeView{ this };
+    ConnectionTreeView m_connectionTreeView;
 
 };

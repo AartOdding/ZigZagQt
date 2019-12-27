@@ -50,8 +50,10 @@ public:
 
     bool isImporting() const;
     bool isExporting() const;
+    bool isImportingFrom(BaseComponent * exporter) const;
+    bool isExportingTo(BaseComponent * importer) const;
 
-    void startImporting(BaseComponent * exportingComponent);
+    void startImporting(BaseComponent * exporter);
     void stopImporting();
     void stopExporting();
 
@@ -118,3 +120,7 @@ private:
     std::bitset<32> m_flags;
 
 };
+
+
+
+Q_DECLARE_METATYPE(BaseComponent*)

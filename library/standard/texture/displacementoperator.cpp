@@ -46,8 +46,8 @@ void DisplacementOperator::run()
     {
         gpu_resources_initialized = true;
         shader.create();
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/displace.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/displace.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 

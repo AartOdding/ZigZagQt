@@ -53,8 +53,8 @@ void SquareWaveOperator::run()
 
         // Flat Square wave shader
         flat_shader.create();
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/square_wave.frag");
+        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/squareWaveFlat.frag");
         auto success = flat_shader.link();
         Q_ASSERT(success);
 
@@ -64,8 +64,8 @@ void SquareWaveOperator::run()
 
         // Radial Square wave shader
         radial_shader.create();
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/radial_square_wave.frag");
+        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/squareWaveRadial.frag");
         success = radial_shader.link();
         Q_ASSERT(success);
 
@@ -75,8 +75,8 @@ void SquareWaveOperator::run()
 
         // Concentric Square wave shader
         concentric_shader.create();
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/concentric_square_wave.frag");
+        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/squareWaveConcentric.frag");
         success = concentric_shader.link();
         Q_ASSERT(success);
 

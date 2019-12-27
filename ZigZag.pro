@@ -67,13 +67,15 @@ SOURCES += \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         model/types.cpp \
-        view/baseconnector.cpp \
+    view/BaseConnector.cpp \
+    view/ConnectionManager.cpp \
+    view/DataConnector.cpp \
+    view/ParameterConnector.cpp \
+    view/PopupWindow.cpp \
         view/basedataview.cpp \
         view/cable.cpp \
     view/connection/ConnectionEditor.cpp \
     view/connection/ConnectionTreeView.cpp \
-        view/connectionmanager.cpp \
-        view/dataconnector.cpp \
         view/opengldataview.cpp \
         view/operatornametag.cpp \
         view/operatorselectordialog.cpp \
@@ -85,7 +87,6 @@ SOURCES += \
         view/parameter/parametereditor.cpp \
         view/parameter/parametergroup.cpp \
         view/parameter/transform2dwidget.cpp \
-        view/parameterconnector.cpp \
         view/projectscopeview.cpp \
         view/viewport.cpp \
         main.cpp \
@@ -152,13 +153,15 @@ HEADERS += \
         utility/numeric.h \
         utility/stb_image_write.h \
         utility/std_containers_helpers.h \
-        view/baseconnector.h \
+        view/BaseConnector.hpp \
+        view/ConnectionManager.hpp \
+        view/DataConnector.hpp \
+        view/ParameterConnector.hpp \
+        view/PopupWindow.hpp \
         view/basedataview.h \
         view/cable.h \
         view/connection/ConnectionEditor.hpp \
         view/connection/ConnectionTreeView.hpp \
-        view/connectionmanager.h \
-        view/dataconnector.h \
         view/opengldataview.h \
         view/operatornametag.h \
         view/operatorselectordialog.h \
@@ -170,7 +173,6 @@ HEADERS += \
         view/parameter/parametereditor.h \
         view/parameter/parametergroup.h \
         view/parameter/transform2dwidget.h \
-        view/parameterconnector.h \
         view/projectscopeview.h \
         view/viewport.h \
         renderer.h \

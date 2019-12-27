@@ -9,8 +9,8 @@
 #include "basedataview.h"
 #include "operatorview.h"
 #include "projectscopeview.h"
-#include "dataconnector.h"
-#include "parameterconnector.h"
+#include "DataConnector.hpp"
+#include "ParameterConnector.hpp"
 
 #include "model/datainput.h"
 #include "model/projectmodel.h"

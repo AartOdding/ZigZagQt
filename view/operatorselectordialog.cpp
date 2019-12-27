@@ -12,7 +12,8 @@
 
 
 OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& where)
-    : QDialog(vp, Qt::Popup), operator_position(where)
+    : QDialog(vp, Qt::Popup),
+      operator_position(where)
 {
     MontSerrat.setPixelSize(14);
     OpenSans.setPixelSize(14);

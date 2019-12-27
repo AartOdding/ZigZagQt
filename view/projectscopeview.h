@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QGraphicsScene>
 
-#include "connectionmanager.h"
+#include "ConnectionManager.hpp"
 #include "model/projectmodel.h"
 
 

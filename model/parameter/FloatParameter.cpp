@@ -4,7 +4,7 @@
 
 
 FloatParameter::FloatParameter(BaseZigZagObject * parent, const QString& name, double value)
-    : BaseParameter(ParameterType::Int, parent, name),
+    : BaseParameter(ParameterType::Float, parent, name),
       m_value(this, value)
 {
     m_value.setObjectName(name);
@@ -13,7 +13,7 @@ FloatParameter::FloatParameter(BaseZigZagObject * parent, const QString& name, d
 
 
 FloatParameter::FloatParameter(BaseZigZagObject * parent, const QString& name, double value, double min, double max)
-    : BaseParameter(ParameterType::Int, parent, name),
+    : BaseParameter(ParameterType::Float, parent, name),
       m_value(this, value, min, max)
 {
     m_value.setObjectName(name);
@@ -43,7 +43,7 @@ void FloatParameter::set(double value)
 
 
 Float2Parameter::Float2Parameter(BaseZigZagObject * parent, const QString& name, double_2 value)
-    : BaseParameter(ParameterType::Int2, parent, name),
+    : BaseParameter(ParameterType::Float2, parent, name),
       m_xValue(this, value[0]),
       m_yValue(this, value[1])
 {
@@ -54,7 +54,7 @@ Float2Parameter::Float2Parameter(BaseZigZagObject * parent, const QString& name,
 
 
 Float2Parameter::Float2Parameter(BaseZigZagObject * parent, const QString& name, double_2 value, double_2 min, double_2 max)
-    : BaseParameter(ParameterType::Int2, parent, name),
+    : BaseParameter(ParameterType::Float2, parent, name),
       m_xValue(this, value[0], min[0], max[0]),
       m_yValue(this, value[1], min[1], max[1])
 {
@@ -101,7 +101,7 @@ void Float2Parameter::set(double x, double y)
 
 
 Float3Parameter::Float3Parameter(BaseZigZagObject * parent, const QString& name, double_3 value)
-    : BaseParameter(ParameterType::Int3, parent, name),
+    : BaseParameter(ParameterType::Float3, parent, name),
       m_xValue(this, value[0]),
       m_yValue(this, value[1]),
       m_zValue(this, value[2])
@@ -114,7 +114,7 @@ Float3Parameter::Float3Parameter(BaseZigZagObject * parent, const QString& name,
 
 
 Float3Parameter::Float3Parameter(BaseZigZagObject * parent, const QString& name, double_3 value, double_3 min, double_3 max)
-    : BaseParameter(ParameterType::Int3, parent, name),
+    : BaseParameter(ParameterType::Float3, parent, name),
       m_xValue(this, value[0], min[0], max[0]),
       m_yValue(this, value[1], min[1], max[1]),
       m_zValue(this, value[2], min[2], max[2])
@@ -178,7 +178,7 @@ void Float3Parameter::set(double x, double y, double z)
 
 
 Float4Parameter::Float4Parameter(BaseZigZagObject * parent, const QString& name, double_4 value)
-    : BaseParameter(ParameterType::Int4, parent, name),
+    : BaseParameter(ParameterType::Float4, parent, name),
       m_xValue(this, value[0]),
       m_yValue(this, value[1]),
       m_zValue(this, value[2]),

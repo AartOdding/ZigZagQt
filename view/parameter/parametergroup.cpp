@@ -79,7 +79,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
             auto widget = new QWidget(this);
             auto widget_layout = new QHBoxLayout(widget);
             widget_layout->setMargin(0);
-            widget_layout->setSpacing(0);
+            widget_layout->setSpacing(4);
 
             for (int i = 0; i < par->getComponents().size(); ++i)
             {
@@ -91,7 +91,8 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
     else if (par->getParameterType() == ParameterType::Float  ||
              par->getParameterType() == ParameterType::Float2 ||
              par->getParameterType() == ParameterType::Float3 ||
-             par->getParameterType() == ParameterType::Float4)
+             par->getParameterType() == ParameterType::Float4 ||
+             par->getParameterType() == ParameterType::Color)
     {
         if (par->getComponents().size() == 1)
         {
@@ -102,7 +103,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
             auto widget = new QWidget(this);
             auto widget_layout = new QHBoxLayout(widget);
             widget_layout->setMargin(0);
-            widget_layout->setSpacing(0);
+            widget_layout->setSpacing(4);
 
             for (int i = 0; i < par->getComponents().size(); ++i)
             {

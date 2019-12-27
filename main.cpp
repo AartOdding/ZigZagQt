@@ -1,6 +1,8 @@
 #include "application.h"
 #include "phantomstyle.h"
 
+#include <QTextStream>
+
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +46,10 @@ int main(int argc, char *argv[])
     Application app(argc, argv);
     app.setStyle(style);
     app.setPalette(palette);
+
+    auto styleSheet = QFile(":/style/style.qss");
+    styleSheet.open(QFile::ReadOnly | QFile::Text);
+    app.setStyleSheet(QTextStream(&styleSheet).readAll());
 
     return app.exec();
 }

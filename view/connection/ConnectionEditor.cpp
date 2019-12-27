@@ -8,20 +8,17 @@
 #include <iostream>
 
 
-ConnectionEditor::ConnectionEditor(Viewport* viewport)
-    : m_viewport(viewport)
+
+ConnectionEditor::ConnectionEditor(QWidget * parent)
+    : ConnectionEditor(nullptr, nullptr, parent)
 {
-    Q_ASSERT(viewport);
+}
 
-#ifdef Q_OS_MAC
-    setParent(nullptr);
-    setWindowFlags(Qt::WindowStaysOnTopHint);
-#else
-    setParent(viewport);
-    setWindowFlags(Qt::Window |Qt::CustomizeWindowHint | Qt::WindowTitleHint
-                   /*| Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint*/);
-#endif
 
+
+ConnectionEditor::ConnectionEditor(BaseZigZagObject * output, BaseZigZagObject * input, QWidget * parent)
+    : m_connectionTreeView(output, input, this)
+{
     m_connectButton.setText(QStringLiteral("Connect"));
     m_disconnectButton.setText(QStringLiteral("Disconnect"));
 
@@ -35,20 +32,42 @@ ConnectionEditor::ConnectionEditor(Viewport* viewport)
     m_buttonsLayout.addWidget(&m_disconnectButton);
     m_buttonsLayout.addStretch();
 
-
     m_mainLayout.addLayout(&m_buttonsLayout);
     m_mainLayout.addWidget(&m_connectionTreeView);
     setLayout(&m_mainLayout);
 
-
-    show();
+    connect(&m_connectButton, &QPushButton::pressed, this, &ConnectionEditor::connectButtonPressed);
+    connect(&m_disconnectButton, &QPushButton::pressed, this, &ConnectionEditor::disconnectButtonPressed);
 }
 
 
 
-void ConnectionEditor::setScene(QGraphicsScene* model)
+void ConnectionEditor::connectButtonPressed()
 {
-    m_connectionTreeView.setScene(model);
+    auto output = m_connectionTreeView.getSelectedOutput();
+    auto input = m_connectionTreeView.getSelectedInput();
+
+    if (input && output)
+    {
+        if (!input->isImportingFrom(output))
+        {
+            input->startImporting(output);
+        }
+    }
 }
 
 
+
+void ConnectionEditor::disconnectButtonPressed()
+{
+    auto output = m_connectionTreeView.getSelectedOutput();
+    auto input = m_connectionTreeView.getSelectedInput();
+
+    if (input && output)
+    {
+        if (input->isImportingFrom(output))
+        {
+            input->stopImporting();
+        }
+    }
+}

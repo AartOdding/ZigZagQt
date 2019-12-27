@@ -47,6 +47,20 @@ bool BaseComponent::isExporting() const
 
 
 
+bool BaseComponent::isImportingFrom(BaseComponent * exporter) const
+{
+    return m_import == exporter;
+}
+
+
+
+bool BaseComponent::isExportingTo(BaseComponent * importer) const
+{
+    return std::find(m_exports.begin(), m_exports.end(), importer) != m_exports.end();
+}
+
+
+
 void BaseComponent::startImporting(BaseComponent * exporting_import)
 {
     auto undo_stack = application::project_model()->get_undo_stack();

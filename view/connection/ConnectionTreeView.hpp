@@ -5,33 +5,12 @@
 #include <QTreeWidget>
 #include <QWheelEvent>
 
+class BaseComponent;
 class BaseZigZagObject;
 class Viewport;
 class QGraphicsScene;
 
 
-
-class ConnectionTreeWidget : public QTreeWidget
-{
-public:
-
-    using QTreeWidget::QTreeWidget;
-
-    void sendWheelEvent(QWheelEvent *event)
-    {
-        wheelEvent(event);
-        //event->accept();
-    }
-
-protected:
-
-    void wheelEvent(QWheelEvent *event) override
-    {
-        QTreeView::wheelEvent(event);
-        //event->accept();
-    }
-
-};
 
 
 class ConnectionTreeView : public QFrame
@@ -40,27 +19,20 @@ class ConnectionTreeView : public QFrame
 
 public:
 
-    ConnectionTreeView(QWidget* parent);
+    ConnectionTreeView(BaseZigZagObject * output, BaseZigZagObject * input, QWidget* parent);
 
-    void setScene(QGraphicsScene* scene);
 
-public slots:
+    BaseComponent* getSelectedInput() const;
+    BaseComponent* getSelectedOutput() const;
 
-    void onSelectionChanged();
-
-protected:
-
-    void wheelEvent(QWheelEvent *event) override;
 
 private:
-
-    static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* treeItem);
 
     QGraphicsScene * m_model = nullptr;
 
     QHBoxLayout m_treeWidgetsLayout{ this };
-    ConnectionTreeWidget m_treeWidgetLeft{ this };
-    ConnectionTreeWidget m_treeWidgetRight{ this };
+    QTreeWidget m_treeWidgetLeft{ this };
+    QTreeWidget m_treeWidgetRight{ this };
 
     QWheelEvent* lastForwardedWheelEvent = nullptr;
 

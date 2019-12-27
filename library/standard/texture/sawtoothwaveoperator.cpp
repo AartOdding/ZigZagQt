@@ -65,8 +65,8 @@ void SawtoothWaveOperator::run()
 
         // Flat Sine wave shader
         flat_shader.create();
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/sawtooth_wave.frag");
+        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sawtoothWaveFlat.frag");
         auto success = flat_shader.link();
         Q_ASSERT(success);
 
@@ -76,8 +76,8 @@ void SawtoothWaveOperator::run()
 
         // Radial sine wave shader
         radial_shader.create();
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/radial_sawtooth_wave.frag");
+        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sawtoothWaveRadial.frag");
         success = radial_shader.link();
         Q_ASSERT(success);
 
@@ -87,8 +87,8 @@ void SawtoothWaveOperator::run()
 
         // Concentric sine wave shader
         concentric_shader.create();
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/basic.vert");
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/concentric_sawtooth_wave.frag");
+        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sawtoothWaveConcentric.frag");
         success = concentric_shader.link();
         Q_ASSERT(success);
 

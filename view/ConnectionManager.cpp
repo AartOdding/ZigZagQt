@@ -1,54 +1,77 @@
-#include "connectionmanager.h"
-#include "baseconnector.h"
+#include "ConnectionManager.hpp"
+#include "BaseConnector.hpp"
 
 #include "operatorview.h"
 
 
 
-void ConnectionManager::try_connect(BaseConnector* connector)
+void ConnectionManager::startConnection(BaseConnector* connector)
 {
-    if (m_active_connector != connector)
+    if (m_startingConnector != connector)
     {
-        if (connector && m_active_connector) // If now have two connectors
+        if (connector && m_startingConnector) // If now have two connectors
         {
-            if (m_active_connector->can_connect_with(connector))
+            if (m_startingConnector->canConnectWith(connector))
             {
-                m_active_connector->connection_requested_event(connector);
-                m_active_connector = nullptr;
+                m_startingConnector->connectionEvent(connector);
+                m_startingConnector = nullptr;
                 return;
             }
         }
         // Can only reach here if no connection was possible
-        if (m_active_connector)
+        if (m_startingConnector)
         {
-            cancel_connection();
+            cancelConnection();
         }
         // Start new connection
-        m_active_connector = connector;
+        m_startingConnector = connector;
     }
 }
 
 
-void ConnectionManager::cancel_connection()
+std::pair<bool, BaseConnector*> ConnectionManager::finishConnection(BaseConnector* connector)
 {
-    if (m_active_connector)
+    std::pair<bool, BaseConnector*> returnValue{ false, nullptr };
+
+    if (m_startingConnector && connector && m_startingConnector != connector)
     {
-        auto old = m_active_connector;
-        m_active_connector = nullptr;
-        old->connection_aborted_event();
+        if (m_startingConnector->canConnectWith(connector))
+        {
+            returnValue = { true, m_startingConnector };
+            m_startingConnector->connectionEvent(connector);
+        }
+    }
+
+    if (m_startingConnector && !returnValue.first)
+    {
+        m_startingConnector->connectionCancelEvent();
+    }
+
+    m_startingConnector = nullptr;
+    return returnValue;
+}
+
+
+void ConnectionManager::cancelConnection()
+{
+    if (m_startingConnector)
+    {
+        auto old = m_startingConnector;
+        m_startingConnector = nullptr;
+        old->connectionCancelEvent();
     }
 }
 
 
-bool ConnectionManager::is_connecting() const
+bool ConnectionManager::connectionStarted() const
 {
-    return m_active_connector != nullptr;
+    return m_startingConnector != nullptr;
 }
 
 
-BaseConnector * ConnectionManager::active_connector() const
+BaseConnector * ConnectionManager::getStartingConnector() const
 {
-    return m_active_connector;
+    return m_startingConnector;
 }
 
 

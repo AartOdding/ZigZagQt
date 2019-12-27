@@ -47,8 +47,8 @@ void TextureView::paint_opengl(int res_x, int res_y)
     {
         gpu_resources_initialized = true;
         shader.create();
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/minimal.vert");
-        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/view_texture.frag");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/minimal.vert");
+        shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/view_texture.frag");
         auto success = shader.link();
         Q_ASSERT(success);
 

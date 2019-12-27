@@ -61,12 +61,12 @@ Application::Application(int &argc, char **argv)
 {
     setAttribute(Qt::AA_ShareOpenGLContexts);
 
-    int oxygen = QFontDatabase::addApplicationFont(":/fonts/OxygenMono-Regular.ttf");
-    int open_sans_reg = QFontDatabase::addApplicationFont(":/fonts/OpenSans-Regular.ttf");
-    int open_sans_semi = QFontDatabase::addApplicationFont(":/fonts/OpenSans-SemiBold.ttf");
-    int montserrat = QFontDatabase::addApplicationFont(":/fonts/Montserrat-Regular.ttf");
+    int oxygen = QFontDatabase::addApplicationFont(":/font/OxygenMono-Regular.ttf");
+    int open_sans_reg = QFontDatabase::addApplicationFont(":/font/OpenSans-Regular.ttf");
+    int open_sans_semi = QFontDatabase::addApplicationFont(":/font/OpenSans-SemiBold.ttf");
+    int montserrat = QFontDatabase::addApplicationFont(":/font/Montserrat-Regular.ttf");
 
-    QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/font/Roboto-Regular.ttf");
 
     std::cout << oxygen << '\t' << open_sans_reg << '\t' << open_sans_semi << '\t' << montserrat << '\n';
 

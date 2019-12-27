@@ -53,10 +53,14 @@ private:
     QAction m_zoomOutAction{ "Zoom Out", this };
     QAction m_resetZoomAction{ "Reset Zoom", this };
 
-    /* configuration */
+    /* member variables */
 
-    bool m_zoomInverted = false;
-    bool m_zoomTowardsMouse = true;
+    ProjectScopeView* view_model;
+    ParameterEditor parameter_editor;
+
+    double m_currentZoomLevel = 1.0;
+
+    /* configuration */
 
     double m_zoomFactor = 1.2;
     double m_zoomFactorDegree = 1.012;
@@ -64,13 +68,7 @@ private:
     double m_zoomInLimit = 10.0;
     double m_zoomOutLimit = 0.10;
 
-    /* member variables */
-
-    ProjectScopeView* view_model;
-
-    ParameterEditor parameter_editor;
-    ConnectionEditor connection_editor;
-
-    double m_currentZoomLevel = 1.0;
+    bool m_zoomInverted = false;
+    bool m_zoomTowardsMouse = true;
 
 };

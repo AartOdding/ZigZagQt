@@ -1,29 +1,27 @@
 <RCC>
-    <qresource prefix="/fonts">
-        <file>OxygenMono-Regular.ttf</file>
-        <file>Montserrat-Regular.ttf</file>
-        <file>OpenSans-Regular.ttf</file>
-        <file>OpenSans-SemiBold.ttf</file>
-        <file>Roboto-Regular.ttf</file>
-        <file>shaders/displace.frag</file>
+    <qresource prefix="/">
+        <file>font/Montserrat-Regular.ttf</file>
+        <file>font/OpenSans-Regular.ttf</file>
+        <file>font/OpenSans-SemiBold.ttf</file>
+        <file>font/OxygenMono-Regular.ttf</file>
+        <file>font/Roboto-Regular.ttf</file>
+        <file>glsl/frag/blend.frag</file>
+        <file>glsl/frag/displace.frag</file>
+        <file>glsl/frag/fade.frag</file>
+        <file>glsl/frag/noise.frag</file>
+        <file>glsl/frag/test_pattern.frag</file>
+        <file>glsl/frag/view_texture.frag</file>
+        <file>glsl/vert/basic.vert</file>
+        <file>glsl/vert/minimal.vert</file>
+        <file>style/style.qss</file>
+        <file>glsl/frag/sawtoothWaveConcentric.frag</file>
+        <file>glsl/frag/sawtoothWaveFlat.frag</file>
+        <file>glsl/frag/sawtoothWaveRadial.frag</file>
+        <file>glsl/frag/sineWaveConcentric.frag</file>
+        <file>glsl/frag/sineWaveFlat.frag</file>
+        <file>glsl/frag/sineWaveRadial.frag</file>
+        <file>glsl/frag/squareWaveConcentric.frag</file>
+        <file>glsl/frag/squareWaveFlat.frag</file>
+        <file>glsl/frag/squareWaveRadial.frag</file>
     </qresource>
-    <qresource prefix="/shaders">
-        <file>shaders/minimal.vert</file>
-        <file>shaders/view_texture.frag</file>
-        <file>shaders/test_pattern.frag</file>
-        <file>shaders/basic.vert</file>
-        <file>shaders/sine_wave.frag</file>
-        <file>shaders/blend.frag</file>
-        <file>shaders/sawtooth_wave.frag</file>
-        <file>shaders/square_wave.frag</file>
-        <file>shaders/noise.frag</file>
-        <file>shaders/fade.frag</file>
-        <file>shaders/radial_square_wave.frag</file>
-        <file>shaders/concentric_sawtooth_wave.frag</file>
-        <file>shaders/concentric_sine_wave.frag</file>
-        <file>shaders/concentric_square_wave.frag</file>
-        <file>shaders/radial_sawtooth_wave.frag</file>
-        <file>shaders/radial_sine_wave.frag</file>
-    </qresource>
-    <qresource prefix="/"/>
 </RCC>

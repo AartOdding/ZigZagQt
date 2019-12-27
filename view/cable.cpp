@@ -1,5 +1,5 @@
 #include "cable.h"
-#include "dataconnector.h"
+#include "DataConnector.hpp"
 #include "operatorview.h"
 
 #include "model/baseoperator.h"
@@ -23,15 +23,23 @@ Cable::Cable(ProjectScopeView * p, BaseConnector * out, BaseConnector * in)
     auto in_pos = input_connector->scenePos();
     setPos(std::min(out_pos.x(), in_pos.x()), std::min(out_pos.y(), in_pos.y()));
 
-    auto out_op = output_connector->operator_view();
-    auto in_op = input_connector->operator_view();
+    auto out_op = output_connector->getOperatorView();
+    auto in_op = input_connector->getOperatorView();
 
     connect(out_op, &OperatorView::has_moved, this, &Cable::on_movement);
     connect(in_op, &OperatorView::has_moved, this, &Cable::on_movement);
     connect(output_connector, &QGraphicsWidget::geometryChanged, this, &Cable::on_movement);
     connect(input_connector, &QGraphicsWidget::geometryChanged, this, &Cable::on_movement);
 
-    color = output_connector->get_color();
+    DataConnector * dataConnector = dynamic_cast<DataConnector*>(output_connector);
+    if (dataConnector)
+    {
+        color = dataConnector->getColor();
+    }
+    else
+    {
+        color = Qt::white;
+    }
 
     build_path();
 }
@@ -88,8 +96,11 @@ float map(float value, float inMin, float inMax, float outMin, float outMax)
 
 void Cable::build_path()
 {
-    QPointF out = output_connector->scenePos() + QPointF(output_connector->visible_width, output_connector->size().height() / 2);
-    QPointF in = input_connector->scenePos() + QPointF(input_connector->size().width() - input_connector->visible_width, input_connector->size().height() / 2);
+    QSizeF halfIn = input_connector->size() / 2;
+    QSizeF halfOut = output_connector->size() / 2;
+
+    QPointF in = input_connector->scenePos() + QPointF(halfIn.width(), halfIn.height());
+    QPointF out = output_connector->scenePos() + QPointF(halfOut.width(), halfOut.height());
 
     double w = abs(in.x() - out.x());
     double x_extrude = std::max(w * tension, flip_distance * tension);

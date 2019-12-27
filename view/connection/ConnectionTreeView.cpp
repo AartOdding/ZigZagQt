@@ -11,7 +11,58 @@
 
 
 
-ConnectionTreeView::ConnectionTreeView(QWidget* parent)
+/*
+ * Recursive function that will add BaseZigZagObject, BaseParameters and
+ * BaseComponents, to a QTreeWidgetItem.
+ */
+static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem)
+{
+    auto parameter = qobject_cast<BaseParameter*>(object);
+    auto children = object->findChildren<BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly);
+    const std::vector<BaseComponent*> * components = nullptr;
+
+    if (parameter)
+    {
+        components = &parameter->getComponents();
+    }
+
+    QTreeWidgetItem * thisTreeItem = nullptr;
+
+    if (parameter && components && children.size() == 0 && components->size() == 1)
+    {
+        // If there is only one component and no other children add the component directly
+        // instead of first adding the paramter and then the component.
+        auto newItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() } );
+        newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(components->at(0)));
+        currentTreeItem->addChild(newItem);
+    }
+    else if ((components && components->size() > 1) || children.size() > 0)
+    {
+        thisTreeItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() });
+        thisTreeItem->setExpanded(true);
+        thisTreeItem->setFlags(Qt::ItemIsEnabled); // No selectable flag!
+        currentTreeItem->addChild(thisTreeItem);
+    }
+
+    if (components && components->size() > 1)
+    {
+        for (auto component : *components)
+        {
+            auto newItem = new QTreeWidgetItem(thisTreeItem, { component->objectName() } );
+            newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(component));
+            thisTreeItem->addChild(newItem);
+        }
+    }
+
+    for (auto child : children)
+    {
+        addToTree(child, thisTreeItem);
+    }
+}
+
+
+
+ConnectionTreeView::ConnectionTreeView(BaseZigZagObject * output, BaseZigZagObject * input, QWidget* parent)
     : QFrame(parent)
 {
     m_treeWidgetsLayout.setMargin(0);
@@ -41,109 +92,38 @@ ConnectionTreeView::ConnectionTreeView(QWidget* parent)
     m_treeWidgetsLayout.addStretch(1);
     m_treeWidgetsLayout.addWidget(m_treeWidgetRight.verticalScrollBar());
 
-    setStyleSheet(QStringLiteral("ConnectionTreeView { background-color:rgb(42, 42, 42); border: 1px solid black; }"));
-
+    if (output)
+    {
+        addToTree(output, m_treeWidgetLeft.invisibleRootItem());
+    }
+    if (input)
+    {
+        addToTree(input, m_treeWidgetRight.invisibleRootItem());
+    }
 }
 
 
-
-void ConnectionTreeView::onSelectionChanged()
+BaseComponent* ConnectionTreeView::getSelectedInput() const
 {
-    auto selectedItems = m_model->selectedItems();
+    auto selected = m_treeWidgetRight.currentItem();
 
-    if (selectedItems.size() == 1)
+    if (selected)
     {
-        auto selected = dynamic_cast<OperatorView*>(selectedItems[0]);
-
-        if (selected)
-        {
-            auto op = &selected->operator_model;
-
-            m_treeWidgetLeft.clear();
-            m_treeWidgetRight.clear();
-
-            addToTree(op, m_treeWidgetLeft.invisibleRootItem());
-            addToTree(op, m_treeWidgetRight.invisibleRootItem());
-        }
+        return selected->data(0, 201).value<BaseComponent*>();
     }
+    return nullptr;
 }
 
 
-
-void ConnectionTreeView::setScene(QGraphicsScene* model)
+BaseComponent* ConnectionTreeView::getSelectedOutput() const
 {
-    if (m_model != model)
+    auto selected = m_treeWidgetLeft.currentItem();
+
+    if (selected)
     {
-        if (m_model != nullptr)
-        {
-            disconnect(m_model, &QGraphicsScene::selectionChanged, this, &ConnectionTreeView::onSelectionChanged);
-        }
-        if (model)
-        {
-            m_model = model;
-            connect(m_model, &QGraphicsScene::selectionChanged, this, &ConnectionTreeView::onSelectionChanged);
-        }
+        return selected->data(0, 201).value<BaseComponent*>();
     }
+    return nullptr;
 }
 
 
-
-void ConnectionTreeView::wheelEvent(QWheelEvent *event)
-{
-    if (event != lastForwardedWheelEvent)
-    {
-        lastForwardedWheelEvent = event;
-
-        if (event->x() < width() / 2)
-        {
-            //m_treeWidgetLeft.sendWheelEvent(event);
-        }
-        else
-        {
-            //m_treeWidgetRight.sendWheelEvent(event);
-        }
-    }
-}
-
-
-
-void ConnectionTreeView::addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem)
-{
-    auto parameter = qobject_cast<BaseParameter*>(object);
-    auto children = object->findChildren<BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly);
-    const std::vector<BaseComponent*> * components = nullptr;
-
-    if (parameter)
-    {
-        components = &parameter->getComponents();
-    }
-
-    QTreeWidgetItem * thisTreeItem = nullptr;
-
-    if (parameter && components && children.size() == 0 && components->size() == 1)
-    {
-        // If there is only one component and no other children add the component directly
-        // instead of first adding the paramter and then the component.
-        currentTreeItem->addChild(new QTreeWidgetItem(currentTreeItem, { object->objectName() } ));
-    }
-    else if ((components && components->size() > 1) || children.size() > 0)
-    {
-        thisTreeItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() });
-        thisTreeItem->setExpanded(true);
-        thisTreeItem->setFlags(Qt::ItemIsEnabled); // No selectable flag!
-        currentTreeItem->addChild(thisTreeItem);
-    }
-
-    if (components && components->size() > 1)
-    {
-        for (auto component : *components)
-        {
-            thisTreeItem->addChild(new QTreeWidgetItem(thisTreeItem, { component->objectName() } ));
-        }
-    }
-
-    for (auto child : children)
-    {
-        addToTree(child, thisTreeItem);
-    }
-}
