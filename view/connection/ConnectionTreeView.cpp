@@ -69,27 +69,25 @@ ConnectionTreeView::ConnectionTreeView(BaseZigZagObject * output, BaseZigZagObje
     m_treeWidgetsLayout.setSpacing(0);
 
     m_treeWidgetLeft.setFrameStyle(QFrame::NoFrame);
+    m_treeWidgetLeft.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_treeWidgetLeft.setHeaderHidden(true);
     m_treeWidgetLeft.setColumnCount(1);
     m_treeWidgetLeft.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_treeWidgetLeft.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_treeWidgetLeft.setMinimumWidth(400);
-    m_treeWidgetLeft.setMaximumWidth(400);
+    m_treeWidgetLeft.setMinimumWidth(200);
 
     m_treeWidgetRight.setFrameStyle(QFrame::NoFrame);
+    m_treeWidgetRight.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_treeWidgetRight.setHeaderHidden(true);
     m_treeWidgetRight.setColumnCount(1);
     m_treeWidgetRight.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_treeWidgetRight.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_treeWidgetRight.setMinimumWidth(400);
-    m_treeWidgetRight.setMaximumWidth(400);
+    m_treeWidgetRight.setMinimumWidth(200);
 
     m_treeWidgetsLayout.addWidget(m_treeWidgetLeft.verticalScrollBar());
+    m_treeWidgetsLayout.addWidget(&m_treeWidgetLeft, 1);
     m_treeWidgetsLayout.addStretch(1);
-    m_treeWidgetsLayout.addWidget(&m_treeWidgetLeft);
-    m_treeWidgetsLayout.addStretch(3);
-    m_treeWidgetsLayout.addWidget(&m_treeWidgetRight);
-    m_treeWidgetsLayout.addStretch(1);
+    m_treeWidgetsLayout.addWidget(&m_treeWidgetRight, 1);
     m_treeWidgetsLayout.addWidget(m_treeWidgetRight.verticalScrollBar());
 
     if (output)

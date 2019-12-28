@@ -5,3 +5,8 @@ ConnectionTreeView
     border: 1px solid white;
 }
 
+
+ConnectionTreeView QScrollBar
+{
+    background: none;
+}
