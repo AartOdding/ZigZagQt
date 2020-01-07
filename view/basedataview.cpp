@@ -1,6 +1,6 @@
 #include "basedataview.h"
 #include "view/operatorview.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include <QWidget>
 #include <QPainter>

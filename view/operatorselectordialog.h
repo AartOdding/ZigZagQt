@@ -10,7 +10,7 @@
 
 
 class Viewport;
-struct DataTypeInfo;
+struct DataTypeDescription;
 struct OperatorDescription;
 
 
@@ -49,7 +49,7 @@ private:
     QPointF operator_position;
 
     // Used to quickly translate from combobox index to corresponding DataTypeInfo.
-    std::vector<const DataTypeInfo*> data_types;
+    std::vector<const DataTypeDescription*> data_types;
 
 
 };

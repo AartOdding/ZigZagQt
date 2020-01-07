@@ -7,7 +7,7 @@
 #include <QVideoFrame>
 #include <QCameraImageCapture>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"

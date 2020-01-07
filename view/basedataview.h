@@ -10,7 +10,7 @@ class BaseOperator;
 class BaseDataType;
 class BaseDataView;
 
-struct DataTypeInfo;
+struct DataTypeDescription;
 
 
 enum class DataViewGraphicsApi
@@ -40,9 +40,10 @@ inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
     return t1.name == t2.name && t1.library == t2.library && t1.graphics_api == t2.graphics_api;
 }
 
-class BaseDataView : public QGraphicsItem,
-                     public BaseZigZagObject
+class BaseDataView : public BaseZigZagObject,
+                     public QGraphicsItem
 {
+    Q_OBJECT
 
 public:
 

@@ -1,7 +1,7 @@
 #include "view/connection/ConnectionEditor.hpp"
 #include "view/viewport.h"
 #include "view/operatorview.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include <QGraphicsScene>
 #include <QScrollBar>

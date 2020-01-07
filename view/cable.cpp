@@ -2,7 +2,7 @@
 #include "DataConnector.hpp"
 #include "operatorview.h"
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include <iostream>
 #include <algorithm>

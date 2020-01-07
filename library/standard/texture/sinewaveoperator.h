@@ -4,7 +4,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"
@@ -14,6 +14,7 @@
 class SineWaveOperator : public BaseOperator,
                          public QOpenGLFunctions_3_3_Core
 {
+    Q_OBJECT
 
 public:
 
@@ -28,6 +29,11 @@ public:
 
     static const OperatorDescription description;
 
+
+    virtual QVariantMap storeState() const override;
+
+    virtual void loadState(const QVariantMap& state) override;
+
 private:
 
     EnumDefinition WaveType { "Wave Type", { "Flat", "Radial", "Concentric" } };
@@ -35,7 +41,7 @@ private:
     ColorPar color_a{ this, "High Color", Qt::white };
     ColorPar color_b{ this, "Low Color", Qt::black };
 
-    EnumPar wave_type{ this, "Wave Type", WaveType };
+    EnumParameter wave_type{ this, "Wave Type", WaveType };
     FloatPar frequency{ this, "Frequency", 6, 0.5, 1000000 };
     FloatPar phase{ this, "Phase", 0 };
 

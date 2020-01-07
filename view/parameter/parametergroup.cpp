@@ -1,6 +1,6 @@
 #include "parametergroup.h"
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/parameter/BaseParameter.hpp"
 #include "model/parameter/ButtonParameter.hpp"
 
@@ -59,7 +59,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
     if (par->getParameterType() == ParameterType::Enum)
     {
-        return new EnumWidget(this, static_cast<EnumPar*>(par));
+        return new EnumWidget(this, static_cast<EnumParameter*>(par));
     }
     else if (par->getParameterType() == ParameterType::Button)
     {

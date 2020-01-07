@@ -15,6 +15,8 @@ using double_4 = std::array<double, 4>;
 
 class FloatParameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     FloatParameter(BaseZigZagObject * parent, const QString& name, double value = 0);
@@ -36,6 +38,8 @@ private:
 
 class Float2Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Float2Parameter(BaseZigZagObject * parent, const QString& name, double_2 value = double_2());
@@ -61,6 +65,8 @@ private:
 
 class Float3Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Float3Parameter(BaseZigZagObject * parent, const QString& name, double_3 value = double_3());
@@ -89,6 +95,8 @@ private:
 
 class Float4Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Float4Parameter(BaseZigZagObject * parent, const QString& name, double_4 value = double_4());

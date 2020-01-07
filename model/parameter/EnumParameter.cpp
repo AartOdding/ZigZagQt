@@ -3,7 +3,7 @@
 
 
 
-EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, int i)
+EnumParameter::EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, int i)
     : BaseParameter(ParameterType::Enum, parent, name),
       m_enum(&def),
       m_enumValue(this, i, 0, def.size()-1)
@@ -11,7 +11,7 @@ EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefin
 }
 
 
-EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, const QString& value)
+EnumParameter::EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, const QString& value)
     : BaseParameter(ParameterType::Enum, parent, name),
       m_enum(&def),
       m_enumValue(this, m_enum->index_of(value), 0, def.size()-1)
@@ -19,31 +19,31 @@ EnumPar::EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefin
 }
 
 
-int EnumPar::getIndex() const
+int EnumParameter::getIndex() const
 {
     return static_cast<int>(m_enumValue.getValue());
 }
 
 
-const QString& EnumPar::getText() const
+const QString& EnumParameter::getText() const
 {
     return m_enum->operator[](static_cast<int>(m_enumValue.getValue()));
 }
 
 
-const EnumDefinition * EnumPar::getEnum() const
+const EnumDefinition * EnumParameter::getEnum() const
 {
     return m_enum;
 }
 
 
-void EnumPar::setIndex(int new_index)
+void EnumParameter::setIndex(int new_index)
 {
     m_enumValue.change((int64_t)new_index);
 }
 
 
-void EnumPar::setText(const QString& new_value)
+void EnumParameter::setText(const QString& new_value)
 {
     auto index = m_enum->index_of(new_value);
 
@@ -54,13 +54,13 @@ void EnumPar::setText(const QString& new_value)
 }
 
 
-void EnumPar::operator=(int new_index)
+void EnumParameter::operator=(int new_index)
 {
     setIndex(new_index);
 }
 
 
-void EnumPar::operator=(const QString& new_value)
+void EnumParameter::operator=(const QString& new_value)
 {
     setText(new_value);
 }

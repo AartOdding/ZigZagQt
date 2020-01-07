@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/parameter/ColorParameter.hpp"
 
 #include "library/standard/texture/texturedata.h"

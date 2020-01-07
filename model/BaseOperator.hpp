@@ -12,7 +12,7 @@
 #include "model/parameter/ColorParameter.hpp"
 
 
-struct DataTypeInfo;
+struct DataTypeDescription;
 struct DataViewTypeInfo;
 class BaseOperator;
 class BaseDataType;
@@ -23,21 +23,21 @@ struct OperatorDescription
 {
     OperatorDescription() = delete;
 
-    OperatorDescription(const std::string& name,
-                        const std::string& package,
+    OperatorDescription(const QString& name,
+                        const QString& package,
                         std::function<BaseOperator*()> construct,
-                        const std::vector<const DataTypeInfo*>& inputs = {},
-                        const std::vector<const DataTypeInfo*>& outputs = {},
+                        const std::vector<const DataTypeDescription*>& inputs = {},
+                        const std::vector<const DataTypeDescription*>& outputs = {},
                         const DataViewTypeInfo * view = nullptr);
 
-    std::string name;
-    std::string package;
+    QString name;
+    QString package;
     std::function<BaseOperator*()> construct;
-    std::vector<const DataTypeInfo*> inputs;
-    std::vector<const DataTypeInfo*> outputs;
+    std::vector<const DataTypeDescription*> inputs;
+    std::vector<const DataTypeDescription*> outputs;
     const DataViewTypeInfo * view;
 
-    // USe OpenGL
+    // Use OpenGL
     // Library
     // Image
     // Version
@@ -64,37 +64,34 @@ class BaseOperator : public BaseZigZagObject
 
 public:
 
-    BaseOperator(const OperatorDescription& type);
+    BaseOperator(const OperatorDescription& description);
 
-    virtual ~BaseOperator();
+    virtual ~BaseOperator() override;
 
     virtual void prepare() { }
     virtual void run() = 0;
 
-    int get_position_x() const;
-    int get_position_y() const;
-
     void update_view();
 
-    const OperatorDescription * type() const;
+
+    int positionX() const;
+    int positionY() const;
+
+    const OperatorDescription * description() const;
 
 
-    const std::vector<DataInput*>& data_inputs() const;
-    const std::vector<BaseDataType*>& data_outputs() const;
+    QList<DataInput*> dataInputs() const;
+    QList<BaseDataType*> dataOutputs() const;
 
-    std::vector<DataInput*> used_data_inputs() const;
-    std::vector<BaseDataType*> used_data_outputs() const;
+    QList<DataInput*> activeDataInputs() const;
+    QList<BaseDataType*> activeDataOutputs() const;
 
-    int count_used_data_inputs() const;
+    bool hasActiveDataInputs() const;
+    bool hasActiveDataOutputs() const;
 
-    void register_data_input(DataInput* input);
-    void register_data_output(BaseDataType* output);
 
-    const std::vector<BaseComponent*>& importing_parameters() const;
-    const std::vector<BaseComponent*>& exporting_parameters() const;
-
-    virtual void set_from_xml(QXmlStreamReader& xml);
-    virtual void write_to_xml(XmlSerializer& xml);
+    virtual void loadState(const QVariantMap& state) override;
+    virtual QVariantMap storeState() const override;
 
 public slots:
 
@@ -111,8 +108,6 @@ signals:
 
     void position_changed(int pos_x, int pos_y);
 
-    void data_input_added(DataInput * new_data_input);
-    void data_output_added(BaseDataType * new_data_output);
 
     void parameter_started_importing(BaseComponent* exporter, BaseComponent* importer);
     void parameter_stopped_importing(BaseComponent* exporter, BaseComponent* importer);
@@ -138,16 +133,9 @@ private:
     // Direct version of move_to (non-undoable)
     void set_position(int pos_x, int pos_y);
 
+    int m_positionX = 0;
+    int m_positionY = 0;
 
-    int position_x = 0;
-    int position_y = 0;
-
-    std::vector<DataInput*> inputs;
-    std::vector<BaseDataType*> outputs;
-
-    std::vector<BaseComponent*> m_importing_parameters;
-    std::vector<BaseComponent*> m_exporting_parameters;
-
-    const OperatorDescription * type_info;
+    const OperatorDescription * m_description;
 
 };

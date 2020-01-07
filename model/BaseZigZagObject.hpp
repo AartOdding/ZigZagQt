@@ -1,8 +1,12 @@
 #pragma once
 
 #include <vector>
-#include <QString>
+
+#include <QMap>
 #include <QObject>
+#include <QString>
+#include <QVariant>
+#include <QXmlStreamAttributes>
 
 
 class BaseParameter;
@@ -21,7 +25,27 @@ public:
 
     virtual ~BaseZigZagObject();
 
+    /*
+     * Will return the object's unique name. The unique name of an object consists of the
+     * name of the object, preceded by every parent object's name. delimited by points.
+     */
+    QString uniqueName() const;
 
+    /*
+     * Will search for an object anywhere in the same object tree, with given unique name.
+     */
+    QObject* findObject(const QString& uniqueName);
+    const QObject* findObject(const QString& uniqueName) const;
+
+    /*
+     * Will return the top most object in the tree hierarchy.
+     */
+    BaseZigZagObject* rootObject();
+    const BaseZigZagObject* rootObject() const;
+
+    /*
+     * Will return the first parent than matches type PtrType.
+     */
     template<typename PtrType>
     PtrType findParent(bool directParentOnly = false) const;
 
@@ -41,6 +65,23 @@ public:
      */
     virtual void disconnectParameters();
 
+    /*
+     * To allow things in ZigZag to load and store themselves to files, the readState and
+     * writeState functions are used.
+     */
+    virtual void loadState(const QVariantMap&) { }
+
+    /*
+     * To allow things in ZigZag to load and store themselves to files, the readState and
+     * writeState functions are used.
+     */
+    virtual QVariantMap storeState() const { return { }; }
+
+    /*
+     * Called when a child needs to be loaded, but the child does not yet exist.
+     */
+    virtual void createChild(const QXmlStreamAttributes&) { Q_ASSERT(false); } // Still need to implement!
+
 protected:
 
     /*
@@ -54,9 +95,15 @@ protected:
 
 
 
+
 template<typename PtrType>
 PtrType BaseZigZagObject::findParent(bool directParentOnly) const
 {
+    static_assert(std::is_pointer<PtrType>::value,
+                  "Only pointer types are allowed!");
+    static_assert(std::is_base_of<QObject, typename std::remove_pointer<PtrType>::type>::value,
+                  "Type must be derived from QObject class!");
+
     QObject * p = parent();
     PtrType typeParent = nullptr;
 

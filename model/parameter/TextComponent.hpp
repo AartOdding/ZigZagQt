@@ -17,6 +17,9 @@ public:
 
     const QString& getText();
 
+    virtual void loadState(const QVariantMap&) override;
+    virtual QVariantMap storeState() const override;
+
 public slots:
 
     // Will return true if the component's value changed.

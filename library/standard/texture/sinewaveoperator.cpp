@@ -140,3 +140,24 @@ void SineWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }
+
+
+QVariantMap SineWaveOperator::storeState() const
+{
+    QVariantMap state;
+    state.insert(QStringLiteral("test"), QStringLiteral("Sine Test"));
+    state.insert(QStringLiteral("BaseOperator"), BaseOperator::storeState());
+/*
+    auto components = findChildren<const BaseComponent*>();
+    for (auto component : components)
+    {
+        state.insert(QStringLiteral("component"), component->storeState());
+    }*/
+
+    return state;
+}
+
+void SineWaveOperator::loadState(const QVariantMap& state)
+{
+
+}

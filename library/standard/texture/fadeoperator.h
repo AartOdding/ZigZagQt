@@ -4,7 +4,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 
 #include "library/standard/texture/texturedata.h"

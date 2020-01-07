@@ -3,7 +3,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"
@@ -34,7 +34,7 @@ private:
     ColorPar color_a{ this, "High Color", Qt::white };
     ColorPar color_b{ this, "Low Color", Qt::black };
 
-    EnumPar wave_type{ this, "Wave Type", WaveType };
+    EnumParameter wave_type{ this, "Wave Type", WaveType };
     FloatPar duty_cyce{ this, "Duty Cycle", 0.5, -1, 1 };
     FloatPar frequency{ this, "Frequency", 6, 0.5, 1000000 };
     FloatPar phase{ this, "Phase", 0 };

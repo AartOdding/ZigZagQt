@@ -6,7 +6,7 @@
 #include "view/connection/ConnectionEditor.hpp"
 #include "view/viewport.h"
 #include "view/operatorview.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include <iostream>
 
 
@@ -19,24 +19,24 @@ static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem
 {
     auto parameter = qobject_cast<BaseParameter*>(object);
     auto children = object->findChildren<BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly);
-    const std::vector<BaseComponent*> * components = nullptr;
+    QList<BaseComponent*> components;
 
     if (parameter)
     {
-        components = &parameter->getComponents();
+        components = parameter->getComponents();
     }
 
     QTreeWidgetItem * thisTreeItem = nullptr;
 
-    if (parameter && components && children.size() == 0 && components->size() == 1)
+    if (parameter && children.size() == 0 && components.size() == 1)
     {
         // If there is only one component and no other children add the component directly
         // instead of first adding the paramter and then the component.
         auto newItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() } );
-        newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(components->at(0)));
+        newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(components.at(0)));
         currentTreeItem->addChild(newItem);
     }
-    else if ((components && components->size() > 1) || children.size() > 0)
+    else if ((components.size() > 1) || children.size() > 0)
     {
         thisTreeItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() });
         thisTreeItem->setExpanded(true);
@@ -44,9 +44,9 @@ static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem
         currentTreeItem->addChild(thisTreeItem);
     }
 
-    if (components && components->size() > 1)
+    if (components.size() > 1)
     {
-        for (auto component : *components)
+        for (auto component : components)
         {
             auto newItem = new QTreeWidgetItem(thisTreeItem, { component->objectName() } );
             newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(component));

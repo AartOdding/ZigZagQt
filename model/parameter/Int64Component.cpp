@@ -128,25 +128,48 @@ void Int64Component::change(double value)
 }
 
 
-
-void Int64Component::readXml(QXmlStreamReader& xml)
+void Int64Component::loadState(const QVariantMap& state)
 {
+    auto value = state.find(QStringLiteral("value"));
+    auto min = state.find(QStringLiteral("min"));
+    auto max = state.find(QStringLiteral("max"));
+    auto pending = state.find(QStringLiteral("pending"));
+    auto base = state.find(QStringLiteral("BaseComponent"));
 
+    if (value != state.end())
+    {
+        m_value = value->value<qint64>();
+    }
+    if (min != state.end())
+    {
+        m_min = min->value<qint64>();
+    }
+    if (max != state.end())
+    {
+        m_max = max->value<qint64>();
+    }
+    if (pending != state.end())
+    {
+        m_newValuePending = true;
+        m_pending = pending->value<qint64>();
+    }
+    if (base != state.end())
+    {
+        BaseComponent::loadState(base->toMap());
+    }
 }
 
 
-
-void Int64Component::writeXml(XmlSerializer& xml)
+QVariantMap Int64Component::storeState() const
 {
-    xml.begin_element("IntParameterComponent");
-
-        BaseComponent::writeXml(xml);
-
-        xml.add_int_element("current_value", m_value);
-        xml.add_int_element("min_value", m_min);
-        xml.add_int_element("max_value", m_max);
-        xml.add_int_element("pending_value", m_pending);
-        xml.add_int_element("new_value_pending", m_newValuePending);
-
-    xml.end_element();
+    QVariantMap state;
+    state.insert(QStringLiteral("value"), m_value);
+    state.insert(QStringLiteral("min"), m_min);
+    state.insert(QStringLiteral("max"), m_max);
+    if (m_newValuePending)
+    {
+        state.insert(QStringLiteral("pending"), m_pending);
+    }
+    state.insert(QStringLiteral("BaseComponent"), BaseComponent::storeState());
+    return state;
 }

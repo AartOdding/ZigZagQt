@@ -1,6 +1,6 @@
 #include "textureview.h"
 #include "library/standard/texture/texturedata.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include <iostream>
 
@@ -20,9 +20,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 TextureView::TextureView(BaseOperator* parent_op)
     : OpenGLDataView(parent_op, &Type), parent_operator(parent_op)
 {
-    for (auto data : parent_op->data_outputs())
+    for (auto data : parent_op->dataOutputs())
     {
-        if (*data->type() == TextureData::Type)
+        if (*data->getDescription() == TextureData::Type)
         {
             viewed_texture = static_cast<TextureData*>(data);
             break;

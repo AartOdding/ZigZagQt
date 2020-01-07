@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "model/operatorlibrary.h"
+#include "BaseZigZagObject.hpp"
+
+#include "model/OperatorLibrary.hpp"
 
 
 class ProjectModel;
@@ -12,7 +14,7 @@ class BaseOperator;
 
 
 
-class ProjectModel : public QObject
+class ProjectModel : public BaseZigZagObject
 {
     Q_OBJECT
 
@@ -28,6 +30,13 @@ public:
     const std::vector<BaseOperator*>& all_operators() const;
 
 
+    virtual void loadState(const QVariantMap&) override;
+
+    virtual QVariantMap storeState() const override;
+
+    virtual void createChild(const QXmlStreamAttributes&) override;
+
+
 public slots:
 
     void redo();
@@ -41,9 +50,6 @@ public slots:
     void remove_operator(BaseOperator* operator_ptr);
 
 
-    void save_to_file(const QString& path);
-
-    void load_from_file(const QString& path);
 
 
     //void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);

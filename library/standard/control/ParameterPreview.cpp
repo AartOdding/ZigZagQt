@@ -1,5 +1,5 @@
 #include "parameterpreview.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include <QPainter>
 

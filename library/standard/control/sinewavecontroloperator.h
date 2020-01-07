@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "library/standard/control/parameterpreview.h"
 
 

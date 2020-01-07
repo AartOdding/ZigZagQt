@@ -3,7 +3,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 
 #include "library/standard/texture/texturedata.h"
@@ -34,7 +34,7 @@ public:
 
 private:
 
-    EnumPar blend_mode{ this, "Blend Mode", BlendMode, 0 };
+    EnumParameter blend_mode{ this, "Blend Mode", BlendMode, 0 };
 
     DataInput texture_a{ this, "Texture in 0", TextureData::Type };
     DataInput texture_b{ this, "Texture in 1", TextureData::Type };

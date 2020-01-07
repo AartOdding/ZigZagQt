@@ -17,6 +17,8 @@ using int64_4 = std::array<int64, 4>;
 
 class IntParameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     IntParameter(BaseZigZagObject * parent, const QString& name, int64 value = 0);
@@ -38,6 +40,8 @@ private:
 
 class Int2Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Int2Parameter(BaseZigZagObject * parent, const QString& name, int64_2 value = int64_2());
@@ -63,6 +67,8 @@ private:
 
 class Int3Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Int3Parameter(BaseZigZagObject * parent, const QString& name, int64_3 value = int64_3());
@@ -91,6 +97,8 @@ private:
 
 class Int4Parameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     Int4Parameter(BaseZigZagObject * parent, const QString& name, int64_4 value = int64_4());

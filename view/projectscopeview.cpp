@@ -6,7 +6,7 @@
 #include "view/cable.h"
 #include "view/DataConnector.hpp"
 #include "view/ParameterConnector.hpp"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 #include "model/parameter/BaseComponent.hpp"
 
@@ -104,7 +104,7 @@ void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
     OperatorView* op_view = new OperatorView(*operator_ptr);
     operator_views.insert(operator_ptr, op_view);
 
-    for (auto i : operator_ptr->data_inputs())
+    for (auto i : operator_ptr->dataInputs())
     {
         if (i)
         {
@@ -123,7 +123,7 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 {
     if (operator_views.contains(operator_ptr))
     {
-        for (auto i : operator_ptr->data_inputs())
+        for (auto i : operator_ptr->dataInputs())
         {
             if (i)
             {
@@ -145,7 +145,7 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input)
 {
     auto input_op = operator_views[input->get_operator()];
-    auto output_op = operator_views[output->get_operator()];
+    auto output_op = operator_views[output->getOperator()];
 
     if (input_op && output_op)
     {

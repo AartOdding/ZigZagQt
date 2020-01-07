@@ -4,7 +4,7 @@
 #include <QOpenGLShaderProgram>
 #include <QtGlobal>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"

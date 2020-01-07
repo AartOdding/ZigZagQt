@@ -1,7 +1,7 @@
 #include "DataConnector.hpp"
 
 #include "model/datainput.h"
-#include "model/basedatatype.h"
+#include "model/BaseDataType.hpp"
 
 #include "view/projectscopeview.h"
 #include "view/operatorview.h"
@@ -26,7 +26,7 @@ DataConnector::DataConnector(OperatorView& operatorView, DataInput& dataInput)
 DataConnector::DataConnector(OperatorView& operatorView, BaseDataType& dataOutput)
     : BaseConnector(application::project_view_model(), &operatorView), m_dataOutput(&dataOutput)
 {
-    m_color = m_dataOutput->type()->gui_color;
+    m_color = m_dataOutput->getDescription()->gui_color;
 }
 
 
@@ -83,7 +83,7 @@ void DataConnector::connectionEvent(BaseConnector* other)
         }
         else
         {
-            m_dataOutput->connect_to(o->m_dataInput);
+            m_dataOutput->connectTo(o->m_dataInput);
         }
     }
 }

@@ -125,3 +125,50 @@ void Float64Component::change(double value)
     m_pending = value;
     m_newValuePending = m_pending != m_value;
 }
+
+
+void Float64Component::loadState(const QVariantMap& state)
+{
+    auto value = state.find(QStringLiteral("value"));
+    auto min = state.find(QStringLiteral("min"));
+    auto max = state.find(QStringLiteral("max"));
+    auto pending = state.find(QStringLiteral("pending"));
+    auto base = state.find(QStringLiteral("BaseComponent"));
+
+    if (value != state.end())
+    {
+        m_value = value->value<qint64>();
+    }
+    if (min != state.end())
+    {
+        m_min = min->value<qint64>();
+    }
+    if (max != state.end())
+    {
+        m_max = max->value<qint64>();
+    }
+    if (pending != state.end())
+    {
+        m_newValuePending = true;
+        m_pending = pending->value<qint64>();
+    }
+    if (base != state.end())
+    {
+        BaseComponent::loadState(base->toMap());
+    }
+}
+
+
+QVariantMap Float64Component::storeState() const
+{
+    QVariantMap state;
+    state.insert(QStringLiteral("value"), m_value);
+    state.insert(QStringLiteral("min"), m_min);
+    state.insert(QStringLiteral("max"), m_max);
+    if (m_newValuePending)
+    {
+        state.insert(QStringLiteral("pending"), m_pending);
+    }
+    state.insert(QStringLiteral("BaseComponent"), BaseComponent::storeState());
+    return state;
+}

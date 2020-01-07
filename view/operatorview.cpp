@@ -14,19 +14,19 @@
 
 #include "model/datainput.h"
 #include "model/projectmodel.h"
-#include "model/baseoperator.h"
-#include "model/basedatatype.h"
+#include "model/BaseOperator.hpp"
+#include "model/BaseDataType.hpp"
 
 
 #include <iostream>
 
 
 OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag(op.type()->name.c_str(), this)
+    : operator_model(op), name_tag(op.description()->name, this)
 {
     setZValue(1);
-    position_x = op.get_position_x();
-    position_y = op.get_position_y();
+    position_x = op.positionX();
+    position_y = op.positionY();
     setPos(position_x, position_y);
 
     setFlag(QGraphicsItem::ItemIsFocusable);
@@ -38,6 +38,8 @@ OperatorView::OperatorView(BaseOperator& op)
     auto h_height = height / 2.0;
 
     name_tag.setPos(-h_width, -h_height - 33);
+
+    setGeometry(-h_width, -h_height, width, height);
 
     selection_rect.setRect(0, 0, width + 50, height + 46);
     selection_rect.setPos(- h_width - 25, -h_height - 35);
@@ -57,13 +59,13 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->setSpacing(0);
 
     // add parameter connector first.
-    for (auto i : op.data_inputs())
+    for (auto i : op.dataInputs())
     {
         auto connector = new DataConnector(*this, *i);
         inputs[i] = connector;
         static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(connector);
     }
-    for (auto o : op.data_outputs())
+    for (auto o : op.dataOutputs())
     {
         auto connector = new DataConnector(*this, *o);
         outputs[o] = connector;
@@ -74,9 +76,9 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
 
-    if (operator_model.type()->view)
+    if (operator_model.description()->view)
     {
-        data_view = operator_model.type()->view->construct(&operator_model);
+        data_view = operator_model.description()->view->construct(&operator_model);
         data_view->set_bounds(-h_width + 7, -h_height + 7, width - 14, height - 14);
         data_view->setParentItem(this);
     }
@@ -88,11 +90,11 @@ ProjectScopeView* OperatorView::scope_view()
     return dynamic_cast<ProjectScopeView*>(scene());
 }
 
-
+/*
 QRectF OperatorView::boundingRect() const
 {
     return QRectF(-width / 2, -height / 2, width, height);
-}
+}*/
 
 
 void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -136,7 +138,7 @@ ParameterConnector* OperatorView::parameter_connector_out() const
 void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     scope_view()->bring_to_front(this);
-    QGraphicsItem::mousePressEvent(event);
+    QGraphicsWidget::mousePressEvent(event);
 }
 
 
@@ -152,7 +154,7 @@ void OperatorView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         was_dragged = true;
     }
 
-    QGraphicsItem::mouseMoveEvent(event);
+    QGraphicsWidget::mouseMoveEvent(event);
 }
 
 
@@ -165,7 +167,7 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     was_dragged = false;
 
-    QGraphicsItem::mouseReleaseEvent(event);
+    QGraphicsWidget::mouseReleaseEvent(event);
 }
 
 

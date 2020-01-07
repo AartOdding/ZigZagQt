@@ -14,6 +14,9 @@ public:
 
     bool update() override;
 
+    virtual void loadState(const QVariantMap&) override;
+    virtual QVariantMap storeState() const override;
+
 public slots:
 
     void change() override;

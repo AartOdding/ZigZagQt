@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/parameter/BaseComponent.hpp"
 #include "model/parameter/TextComponent.hpp"
 

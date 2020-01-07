@@ -38,7 +38,7 @@ public:
 
     BaseParameter(ParameterType parameterType, BaseZigZagObject * parent, const QString& name);
 
-    const std::vector<BaseComponent*>& getComponents() const;
+    QList<BaseComponent*> getComponents() const;
 
     ParameterType getParameterType() const;
 
@@ -56,11 +56,6 @@ public:
     virtual void disconnectParameters() override;
 
 private:
-
-    friend class BaseComponent;
-
-    // components will add and remove themselves in their constructor/ destructor
-    std::vector<BaseComponent*> m_components;
 
     ParameterType m_parameterType;
 

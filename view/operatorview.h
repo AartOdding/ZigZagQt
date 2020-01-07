@@ -20,8 +20,7 @@ class ProjectScopeView;
 
 
 
-class OperatorView : public QObject,
-                     public QGraphicsItem
+class OperatorView : public QGraphicsWidget
 {
     Q_OBJECT
 
@@ -29,7 +28,7 @@ public:
 
     OperatorView(BaseOperator& operator_model);
 
-    QRectF boundingRect() const override;
+    //QRectF boundingRect() const override;
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 

@@ -79,3 +79,38 @@ void TextComponent::change(const QString& text)
     m_pendingText = text;
     m_newTextPending = m_text != m_pendingText;
 }
+
+
+void TextComponent::loadState(const QVariantMap& state)
+{
+    auto text = state.find(QStringLiteral("text"));
+    auto pendingText = state.find(QStringLiteral("pendingText"));
+    auto base = state.find(QStringLiteral("BaseComponent"));
+
+    if (text != state.end())
+    {
+        m_text = text->toString();
+    }
+    if (pendingText != state.end())
+    {
+        m_newTextPending = true;
+        m_pendingText = pendingText->toString();
+    }
+    if (base != state.end())
+    {
+        BaseComponent::loadState(base->toMap());
+    }
+}
+
+
+QVariantMap TextComponent::storeState() const
+{
+    QVariantMap state;
+    state.insert(QStringLiteral("text"), m_text);
+    if (m_newTextPending)
+    {
+        state.insert(QStringLiteral("pendingText"), m_pendingText);
+    }
+    state.insert(QStringLiteral("BaseComponent"), BaseComponent::storeState());
+    return state;
+}

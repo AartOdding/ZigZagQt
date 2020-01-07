@@ -7,6 +7,7 @@
 
 class ButtonPar : public BaseParameter
 {
+    Q_OBJECT
 
 public:
 

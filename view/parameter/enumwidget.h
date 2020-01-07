@@ -16,7 +16,7 @@ class EnumWidget : public QComboBox
 
 public:
 
-    EnumWidget(QWidget * parent, EnumPar* parameter);
+    EnumWidget(QWidget * parent, EnumParameter* parameter);
 
 private slots:
 
@@ -25,6 +25,6 @@ private slots:
 
 private:
 
-    EnumPar* parameter;
+    EnumParameter* parameter;
 
 };

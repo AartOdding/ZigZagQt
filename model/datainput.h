@@ -3,7 +3,7 @@
 #include <QObject>
 
 #include "model/BaseZigZagObject.hpp"
-#include "basedatatype.h"
+#include "BaseDataType.hpp"
 
 class BaseOperator;
 
@@ -15,7 +15,7 @@ class DataInput : public BaseZigZagObject
 
 public:
 
-    DataInput(BaseOperator* parent_operator, const char * name, const DataTypeInfo& type_info);
+    DataInput(BaseOperator* parent_operator, const char * name, const DataTypeDescription& type_info);
 
     virtual ~DataInput();
 
@@ -25,7 +25,7 @@ public:
     bool is_connected_to(const BaseDataType* data_block) const;
     const BaseDataType* get_connection() const;
 
-    const DataTypeInfo * type() const;
+    const DataTypeDescription * type() const;
 
     virtual void set_from_xml(QXmlStreamReader& xml);
     virtual void write_to_xml(XmlSerializer& xml);
@@ -62,6 +62,6 @@ private:
 
     BaseOperator* m_parent_operator;
 
-    const DataTypeInfo * data_type;
+    const DataTypeDescription * data_type;
 
 };

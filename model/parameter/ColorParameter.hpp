@@ -9,6 +9,8 @@
 
 class ColorParameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
     ColorParameter(BaseZigZagObject * parent, const QString& name, QColor color = Qt::black);

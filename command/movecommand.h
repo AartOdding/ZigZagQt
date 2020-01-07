@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 
 
@@ -14,8 +14,8 @@ public:
     MoveCommand(BaseOperator& op, int to_x_, int to_y_)
         : operator_(op), to_x(to_x_), to_y(to_y_)
     {
-        from_x = op.get_position_x();
-        from_y = op.get_position_y();
+        from_x = op.positionX();
+        from_y = op.positionY();
     }
 
     void redo() override

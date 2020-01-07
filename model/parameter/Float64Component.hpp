@@ -19,6 +19,9 @@ public:
     double getMin() const;
     double getMax() const;
 
+    virtual void loadState(const QVariantMap&) override;
+    virtual QVariantMap storeState() const override;
+
 public slots:
 
     // Will return true if the component's value changed.

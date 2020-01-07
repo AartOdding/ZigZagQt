@@ -3,7 +3,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"
@@ -13,6 +13,7 @@
 class SawtoothWaveOperator : public BaseOperator,
                              public QOpenGLFunctions_3_3_Core
 {
+    Q_OBJECT
 
 public:
 
@@ -29,13 +30,20 @@ public:
 
     static const EnumDefinition WaveType;
 
+
+    Q_INVOKABLE void storeState(QVariantMap* state) const
+    {
+        state->insert(QStringLiteral("test int"), QVariant(43));
+        state->insert(QStringLiteral("operator"), QVariant(QStringLiteral("Sawtooth")));
+    }
+
 private:
 
 
     ColorPar color_a{ this, "High Color", Qt::white };
     ColorPar color_b{ this, "Low Color", Qt::black };
 
-    EnumPar wave_type{ this, "Wave Type", WaveType };
+    EnumParameter wave_type{ this, "Wave Type", WaveType };
     FloatPar peak_position{ this, "Peak Position", 0.5, 0, 1 };
     FloatPar frequency{ this, "Frequency", 6, 0.5, 1000000 };
     FloatPar phase{ this, "Phase", 0 };

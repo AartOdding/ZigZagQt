@@ -3,7 +3,9 @@
 #include <array>
 #include <vector>
 #include <bitset>
+#include <QMap>
 #include <QObject>
+#include <QVariant>
 
 class BaseParameter;
 
@@ -41,6 +43,7 @@ public:
 
     virtual ~BaseComponent();
 
+    QString uniqueName() const;
 
     /*
      * Should process any pending changes, should return true if value of the component changed.
@@ -68,8 +71,8 @@ public:
     BaseParameter * getParameter() const;
 
 
-    virtual void readXml(QXmlStreamReader& xml);
-    virtual void writeXml(XmlSerializer& xml);
+    virtual void loadState(const QVariantMap&);
+    virtual QVariantMap storeState() const;
 
 public slots:
 

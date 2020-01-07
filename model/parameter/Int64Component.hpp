@@ -19,8 +19,8 @@ public:
     int64_t getMin() const;
     int64_t getMax() const;
 
-    void readXml(QXmlStreamReader& xml) override;
-    void writeXml(XmlSerializer& xml) override;
+    virtual void loadState(const QVariantMap&) override;
+    virtual QVariantMap storeState() const override;
 
 public slots:
 

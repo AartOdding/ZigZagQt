@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/basedatatype.h"
+#include "model/BaseDataType.hpp"
 #include "model/datainput.h"
 
 
@@ -20,13 +20,13 @@ public:
 
     void redo() override
     {
-        output->remove_connection(input);
+        output->removeConnection(input);
         input->set_connection(nullptr);
     }
 
     void undo() override
     {
-        output->add_connection(input);
+        output->addConnection(input);
         input->set_connection(output);
     }
 

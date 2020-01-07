@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/basedatatype.h"
+#include "model/BaseDataType.hpp"
 #include "model/enumdefinition.h"
 #include "model/parameter/EnumParameter.hpp"
 #include "model/parameter/IntParameter.hpp"
@@ -88,8 +88,8 @@ public:
     // pointer, it is not a description of the storage method on the gpu!
     void upload_data(PixelNumChannelsEnum num_channels, PixelDataFormatEnum format, const void * pixel_data);
 
-    void acquire_resources() override;
-    void release_resources() override;
+    void acquireResources() override;
+    void releaseResources() override;
 
     void bind_as_framebuffer();
     void bind_as_texture(int texture_index) const;
@@ -104,18 +104,18 @@ public:
     PixelNumChannelsEnum get_num_channels() const;
     PixelDataFormatEnum get_format() const;
 
-    static const inline DataTypeInfo Type { "Texture", "Texture", QColor(255, 20, 147), true };
+    static const inline DataTypeDescription Type { "Texture", "Texture", QColor(255, 20, 147), true };
 
 
 private:
 
     void reallocate();
 
-    static GLenum gl_format_for(const EnumPar& format, const EnumPar& num_channels);
+    static GLenum gl_format_for(const EnumParameter& format, const EnumParameter& num_channels);
 
     Int2Par resolution{ this, "Resolution", { 256, 256 }, { 1, 1 }, { 16384, 16384 } };
-    EnumPar pixel_format{ this, "Format", PixelDataFormat, 0 };
-    EnumPar pixel_channels{ this, "Num Channels", PixelNumChannels, 3 };
+    EnumParameter pixel_format{ this, "Format", PixelDataFormat, 0 };
+    EnumParameter pixel_channels{ this, "Num Channels", PixelNumChannels, 3 };
 
     GLuint fbo_handle;
     GLuint texture_handle;

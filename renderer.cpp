@@ -4,9 +4,9 @@
 #include "renderer.h"
 #include "application.h"
 #include "model/projectmodel.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/datainput.h"
-#include "model/basedatatype.h"
+#include "model/BaseDataType.hpp"
 #include "utility/std_containers_helpers.h"
 
 #include <QThread>
@@ -45,21 +45,13 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 {
     Q_ASSERT(op);
 
-    for (auto& input : op->used_data_inputs())
+    for (auto& input : op->activeDataInputs())
     {
-        auto connected_op = input->get_connection()->get_operator();
+        auto connected_op = input->get_connection()->getOperator();
 
         // If a connected operator has not yet been processed that one has to process first,
         // thus return false: this operator does not yet have its turn.
         if (closed_list.count(connected_op) == 0)
-        {
-            return false;
-        }
-    }
-
-    for (auto par : op->importing_parameters())
-    {
-        if (closed_list.count(par->getImport()->getParameter()->findParent<BaseOperator*>()) == 0)
         {
             return false;
         }
@@ -84,7 +76,7 @@ void Renderer::render_frame()
 
     for (auto o : model->all_operators())
     {
-        if (o->count_used_data_inputs() == 0 && o->importing_parameters().empty())
+        if (o->hasActiveDataInputs() == 0)
         {
             open_list.push_back(o);
         }
@@ -103,23 +95,13 @@ void Renderer::render_frame()
 
             closed_list.insert(current);
 
-            for (auto& output : current->used_data_outputs())
+            for (auto& output : current->activeDataOutputs())
             {
-                for (auto connected_input : output->get_connections())
+                for (auto connected_input : output->getConnections())
                 {
                     if (!contains(open_list, connected_input->get_operator()))
                     {
                         open_list.push_back(connected_input->get_operator());
-                    }
-                }
-            }
-            for (auto par : current->exporting_parameters())
-            {
-                for (auto importer : par->getExports())
-                {
-                    if (!contains(open_list, importer->getParameter()->findParent<BaseOperator*>()))
-                    {
-                        open_list.push_back(importer->getParameter()->findParent<BaseOperator*>());
                     }
                 }
             }

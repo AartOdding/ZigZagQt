@@ -7,12 +7,14 @@
 
 
 
-class EnumPar : public BaseParameter
+class EnumParameter : public BaseParameter
 {
+    Q_OBJECT
+
 public:
 
-    EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, int m_enumValue = 0);
-    EnumPar(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, const QString& value);
+    EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, int m_enumValue = 0);
+    EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, const QString& value);
 
     int getIndex() const;
     const QString& getText() const;

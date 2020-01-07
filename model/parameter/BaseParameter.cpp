@@ -18,9 +18,9 @@ std::vector<BaseComponent*> BaseParameter::getComponents()
 
 
 
-const std::vector<BaseComponent*>& BaseParameter::getComponents() const
+QList<BaseComponent*> BaseParameter::getComponents() const
 {
-    return m_components;
+    return findChildren<BaseComponent*>(QString(), Qt::FindDirectChildrenOnly);
 }
 
 
@@ -36,7 +36,7 @@ void BaseParameter::updateParameters()
 {
     bool changed = false;
 
-    for (auto component : m_components)
+    for (auto component : getComponents())
     {
         changed |= component->update();
     }
@@ -50,7 +50,7 @@ void BaseParameter::updateParameters()
 
 void BaseParameter::disconnectParameters()
 {
-    for (auto component : m_components)
+    for (auto component : getComponents())
     {
         component->stopImporting();
         component->stopExporting();

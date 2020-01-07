@@ -24,7 +24,7 @@ void TextureData::parameterChangeEvent(const BaseParameter*)
 }
 
 
-void TextureData::acquire_resources()
+void TextureData::acquireResources()
 {
     glGenTextures(1, &texture_handle);
     currently_allocated = true;
@@ -44,7 +44,7 @@ void TextureData::acquire_resources()
 }
 
 
-void TextureData::release_resources()
+void TextureData::releaseResources()
 {
     if (has_fbo)
     {
@@ -181,7 +181,7 @@ void TextureData::reallocate()
 }
 
 
-GLenum TextureData::gl_format_for(const EnumPar& format, const EnumPar& num_channels)
+GLenum TextureData::gl_format_for(const EnumParameter& format, const EnumParameter& num_channels)
 {
     switch (format.getIndex())
     {

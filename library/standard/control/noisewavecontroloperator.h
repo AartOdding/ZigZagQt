@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "library/standard/control/parameterpreview.h"
 
 
@@ -30,8 +30,8 @@ private:
 
 
     FloatPar output   { this, "Output",    0 };
-    EnumPar noise_type { this, "Noise Type", NoiseType };
-    EnumPar use_time   { this, "Use time as Input", UseTime, 0 };
+    EnumParameter noise_type { this, "Noise Type", NoiseType };
+    EnumParameter use_time   { this, "Use time as Input", UseTime, 0 };
     FloatPar amplitude{ this, "Amplitude", 1 };
     FloatPar offset   { this, "Offset",    0 };
     Float4Par position{ this, "Position",  {} };

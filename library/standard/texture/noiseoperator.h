@@ -3,7 +3,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "texturedata.h"
 #include "textureview.h"
@@ -40,7 +40,7 @@ private:
     FloatPar rotation{ this, "Rotate", 0 };
     Float2Par scale{ this, "Scale", { 1, 1 } };
 
-    EnumPar use_z_value{ this, "Use Z Value", BoolEnum, 0 };
+    EnumParameter use_z_value{ this, "Use Z Value", BoolEnum, 0 };
     FloatPar z_value{ this, "Z Value", 0 };
 
     TextureData output_texture{ this, "Texture" };

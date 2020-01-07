@@ -1,8 +1,9 @@
 #include "projectmodel.h"
 #include "application.h"
+#include <utility/Serializer.hpp>
 
-#include "model/baseoperator.h"
-#include "model/basedatatype.h"
+#include "model/BaseOperator.hpp"
+#include "model/BaseDataType.hpp"
 #include "model/datainput.h"
 
 #include "command/addcommand.h"
@@ -19,6 +20,7 @@
 
 
 ProjectModel::ProjectModel()
+    : BaseZigZagObject(nullptr, QString())
 { }
 
 
@@ -57,15 +59,15 @@ void ProjectModel::remove_operator(BaseOperator * operator_ptr)
 
         operator_ptr->disconnectParameters();
 
-        for (auto& input : operator_ptr->data_inputs())
+        for (auto& input : operator_ptr->dataInputs())
         {
             //input->remove_imports_exports();
             input->disconnect();
         }
-        for (auto& output : operator_ptr->data_outputs())
+        for (auto& output : operator_ptr->dataOutputs())
         {
             //output->remove_imports_exports();
-            output->disconnect_all();
+            output->disconnectFromAll();
         }
         undo_stack.push(new RemoveCommand(*this, operator_ptr));
         undo_stack.endMacro();
@@ -81,13 +83,13 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
         GLint old_fbo;
         context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
 
-        auto blocks = operator_ptr->data_outputs();
+        auto blocks = operator_ptr->dataOutputs();
 
         for (auto& block : blocks)
         {
             if (block)
             {
-                block->acquire_resources();
+                block->acquireResources();
             }
         }
         operator_ptr->acquire_resources();
@@ -101,12 +103,16 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
 
         // To avoid cables being drawn to the wrong until the operator is moved, i suspect, it is because
         // layout has not yet been applied when cable is being made.
-        auto x = operator_ptr->get_position_x();
-        auto y = operator_ptr->get_position_y();
+        auto x = operator_ptr->positionX();
+        auto y = operator_ptr->positionY();
         operator_ptr->set_position(0, 0);
         operator_ptr->set_position(x, y);
         //emit operator_ptr->position_changed();
         //emit operator_ptr->position_changed(operator_ptr->get_position_x(), operator_ptr->get_position_y()+1);
+
+        Serializer serializer;
+        serializer.serialize(operator_ptr);
+        std::cout << serializer.text.toStdString() << std::endl;
     }
 }
 
@@ -117,13 +123,13 @@ void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
     {
         operator_ptr->release_resources();
 
-        auto blocks = operator_ptr->data_outputs();
+        auto blocks = operator_ptr->dataOutputs();
 
         for (auto& block : blocks)
         {
             if (block)
             {
-                block->release_resources();
+                block->releaseResources();
             }
         }
 
@@ -139,7 +145,28 @@ const std::vector<BaseOperator*>& ProjectModel::all_operators() const
 }
 
 
-void ProjectModel::save_to_file(const QString& path)
+void ProjectModel::loadState(const QVariantMap&)
+{
+
+}
+
+
+
+QVariantMap ProjectModel::storeState() const
+{
+
+}
+
+
+
+void ProjectModel::createChild(const QXmlStreamAttributes&)
+{
+
+}
+
+
+/*
+void ProjectModel::saveModel(const QString& path)
 {
     QFile file(path);
     file.open(QFile::WriteOnly | QFile::Truncate);
@@ -147,7 +174,7 @@ void ProjectModel::save_to_file(const QString& path)
 }
 
 
-void ProjectModel::load_from_file(const QString& path)
+void ProjectModel::loadModel(const QString& path)
 {
 
-}
+}*/

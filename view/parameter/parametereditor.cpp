@@ -1,5 +1,5 @@
 #include "parametereditor.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "view/viewport.h"
 #include "view/operatorview.h"
 
@@ -75,7 +75,7 @@ void ParameterEditor::onSelectionChanged()
             parameters = new ParameterGroup(this, &selected->operator_model);
             inner_layout.insertWidget(0, parameters);
             if (!isVisible()) show();
-            setWindowTitle(selected->operator_model.type()->name.c_str());
+            setWindowTitle(selected->operator_model.description()->name);
             return;
         }
     }

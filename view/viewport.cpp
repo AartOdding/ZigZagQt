@@ -2,9 +2,10 @@
 #include <QWheelEvent>
 
 #include <iostream>
+#include <cmath>
 
 #include "application.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/projectmodel.h"
 #include "projectscopeview.h"
 #include "operatorselectordialog.h"
@@ -146,7 +147,7 @@ void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
 
 void Viewport::on_operator_requested(const OperatorDescription* op_type, const QPointF& where)
 {
-    std::cout << "succes: " << op_type->name << "\n";
+    std::cout << "succes: " << op_type->name.toStdString() << "\n";
     std::cout << application::project_model() << "\n";
     application::project_model()->add_operator(*op_type, where.x(), where.y());
 }

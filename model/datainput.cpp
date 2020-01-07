@@ -1,20 +1,19 @@
 #include "datainput.h"
 
 #include "application.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 #include "model/projectmodel.h"
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
 #include "zigzaglib/xmlserializer.h"
 
 
-DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeInfo& type_info)
+DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeDescription& type_info)
     : BaseZigZagObject(parent_op, name),
       m_parent_operator(parent_op),
       data_type(&type_info)
 {
     Q_ASSERT(parent_op);
-    parent_op->register_data_input(this);
 }
 
 
@@ -28,7 +27,7 @@ BaseOperator* DataInput::get_operator() const
     return m_parent_operator;
 }
 
-const DataTypeInfo * DataInput::type() const
+const DataTypeDescription * DataInput::type() const
 {
     return data_type;
 }
@@ -38,7 +37,7 @@ bool DataInput::compatible_with(const BaseDataType* data_block) const
 {
     if (data_block)
     {
-        return type()->name == data_block->type()->name;
+        return type()->name == data_block->getDescription()->name;
     }
     return false;
 }

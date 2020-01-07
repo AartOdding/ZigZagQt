@@ -1,9 +1,9 @@
 #include "enumwidget.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 
 
-EnumWidget::EnumWidget(QWidget * parent, EnumPar* par)
+EnumWidget::EnumWidget(QWidget * parent, EnumParameter* par)
     : QComboBox(parent), parameter(par)
 {
     for (const auto& value : *(par->getEnum()))

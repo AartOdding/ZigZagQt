@@ -1,9 +1,9 @@
 #include "operatorselectordialog.h"
 
 #include "view/viewport.h"
-#include "model/operatorlibrary.h"
+#include "model/OperatorLibrary.hpp"
 #include "application.h"
-#include "model/baseoperator.h"
+#include "model/BaseOperator.hpp"
 
 #include "ui_librarydialogpanel.h"
 #include <QComboBox>
@@ -28,19 +28,19 @@ OperatorSelectorDialog::OperatorSelectorDialog(Viewport* vp, const QPointF& wher
 
     auto library = OperatorLibrary::instance();
 
-    auto sub_libraries = library->packages();
+    auto packages = library->packages();
 
-    for (auto name : sub_libraries)
+    for (auto packageName : packages)
     {
-        ui.filter->addItem(name.c_str());
+        ui.filter->addItem(packageName);
     }
 
-    ui.filter->setCurrentText("Texture");
-    auto ops = library->get_package("Control");
+    //ui.filter->setCurrentText("Texture");
+    auto ops = library->getPackage("Control");
 
     for (auto op : ops)
     {
-        ui.operator_list->addItem(op->name.c_str());
+        ui.operator_list->addItem(op->name);
     }
 
     ui.operator_list->setCurrentRow(0);
@@ -57,10 +57,10 @@ void OperatorSelectorDialog::on_different_library_selected(const QString& new_li
     ui.operator_list->clear();
     auto name = new_library.toStdString();
 
-    auto operators = OperatorLibrary::instance()->get_package(name.c_str());
+    auto operators = OperatorLibrary::instance()->getPackage(name.c_str());
     for (auto op : operators)
     {
-        ui.operator_list->addItem(op->name.c_str());
+        ui.operator_list->addItem(op->name);
     }
 }
 
@@ -69,9 +69,9 @@ void OperatorSelectorDialog::accept_clicked()
 {
     if (ui.operator_list->currentItem())
     {
-        auto op = OperatorLibrary::instance()->get_operator(
-                    ui.filter->currentText().toStdString(),
-                    ui.operator_list->currentItem()->text().toStdString());
+        auto op = OperatorLibrary::instance()->getOperator(
+                    ui.filter->currentText(),
+                    ui.operator_list->currentItem()->text());
         if (op)
         {
             emit operator_requested(op, operator_position);

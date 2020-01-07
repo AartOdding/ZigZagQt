@@ -45,13 +45,13 @@ SOURCES += \
         library/standard/texture/textureview.cpp \
         library/standard/texture/textureviewwindow.cpp \
         library/standard/texture/thresholdoperator.cpp \
+    model/BaseDataType.cpp \
+    model/BaseOperator.cpp \
     model/BaseZigZagObject.cpp \
-        model/basedatatype.cpp \
+    model/OperatorLibrary.cpp \
         model/clock.cpp \
         model/datainput.cpp \
-        model/baseoperator.cpp \
         model/enumdefinition.cpp \
-    model/operatorlibrary.cpp \
     model/parameter/BaseComponent.cpp \
     model/parameter/BaseParameter.cpp \
     model/parameter/ButtonParameter.cpp \
@@ -67,6 +67,8 @@ SOURCES += \
         model/projectmodel.cpp \
         model/projectscope.cpp \
         model/types.cpp \
+    utility/Deserializer.cpp \
+    utility/Serializer.cpp \
     view/BaseConnector.cpp \
     view/ConnectionManager.cpp \
     view/DataConnector.cpp \
@@ -125,14 +127,14 @@ HEADERS += \
         library/standard/texture/textureview.h \
         library/standard/texture/textureviewwindow.h \
         library/standard/texture/thresholdoperator.h \
+        model/BaseDataType.hpp \
+        model/BaseOperator.hpp \
         model/BaseZigZagObject.hpp \
-        model/basedatatype.h \
+        model/OperatorLibrary.hpp \
         model/clock.h \
         model/datainput.h \
-        model/baseoperator.h \
         model/enumdefinition.h \
         model/namemanager.h \
-        model/operatorlibrary.h \
         model/parameter/BaseComponent.hpp \
         model/parameter/BaseParameter.hpp \
         model/parameter/ButtonParameter.hpp \
@@ -148,6 +150,8 @@ HEADERS += \
         model/projectmodel.h \
         model/projectscope.h \
         model/types.h \
+        utility/Deserializer.hpp \
+        utility/Serializer.hpp \
         utility/fpsmonitor.h \
         utility/frameratecontroller.h \
         utility/numeric.h \
