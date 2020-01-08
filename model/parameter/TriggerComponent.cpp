@@ -3,8 +3,8 @@
 
 
 
-TriggerComponent::TriggerComponent(BaseParameter* parameter)
-    : BaseComponent(parameter)
+TriggerComponent::TriggerComponent(BaseParameter* parameter, const QString& name)
+    : BaseComponent(parameter, name)
 {
 
 }

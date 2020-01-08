@@ -7,16 +7,16 @@
 
 
 
-Int64Component::Int64Component(BaseParameter* parameter, int64_t value)
-    : Int64Component(parameter, value, std::numeric_limits<int64_t>::lowest(), std::numeric_limits<int64_t>::max())
+Int64Component::Int64Component(BaseParameter* parameter, const QString& name, int64_t value)
+    : Int64Component(parameter, name, value, std::numeric_limits<int64_t>::lowest(), std::numeric_limits<int64_t>::max())
 {
 
 }
 
 
 
-Int64Component::Int64Component(BaseParameter* parameter, int64_t value, int64_t min, int64_t max)
-    : BaseComponent(parameter)
+Int64Component::Int64Component(BaseParameter* parameter, const QString& name, int64_t value, int64_t min, int64_t max)
+    : BaseComponent(parameter, name)
 {
     m_min = smallest(min, max);
     m_max = largest(min, max);

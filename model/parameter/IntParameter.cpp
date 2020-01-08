@@ -5,18 +5,16 @@
 
 IntParameter::IntParameter(BaseZigZagObject * parent, const QString& name, int64 value)
     : BaseParameter(ParameterType::Int, parent, name),
-      m_value(this, value)
+      m_value(this, name, value)
 {
-    m_value.setObjectName(name);
 }
 
 
 
 IntParameter::IntParameter(BaseZigZagObject * parent, const QString& name, int64 value, int64 min, int64 max)
     : BaseParameter(ParameterType::Int, parent, name),
-      m_value(this, value, min, max)
+      m_value(this, name, value, min, max)
 {
-    m_value.setObjectName(name);
 }
 
 
@@ -44,22 +42,18 @@ void IntParameter::set(int64 value)
 
 Int2Parameter::Int2Parameter(BaseZigZagObject * parent, const QString& name, int64_2 value)
     : BaseParameter(ParameterType::Int2, parent, name),
-      m_xValue(this, value[0]),
-      m_yValue(this, value[1])
+      m_xValue(this, QStringLiteral("X"), value[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
 }
 
 
 
 Int2Parameter::Int2Parameter(BaseZigZagObject * parent, const QString& name, int64_2 value, int64_2 min, int64_2 max)
     : BaseParameter(ParameterType::Int2, parent, name),
-      m_xValue(this, value[0], min[0], max[0]),
-      m_yValue(this, value[1], min[1], max[1])
+      m_xValue(this, QStringLiteral("X"), value[0], min[0], max[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1], min[1], max[1])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
 }
 
 
@@ -102,26 +96,20 @@ void Int2Parameter::set(int64 x, int64 y)
 
 Int3Parameter::Int3Parameter(BaseZigZagObject * parent, const QString& name, int64_3 value)
     : BaseParameter(ParameterType::Int3, parent, name),
-      m_xValue(this, value[0]),
-      m_yValue(this, value[1]),
-      m_zValue(this, value[2])
+      m_xValue(this, QStringLiteral("X"), value[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1]),
+      m_zValue(this, QStringLiteral("Z"), value[2])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
-    m_zValue.setObjectName(QStringLiteral("Z"));
 }
 
 
 
 Int3Parameter::Int3Parameter(BaseZigZagObject * parent, const QString& name, int64_3 value, int64_3 min, int64_3 max)
     : BaseParameter(ParameterType::Int3, parent, name),
-      m_xValue(this, value[0], min[0], max[0]),
-      m_yValue(this, value[1], min[1], max[1]),
-      m_zValue(this, value[2], min[2], max[2])
+      m_xValue(this, QStringLiteral("X"), value[0], min[0], max[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1], min[1], max[1]),
+      m_zValue(this, QStringLiteral("Z"), value[2], min[2], max[2])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
-    m_zValue.setObjectName(QStringLiteral("Z"));
 }
 
 
@@ -179,30 +167,22 @@ void Int3Parameter::set(int64 x, int64 y, int64 z)
 
 Int4Parameter::Int4Parameter(BaseZigZagObject * parent, const QString& name, int64_4 value)
     : BaseParameter(ParameterType::Int4, parent, name),
-      m_xValue(this, value[0]),
-      m_yValue(this, value[1]),
-      m_zValue(this, value[2]),
-      m_wValue(this, value[3])
+      m_xValue(this, QStringLiteral("X"), value[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1]),
+      m_zValue(this, QStringLiteral("Z"), value[2]),
+      m_wValue(this, QStringLiteral("W"), value[3])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
-    m_zValue.setObjectName(QStringLiteral("Z"));
-    m_wValue.setObjectName(QStringLiteral("W"));
 }
 
 
 
 Int4Parameter::Int4Parameter(BaseZigZagObject * parent, const QString& name, int64_4 value, int64_4 min, int64_4 max)
     : BaseParameter(ParameterType::Int4, parent, name),
-      m_xValue(this, value[0], min[0], max[0]),
-      m_yValue(this, value[1], min[1], max[1]),
-      m_zValue(this, value[2], min[2], max[2]),
-      m_wValue(this, value[3], min[3], max[3])
+      m_xValue(this, QStringLiteral("X"), value[0], min[0], max[0]),
+      m_yValue(this, QStringLiteral("Y"), value[1], min[1], max[1]),
+      m_zValue(this, QStringLiteral("Z"), value[2], min[2], max[2]),
+      m_wValue(this, QStringLiteral("W"), value[3], min[3], max[3])
 {
-    m_xValue.setObjectName(QStringLiteral("X"));
-    m_yValue.setObjectName(QStringLiteral("Y"));
-    m_zValue.setObjectName(QStringLiteral("Z"));
-    m_wValue.setObjectName(QStringLiteral("W"));
 }
 
 

@@ -6,16 +6,16 @@
 
 
 
-Float64Component::Float64Component(BaseParameter* parameter, double value)
-    : Float64Component(parameter, value, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max())
+Float64Component::Float64Component(BaseParameter* parameter, const QString& name, double value)
+    : Float64Component(parameter, name, value, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max())
 {
 
 }
 
 
 
-Float64Component::Float64Component(BaseParameter* parameter, double value, double min, double max)
-    : BaseComponent(parameter)
+Float64Component::Float64Component(BaseParameter* parameter, const QString& name, double value, double min, double max)
+    : BaseComponent(parameter, name)
 {
     m_min = smallest(min, max);
     m_max = largest(min, max);

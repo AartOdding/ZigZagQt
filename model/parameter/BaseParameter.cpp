@@ -45,15 +45,3 @@ void BaseParameter::updateParameters()
         parameterChangeEvent(this);
     }
 }
-
-
-
-void BaseParameter::disconnectParameters()
-{
-    for (auto component : getComponents())
-    {
-        component->stopImporting();
-        component->stopExporting();
-    }
-    BaseZigZagObject::disconnectParameters();
-}

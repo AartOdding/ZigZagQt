@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QVariant>
 
+#include "model/BaseZigZagObject.hpp"
+
 class BaseParameter;
 
 class XmlSerializer;
@@ -33,17 +35,15 @@ static constexpr std::array<ParameterFlags, 4> defaultParameterFlags
 
 
 
-class BaseComponent : public QObject
+class BaseComponent : public BaseZigZagObject
 {
     Q_OBJECT
 
 public:
 
-    BaseComponent(BaseParameter * parameter);
+    BaseComponent(BaseParameter * parentParameter, const QString& name);
 
-    virtual ~BaseComponent();
-
-    QString uniqueName() const;
+    virtual ~BaseComponent() override;
 
     /*
      * Should process any pending changes, should return true if value of the component changed.
@@ -71,8 +71,10 @@ public:
     BaseParameter * getParameter() const;
 
 
-    virtual void loadState(const QVariantMap&);
-    virtual QVariantMap storeState() const;
+    virtual void loadState(const QVariantMap&) override;
+    virtual QVariantMap storeState() const override;
+
+    virtual void disconnectParameters() override;
 
 public slots:
 
@@ -117,6 +119,7 @@ private:
     friend class DisconnectParametersCommand;
 
     BaseParameter * m_parameter = nullptr;
+
     BaseComponent * m_import = nullptr;
     std::vector<BaseComponent *> m_exports;
 

@@ -3,16 +3,16 @@
 
 
 
-TextComponent::TextComponent(BaseParameter * parameter)
-    : BaseComponent(parameter)
+TextComponent::TextComponent(BaseParameter * parameter, const QString& name)
+    : BaseComponent(parameter, name)
 {
 
 }
 
 
 
-TextComponent::TextComponent(BaseParameter * parameter, const QString& text)
-    : BaseComponent(parameter),
+TextComponent::TextComponent(BaseParameter * parameter, const QString& name, const QString& text)
+    : BaseComponent(parameter, name),
       m_text(text)
 {
 

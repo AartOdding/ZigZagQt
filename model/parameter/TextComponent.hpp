@@ -10,8 +10,8 @@ class TextComponent : public BaseComponent
 
 public:
 
-    TextComponent(BaseParameter * parameter);
-    TextComponent(BaseParameter * parameter, const QString& text);
+    TextComponent(BaseParameter * parameter, const QString& name);
+    TextComponent(BaseParameter * parameter, const QString& name, const QString& text);
 
     bool update() override;
 

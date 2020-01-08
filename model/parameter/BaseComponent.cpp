@@ -12,9 +12,9 @@
 
 
 
-BaseComponent::BaseComponent(BaseParameter * parameter)
-    : QObject(parameter),
-      m_parameter(parameter)
+BaseComponent::BaseComponent(BaseParameter * parentParameter, const QString& name)
+    : BaseZigZagObject(parentParameter, name),
+      m_parameter(parentParameter)
 {
     for (ParameterFlags flag : defaultParameterFlags)
     {
@@ -26,36 +26,6 @@ BaseComponent::BaseComponent(BaseParameter * parameter)
 
 BaseComponent::~BaseComponent()
 {
-}
-
-
-
-QString BaseComponent::uniqueName() const
-{
-    const QObject* object = this;
-    auto thisName = objectName();
-
-    std::vector<QString> parentNames;
-    parentNames.reserve(6);
-    int size = thisName.length();
-
-    // While there is a parent that is a BaseZigZagObject.
-    while (qobject_cast<const BaseZigZagObject*>(object->parent()))
-    {
-        object = static_cast<const BaseZigZagObject*>(object->parent());
-        parentNames.push_back(object->objectName());
-        size += parentNames.back().length() + 1; // +1 for the points
-    }
-
-    QString result;
-    result.reserve(size);
-
-    // Reverse iterate parents: start at root towards this.
-    for (auto it = parentNames.rbegin(); it != parentNames.rend(); ++it)
-    {
-        result.append(*it).append('.');
-    }
-    return result.append(thisName);
 }
 
 
@@ -183,7 +153,6 @@ void BaseComponent::loadState(const QVariantMap& map)
             }
         }
     }
-
 }
 
 
@@ -214,32 +183,10 @@ QVariantMap BaseComponent::storeState() const
     return state;
 }
 
-/*
-void BaseComponent::readXml(QXmlStreamReader& xml)
-{
 
+
+void BaseComponent::disconnectParameters()
+{
+    stopImporting();
+    stopExporting();
 }
-
-
-
-void BaseComponent::writeXml(XmlSerializer& xml)
-{
-    xml.begin_element("BaseParameterComponent");
-    xml.add_int_attribute("id", xml.id(this));
-
-        //xml.add_int_element("component_type", static_cast<qint32>(m_componentType));
-        //xml.add_int_element("flags", static_cast<quint32>(m_flags));
-        xml.add_int_element("import", xml.id(m_import));
-
-        xml.begin_element("exports");
-        xml.add_int_attribute("size", m_exports.size());
-
-            for (auto e : m_exports)
-            {
-                xml.add_int_element("export", xml.id(e));
-            }
-
-        xml.end_element(); // ends exports
-
-    xml.end_element(); // ends BaseParameterComponent
-}*/

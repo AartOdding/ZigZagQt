@@ -49,12 +49,6 @@ public:
      */
     virtual void updateParameters() override;
 
-    /*
-     * Will disconnect all owned components, and then call disconnectParameters() on base class to
-     * to ensure that all children also have their disconnectParameters() method called.
-     */
-    virtual void disconnectParameters() override;
-
 private:
 
     ParameterType m_parameterType;

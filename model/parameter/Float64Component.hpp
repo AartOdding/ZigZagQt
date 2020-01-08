@@ -10,8 +10,8 @@ class Float64Component : public BaseComponent
 
 public:
 
-    Float64Component(BaseParameter * parameter, double value = 0.0);
-    Float64Component(BaseParameter * parameter, double value, double min, double max);
+    Float64Component(BaseParameter * parameter, const QString& name, double value = 0.0);
+    Float64Component(BaseParameter * parameter, const QString& name, double value, double min, double max);
 
     bool update() override;
 

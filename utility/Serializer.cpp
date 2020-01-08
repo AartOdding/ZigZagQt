@@ -122,19 +122,7 @@ void Serializer::serialize(const QObject* object)
     //----------
 
     QVariantMap state;
-
-    if (qobject_cast<const BaseZigZagObject*>(object))
-    {
-        state = static_cast<const BaseZigZagObject*>(object)->storeState();
-    }
-    else if (qobject_cast<const BaseComponent*>(object))
-    {
-        state = static_cast<const BaseComponent*>(object)->storeState();
-    }
-    else
-    {
-        throw "oopsie!";
-    }
+    state = static_cast<const BaseZigZagObject*>(object)->storeState();
 
     if (state.size() > 0)
     {
@@ -146,19 +134,14 @@ void Serializer::serialize(const QObject* object)
     //----------
 
     auto children = object->findChildren<const BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly);
-    auto components = object->findChildren<const BaseComponent*>(QString(), Qt::FindDirectChildrenOnly);
 
-    if (!children.empty() || !components.empty())
+    if (!children.empty())
     {
         xml.writeStartElement(QStringLiteral("children"));
 
         for (auto child : children)
         {
             serialize(child);
-        }
-        for (auto component : components)
-        {
-            serialize(component);
         }
 
         xml.writeEndElement(); // children

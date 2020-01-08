@@ -10,8 +10,8 @@ class Int64Component : public BaseComponent
 
 public:
 
-    Int64Component(BaseParameter * parameter, int64_t value = 0);
-    Int64Component(BaseParameter * parameter, int64_t value, int64_t min, int64_t max);
+    Int64Component(BaseParameter * parameter, const QString& name, int64_t value = 0);
+    Int64Component(BaseParameter * parameter, const QString& name, int64_t value, int64_t min, int64_t max);
 
     bool update() override;
 

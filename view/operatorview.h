@@ -68,8 +68,8 @@ private:
     static constexpr int width = 200;
     static constexpr int height = 160;
 
-    int position_x;
-    int position_y;
+    int m_posX;
+    int m_posY;
 
     bool was_dragged = false;
 

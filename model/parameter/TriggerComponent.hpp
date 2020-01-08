@@ -10,7 +10,7 @@ class TriggerComponent : public BaseComponent
 
 public:
 
-    TriggerComponent(BaseParameter* parameter);
+    TriggerComponent(BaseParameter* parameter, const QString& name);
 
     bool update() override;
 

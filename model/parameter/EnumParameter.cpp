@@ -6,7 +6,7 @@
 EnumParameter::EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, int i)
     : BaseParameter(ParameterType::Enum, parent, name),
       m_enum(&def),
-      m_enumValue(this, i, 0, def.size()-1)
+      m_enumValue(this, name, i, 0, def.size()-1)
 {
 }
 
@@ -14,7 +14,7 @@ EnumParameter::EnumParameter(BaseZigZagObject * parent, const QString& name, con
 EnumParameter::EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& def, const QString& value)
     : BaseParameter(ParameterType::Enum, parent, name),
       m_enum(&def),
-      m_enumValue(this, m_enum->index_of(value), 0, def.size()-1)
+      m_enumValue(this, name, m_enum->index_of(value), 0, def.size()-1)
 {
 }
 

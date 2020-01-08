@@ -5,10 +5,6 @@
 ColorParameter::ColorParameter(BaseZigZagObject * parent, const QString& name, QColor color)
     : BaseParameter(ParameterType::Color, parent, name)
 {
-    m_red.setObjectName(QStringLiteral("Red"));
-    m_green.setObjectName(QStringLiteral("Green"));
-    m_blue.setObjectName(QStringLiteral("Blue"));
-    m_alpha.setObjectName(QStringLiteral("Alpha"));
     set(color);
 }
 
