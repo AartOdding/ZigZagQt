@@ -3,9 +3,9 @@
 
 
 
-BaseOperator * IncreasingValueOperator::create()
+BaseOperator * IncreasingValueOperator::create(BaseZigZagObject* parent)
 {
-    return new IncreasingValueOperator();
+    return new IncreasingValueOperator(parent);
 }
 
 
@@ -16,12 +16,12 @@ const OperatorDescription IncreasingValueOperator::description
     &create,
     { },
     { },
-    &ParameterPreview::Type
+    &ParameterView::Type
 };
 
 
-IncreasingValueOperator::IncreasingValueOperator()
-    : BaseOperator(description)
+IncreasingValueOperator::IncreasingValueOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
 
 }

@@ -16,9 +16,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-BaseOperator* DisplacementOperator::create()
+BaseOperator* DisplacementOperator::create(BaseZigZagObject* parent)
 {
-    return new DisplacementOperator();
+    return new DisplacementOperator(parent);
 }
 
 
@@ -33,8 +33,8 @@ const OperatorDescription DisplacementOperator::Type
 };
 
 
-DisplacementOperator::DisplacementOperator()
-    : BaseOperator(Type)
+DisplacementOperator::DisplacementOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, Type)
 {
     initializeOpenGLFunctions();
 }

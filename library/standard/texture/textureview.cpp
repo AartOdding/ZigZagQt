@@ -17,18 +17,15 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-TextureView::TextureView(BaseOperator* parent_op)
-    : OpenGLDataView(parent_op, &Type), parent_operator(parent_op)
+TextureView::TextureView(BaseOperator* parentOperator, TextureData* viewedTexture)
+    : OpenGLDataView(parentOperator, &Type),
+      m_parentOperator(parentOperator),
+      m_viewedTexture(viewedTexture)
 {
-    for (auto data : parent_op->dataOutputs())
+    if (parentOperator && viewedTexture)
     {
-        if (*data->getDescription() == TextureData::Type)
-        {
-            viewed_texture = static_cast<TextureData*>(data);
-            break;
-        }
+        connect(parentOperator, &BaseOperator::update_view_requested, this, &TextureView::update_view);
     }
-    connect(parent_op, &BaseOperator::update_view_requested, this, &TextureView::update_view);
 }
 
 
@@ -67,17 +64,20 @@ void TextureView::paint_opengl(int res_x, int res_y)
         glBindVertexArray(0);
     }
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (m_viewedTexture)
+    {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(shader.programId());
-    glBindVertexArray(vao);
-    viewed_texture->bind_as_texture(0);
-    shader.setUniformValue(shader.uniformLocation("framebuffer_resolution"), QPointF(256, 256));
-    shader.setUniformValue(shader.uniformLocation("color"), 0.5f, 0.0f, 0.3f);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glUseProgram(0);
-    glFlush();
+        glUseProgram(shader.programId());
+        glBindVertexArray(vao);
+        m_viewedTexture->bind_as_texture(0);
+        shader.setUniformValue(shader.uniformLocation("framebuffer_resolution"), QPointF(256, 256));
+        shader.setUniformValue(shader.uniformLocation("color"), 0.5f, 0.0f, 0.3f);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glUseProgram(0);
+    }
+
     GLenum err;
     while((err = glGetError()) != GL_NO_ERROR)
     {
@@ -100,7 +100,7 @@ void TextureView::parameterChangeEvent(const BaseParameter* parameter)
         {
             window = new TextureViewWindow(this);
             window->setAttribute(Qt::WA_DeleteOnClose, true);
-            connect(parent_operator, &BaseOperator::update_view_requested, window.data(), qOverload<>(&QOpenGLWidget::update), Qt::QueuedConnection);
+            connect(m_parentOperator, &BaseOperator::update_view_requested, window.data(), qOverload<>(&QOpenGLWidget::update), Qt::QueuedConnection);
             window->show();
         }
     }
@@ -109,5 +109,5 @@ void TextureView::parameterChangeEvent(const BaseParameter* parameter)
 
 BaseDataView* TextureView::create(BaseOperator* parent_operator)
 {
-    return new TextureView(parent_operator);
+    return new TextureView(parent_operator, nullptr);
 }

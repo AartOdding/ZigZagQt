@@ -14,14 +14,14 @@ const OperatorDescription ColorOperator::Type
 };
 
 
-BaseOperator* ColorOperator::create()
+BaseOperator* ColorOperator::create(BaseZigZagObject* parent)
 {
-    return new ColorOperator();
+    return new ColorOperator(parent);
 }
 
 
-ColorOperator::ColorOperator()
-    : BaseOperator(Type)
+ColorOperator::ColorOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, Type)
 {
     initializeOpenGLFunctions();
 }

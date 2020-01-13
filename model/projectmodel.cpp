@@ -44,7 +44,7 @@ void ProjectModel::undo()
 
 void ProjectModel::add_operator(const OperatorDescription& op_type, int x, int y)
 {
-    auto op = op_type.construct();
+    auto op = op_type.construct(this);
     op->set_position(x, y);
 
     undo_stack.push(new AddCommand(*this, op));

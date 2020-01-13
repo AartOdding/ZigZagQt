@@ -19,9 +19,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-BaseOperator * NoiseOperator::create()
+BaseOperator * NoiseOperator::create(BaseZigZagObject* parent)
 {
-    return new NoiseOperator();
+    return new NoiseOperator(parent);
 }
 
 
@@ -37,8 +37,8 @@ const OperatorDescription NoiseOperator::description
 
 
 
-NoiseOperator::NoiseOperator()
-    : BaseOperator(description)
+NoiseOperator::NoiseOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
     should_update = true;

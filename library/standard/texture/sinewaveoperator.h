@@ -18,14 +18,14 @@ class SineWaveOperator : public BaseOperator,
 
 public:
 
-    SineWaveOperator();
+    SineWaveOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -50,6 +50,7 @@ private:
     Float2Par scale{ this, "Scale", { 1, 1 } };
 
     TextureData output_texture{ this, "Texture" };
+    TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

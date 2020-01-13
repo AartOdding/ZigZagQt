@@ -28,6 +28,8 @@ public:
 
     OperatorView(BaseOperator& operator_model);
 
+    virtual ~OperatorView() override;
+
     //QRectF boundingRect() const override;
 
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
@@ -75,6 +77,7 @@ private:
 
     std::unordered_map<const DataInput*, DataConnector*> inputs;
     std::unordered_map<const BaseDataType*, DataConnector*> outputs;
+    QList<BaseDataView*> dataViews;
 
     QGraphicsWidget inputs_panel{ this };
     QGraphicsWidget outputs_panel{ this };

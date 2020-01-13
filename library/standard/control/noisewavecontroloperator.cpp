@@ -4,9 +4,9 @@
 
 
 
-BaseOperator * NoiseWaveControlOperator::create()
+BaseOperator * NoiseWaveControlOperator::create(BaseZigZagObject* parent)
 {
-    return new NoiseWaveControlOperator();
+    return new NoiseWaveControlOperator(parent);
 }
 
 
@@ -17,7 +17,7 @@ const OperatorDescription NoiseWaveControlOperator::description
     &create,
     { },
     { },
-    &ParameterPreview::Type
+    &ParameterView::Type
 };
 
 
@@ -33,8 +33,8 @@ const EnumDefinition NoiseWaveControlOperator::NoiseType
 
 
 
-NoiseWaveControlOperator::NoiseWaveControlOperator()
-    : BaseOperator(description)
+NoiseWaveControlOperator::NoiseWaveControlOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     recalculate();
 }

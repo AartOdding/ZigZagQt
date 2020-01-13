@@ -20,14 +20,14 @@ class KinectTwoTextureOperator : public BaseOperator,
 {
 public:
 
-    KinectTwoTextureOperator();
+    KinectTwoTextureOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -35,6 +35,7 @@ public:
 private:
 
     TextureData output_texture{ this, "Depth Texture", false };
+    TextureView outputView{ this, &output_texture };
 
 
 #ifdef Q_OS_WIN

@@ -7,14 +7,14 @@
 const OperatorDescription ClockOperator::description { "Clock", "Control", &create };
 
 
-BaseOperator * ClockOperator::create()
+BaseOperator * ClockOperator::create(BaseZigZagObject* parent)
 {
-    return new ClockOperator();
+    return new ClockOperator(parent);
 }
 
 
-ClockOperator::ClockOperator()
-    : BaseOperator(description)
+ClockOperator::ClockOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     frames.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
     seconds.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);

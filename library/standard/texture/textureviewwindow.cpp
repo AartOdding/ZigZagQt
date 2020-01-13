@@ -47,7 +47,7 @@ void TextureViewWindow::paintGL()
 
         glUseProgram(belonging_view->shader.programId());
         glBindVertexArray(vao);
-        belonging_view->viewed_texture->bind_as_texture(0);
+        belonging_view->m_viewedTexture->bind_as_texture(0);
         belonging_view->shader.setUniformValue(belonging_view->shader.uniformLocation("framebuffer_resolution"), QPointF(256, 256));
         belonging_view->shader.setUniformValue(belonging_view->shader.uniformLocation("color"), 0.5f, 0.0f, 0.3f);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

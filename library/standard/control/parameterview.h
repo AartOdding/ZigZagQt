@@ -7,16 +7,16 @@
 
 class BaseOperator;
 
-class ParameterPreview : public BaseDataView
+class ParameterView : public BaseDataView
 {
     Q_OBJECT
 
 public:
 
-    ParameterPreview(BaseOperator* parent_operator);
+    ParameterView(BaseOperator* parent_operator, const BaseComponent* component);
 
 
-    static BaseDataView* create(BaseOperator* parent_operator) { return new ParameterPreview(parent_operator); }
+    static BaseDataView* create(BaseOperator* parent_operator) { return new ParameterView(parent_operator, nullptr); }
 
     static const inline DataViewTypeInfo Type { "Parameter Preview", "Control", DataViewGraphicsApi::QPainter, &create };
 
@@ -38,7 +38,7 @@ private:
 
     bool is_int = true;
 
-    BaseComponent * viewedComponent;
+    const BaseComponent * m_viewedComponent;
 
     double floatValue = 0;
     int64_t intValue = 0;

@@ -48,6 +48,18 @@ QString BaseZigZagObject::uniqueName() const
 }
 
 
+ProjectModel* BaseZigZagObject::network()
+{
+    return qobject_cast<ProjectModel*>(rootObject());
+}
+
+
+const ProjectModel* BaseZigZagObject::network() const
+{
+    return qobject_cast<const ProjectModel*>(rootObject());
+}
+
+
 BaseZigZagObject* BaseZigZagObject::rootObject()
 {
     auto root = this;

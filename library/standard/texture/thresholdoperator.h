@@ -16,14 +16,14 @@ class ThresholdOperator : public BaseOperator,
 
 public:
 
-    ThresholdOperator();
+    ThresholdOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator* create();
+    static BaseOperator* create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -32,6 +32,7 @@ private:
     DataInput texture_in{ this, "Input", TextureData::Type };
 
     TextureData output_texture{ this, "Output Texture" };
+    TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

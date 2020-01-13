@@ -9,11 +9,11 @@ class ClockOperator : public BaseOperator
 {
 public:
 
-    ClockOperator();
+    ClockOperator(BaseZigZagObject* parent);
 
     void run() override;
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 

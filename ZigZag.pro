@@ -26,7 +26,7 @@ include( ext/phantom/phantom.pri )
 
 SOURCES += \
         application.cpp \
-    library/standard/control/ParameterPreview.cpp \
+    library/standard/control/ParameterView.cpp \
         library/standard/control/clockoperator.cpp \
         library/standard/control/increasingvalueoperator.cpp \
         library/standard/control/noisewavecontroloperator.cpp \
@@ -48,6 +48,7 @@ SOURCES += \
     model/BaseDataType.cpp \
     model/BaseOperator.cpp \
     model/BaseZigZagObject.cpp \
+    model/ExecutionEngine.cpp \
     model/OperatorLibrary.cpp \
         model/clock.cpp \
         model/datainput.cpp \
@@ -111,7 +112,7 @@ HEADERS += \
         library/standard/control/clockoperator.h \
         library/standard/control/increasingvalueoperator.h \
         library/standard/control/noisewavecontroloperator.h \
-        library/standard/control/parameterpreview.h \
+        library/standard/control/parameterview.h \
         library/standard/control/sinewavecontroloperator.h \
         library/standard/texture/blendoperator.h \
         library/standard/texture/cameraoperator.h \
@@ -130,6 +131,7 @@ HEADERS += \
         model/BaseDataType.hpp \
         model/BaseOperator.hpp \
         model/BaseZigZagObject.hpp \
+        model/ExecutionEngine.hpp \
         model/OperatorLibrary.hpp \
         model/clock.h \
         model/datainput.h \

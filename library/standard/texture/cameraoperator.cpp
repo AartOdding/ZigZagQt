@@ -4,9 +4,9 @@
 #include <iostream>
 
 
-BaseOperator * CameraOperator::create()
+BaseOperator * CameraOperator::create(BaseZigZagObject* parent)
 {
-    return new CameraOperator();
+    return new CameraOperator(parent);
 }
 
 
@@ -21,8 +21,8 @@ const OperatorDescription CameraOperator::description
 };
 
 
-CameraOperator::CameraOperator()
-    : BaseOperator(description)
+CameraOperator::CameraOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     capture.setCaptureDestination(QCameraImageCapture::CaptureToBuffer);
     camera.setCaptureMode(QCamera::CaptureStillImage);

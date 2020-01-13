@@ -40,15 +40,15 @@ const OperatorDescription BlendOperator::description {
 
 
 
-BaseOperator* BlendOperator::create()
+BaseOperator* BlendOperator::create(BaseZigZagObject* parent)
 {
-    return new BlendOperator();
+    return new BlendOperator(parent);
 }
 
 
 
-BlendOperator::BlendOperator()
-    : BaseOperator(description)
+BlendOperator::BlendOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
 }

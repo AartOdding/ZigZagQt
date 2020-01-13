@@ -10,8 +10,7 @@
 
 
 class BaseParameter;
-class QXmlStreamReader;
-class XmlSerializer;
+class ProjectModel;
 
 
 
@@ -36,6 +35,12 @@ public:
      */
     QObject* findObject(const QString& uniqueName);
     const QObject* findObject(const QString& uniqueName) const;
+
+    /*
+     * Will return the network this object belongs to, if any.
+     */
+    ProjectModel* network();
+    const ProjectModel* network() const;
 
     /*
      * Will return the top most object in the tree hierarchy.

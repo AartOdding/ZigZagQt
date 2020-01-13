@@ -16,7 +16,7 @@ class ColorOperator : public BaseOperator,
 
 public:
 
-    ColorOperator();
+    ColorOperator(BaseZigZagObject* parent);
 
     ~ColorOperator() override;
 
@@ -24,7 +24,7 @@ public:
     void run() override;
 
 
-    static BaseOperator* create();
+    static BaseOperator* create(BaseZigZagObject* parent);
 
     static const OperatorDescription Type;
 
@@ -40,5 +40,6 @@ private:
     //parameter::Float test3{ this, "tets"};
 
     TextureData output_texture{ this, "Output Texture" };
+    TextureView outputView{ this, &output_texture };
 
 };

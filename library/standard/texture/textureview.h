@@ -20,7 +20,7 @@ class TextureView : public OpenGLDataView
 
 public:
 
-    TextureView(BaseOperator* parent_operator);
+    TextureView(BaseOperator* parentOperator, TextureData* viewedTexture);
 
     ~TextureView() override;
 
@@ -28,7 +28,7 @@ public:
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
-    static BaseDataView* create(BaseOperator* parent_operator);
+    static BaseDataView* create(BaseOperator* m_parentOperator);
 
     static const inline DataViewTypeInfo Type { "Texture View", "Texture", DataViewGraphicsApi::OpenGL, &create };
 
@@ -42,8 +42,8 @@ private:
 
     ButtonPar open_window_button{ this, "Open in Separate Window" };
 
-    const BaseOperator* parent_operator;
-    TextureData* viewed_texture = nullptr;
+    const BaseOperator* m_parentOperator;
+    TextureData* m_viewedTexture = nullptr;
 
     QPointer<TextureViewWindow> window;
 

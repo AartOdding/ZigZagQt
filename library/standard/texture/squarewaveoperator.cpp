@@ -20,9 +20,9 @@ GLuint SquareWaveOperator::vbo;
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
-BaseOperator * SquareWaveOperator::create()
+BaseOperator * SquareWaveOperator::create(BaseZigZagObject* parent)
 {
-    return new SquareWaveOperator();
+    return new SquareWaveOperator(parent);
 }
 
 
@@ -37,8 +37,8 @@ const OperatorDescription SquareWaveOperator::description
 };
 
 
-SquareWaveOperator::SquareWaveOperator()
-    : BaseOperator(description)
+SquareWaveOperator::SquareWaveOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
     should_update = true;

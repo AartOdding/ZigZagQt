@@ -22,9 +22,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-BaseOperator * SawtoothWaveOperator::create()
+BaseOperator * SawtoothWaveOperator::create(BaseZigZagObject* parent)
 {
-    return new SawtoothWaveOperator();
+    return new SawtoothWaveOperator(parent);
 }
 
 const OperatorDescription SawtoothWaveOperator::description
@@ -49,8 +49,8 @@ const EnumDefinition SawtoothWaveOperator::WaveType
 };
 
 
-SawtoothWaveOperator::SawtoothWaveOperator()
-    : BaseOperator(description)
+SawtoothWaveOperator::SawtoothWaveOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
     should_update = true;

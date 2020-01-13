@@ -7,9 +7,9 @@
 
 
 
-BaseOperator * KinectTwoTextureOperator::create()
+BaseOperator * KinectTwoTextureOperator::create(BaseZigZagObject* parent)
 {
-    return new KinectTwoTextureOperator();
+    return new KinectTwoTextureOperator(parent);
 }
 
 const OperatorDescription KinectTwoTextureOperator::description
@@ -24,8 +24,8 @@ const OperatorDescription KinectTwoTextureOperator::description
 
 
 
-KinectTwoTextureOperator::KinectTwoTextureOperator()
-    : BaseOperator(description)
+KinectTwoTextureOperator::KinectTwoTextureOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     output_texture.set_resolution(512, 424);
     output_texture.set_num_channels(PixelNumChannelsEnum::one_channel);

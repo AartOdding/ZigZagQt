@@ -17,9 +17,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-BaseOperator* FadeOperator::create()
+BaseOperator* FadeOperator::create(BaseZigZagObject* parent)
 {
-    return new FadeOperator();
+    return new FadeOperator(parent);
 }
 
 
@@ -36,8 +36,8 @@ const OperatorDescription FadeOperator::description
 
 
 
-FadeOperator::FadeOperator()
-    : BaseOperator(description)
+FadeOperator::FadeOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
 }

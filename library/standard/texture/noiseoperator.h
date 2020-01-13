@@ -16,14 +16,14 @@ class NoiseOperator : public BaseOperator,
 
 public:
 
-    NoiseOperator();
+    NoiseOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -44,6 +44,7 @@ private:
     FloatPar z_value{ this, "Z Value", 0 };
 
     TextureData output_texture{ this, "Texture" };
+    TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

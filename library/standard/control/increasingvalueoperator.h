@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model/BaseOperator.hpp"
-#include "library/standard/control/parameterpreview.h"
+#include "library/standard/control/parameterview.h"
 
 
 
@@ -10,11 +10,11 @@ class IncreasingValueOperator : public BaseOperator
 
 public:
 
-    IncreasingValueOperator();
+    IncreasingValueOperator(BaseZigZagObject* parent);
 
     void run() override;
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 

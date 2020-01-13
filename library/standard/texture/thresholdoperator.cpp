@@ -11,9 +11,9 @@ GLuint ThresholdOperator::vbo;
 
 
 
-BaseOperator* ThresholdOperator::create()
+BaseOperator* ThresholdOperator::create(BaseZigZagObject* parent)
 {
-    return new ThresholdOperator();
+    return new ThresholdOperator(parent);
 }
 
 
@@ -29,8 +29,8 @@ const OperatorDescription ThresholdOperator::description
 
 
 
-ThresholdOperator::ThresholdOperator()
-    : BaseOperator(description)
+ThresholdOperator::ThresholdOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
 }

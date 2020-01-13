@@ -128,18 +128,3 @@ const BaseDataType* DataInput::get_connection() const
     return connection;
 }
 
-
-void DataInput::set_from_xml(QXmlStreamReader& xml)
-{
-
-}
-
-
-void DataInput::write_to_xml(XmlSerializer& xml)
-{
-    xml.begin_element("DataInput");
-    xml.add_int_attribute("id", xml.id(this));
-        //BaseParameter::write_to_xml(xml);
-        xml.add_int_element("connection", xml.id(connection));
-    xml.end_element();
-}

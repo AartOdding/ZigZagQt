@@ -17,14 +17,14 @@ class DisplacementOperator : public BaseOperator,
 
 public:
 
-    DisplacementOperator();
+    DisplacementOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator* create();
+    static BaseOperator* create(BaseZigZagObject* parent);
 
     static const OperatorDescription Type;
 
@@ -35,6 +35,7 @@ private:
 
     DataInput input_texture{ this, "Input", TextureData::Type };
     TextureData output_texture{ this, "Result" };
+    TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

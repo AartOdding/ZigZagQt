@@ -21,14 +21,14 @@ class CameraOperator : public BaseOperator,
 
 public:
 
-    CameraOperator();
+    CameraOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator * create();
+    static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -39,6 +39,7 @@ public slots:
 private:
 
     TextureData output_texture{ this, "Camera Image", false };
+    TextureView outputView{ this, &output_texture };
 
     QCamera camera;
     QCameraImageCapture capture{ &camera };

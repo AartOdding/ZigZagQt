@@ -5,9 +5,9 @@
 
 
 
-BaseOperator * SineWaveControlOperator::create()
+BaseOperator * SineWaveControlOperator::create(BaseZigZagObject* parent)
 {
-    return new SineWaveControlOperator();
+    return new SineWaveControlOperator(parent);
 }
 
 
@@ -18,12 +18,12 @@ const OperatorDescription SineWaveControlOperator::description
     &create,
     { },
     { },
-    &ParameterPreview::Type
+    &ParameterView::Type
 };
 
 
-SineWaveControlOperator::SineWaveControlOperator()
-    : BaseOperator(description)
+SineWaveControlOperator::SineWaveControlOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     output.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
     output.getComponents()[0]->setFlag(ParameterFlags::CanImport, false);

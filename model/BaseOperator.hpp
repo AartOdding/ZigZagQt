@@ -25,14 +25,14 @@ struct OperatorDescription
 
     OperatorDescription(const QString& name,
                         const QString& package,
-                        std::function<BaseOperator*()> construct,
+                        std::function<BaseOperator*(BaseZigZagObject* parent)> construct,
                         const std::vector<const DataTypeDescription*>& inputs = {},
                         const std::vector<const DataTypeDescription*>& outputs = {},
                         const DataViewTypeInfo * view = nullptr);
 
     QString name;
     QString package;
-    std::function<BaseOperator*()> construct;
+    std::function<BaseOperator*(BaseZigZagObject* parent)> construct;
     std::vector<const DataTypeDescription*> inputs;
     std::vector<const DataTypeDescription*> outputs;
     const DataViewTypeInfo * view;
@@ -64,7 +64,7 @@ class BaseOperator : public BaseZigZagObject
 
 public:
 
-    BaseOperator(const OperatorDescription& description);
+    BaseOperator(BaseZigZagObject* parent, const OperatorDescription& description);
 
     virtual ~BaseOperator() override;
 

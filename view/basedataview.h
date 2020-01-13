@@ -40,6 +40,8 @@ inline bool operator==(const DataViewTypeInfo& t1, const DataViewTypeInfo& t2)
     return t1.name == t2.name && t1.library == t2.library && t1.graphics_api == t2.graphics_api;
 }
 
+
+
 class BaseDataView : public BaseZigZagObject,
                      public QGraphicsItem
 {
@@ -50,7 +52,7 @@ public:
     BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info);
 
 
-    QRectF boundingRect() const override;
+    QRectF boundingRect() const final;
 
     void set_bounds(double x, double y, double w, double h);
 

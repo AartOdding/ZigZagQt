@@ -18,14 +18,14 @@ class FadeOperator : public BaseOperator,
 
 public:
 
-    FadeOperator();
+    FadeOperator(BaseZigZagObject* parent);
 
     void run() override;
 
     void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
-    static BaseOperator* create();
+    static BaseOperator* create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
@@ -42,6 +42,7 @@ private:
     std::array<DataInput*, 5> textures = { &texture_0, &texture_1, &texture_2, &texture_3, &texture_4 };
 
     TextureData output_texture{ this, "Result" };
+    TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

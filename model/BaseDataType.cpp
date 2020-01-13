@@ -55,7 +55,7 @@ void BaseDataType::connectTo(DataInput* data_input)
 {
     if (data_input && data_input->get_connection() != this && data_input->compatible_with(this))
     {
-        auto undo = application::project_model()->get_undo_stack();
+        auto undo = network()->get_undo_stack();
         undo->push(new ConnectCommand(this, data_input));
     }
 }

@@ -22,9 +22,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-BaseOperator * SineWaveOperator::create()
+BaseOperator * SineWaveOperator::create(BaseZigZagObject* parent)
 {
-    return new SineWaveOperator();
+    return new SineWaveOperator(parent);
 }
 
 
@@ -39,8 +39,8 @@ const OperatorDescription SineWaveOperator::description
 };
 
 
-SineWaveOperator::SineWaveOperator()
-    : BaseOperator(description)
+SineWaveOperator::SineWaveOperator(BaseZigZagObject* parent)
+    : BaseOperator(parent, description)
 {
     initializeOpenGLFunctions();
     should_update = true;

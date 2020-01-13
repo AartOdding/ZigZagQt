@@ -18,7 +18,7 @@
 
 OperatorDescription::OperatorDescription(const QString& name_,
                                          const QString& package_,
-                                         std::function<BaseOperator*()> construct_,
+                                         std::function<BaseOperator*(BaseZigZagObject* parent)> construct_,
                                          const std::vector<const DataTypeDescription*>& inputs_,
                                          const std::vector<const DataTypeDescription*>& outputs_,
                                          const DataViewTypeInfo * view_)
@@ -34,8 +34,8 @@ OperatorDescription::OperatorDescription(const QString& name_,
 
 
 
-BaseOperator::BaseOperator(const OperatorDescription& type_)
-    : BaseZigZagObject(nullptr, type_.name),
+BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorDescription& type_)
+    : BaseZigZagObject(parent, type_.name),
       m_description(&type_)
 {
 

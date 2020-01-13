@@ -71,13 +71,28 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
+    /*
+    dataViews = operator_model.findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
 
-    if (operator_model.description()->view)
+    if (dataViews.size() > 0)
     {
-        data_view = operator_model.description()->view->construct(&operator_model);
-        data_view->set_bounds(7, 7, width - 14, height - 14);
-        data_view->setParentItem(this);
-    }
+        for (auto view : dataViews)
+        {
+            view->setParentItem(this);
+            view->set_bounds(7, 7, width - 14, height - 14);
+        }
+    }*/
+}
+
+
+OperatorView::~OperatorView()
+{
+    /*
+    for (auto view : dataViews)
+    {
+        view->setParentItem(nullptr);
+        scene()->removeItem(view);
+    }*/
 }
 
 
