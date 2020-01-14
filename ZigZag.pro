@@ -22,10 +22,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++17 console
 
-INCLUDEPATH += third_party/glm
 INCLUDEPATH += src
+INCLUDEPATH += third_party/glm
+INCLUDEPATH += third_party/glfw-3.3.1/include
 
-include( third_party/phantom/phantom.pri )
 
 SOURCES += \
     src/application.cpp \
@@ -184,17 +184,22 @@ FORMS += \
     forms/mainwindow.ui \
     forms/parameterconnectionscreen.ui
 
-DISTFILES += \
-    README.md
-
 RESOURCES += \
     resources/resources.qrc
 
-win32 {
-    INCLUDEPATH += third_party/Kinect2/include
-    LIBS += -L"C:\Users\aart_\Documents\ZigZag\third_party\Kinect2\lib" -lKinect20
+
+macx: {
+    LIBS += $$PWD/third_party/glfw-3.3.1/lib/mac/libglfw3.a
 }
 
+win32 {
+    INCLUDEPATH += third_party/Kinect2/include
+    LIBS += -L"$$PWD/third_party/Kinect2/lib" -lKinect20
+}
+
+# copied december 2019
+# https://github.com/randrew/phantomstyle
+include( third_party/phantom/phantom.pri )
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
