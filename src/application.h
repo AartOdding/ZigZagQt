@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <QApplication>
+#include <QThread>
 
 #include "renderer.h"
 #include "view/viewport.h"
@@ -15,6 +16,7 @@ class Application;
 class ProjectModel;
 class ProjectScopeView;
 class NameManager;
+class ExecutionEngine;
 
 class QMainWindow;
 class QOpenGLContext;
@@ -56,6 +58,8 @@ private:
     std::unique_ptr<Renderer>         renderer;
     std::unique_ptr<ProjectModel>     project_model;
     std::unique_ptr<ProjectScopeView> project_view_model;
+    ExecutionEngine *                 m_executionEngine;
+    QThread                           m_executionThread;
 
     std::unique_ptr<Viewport> viewport;
     QOpenGLWidget * main_opengl_widget;

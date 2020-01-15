@@ -23,9 +23,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17 console
 
 INCLUDEPATH += src
-INCLUDEPATH += third_party/glm
-INCLUDEPATH += third_party/glfw-3.3.1/include
-
 
 SOURCES += \
     src/application.cpp \
@@ -188,10 +185,24 @@ RESOURCES += \
     resources/resources.qrc
 
 
-macx: {
-    LIBS += $$PWD/third_party/glfw-3.3.1/lib/mac/libglfw3.a
-}
+INCLUDEPATH += third_party/glm
 
+# glad
+INCLUDEPATH += third_party/glad/include
+
+SOURCES += third_party/glad/src/glad.c
+
+# glfw
+INCLUDEPATH += third_party/glfw-3.3.1/include
+
+#macx: {
+    #LIBS += $$PWD/third_party/glfw-3.3.1/lib/mac/libglfw3.a
+
+#}
+#LIBS += "-L/Users/aart/Documents/ZigZag/third_party/glfw-3.3.1/lib/mac" -lglfw3
+LIBS += -L$$PWD/third_party/glfw-3.3.1/lib/mac -lglfw3
+
+# kinect for xbox one
 win32 {
     INCLUDEPATH += third_party/Kinect2/include
     LIBS += -L"$$PWD/third_party/Kinect2/lib" -lKinect20

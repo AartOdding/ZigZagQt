@@ -1,4 +1,5 @@
 #include "application.h"
+#include "model/ExecutionEngine.hpp"
 #include "renderer.h"
 
 #include "model/clock.h"
@@ -133,7 +134,13 @@ Application::Application(int &argc, char **argv)
     main_window = std::make_unique<QWidget>();
     main_window->setLayout(layout);
 
+    m_executionEngine = new ExecutionEngine();
+    m_executionEngine->moveToThread(&m_executionThread);
+    connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
+    m_executionThread.start(QThread::TimeCriticalPriority);
+
     connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
+    std::cout << "GUI: " << thread() << std::endl;
 }
 
 
