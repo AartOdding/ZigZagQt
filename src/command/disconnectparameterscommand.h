@@ -32,23 +32,23 @@ public:
 
         if (qobject_cast<TriggerComponent*>(exporter))
         {
-            QObject::disconnect(exporter, qOverload<>(&BaseComponent::valueChanged),
-                                importer, qOverload<>(&BaseComponent::change));
+            QObject::disconnect(exporter, qOverload<>(&BaseComponent::exportChange),
+                                importer, qOverload<>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Int64Component*>(exporter))
         {
-            QObject::disconnect(exporter, qOverload<int64_t>(&BaseComponent::valueChanged),
-                                importer, qOverload<int64_t>(&BaseComponent::change));
+            QObject::disconnect(exporter, qOverload<int64_t>(&BaseComponent::exportChange),
+                                importer, qOverload<int64_t>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Float64Component*>(exporter))
         {
-            QObject::disconnect(exporter, qOverload<double>(&BaseComponent::valueChanged),
-                                importer, qOverload<double>(&BaseComponent::change));
+            QObject::disconnect(exporter, qOverload<double>(&BaseComponent::exportChange),
+                                importer, qOverload<double>(&BaseComponent::importChange));
         }
         else if (qobject_cast<TextComponent*>(exporter))
         {
-            QObject::disconnect(exporter, qOverload<const QString&>(&BaseComponent::valueChanged),
-                                importer, qOverload<const QString&>(&BaseComponent::change));
+            QObject::disconnect(exporter, qOverload<const QString&>(&BaseComponent::exportChange),
+                                importer, qOverload<const QString&>(&BaseComponent::importChange));
         }
 
 
@@ -74,26 +74,26 @@ public:
 
         if (qobject_cast<TriggerComponent*>(exporter))
         {
-            QObject::connect(exporter, qOverload<>(&BaseComponent::valueChanged),
-                             importer, qOverload<>(&BaseComponent::change));
+            QObject::connect(exporter, qOverload<>(&BaseComponent::exportChange),
+                             importer, qOverload<>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Int64Component*>(exporter))
         {
-            QObject::connect(exporter, qOverload<int64_t>(&BaseComponent::valueChanged),
-                             importer, qOverload<int64_t>(&BaseComponent::change));
-            importer->change(static_cast<Int64Component*>(exporter)->getValue());
+            QObject::connect(exporter, qOverload<int64_t>(&BaseComponent::exportChange),
+                             importer, qOverload<int64_t>(&BaseComponent::importChange));
+            importer->importChange(static_cast<Int64Component*>(exporter)->getValue());
         }
         else if (qobject_cast<Float64Component*>(exporter))
         {
-            QObject::connect(exporter, qOverload<double>(&BaseComponent::valueChanged),
-                             importer, qOverload<double>(&BaseComponent::change));
-            importer->change(static_cast<Float64Component*>(exporter)->getValue());
+            QObject::connect(exporter, qOverload<double>(&BaseComponent::exportChange),
+                             importer, qOverload<double>(&BaseComponent::importChange));
+            importer->importChange(static_cast<Float64Component*>(exporter)->getValue());
         }
         else if (qobject_cast<TextComponent*>(exporter))
         {
-            QObject::connect(exporter, qOverload<const QString&>(&BaseComponent::valueChanged),
-                             importer, qOverload<const QString&>(&BaseComponent::change));
-            importer->change(static_cast<TextComponent*>(exporter)->getText());
+            QObject::connect(exporter, qOverload<const QString&>(&BaseComponent::exportChange),
+                             importer, qOverload<const QString&>(&BaseComponent::importChange));
+            importer->importChange(static_cast<TextComponent*>(exporter)->getText());
         }
 
         // Add the parameters to their parent's list of importing/ exporting parameters.

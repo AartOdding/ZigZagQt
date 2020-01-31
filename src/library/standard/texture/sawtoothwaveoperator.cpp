@@ -33,20 +33,10 @@ const OperatorDescription SawtoothWaveOperator::description
     "Video Synthesis",
     &create,
     { },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type
 };
 
-
-const EnumDefinition SawtoothWaveOperator::WaveType
-{
-    "Wave Type",
-    {
-        "Flat",
-        "Radial",
-        "Concentric"
-    }
-};
 
 
 SawtoothWaveOperator::SawtoothWaveOperator(BaseZigZagObject* parent)
@@ -117,7 +107,7 @@ void SawtoothWaveOperator::run()
     {
         auto shader = shaders[wave_type.getIndex()];
 
-        output_texture.bind_as_framebuffer();
+        output_texture.bindFramebuffer();
 
         glUseProgram(shader->programId());
         glBindVertexArray(vao);
@@ -141,13 +131,13 @@ void SawtoothWaveOperator::run()
         }
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        update_view();
+        updateView();
         should_update = false;
     }
 }
 
 
-void SawtoothWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
+void SawtoothWaveOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

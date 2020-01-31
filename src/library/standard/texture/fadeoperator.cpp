@@ -28,8 +28,8 @@ const OperatorDescription FadeOperator::description
     "Fade",
     "Video Edit",
     &create,
-    { &TextureData::Type, &TextureData::Type },
-    { &TextureData::Type },
+    { &TextureData::description, &TextureData::description },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -84,14 +84,14 @@ void FadeOperator::run()
     const TextureData* tex_a = static_cast<const TextureData*>(textures[index_a]->get_connection());
     const TextureData* tex_b = static_cast<const TextureData*>(textures[index_b]->get_connection());
 
-    output_texture.bind_as_framebuffer();
+    output_texture.bindFramebuffer();
     glUseProgram(shader.programId());
     glBindVertexArray(vao);
     shader.setUniformValue(shader.uniformLocation("fade_position"), fract);
 
     if (tex_a)
     {
-        tex_a->bind_as_texture(0);
+        tex_a->bindTexture(0);
     }
     else
     {
@@ -100,7 +100,7 @@ void FadeOperator::run()
 
     if (tex_b)
     {
-        tex_b->bind_as_texture(1);
+        tex_b->bindTexture(1);
     }
     else
     {
@@ -108,11 +108,11 @@ void FadeOperator::run()
     }
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    update_view();
+    updateView();
 }
 
 
-void FadeOperator::parameterChangeEvent(const BaseParameter* parameter)
+void FadeOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

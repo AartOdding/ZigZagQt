@@ -1,4 +1,4 @@
-#include "projectmodel.h"
+#include "OperatorNetwork.hpp"
 #include "application.h"
 #include <utility/Serializer.hpp>
 
@@ -19,39 +19,41 @@
 
 
 
-ProjectModel::ProjectModel()
-    : BaseZigZagObject(nullptr, QString())
+OperatorNetwork::OperatorNetwork(const QString& name)
+    : BaseZigZagObject(nullptr, name)
 { }
 
 
-QUndoStack* ProjectModel::get_undo_stack()
+QUndoStack* OperatorNetwork::get_undo_stack()
 {
     return &undo_stack;
 }
 
 
-void ProjectModel::redo()
+void OperatorNetwork::redo()
 {
     undo_stack.redo();
 }
 
 
-void ProjectModel::undo()
+void OperatorNetwork::undo()
 {
     undo_stack.undo();
 }
 
 
-void ProjectModel::add_operator(const OperatorDescription& op_type, int x, int y)
+void OperatorNetwork::add_operator(const OperatorDescription* op_type, int x, int y)
 {
-    auto op = op_type.construct(this);
-    op->set_position(x, y);
-
-    undo_stack.push(new AddCommand(*this, op));
+    if (op_type)
+    {
+        auto op = op_type->construct(this);
+        op->set_position(x, y);
+        undo_stack.push(new AddCommand(*this, op));
+    }
 }
 
 
-void ProjectModel::remove_operator(BaseOperator * operator_ptr)
+void OperatorNetwork::remove_operator(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -75,7 +77,7 @@ void ProjectModel::remove_operator(BaseOperator * operator_ptr)
 }
 
 
-void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
+void OperatorNetwork::add_operator_to_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -117,7 +119,7 @@ void ProjectModel::add_operator_to_model(BaseOperator * operator_ptr)
 }
 
 
-void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
+void OperatorNetwork::remove_operator_from_model(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -139,27 +141,27 @@ void ProjectModel::remove_operator_from_model(BaseOperator * operator_ptr)
 }
 
 
-const std::vector<BaseOperator*>& ProjectModel::all_operators() const
+const std::vector<BaseOperator*>& OperatorNetwork::all_operators() const
 {
     return operators;
 }
 
 
-void ProjectModel::loadState(const QVariantMap&)
+void OperatorNetwork::loadState(const QVariantMap&)
 {
 
 }
 
 
 
-QVariantMap ProjectModel::storeState() const
+QVariantMap OperatorNetwork::storeState() const
 {
-
+    return QVariantMap();
 }
 
 
 
-void ProjectModel::createChild(const QXmlStreamAttributes&)
+void OperatorNetwork::createChild(const QXmlStreamAttributes&)
 {
 
 }

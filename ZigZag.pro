@@ -50,9 +50,9 @@ SOURCES += \
     src/model/BaseZigZagObject.cpp \
     src/model/ExecutionEngine.cpp \
     src/model/OperatorLibrary.cpp \
+    src/model/OperatorNetwork.cpp \
     src/model/clock.cpp \
     src/model/datainput.cpp \
-    src/model/enumdefinition.cpp \
     src/model/parameter/BaseComponent.cpp \
     src/model/parameter/BaseParameter.cpp \
     src/model/parameter/ButtonParameter.cpp \
@@ -62,35 +62,34 @@ SOURCES += \
     src/model/parameter/FloatParameter.cpp \
     src/model/parameter/Int64Component.cpp \
     src/model/parameter/IntParameter.cpp \
+    src/model/parameter/ParameterFlags.cpp \
     src/model/parameter/TextComponent.cpp \
     src/model/parameter/Transform2DParameter.cpp \
     src/model/parameter/TriggerComponent.cpp \
-    src/model/projectmodel.cpp \
-    src/model/projectscope.cpp \
     src/utility/Deserializer.cpp \
     src/utility/Serializer.cpp \
     src/view/BaseConnector.cpp \
     src/view/ConnectionManager.cpp \
     src/view/DataConnector.cpp \
+    src/view/OperatorNetworkView.cpp \
+    src/view/OperatorSelectorDialog.cpp \
     src/view/ParameterConnector.cpp \
     src/view/PopupWindow.cpp \
+    src/view/Viewport.cpp \
     src/view/basedataview.cpp \
     src/view/cable.cpp \
     src/view/connection/ConnectionEditor.cpp \
     src/view/connection/ConnectionTreeView.cpp \
     src/view/opengldataview.cpp \
     src/view/operatornametag.cpp \
-    src/view/operatorselectordialog.cpp \
     src/view/operatorview.cpp \
-    src/view/parameter/buttonparameterbox.cpp \
-    src/view/parameter/doubleparameterbox.cpp \
-    src/view/parameter/enumwidget.cpp \
-    src/view/parameter/int64parameterbox.cpp \
+    src/view/parameter/ButtonParameterWidget.cpp \
+    src/view/parameter/DoubleParameterWidget.cpp \
+    src/view/parameter/EnumParameterWidget.cpp \
+    src/view/parameter/IntParameterWidget.cpp \
+    src/view/parameter/Transform2DParameterWidget.cpp \
     src/view/parameter/parametereditor.cpp \
     src/view/parameter/parametergroup.cpp \
-    src/view/parameter/transform2dwidget.cpp \
-    src/view/projectscopeview.cpp \
-    src/view/viewport.cpp \
     src/main.cpp \
     src/renderer.cpp
 
@@ -127,10 +126,9 @@ HEADERS += \
     src/model/BaseZigZagObject.hpp \
     src/model/ExecutionEngine.hpp \
     src/model/OperatorLibrary.hpp \
+    src/model/OperatorNetwork.hpp \
     src/model/clock.h \
     src/model/datainput.h \
-    src/model/enumdefinition.h \
-    src/model/namemanager.h \
     src/model/parameter/BaseComponent.hpp \
     src/model/parameter/BaseParameter.hpp \
     src/model/parameter/ButtonParameter.hpp \
@@ -140,11 +138,10 @@ HEADERS += \
     src/model/parameter/FloatParameter.hpp \
     src/model/parameter/Int64Component.hpp \
     src/model/parameter/IntParameter.hpp \
+    src/model/parameter/ParameterFlags.hpp \
     src/model/parameter/TextComponent.hpp \
     src/model/parameter/Transform2DParameter.hpp \
     src/model/parameter/TriggerComponent.hpp \
-    src/model/projectmodel.h \
-    src/model/projectscope.h \
     src/utility/Deserializer.hpp \
     src/utility/Serializer.hpp \
     src/utility/fpsmonitor.h \
@@ -155,31 +152,32 @@ HEADERS += \
     src/view/BaseConnector.hpp \
     src/view/ConnectionManager.hpp \
     src/view/DataConnector.hpp \
+    src/view/OperatorNetworkView.hpp \
+    src/view/OperatorSelectorDialog.hpp \
     src/view/ParameterConnector.hpp \
     src/view/PopupWindow.hpp \
+    src/view/Viewport.hpp \
     src/view/basedataview.h \
     src/view/cable.h \
     src/view/connection/ConnectionEditor.hpp \
     src/view/connection/ConnectionTreeView.hpp \
     src/view/opengldataview.h \
     src/view/operatornametag.h \
-    src/view/operatorselectordialog.h \
     src/view/operatorview.h \
-    src/view/parameter/buttonparameterbox.h \
-    src/view/parameter/doubleparameterbox.h \
-    src/view/parameter/enumwidget.h \
-    src/view/parameter/int64parameterbox.h \
+    src/view/parameter/ButtonParameterWidget.hpp \
+    src/view/parameter/DoubleParameterWidget.hpp \
+    src/view/parameter/EnumParameterWidget.hpp \
+    src/view/parameter/IntParameterWidget.hpp \
+    src/view/parameter/Transform2DParameterWidget.hpp \
     src/view/parameter/parametereditor.h \
     src/view/parameter/parametergroup.h \
-    src/view/parameter/transform2dwidget.h \
-    src/view/projectscopeview.h \
-    src/view/viewport.h \
     src/renderer.h
 
 FORMS += \
     forms/librarydialogpanel.ui \
     forms/mainwindow.ui \
-    forms/parameterconnectionscreen.ui
+    forms/parameterconnectionscreen.ui \
+    forms/transform2dparameterwidget.ui
 
 RESOURCES += \
     resources/resources.qrc
@@ -187,20 +185,6 @@ RESOURCES += \
 
 INCLUDEPATH += third_party/glm
 
-# glad
-INCLUDEPATH += third_party/glad/include
-
-SOURCES += third_party/glad/src/glad.c
-
-# glfw
-INCLUDEPATH += third_party/glfw-3.3.1/include
-
-#macx: {
-    #LIBS += $$PWD/third_party/glfw-3.3.1/lib/mac/libglfw3.a
-
-#}
-#LIBS += "-L/Users/aart/Documents/ZigZag/third_party/glfw-3.3.1/lib/mac" -lglfw3
-LIBS += -L$$PWD/third_party/glfw-3.3.1/lib/mac -lglfw3
 
 # kinect for xbox one
 win32 {

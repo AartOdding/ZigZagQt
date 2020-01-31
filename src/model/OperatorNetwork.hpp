@@ -9,12 +9,12 @@
 #include "model/OperatorLibrary.hpp"
 
 
-class ProjectModel;
+class OperatorNetwork;
 class BaseOperator;
 
 
 
-class ProjectModel : public BaseZigZagObject
+class OperatorNetwork : public BaseZigZagObject
 {
     Q_OBJECT
 
@@ -23,7 +23,7 @@ class ProjectModel : public BaseZigZagObject
 
 public:
 
-    ProjectModel();
+    OperatorNetwork(const QString& name);
 
     QUndoStack* get_undo_stack();
 
@@ -44,7 +44,7 @@ public slots:
     void undo();
 
     // Undoable action
-    void add_operator(const OperatorDescription& op_type, int x, int y);
+    void add_operator(const OperatorDescription* op_type, int x, int y);
 
     // Undoable action
     void remove_operator(BaseOperator* operator_ptr);

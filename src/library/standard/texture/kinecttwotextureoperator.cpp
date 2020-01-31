@@ -18,7 +18,7 @@ const OperatorDescription KinectTwoTextureOperator::description
     "Texture",
     &create,
     {  },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type,
 };
 
@@ -27,9 +27,9 @@ const OperatorDescription KinectTwoTextureOperator::description
 KinectTwoTextureOperator::KinectTwoTextureOperator(BaseZigZagObject* parent)
     : BaseOperator(parent, description)
 {
-    output_texture.set_resolution(512, 424);
-    output_texture.set_num_channels(PixelNumChannelsEnum::one_channel);
-    output_texture.set_format(PixelDataFormatEnum::unsigned_norm_8bit);
+    output_texture.setResolution(512, 424);
+    output_texture.setNumChannels(TextureData::OneChannel);
+    output_texture.setPixelFormat(TextureData::Normalized8Bit);
 
 #ifdef Q_OS_WIN
     if (FAILED(GetDefaultKinectSensor(&kinect))) return;
@@ -120,7 +120,7 @@ void KinectTwoTextureOperator::run()
 }
 
 
-void KinectTwoTextureOperator::parameterChangeEvent(const BaseParameter* parameter)
+void KinectTwoTextureOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

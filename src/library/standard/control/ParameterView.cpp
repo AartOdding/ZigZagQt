@@ -24,13 +24,13 @@ ParameterView::ParameterView(BaseOperator* parent_operator, const BaseComponent*
             if (qobject_cast<const Int64Component*>(m_viewedComponent))
             {
                 is_int = true;
-                QObject::connect(m_viewedComponent, qOverload<int64_t>(&BaseComponent::valueChanged),
+                QObject::connect(m_viewedComponent, qOverload<int64_t>(&BaseComponent::exportChange),
                             this, &ParameterView::onValueChangedInt);
             }
             if (qobject_cast<const Float64Component*>(m_viewedComponent))
             {
                 is_int = false;
-                QObject::connect(m_viewedComponent, qOverload<double>(&BaseComponent::valueChanged),
+                QObject::connect(m_viewedComponent, qOverload<double>(&BaseComponent::exportChange),
                             this, &ParameterView::onValueChangedDouble);
             }
         }

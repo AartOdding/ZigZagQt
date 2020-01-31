@@ -3,8 +3,8 @@
 #include "renderer.h"
 
 #include "model/clock.h"
-#include "model/projectmodel.h"
-#include "view/projectscopeview.h"
+#include "model/OperatorNetwork.hpp"
+#include "view/OperatorNetworkView.hpp"
 
 #include <QStyle>
 #include <QStyleFactory>
@@ -25,11 +25,6 @@ namespace application
         return qobject_cast<Application *>(QApplication::instance());
     }
 
-    NameManager * name_manager()
-    {
-        return instance()->get_name_manager();
-    }
-
     Clock * clock()
     {
         return instance()->get_clock();
@@ -40,12 +35,17 @@ namespace application
         return instance()->get_renderer();
     }
 
-    ProjectModel * project_model()
+    OperatorNetwork * project_model()
     {
         return instance()->get_project_model();
     }
 
-    ProjectScopeView * project_view_model()
+    ParameterEditor* parameterEditor()
+    {
+        return instance()->getParameterEditor();
+    }
+
+    OperatorNetworkView * project_view_model()
     {
         return instance()->get_project_view_model();
     }
@@ -76,13 +76,14 @@ Application::Application(int &argc, char **argv)
     std::cout << QFontDatabase::applicationFontFamilies(open_sans_semi).at(0).toStdString() << "\n";
     std::cout << QFontDatabase::applicationFontFamilies(montserrat).at(0).toStdString() << "\n";
 
+    connect(this, &QCoreApplication::aboutToQuit, this, &Application::onShutdown);
+
     clock = std::make_unique<Clock>();
 
-    // greenish color: { 205, 255, 0 }
 
-    project_model = std::make_unique<ProjectModel>();
+    project_model = std::make_unique<OperatorNetwork>("project");
 
-    project_view_model = std::make_unique<ProjectScopeView>();
+    project_view_model = std::make_unique<OperatorNetworkView>();
     project_view_model->set_model(project_model.get());
 
 
@@ -93,14 +94,13 @@ Application::Application(int &argc, char **argv)
 
     main_opengl_widget = new QOpenGLWidget();
     viewport = std::make_unique<Viewport>(main_opengl_widget);
+    viewport->setScene(project_view_model.get());
     auto context = main_opengl_widget->context();
     main_opengl_widget->doneCurrent();
 
     renderer = std::make_unique<Renderer>(main_opengl_widget);
 
     //viewport->
-
-    viewport->set_view(project_view_model.get());
 
     renderer->set_model(project_model.get());
     std::cout << "renderer" << renderer << "\n";
@@ -127,26 +127,29 @@ Application::Application(int &argc, char **argv)
     menu_bar->addAction(edit_menu->menuAction());
     menu_bar->addAction(view_menu->menuAction());
 
-
     viewport->show();
 
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
     main_window = std::make_unique<QWidget>();
     main_window->setLayout(layout);
 
-    m_executionEngine = new ExecutionEngine();
-    m_executionEngine->moveToThread(&m_executionThread);
+    m_executionEngine = new ExecutionEngine(project_model.get());
+    //m_executionEngine->moveToThread(&m_executionThread);
     connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
-    m_executionThread.start(QThread::TimeCriticalPriority);
+    //m_executionThread.start(QThread::TimeCriticalPriority);
+
+    parameterEditor = std::make_unique<ParameterEditor>();
+    parameterEditor->setScene(project_view_model.get());
 
     connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
     std::cout << "GUI: " << thread() << std::endl;
 }
 
 
-NameManager * Application::get_name_manager()
+void Application::onShutdown()
 {
-    return nullptr;
+    m_executionThread.quit();
+    m_executionThread.wait();
 }
 
 
@@ -161,14 +164,18 @@ Renderer * Application::get_renderer()
     return renderer.get();
 }
 
+ParameterEditor * Application::getParameterEditor()
+{
+    return parameterEditor.get();
+}
 
-ProjectModel * Application::get_project_model()
+OperatorNetwork * Application::get_project_model()
 {
     return project_model.get();
 }
 
 
-ProjectScopeView * Application::get_project_view_model()
+OperatorNetworkView * Application::get_project_view_model()
 {
     return project_view_model.get();
 }

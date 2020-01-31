@@ -33,7 +33,7 @@ void IncreasingValueOperator::run()
 }
 
 
-void IncreasingValueOperator::parameterChangeEvent(const BaseParameter * parameter)
+void IncreasingValueOperator::parameterChangedEvent(const BaseParameter * parameter)
 {
     if (parameter == &reset)
     {
@@ -49,5 +49,5 @@ void IncreasingValueOperator::recalculate()
     double increase = dt * speed.get();
     value.set(value.get() + increase);
     last_frame_time = time_now;
-    update_view();
+    updateView();
 }

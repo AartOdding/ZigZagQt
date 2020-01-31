@@ -25,10 +25,10 @@ const OperatorDescription SineWaveControlOperator::description
 SineWaveControlOperator::SineWaveControlOperator(BaseZigZagObject* parent)
     : BaseOperator(parent, description)
 {
-    output.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    output.getComponents()[0]->setFlag(ParameterFlags::CanImport, false);
-    input.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    input.getComponents()[0]->setFlag(ParameterFlags::IsVisible, false);
+    output.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    output.getComponents()[0]->setFlag(ParameterFlag::CanImport, false);
+    input.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    input.getComponents()[0]->setFlag(ParameterFlag::IsVisible, false);
 }
 
 
@@ -46,5 +46,5 @@ void SineWaveControlOperator::run()
     }
 
     output.set(amplitude.get() * std::sin(val / period.get()) + offset.get());
-    update_view();
+    updateView();
 }

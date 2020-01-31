@@ -31,7 +31,7 @@ const OperatorDescription NoiseOperator::description
     "Video Synthesis",
     &create,
     { },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type,
 };
 
@@ -78,7 +78,7 @@ void NoiseOperator::run()
 
     if (should_update)
     {
-        output_texture.bind_as_framebuffer();
+        output_texture.bindFramebuffer();
 
         glUseProgram(shader.programId());
         glBindVertexArray(vao);
@@ -96,12 +96,12 @@ void NoiseOperator::run()
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         should_update = false;
-        update_view();
+        updateView();
     }
 }
 
 
-void NoiseOperator::parameterChangeEvent(const BaseParameter* parameter)
+void NoiseOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

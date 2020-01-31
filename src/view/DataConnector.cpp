@@ -3,7 +3,7 @@
 #include "model/datainput.h"
 #include "model/BaseDataType.hpp"
 
-#include "view/projectscopeview.h"
+#include "view/OperatorNetworkView.hpp"
 #include "view/operatorview.h"
 
 #include "application.h"

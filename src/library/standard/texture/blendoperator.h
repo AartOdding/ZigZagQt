@@ -23,24 +23,25 @@ public:
 
     void run() override;
 
-    void parameterChangeEvent(const BaseParameter* parameter) override;
+    void parameterChangedEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator* create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
 
-    static const EnumDefinition BlendMode;
-
 private:
 
-    EnumParameter blend_mode{ this, "Blend Mode", BlendMode, 0 };
+    EnumParameter m_blendMode{ this, QStringLiteral("Blend Mode"), {
+          QStringLiteral("Over"), QStringLiteral("Add"), QStringLiteral("Subtract"),
+          QStringLiteral("Multiply"), QStringLiteral("Divide"), QStringLiteral("Average"),
+          QStringLiteral("Difference"), }, 0 };
 
-    DataInput texture_a{ this, "Texture in 0", TextureData::Type };
-    DataInput texture_b{ this, "Texture in 1", TextureData::Type };
+    DataInput m_textureA{ this, QStringLiteral("Texture 0"), TextureData::description };
+    DataInput m_textureB{ this, QStringLiteral("Texture 1"), TextureData::description };
 
-    TextureData output_texture{ this, "Output Texture" };
-    TextureView outputView{ this, &output_texture };
+    TextureData m_outputTexture{ this, "Output Texture" };
+    TextureView m_outputView{ this, &m_outputTexture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

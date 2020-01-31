@@ -18,7 +18,7 @@ class ParameterEditor : public QWidget
 
 public:
 
-    ParameterEditor(Viewport* viewport);
+    ParameterEditor(QWidget* parent = nullptr);
 
     void setScene(QGraphicsScene* scene);
 

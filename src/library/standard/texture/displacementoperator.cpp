@@ -27,8 +27,8 @@ const OperatorDescription DisplacementOperator::Type
     "Displace",
     "Video Edit",
     &create,
-    { &TextureData::Type, &TextureData::Type },
-    { &TextureData::Type },
+    { &TextureData::description, &TextureData::description },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -105,7 +105,7 @@ void DisplacementOperator::run()
 }
 
 
-void DisplacementOperator::parameterChangeEvent(const BaseParameter* parameter)
+void DisplacementOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

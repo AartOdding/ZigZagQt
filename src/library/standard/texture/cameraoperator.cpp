@@ -16,7 +16,7 @@ const OperatorDescription CameraOperator::description
     "Texture",
     &create,
     { },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -46,7 +46,7 @@ CameraOperator::CameraOperator(BaseZigZagObject* parent)
         std::cout << size.width() << " " << size.height() << "\n";
     }
 
-    std::cout << "\codecs: \n";
+    std::cout << "\ncodecs: \n";
     for (auto codec : capture.supportedImageCodecs())
     {
         std::cout << codec.toStdString() << "\n";
@@ -60,9 +60,9 @@ void CameraOperator::run()
 {
     if (has_frame)
     {
-        if (output_texture.get_resolution_x() != last_frame.width() || output_texture.get_resolution_y() != last_frame.height())
+        if (output_texture.getWidth() != last_frame.width() || output_texture.getHeight() != last_frame.height())
         {
-            output_texture.set_resolution(last_frame.width(), last_frame.height());
+            output_texture.setResolution(last_frame.width(), last_frame.height());
         }
         if (last_frame.pixelFormat() == QVideoFrame::Format_RGB32 || last_frame.pixelFormat() == QVideoFrame::Format_ARGB32)
         {
@@ -78,8 +78,8 @@ void CameraOperator::run()
                 rgb.push_back(raw[i+2]);
             }
             std::cout << "came frame\n";
-            output_texture.upload_data(PixelNumChannelsEnum::three_channels, PixelDataFormatEnum::unsigned_int_8bit, rgb.data());
-            update_view();
+            output_texture.uploadPixels(TextureData::ThreeChannels, TextureData::Normalized8Bit, rgb.data());
+            updateView();
         }
         has_frame = false;
     }
@@ -95,7 +95,7 @@ void CameraOperator::on_image_captured(int, const QVideoFrame& buffer)
     has_frame = true;
 }
 
-void CameraOperator::parameterChangeEvent(const BaseParameter* parameter)
+void CameraOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

@@ -25,9 +25,9 @@ public slots:
     // Will return true if the component's value changed.
     bool setText(const QString& text, bool overwritePendingChanges = true);
 
-    void change(int64_t value) override;
-    void change(double value) override;
-    void change(const QString& value) override;
+    void importChange(int64_t value) override;
+    void importChange(double value) override;
+    void importChange(const QString& value) override;
 
 private:
 

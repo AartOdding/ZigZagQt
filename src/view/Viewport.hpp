@@ -3,13 +3,9 @@
 #include <QAction>
 #include <QGraphicsView>
 
-#include "view/parameter/parametereditor.h"
-#include "view/connection/ConnectionEditor.hpp"
-
 
 class QOpenGLWidget;
-class ProjectScopeView;
-struct OperatorDescription;
+
 
 
 class Viewport : public QGraphicsView
@@ -20,20 +16,12 @@ public:
 
     Viewport(QOpenGLWidget* gl, QWidget* parent = nullptr);
 
-    void set_view(ProjectScopeView* view_model /* , ProgramScope scope */);
-
 protected:
-
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-
     void wheelEvent(QWheelEvent *event) override;
-
-    void resizeEvent(QResizeEvent *event) override;
-    void moveEvent(QMoveEvent* event) override;
 
 public slots:
 
@@ -42,26 +30,15 @@ public slots:
     void resetZoom();
     void zoomDegrees(int degrees);
 
-    void on_operator_requested(const OperatorDescription* op_type, const QPointF& where);
-
-
 private:
-
-    /* actions */
 
     QAction m_zoomInAction{ "Zoom In", this };
     QAction m_zoomOutAction{ "Zoom Out", this };
     QAction m_resetZoomAction{ "Reset Zoom", this };
 
-    /* member variables */
-
-    ProjectScopeView* view_model;
-    ParameterEditor parameter_editor;
-
     double m_currentZoomLevel = 1.0;
 
-    /* configuration */
-
+    // Behaviour configuration:
     double m_zoomFactor = 1.2;
     double m_zoomFactorDegree = 1.012;
 

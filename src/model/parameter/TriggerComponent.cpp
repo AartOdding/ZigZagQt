@@ -16,32 +16,32 @@ bool TriggerComponent::update()
     if (m_triggerReceived)
     {
         m_triggerReceived = false;
-        emit valueChanged();
+        emit exportChange();
         return true;
     }
     return false;
 }
 
 
-void TriggerComponent::change()
+void TriggerComponent::importChange()
 {
     m_triggerReceived = true;
 }
 
 
-void TriggerComponent::change(int64_t)
+void TriggerComponent::importChange(int64_t)
 {
     m_triggerReceived = true;
 }
 
 
-void TriggerComponent::change(double)
+void TriggerComponent::importChange(double)
 {
     m_triggerReceived = true;
 }
 
 
-void TriggerComponent::change(const QString&)
+void TriggerComponent::importChange(const QString&)
 {
     m_triggerReceived = true;
 }

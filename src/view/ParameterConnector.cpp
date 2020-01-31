@@ -5,7 +5,7 @@
 #include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 #include "model/BaseDataType.hpp"
-#include "view/projectscopeview.h"
+#include "view/OperatorNetworkView.hpp"
 #include "view/PopupWindow.hpp"
 #include "view/connection/ConnectionEditor.hpp"
 

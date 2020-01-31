@@ -1,37 +1,23 @@
-#include <QMoveEvent>
 #include <QWheelEvent>
+#include <QOpenGLWidget>
 
-#include <iostream>
 #include <cmath>
 
-#include "application.h"
-#include "model/BaseOperator.hpp"
-#include "model/projectmodel.h"
-#include "projectscopeview.h"
-#include "operatorselectordialog.h"
-#include "viewport.h"
-
+#include "Viewport.hpp"
 
 
 
 
 Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
-    : QGraphicsView(parent),
-      parameter_editor(this)
+    : QGraphicsView(parent)
 {
-    //setViewport(&gl_widget);
+    setViewport(gl);
+
     setDragMode(QGraphicsView::ScrollHandDrag);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeAnchor(QGraphicsView::AnchorViewCenter);
-    setViewport(gl);
     setRenderHint(QPainter::Antialiasing);
-
-    parameter_editor.move(width() - 260, 100);
-    parameter_editor.resize(250, 300);
-
-    parameter_editor.move(width() - 560, 400);
-    parameter_editor.resize(250, 300);
 
     viewport()->setCursor(Qt::ArrowCursor);
 
@@ -53,17 +39,6 @@ Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
     insertAction(nullptr, &m_zoomInAction);
     insertAction(nullptr, &m_zoomOutAction);
     insertAction(nullptr, &m_resetZoomAction);
-}
-
-
-void Viewport::set_view(ProjectScopeView* view_mdl /* , ProgramScope scope */)
-{
-    view_model = view_mdl;
-    setScene(view_model);
-    parameter_editor.setScene(view_model);
-
-    //connect(view_model, &ProjectSurface::focus_operator_changed,
-           // &parameter_editor, &ParameterEditor::on_focus_operator_changed);
 }
 
 
@@ -126,39 +101,9 @@ void Viewport::zoomDegrees(int degrees)
 }
 
 
-void Viewport::wheelEvent(QWheelEvent *event)
-{
-    zoomDegrees(event->angleDelta().y() / 8);
-}
-
-
-void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    QGraphicsView::mouseDoubleClickEvent(event);
-    auto dialog = new OperatorSelectorDialog{ this, mapToScene(event->pos()) };
-    auto x = event->screenPos().x() - dialog->size().width() / 2;
-    auto y = event->screenPos().y() - 100;
-    dialog->move(x, y);
-    connect(dialog, &OperatorSelectorDialog::operator_requested, this, &Viewport::on_operator_requested);
-    dialog->show();
-}
-
-
-
-void Viewport::on_operator_requested(const OperatorDescription* op_type, const QPointF& where)
-{
-    std::cout << "succes: " << op_type->name.toStdString() << "\n";
-    std::cout << application::project_model() << "\n";
-    application::project_model()->add_operator(*op_type, where.x(), where.y());
-}
-
-
 void Viewport::mousePressEvent(QMouseEvent *event)
 {
-    event->setAccepted(false);
-
     QGraphicsView::mousePressEvent(event);
-
     viewport()->setCursor(Qt::ArrowCursor);
 }
 
@@ -177,14 +122,8 @@ void Viewport::mouseReleaseEvent(QMouseEvent *event)
 }
 
 
-void Viewport::resizeEvent(QResizeEvent *event)
+void Viewport::wheelEvent(QWheelEvent *event)
 {
-    QGraphicsView::resizeEvent(event);
+    zoomDegrees(event->angleDelta().y() / 8);
 }
 
-
-void Viewport::moveEvent(QMoveEvent* event)
-{
-    auto movement = event->pos() - event->oldPos();
-    parameter_editor.move(parameter_editor.pos() + movement);
-}

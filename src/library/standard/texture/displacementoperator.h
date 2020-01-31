@@ -21,7 +21,7 @@ public:
 
     void run() override;
 
-    void parameterChangeEvent(const BaseParameter* parameter) override;
+    void parameterChangedEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator* create(BaseZigZagObject* parent);
@@ -33,7 +33,7 @@ private:
     FloatParameter direction{ this, "Direction", 0 };
     FloatParameter amount{ this, "Amount", 0 };
 
-    DataInput input_texture{ this, "Input", TextureData::Type };
+    DataInput input_texture{ this, "Input", TextureData::description };
     TextureData output_texture{ this, "Result" };
     TextureView outputView{ this, &output_texture };
 

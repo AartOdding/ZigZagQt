@@ -28,13 +28,9 @@ public:
 
 private:
 
-    QGraphicsScene * m_model = nullptr;
-
     QHBoxLayout m_treeWidgetsLayout{ this };
     QTreeWidget m_treeWidgetLeft{ this };
     QTreeWidget m_treeWidgetRight{ this };
-
-    QWheelEvent* lastForwardedWheelEvent = nullptr;
 
 };
 

@@ -16,7 +16,7 @@ class ParameterConnector;
 class DataInput;
 class BaseDataType;
 class BaseDataView;
-class ProjectScopeView;
+class OperatorNetworkView;
 
 
 
@@ -37,7 +37,7 @@ public:
 
     BaseOperator& operator_model;
 
-    ProjectScopeView * scope_view();
+    OperatorNetworkView * scope_view();
 
     DataConnector* data_connector_in(const DataInput* input);
     DataConnector* data_connector_out(const BaseDataType* output);

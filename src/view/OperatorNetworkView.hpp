@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 
 #include "ConnectionManager.hpp"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 
 
 class BaseOperator;
@@ -20,16 +20,17 @@ class ParameterOwner;
 class BaseComponent;
 
 
-class ProjectScopeView : public QGraphicsScene,
-                         public ConnectionManager
+
+class OperatorNetworkView : public QGraphicsScene,
+                            public ConnectionManager
 {
     Q_OBJECT
 
 public:
 
-    ProjectScopeView(QObject *parent = nullptr);
+    OperatorNetworkView(QObject *parent = nullptr);
 
-    void set_model(ProjectModel* program);
+    void set_model(OperatorNetwork* program);
 
     void bring_to_front(OperatorView* op);
 
@@ -48,13 +49,15 @@ public slots:
 
 protected:
 
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
 
 
 private:
 
-    ProjectModel* data_model;
+    OperatorNetwork* data_model;
     // need to have a separate scene for every scope, we can then switch scenes, when viewing different scopes
     // HashMap<Scope, Scene> scenes
     QHash<BaseOperator*, OperatorView*> operator_views;

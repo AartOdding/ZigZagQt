@@ -20,7 +20,7 @@ public:
 
     void run() override;
 
-    void parameterChangeEvent(const BaseParameter* parameter) override;
+    void parameterChangedEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator* create(BaseZigZagObject* parent);
@@ -29,7 +29,7 @@ public:
 
 private:
 
-    DataInput texture_in{ this, "Input", TextureData::Type };
+    DataInput texture_in{ this, "Input", TextureData::description };
 
     TextureData output_texture{ this, "Output Texture" };
     TextureView outputView{ this, &output_texture };

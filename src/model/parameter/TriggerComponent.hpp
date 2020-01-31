@@ -19,10 +19,10 @@ public:
 
 public slots:
 
-    void change() override;
-    void change(int64_t value) override;
-    void change(double value) override;
-    void change(const QString&) override;
+    void importChange() override;
+    void importChange(int64_t value) override;
+    void importChange(double value) override;
+    void importChange(const QString&) override;
 
 private:
 

@@ -8,12 +8,12 @@
 
 #include "basedataview.h"
 #include "operatorview.h"
-#include "projectscopeview.h"
+#include "OperatorNetworkView.hpp"
 #include "DataConnector.hpp"
 #include "ParameterConnector.hpp"
 
 #include "model/datainput.h"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/BaseOperator.hpp"
 #include "model/BaseDataType.hpp"
 
@@ -92,9 +92,9 @@ OperatorView::~OperatorView()
 }
 
 
-ProjectScopeView* OperatorView::scope_view()
+OperatorNetworkView* OperatorView::scope_view()
 {
-    return dynamic_cast<ProjectScopeView*>(scene());
+    return dynamic_cast<OperatorNetworkView*>(scene());
 }
 
 

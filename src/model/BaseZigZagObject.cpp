@@ -1,15 +1,16 @@
 #include "BaseZigZagObject.hpp"
-#include "projectmodel.h"
+#include "OperatorNetwork.hpp"
 
 #include "model/parameter/BaseParameter.hpp"
 
 #include <QVector>
 #include <QStringRef>
 
+#include <iostream>
 
 BaseZigZagObject::BaseZigZagObject(BaseZigZagObject * parent, const QString& name)
-    : QObject(parent)
 {
+    setParent(parent);
     setObjectName(name);
 }
 
@@ -48,15 +49,15 @@ QString BaseZigZagObject::uniqueName() const
 }
 
 
-ProjectModel* BaseZigZagObject::network()
+OperatorNetwork* BaseZigZagObject::network()
 {
-    return qobject_cast<ProjectModel*>(rootObject());
+    return qobject_cast<OperatorNetwork*>(rootObject());
 }
 
 
-const ProjectModel* BaseZigZagObject::network() const
+const OperatorNetwork* BaseZigZagObject::network() const
 {
-    return qobject_cast<const ProjectModel*>(rootObject());
+    return qobject_cast<const OperatorNetwork*>(rootObject());
 }
 
 
@@ -158,12 +159,12 @@ void BaseZigZagObject::disconnectParameters()
 }
 
 
-void BaseZigZagObject::parameterChangeEvent(const BaseParameter* parameter)
+void BaseZigZagObject::parameterChangedEvent(const BaseParameter* parameter)
 {
     BaseZigZagObject* parent = findParent<BaseZigZagObject*>();
 
     if (parent)
     {
-        parent->parameterChangeEvent(parameter);
+        parent->parameterChangedEvent(parameter);
     }
 }

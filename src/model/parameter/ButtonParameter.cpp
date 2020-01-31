@@ -8,3 +8,9 @@ ButtonParameter::ButtonParameter(BaseZigZagObject * parent, const char * name)
 {
 
 }
+
+
+TriggerComponent* ButtonParameter::getTriggerComponent()
+{
+    return &m_triggerComponent;
+}

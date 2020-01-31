@@ -13,28 +13,13 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-const EnumDefinition BlendOperator::BlendMode
-{
-    "BlendMode",
-    {
-        "Over",
-        "Add",
-        "Subtract",
-        "Multiply",
-        "Divide",
-        "Average",
-        "Difference",
-    }
-};
-
-
 
 const OperatorDescription BlendOperator::description {
     "Blend",
     "Video Edit",
     &create,
-    { &TextureData::Type, &TextureData::Type },
-    { &TextureData::Type },
+    { &TextureData::description, &TextureData::description },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -86,31 +71,31 @@ void BlendOperator::run()
         glBindVertexArray(0);
     }
 
-    auto a = static_cast<const TextureData*>(texture_a.get_connection());
-    auto b = static_cast<const TextureData*>(texture_b.get_connection());
+    auto a = static_cast<const TextureData*>(m_textureA.get_connection());
+    auto b = static_cast<const TextureData*>(m_textureB.get_connection());
 
     if (a && b)
     {
-        output_texture.bind_as_framebuffer();
+        m_outputTexture.bindFramebuffer();
         glUseProgram(shader.programId());
         glBindVertexArray(vao);
-        shader.setUniformValue(shader.uniformLocation("blend_mode"), blend_mode.getIndex());
-        a->bind_as_texture(0);
-        b->bind_as_texture(1);
+        shader.setUniformValue(shader.uniformLocation("blend_mode"), m_blendMode.getIndex());
+        a->bindTexture(0);
+        b->bindTexture(1);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
     else
     {
-        output_texture.bind_as_framebuffer();
+        m_outputTexture.bindFramebuffer();
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
     }
-    update_view();
+    updateView();
 
 }
 
 
-void BlendOperator::parameterChangeEvent(const BaseParameter* parameter)
+void BlendOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

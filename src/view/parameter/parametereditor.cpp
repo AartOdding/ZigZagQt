@@ -1,6 +1,6 @@
 #include "parametereditor.h"
 #include "model/BaseOperator.hpp"
-#include "view/viewport.h"
+#include "view/Viewport.hpp"
 #include "view/operatorview.h"
 
 #include <QIcon>
@@ -10,16 +10,15 @@
 #include <QGraphicsScene>
 
 
-ParameterEditor::ParameterEditor(Viewport* viewport_)
-    : viewport(viewport_)
+
+ParameterEditor::ParameterEditor(QWidget* parent)
 {
-    Q_ASSERT(viewport);
 
 #ifdef Q_OS_MAC
     setParent(nullptr);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 #else
-    setParent(viewport_);
+    setParent(parent);
     setWindowFlags(Qt::Window |Qt::CustomizeWindowHint | Qt::WindowTitleHint
                    /*| Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint*/);
 #endif
@@ -34,7 +33,6 @@ ParameterEditor::ParameterEditor(Viewport* viewport_)
     inner_layout.setMargin(10);
     inner_layout.setSpacing(10);
     inner_layout.addStretch();
-
 
     scroll_area.setFrameShape(QFrame::NoFrame);
 }

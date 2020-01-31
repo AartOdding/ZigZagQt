@@ -2,13 +2,13 @@
 
 #include "application.h"
 #include "model/BaseOperator.hpp"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "command/connectcommand.h"
 #include "command/disconnectcommand.h"
 
 
 
-DataInput::DataInput(BaseOperator* parent_op, const char * name, const DataTypeDescription& type_info)
+DataInput::DataInput(BaseOperator* parent_op, const QString& name, const DataTypeDescription& type_info)
     : BaseZigZagObject(parent_op, name),
       m_parent_operator(parent_op),
       data_type(&type_info)
@@ -33,11 +33,11 @@ const DataTypeDescription * DataInput::type() const
 }
 
 
-bool DataInput::compatible_with(const BaseDataType* data_block) const
+bool DataInput::compatible_with(const BaseDataType* data) const
 {
-    if (data_block)
+    if (data)
     {
-        return type()->name == data_block->getDescription()->name;
+        return type()->name == data->getDescription()->name;
     }
     return false;
 }

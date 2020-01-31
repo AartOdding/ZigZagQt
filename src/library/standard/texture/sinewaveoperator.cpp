@@ -34,7 +34,7 @@ const OperatorDescription SineWaveOperator::description
     "Video Synthesis",
     &create,
     { },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type,
 };
 
@@ -107,7 +107,7 @@ void SineWaveOperator::run()
     {
         auto shader = shaders[wave_type.getIndex()];
 
-        output_texture.bind_as_framebuffer();
+        output_texture.bindFramebuffer();
 
         glUseProgram(shader->programId());
         glBindVertexArray(vao);
@@ -130,13 +130,13 @@ void SineWaveOperator::run()
         }
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        update_view();
+        updateView();
         should_update = false;
     }
 }
 
 
-void SineWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
+void SineWaveOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

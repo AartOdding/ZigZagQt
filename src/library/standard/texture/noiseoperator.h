@@ -20,7 +20,7 @@ public:
 
     void run() override;
 
-    void parameterChangeEvent(const BaseParameter* parameter) override;
+    void parameterChangedEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);
@@ -28,8 +28,6 @@ public:
     static const OperatorDescription description;
 
 private:
-
-    EnumDefinition BoolEnum { "BoolEnum", { "False", "True" } };
 
     ColorParameter m_highColor{ this, "High Color" };
     ColorParameter m_lowColor{ this, "Low Color" };
@@ -40,7 +38,7 @@ private:
     FloatParameter rotation{ this, "Rotate", 0 };
     Float2Parameter scale{ this, "Scale", { 1, 1 } };
 
-    EnumParameter use_z_value{ this, "Use Z Value", BoolEnum, 0 };
+    EnumParameter use_z_value{ this, "Use Z Value", { "False", "True" }, 0 };
     FloatParameter z_value{ this, "Z Value", 0 };
 
     TextureData output_texture{ this, "Texture" };

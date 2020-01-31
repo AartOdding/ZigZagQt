@@ -4,7 +4,7 @@
 
 #include "command/movecommand.h"
 #include "command/removecommand.h"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/datainput.h"
 
 #include <QPointer>
@@ -48,7 +48,7 @@ BaseOperator::~BaseOperator()
 
 
 
-void BaseOperator::update_view()
+void BaseOperator::updateView()
 {
     emit update_view_requested();
 }

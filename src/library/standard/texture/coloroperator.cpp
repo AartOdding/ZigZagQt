@@ -9,7 +9,7 @@ const OperatorDescription ColorOperator::Type
     "Texture",
     &create,
     { },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -35,7 +35,7 @@ ColorOperator::~ColorOperator()
 void ColorOperator::run()
 {
     //std::cout << red_value.get() << "color run \n";
-    output_texture.bind_as_framebuffer();
+    output_texture.bindFramebuffer();
     auto color = m_color.get();
     glClearColor(color.red(), color.green(), color.blue(), color.alpha());
     glClear(GL_COLOR_BUFFER_BIT);

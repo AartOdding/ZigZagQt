@@ -71,7 +71,7 @@ void TextureView::paint_opengl(int res_x, int res_y)
 
         glUseProgram(shader.programId());
         glBindVertexArray(vao);
-        m_viewedTexture->bind_as_texture(0);
+        m_viewedTexture->bindTexture(0);
         shader.setUniformValue(shader.uniformLocation("framebuffer_resolution"), QPointF(256, 256));
         shader.setUniformValue(shader.uniformLocation("color"), 0.5f, 0.0f, 0.3f);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -92,7 +92,7 @@ void TextureView::update_view()
 }
 
 
-void TextureView::parameterChangeEvent(const BaseParameter* parameter)
+void TextureView::parameterChangedEvent(const BaseParameter* parameter)
 {
     if (parameter == &open_window_button)
     {

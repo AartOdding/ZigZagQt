@@ -3,7 +3,7 @@
 
 #include "renderer.h"
 #include "application.h"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 #include "model/BaseDataType.hpp"
@@ -35,7 +35,7 @@ Renderer::~Renderer()
 { }
 
 
-void Renderer::set_model(ProjectModel* m)
+void Renderer::set_model(OperatorNetwork* m)
 {
     model = m;
 }

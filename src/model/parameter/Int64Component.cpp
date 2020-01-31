@@ -68,7 +68,7 @@ bool Int64Component::setValue(int64_t value, bool overwritePendingChanges)
     if (constrained_value != m_value)
     {
         m_value = constrained_value;
-        emit valueChanged(m_value);
+        emit exportChange(m_value);
         return true;
     }
     return false;
@@ -112,7 +112,7 @@ void Int64Component::setMax(int64_t max)
 
 
 
-void Int64Component::change(int64_t value)
+void Int64Component::importChange(int64_t value)
 {
     m_pending = value;
     m_newValuePending = m_pending != m_value;
@@ -120,7 +120,7 @@ void Int64Component::change(int64_t value)
 
 
 
-void Int64Component::change(double value)
+void Int64Component::importChange(double value)
 {
     m_pending = value;
     m_newValuePending = m_pending != m_value;

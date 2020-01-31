@@ -4,7 +4,7 @@
 
 #include "view/connection/ConnectionTreeView.hpp"
 #include "view/connection/ConnectionEditor.hpp"
-#include "view/viewport.h"
+#include "view/Viewport.hpp"
 #include "view/operatorview.h"
 #include "model/BaseOperator.hpp"
 #include <iostream>
@@ -101,6 +101,7 @@ ConnectionTreeView::ConnectionTreeView(BaseZigZagObject * output, BaseZigZagObje
 }
 
 
+
 BaseComponent* ConnectionTreeView::getSelectedInput() const
 {
     auto selected = m_treeWidgetRight.currentItem();
@@ -111,6 +112,7 @@ BaseComponent* ConnectionTreeView::getSelectedInput() const
     }
     return nullptr;
 }
+
 
 
 BaseComponent* ConnectionTreeView::getSelectedOutput() const

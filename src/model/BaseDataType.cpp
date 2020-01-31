@@ -1,6 +1,6 @@
 #include "BaseDataType.hpp"
 #include "model/datainput.h"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/BaseOperator.hpp"
 
 #include "command/connectcommand.h"

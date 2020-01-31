@@ -29,8 +29,8 @@ public slots:
     void setMin(double min);
     void setMax(double max);
 
-    void change(int64_t value) override;
-    void change(double value) override;
+    void importChange(int64_t value) override;
+    void importChange(double value) override;
 
 signals:
 

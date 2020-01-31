@@ -1,4 +1,4 @@
-#include "projectscopeview.h"
+#include "OperatorNetworkView.hpp"
 #include "application.h"
 
 #include "view/BaseConnector.hpp"
@@ -9,6 +9,7 @@
 #include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 #include "model/parameter/BaseComponent.hpp"
+#include "view/OperatorSelectorDialog.hpp"
 
 #include <QPointer>
 #include <QKeyEvent>
@@ -16,26 +17,26 @@
 
 
 
-ProjectScopeView::ProjectScopeView(QObject *parent)
+OperatorNetworkView::OperatorNetworkView(QObject *parent)
     : QGraphicsScene(-20000, -20000, 40000, 40000)
 {
     setBackgroundBrush(QBrush(QColor(55, 55, 55)));
 }
 
 
-void ProjectScopeView::set_model(ProjectModel *model)
+void OperatorNetworkView::set_model(OperatorNetwork *model)
 {
     data_model = model;
 
-    connect(this, &ProjectScopeView::redo_signal, data_model, &ProjectModel::redo);
-    connect(this, &ProjectScopeView::undo_signal, data_model, &ProjectModel::undo);
+    connect(this, &OperatorNetworkView::redo_signal, data_model, &OperatorNetwork::redo);
+    connect(this, &OperatorNetworkView::undo_signal, data_model, &OperatorNetwork::undo);
 
-    connect(data_model, &ProjectModel::operator_added, this, &ProjectScopeView::on_operator_added);
-    connect(data_model, &ProjectModel::operator_removed, this, &ProjectScopeView::on_operator_deleted);
+    connect(data_model, &OperatorNetwork::operator_added, this, &OperatorNetworkView::on_operator_added);
+    connect(data_model, &OperatorNetwork::operator_removed, this, &OperatorNetworkView::on_operator_deleted);
 }
 
 
-void ProjectScopeView::bring_to_front(OperatorView* op)
+void OperatorNetworkView::bring_to_front(OperatorView* op)
 {
     for (auto o : operator_views)
     {
@@ -48,7 +49,7 @@ void ProjectScopeView::bring_to_front(OperatorView* op)
 }
 
 
-void ProjectScopeView::keyPressEvent(QKeyEvent *keyEvent)
+void OperatorNetworkView::keyPressEvent(QKeyEvent *keyEvent)
 {
     keyEvent->setAccepted(false);
     QGraphicsScene::keyPressEvent(keyEvent);
@@ -93,13 +94,32 @@ void ProjectScopeView::keyPressEvent(QKeyEvent *keyEvent)
 }
 
 
-void ProjectScopeView::keyReleaseEvent(QKeyEvent *keyEvent)
+void OperatorNetworkView::keyReleaseEvent(QKeyEvent *keyEvent)
 {
     QGraphicsScene::keyReleaseEvent(keyEvent);
 }
 
 
-void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
+void OperatorNetworkView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    auto dialog = new OperatorSelectorDialog(nullptr, event->scenePos().x(), event->scenePos().y());
+     connect(dialog, &OperatorSelectorDialog::operatorRequested,
+             data_model, &OperatorNetwork::add_operator, Qt::QueuedConnection);
+
+     auto x = event->screenPos().x() - dialog->size().width() / 2;
+     auto y = event->screenPos().y() - 100;
+     auto screen = QGuiApplication::screenAt(event->screenPos());
+
+     if (screen)
+     {
+         // make sure always fits in screen
+     }
+     dialog->move(x, y);
+     dialog->show();
+}
+
+
+void OperatorNetworkView::on_operator_added(BaseOperator* operator_ptr)
 {
     OperatorView* op_view = new OperatorView(*operator_ptr);
     operator_views.insert(operator_ptr, op_view);
@@ -108,18 +128,18 @@ void ProjectScopeView::on_operator_added(BaseOperator* operator_ptr)
     {
         if (i)
         {
-            connect(i, &DataInput::has_connected, this, &ProjectScopeView::on_input_connected);
-            connect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
+            connect(i, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
+            connect(i, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
         }
     }
-    connect(operator_ptr, &BaseOperator::parameter_started_importing, this, &ProjectScopeView::on_parameters_connected);
-    connect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &ProjectScopeView::on_parameter_disconnected);
+    connect(operator_ptr, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
+    connect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
 
     addItem(op_view);
 }
 
 
-void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
+void OperatorNetworkView::on_operator_deleted(BaseOperator* operator_ptr)
 {
     if (operator_views.contains(operator_ptr))
     {
@@ -127,12 +147,12 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
         {
             if (i)
             {
-                disconnect(i, &DataInput::has_connected, this, &ProjectScopeView::on_input_connected);
-                disconnect(i, &DataInput::has_disconnected, this, &ProjectScopeView::on_input_disconnected);
+                disconnect(i, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
+                disconnect(i, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
             }
         }
-        disconnect(operator_ptr, &BaseOperator::parameter_started_importing, this, &ProjectScopeView::on_parameters_connected);
-        disconnect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &ProjectScopeView::on_parameter_disconnected);
+        disconnect(operator_ptr, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
+        disconnect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
 
         OperatorView* op_view = operator_views[operator_ptr];
         operator_views.remove(operator_ptr);
@@ -142,7 +162,7 @@ void ProjectScopeView::on_operator_deleted(BaseOperator* operator_ptr)
 }
 
 
-void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input)
+void OperatorNetworkView::on_input_connected(BaseDataType* output, DataInput* input)
 {
     auto input_op = operator_views[input->get_operator()];
     auto output_op = operator_views[output->getOperator()];
@@ -162,7 +182,7 @@ void ProjectScopeView::on_input_connected(BaseDataType* output, DataInput* input
 }
 
 
-void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* input)
+void OperatorNetworkView::on_input_disconnected(BaseDataType* output, DataInput* input)
 {
     auto input_op = operator_views[input->get_operator()];
 
@@ -181,7 +201,7 @@ void ProjectScopeView::on_input_disconnected(BaseDataType* output, DataInput* in
 }
 
 
-void ProjectScopeView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
+void OperatorNetworkView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
 {
     OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
     OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];
@@ -208,7 +228,7 @@ void ProjectScopeView::on_parameters_connected(BaseComponent * exporter, BaseCom
 }
 
 
-void ProjectScopeView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
+void OperatorNetworkView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
 {
     OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
     OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];

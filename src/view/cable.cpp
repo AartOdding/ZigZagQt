@@ -13,7 +13,7 @@
 
 
 
-Cable::Cable(ProjectScopeView * p, BaseConnector * out, BaseConnector * in)
+Cable::Cable(OperatorNetworkView * p, BaseConnector * out, BaseConnector * in)
     : program_view(p), output_connector(out), input_connector(in)
 {
     setZValue(0.5);

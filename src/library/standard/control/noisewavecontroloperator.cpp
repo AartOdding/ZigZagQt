@@ -21,18 +21,6 @@ const OperatorDescription NoiseWaveControlOperator::description
 };
 
 
-
-const EnumDefinition NoiseWaveControlOperator::NoiseType
-{
-    "NoiseType",
-    {
-        "Simplex Noise",
-        "Perlin Noise"
-    }
-};
-
-
-
 NoiseWaveControlOperator::NoiseWaveControlOperator(BaseZigZagObject* parent)
     : BaseOperator(parent, description)
 {
@@ -50,22 +38,22 @@ void NoiseWaveControlOperator::recalculate()
 {
     glm::vec4 pos;
 
-    if (use_time.getIndex() == 0)
+    if (m_timeIsInput.getIndex() == 0)
     {
-        pos = { application::clock()->get_elapsed_seconds() / slow_down.get(), 0, 0, 0 };
+        pos = { application::clock()->get_elapsed_seconds() * m_timeSpeed.get(), 0, 0, 0 };
     }
     else
     {
-        pos = { position.x(), position.y(), position.z(), position.w() };
+        pos = { m_position.x(), m_position.y(), m_position.z(), m_position.w() };
     }
 
-    if (noise_type.getIndex() == 0) // Simplex Noise
+    if (m_noiseType.getIndex() == 0) // Simplex Noise
     {
-        output.set(glm::simplex(pos) * amplitude.get() + offset.get());
+        m_outputValue.set(glm::simplex(pos) * m_amplitude.get() + m_offset.get());
     }
     else  // Perlin Noise
     {
-        output.set(glm::perlin(pos) * amplitude.get() + offset.get());
+        m_outputValue.set(glm::perlin(pos) * m_amplitude.get() + m_offset.get());
     }
-    update_view();
+    updateView();
 }

@@ -71,26 +71,26 @@ private:
 
         if (qobject_cast<TriggerComponent*>(exporter_))
         {
-            QObject::connect(exporter_, qOverload<>(&BaseComponent::valueChanged),
-                             importer_, qOverload<>(&BaseComponent::change));
+            QObject::connect(exporter_, qOverload<>(&BaseComponent::exportChange),
+                             importer_, qOverload<>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Int64Component*>(exporter_))
         {
-            QObject::connect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged),
-                             importer_, qOverload<int64_t>(&BaseComponent::change));
-            importer_->change(static_cast<Int64Component*>(exporter_)->getValue());
+            QObject::connect(exporter_, qOverload<int64_t>(&BaseComponent::exportChange),
+                             importer_, qOverload<int64_t>(&BaseComponent::importChange));
+            importer_->importChange(static_cast<Int64Component*>(exporter_)->getValue());
         }
         else if (qobject_cast<Float64Component*>(exporter_))
         {
-            QObject::connect(exporter_, qOverload<double>(&BaseComponent::valueChanged),
-                             importer_, qOverload<double>(&BaseComponent::change));
-            importer_->change(static_cast<Float64Component*>(exporter_)->getValue());
+            QObject::connect(exporter_, qOverload<double>(&BaseComponent::exportChange),
+                             importer_, qOverload<double>(&BaseComponent::importChange));
+            importer_->importChange(static_cast<Float64Component*>(exporter_)->getValue());
         }
         else if (qobject_cast<TextComponent*>(exporter_))
         {
-            QObject::connect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged),
-                             importer_, qOverload<const QString&>(&BaseComponent::change));
-            importer_->change(static_cast<TextComponent*>(exporter_)->getText());
+            QObject::connect(exporter_, qOverload<const QString&>(&BaseComponent::exportChange),
+                             importer_, qOverload<const QString&>(&BaseComponent::importChange));
+            importer_->importChange(static_cast<TextComponent*>(exporter_)->getText());
         }
 
         emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_started_importing(exporter_, importer_);
@@ -110,23 +110,23 @@ private:
 
         if (qobject_cast<TriggerComponent*>(exporter_))
         {
-            QObject::disconnect(exporter_, qOverload<>(&BaseComponent::valueChanged),
-                                importer_, qOverload<>(&BaseComponent::change));
+            QObject::disconnect(exporter_, qOverload<>(&BaseComponent::exportChange),
+                                importer_, qOverload<>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Int64Component*>(exporter_))
         {
-            QObject::disconnect(exporter_, qOverload<int64_t>(&BaseComponent::valueChanged),
-                                importer_, qOverload<int64_t>(&BaseComponent::change));
+            QObject::disconnect(exporter_, qOverload<int64_t>(&BaseComponent::exportChange),
+                                importer_, qOverload<int64_t>(&BaseComponent::importChange));
         }
         else if (qobject_cast<Float64Component*>(exporter_))
         {
-            QObject::disconnect(exporter_, qOverload<double>(&BaseComponent::valueChanged),
-                                importer_, qOverload<double>(&BaseComponent::change));
+            QObject::disconnect(exporter_, qOverload<double>(&BaseComponent::exportChange),
+                                importer_, qOverload<double>(&BaseComponent::importChange));
         }
         else if (qobject_cast<TextComponent*>(exporter_))
         {
-            QObject::disconnect(exporter_, qOverload<const QString&>(&BaseComponent::valueChanged),
-                                importer_, qOverload<const QString&>(&BaseComponent::change));
+            QObject::disconnect(exporter_, qOverload<const QString&>(&BaseComponent::exportChange),
+                                importer_, qOverload<const QString&>(&BaseComponent::importChange));
         }
 
         emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_stopped_importing(exporter_, importer_);

@@ -10,7 +10,7 @@
 
 
 class BaseParameter;
-class ProjectModel;
+class OperatorNetwork;
 
 
 
@@ -39,8 +39,8 @@ public:
     /*
      * Will return the network this object belongs to, if any.
      */
-    ProjectModel* network();
-    const ProjectModel* network() const;
+    OperatorNetwork* network();
+    const OperatorNetwork* network() const;
 
     /*
      * Will return the top most object in the tree hierarchy.
@@ -94,7 +94,7 @@ protected:
      * has been changed as a result of calling updateParameters(). The default implementation
      * will check if there is a parent, and if so forward the event to them.
      */
-    virtual void parameterChangeEvent(const BaseParameter* parameter);
+    virtual void parameterChangedEvent(const BaseParameter* parameter);
 
 };
 

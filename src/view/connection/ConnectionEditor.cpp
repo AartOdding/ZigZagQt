@@ -1,5 +1,5 @@
 #include "view/connection/ConnectionEditor.hpp"
-#include "view/viewport.h"
+#include "view/Viewport.hpp"
 #include "view/operatorview.h"
 #include "model/BaseOperator.hpp"
 

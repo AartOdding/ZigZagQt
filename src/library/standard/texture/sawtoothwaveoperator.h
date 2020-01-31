@@ -21,14 +21,12 @@ public:
 
     void run() override;
 
-    void parameterChangeEvent(const BaseParameter* parameter) override;
+    void parameterChangedEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);
 
     static const OperatorDescription description;
-
-    static const EnumDefinition WaveType;
 
 
     Q_INVOKABLE void storeState(QVariantMap* state) const
@@ -43,7 +41,7 @@ private:
     ColorPar color_a{ this, "High Color", Qt::white };
     ColorPar color_b{ this, "Low Color", Qt::black };
 
-    EnumParameter wave_type{ this, "Wave Type", WaveType };
+    EnumParameter wave_type{ this, "Wave Type", { "Flat", "Radial", "Concentric" } };
     FloatParameter peak_position{ this, "Peak Position", 0.5, 0, 1 };
     FloatParameter frequency{ this, "Frequency", 6, 0.5, 1000000 };
     FloatParameter phase{ this, "Phase", 0 };

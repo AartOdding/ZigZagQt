@@ -25,7 +25,7 @@ bool TextComponent::update()
     if (m_newTextPending)
     {
         m_text = m_pendingText;
-        emit valueChanged(m_text);
+        emit exportChange(m_text);
         return true;
     }
     return false;
@@ -50,7 +50,7 @@ bool TextComponent::setText(const QString& text, bool overwritePendingChanges)
     if (m_text != text)
     {
         m_text = text;
-        emit valueChanged(m_text);
+        emit exportChange(m_text);
         return true;
     }
     return false;
@@ -58,7 +58,7 @@ bool TextComponent::setText(const QString& text, bool overwritePendingChanges)
 
 
 
-void TextComponent::change(int64_t value)
+void TextComponent::importChange(int64_t value)
 {
     m_pendingText = QString::number(value);
     m_newTextPending = m_text != m_pendingText;
@@ -66,7 +66,7 @@ void TextComponent::change(int64_t value)
 
 
 
-void TextComponent::change(double value)
+void TextComponent::importChange(double value)
 {
     m_pendingText = QString::number(value, 'f', 6);
     m_newTextPending = m_text != m_pendingText;
@@ -74,7 +74,7 @@ void TextComponent::change(double value)
 
 
 
-void TextComponent::change(const QString& text)
+void TextComponent::importChange(const QString& text)
 {
     m_pendingText = text;
     m_newTextPending = m_text != m_pendingText;

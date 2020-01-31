@@ -16,13 +16,13 @@ BaseOperator * ClockOperator::create(BaseZigZagObject* parent)
 ClockOperator::ClockOperator(BaseZigZagObject* parent)
     : BaseOperator(parent, description)
 {
-    frames.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    seconds.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    minutes.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    hours.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    seconds_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    minutes_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
-    hours_whole.getComponents()[0]->setFlag(ParameterFlags::IsEditable, false);
+    frames.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    seconds.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    minutes.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    hours.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    seconds_whole.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    minutes_whole.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
+    hours_whole.getComponents()[0]->setFlag(ParameterFlag::IsEditable, false);
 }
 
 

@@ -32,7 +32,7 @@ const OperatorDescription SquareWaveOperator::description
     "Video Synthesis",
     &create,
     {  },
-    { &TextureData::Type },
+    { &TextureData::description },
     &TextureView::Type
 };
 
@@ -104,7 +104,7 @@ void SquareWaveOperator::run()
     {
         auto shader = shaders[wave_type.getIndex()];
 
-        output_texture.bind_as_framebuffer();
+        output_texture.bindFramebuffer();
 
         glUseProgram(shader->programId());
         glBindVertexArray(vao);
@@ -128,13 +128,13 @@ void SquareWaveOperator::run()
         }
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        update_view();
+        updateView();
         should_update = false;
     }
 }
 
 
-void SquareWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
+void SquareWaveOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

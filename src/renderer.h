@@ -11,7 +11,7 @@
 #include "utility/fpsmonitor.h"
 
 
-class ProjectModel;
+class OperatorNetwork;
 
 
 
@@ -26,7 +26,7 @@ public:
 
     ~Renderer();
 
-    void set_model(ProjectModel* model);
+    void set_model(OperatorNetwork* model);
 
 
 public slots:
@@ -36,7 +36,7 @@ public slots:
 
 private:
 
-    ProjectModel* model;
+    OperatorNetwork* model;
 
     QOpenGLWidget opengl_widget;
     QOffscreenSurface opengl_surface;

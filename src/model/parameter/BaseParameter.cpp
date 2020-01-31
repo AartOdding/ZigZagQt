@@ -42,6 +42,6 @@ void BaseParameter::updateParameters()
     }
     if (changed)
     {
-        parameterChangeEvent(this);
+        parameterChangedEvent(this);
     }
 }

@@ -19,6 +19,7 @@ public:
     ParameterGroup(QWidget *parent, BaseZigZagObject* parameters);
 
 
+
 private:
 
     QWidget* new_widget_for_parameter(BaseParameter * parameter);

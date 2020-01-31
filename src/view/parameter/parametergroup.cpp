@@ -4,13 +4,14 @@
 #include "model/parameter/BaseParameter.hpp"
 #include "model/parameter/ButtonParameter.hpp"
 
-#include "enumwidget.h"
+#include "EnumParameterWidget.hpp"
 
 #include "model/parameter/Int64Component.hpp"
 #include "model/parameter/Float64Component.hpp"
-#include "int64parameterbox.h"
-#include "doubleparameterbox.h"
-#include "buttonparameterbox.h"
+#include "IntParameterWidget.hpp"
+#include "DoubleParameterWidget.hpp"
+#include "ButtonParameterWidget.hpp"
+#include "Transform2DParameterWidget.hpp"
 
 #include <QLabel>
 
@@ -59,11 +60,11 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
     if (par->getParameterType() == ParameterType::Enum)
     {
-        return new EnumWidget(this, static_cast<EnumParameter*>(par));
+        return new EnumParameterWidget(this, static_cast<EnumParameter*>(par));
     }
     else if (par->getParameterType() == ParameterType::Button)
     {
-        return new ButtonParameterBox(this, static_cast<ButtonParameter*>(par));
+        return new ButtonParameterWidget(this, static_cast<ButtonParameter*>(par));
     }
     else if (par->getParameterType() == ParameterType::Int  ||
              par->getParameterType() == ParameterType::Int2 ||
@@ -72,7 +73,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
     {
         if (par->getComponents().size() == 1)
         {
-            return new Int64ParameterBox(this, static_cast<Int64Component*>(par->getComponents()[0]));
+            return new IntParameterWidget(this, static_cast<Int64Component*>(par->getComponents()[0]));
         }
         else
         {
@@ -83,7 +84,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
             for (int i = 0; i < par->getComponents().size(); ++i)
             {
-                widget_layout->addWidget(new Int64ParameterBox(this, static_cast<Int64Component*>(par->getComponents()[i])));
+                widget_layout->addWidget(new IntParameterWidget(this, static_cast<Int64Component*>(par->getComponents()[i])));
             }
             return widget;
         }
@@ -96,7 +97,7 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
     {
         if (par->getComponents().size() == 1)
         {
-            return new DoubleParameterBox(this, static_cast<Float64Component*>(par->getComponents()[0]));
+            return new DoubleParameterWidget(this, static_cast<Float64Component*>(par->getComponents()[0]));
         }
         else
         {
@@ -107,10 +108,14 @@ QWidget* ParameterGroup::new_widget_for_parameter(BaseParameter* par)
 
             for (int i = 0; i < par->getComponents().size(); ++i)
             {
-                widget_layout->addWidget(new DoubleParameterBox(this, static_cast<Float64Component*>(par->getComponents()[i])));
+                widget_layout->addWidget(new DoubleParameterWidget(this, static_cast<Float64Component*>(par->getComponents()[i])));
             }
             return widget;
         }
+    }
+    else if (par->getParameterType() == ParameterType::Transform2D)
+    {
+        return new Transform2DParameterWidget(this, static_cast<Transform2DParameter*>(par));
     }
     return nullptr;
 }

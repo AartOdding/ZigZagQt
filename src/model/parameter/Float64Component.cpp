@@ -68,7 +68,7 @@ bool Float64Component::setValue(double value, bool overwritePendingChanges)
     if (constrainedValue != m_value)
     {
         m_value = constrainedValue;
-        emit valueChanged(m_value);
+        emit exportChange(m_value);
         return true;
     }
     return false;
@@ -112,7 +112,7 @@ void Float64Component::setMax(double max)
 
 
 
-void Float64Component::change(int64_t value)
+void Float64Component::importChange(int64_t value)
 {
     m_pending = value;
     m_newValuePending = m_pending != m_value;
@@ -120,7 +120,7 @@ void Float64Component::change(int64_t value)
 
 
 
-void Float64Component::change(double value)
+void Float64Component::importChange(double value)
 {
     m_pending = value;
     m_newValuePending = m_pending != m_value;

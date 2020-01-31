@@ -22,8 +22,8 @@ const OperatorDescription ThresholdOperator::description
     "Threshold",
     "Texture",
     &create,
-    { &TextureData::Type },
-    { &TextureData::Type },
+    { &TextureData::description },
+    { &TextureData::description },
     &TextureView::Type,
 };
 
@@ -42,7 +42,7 @@ void ThresholdOperator::run()
 }
 
 
-void ThresholdOperator::parameterChangeEvent(const BaseParameter* parameter)
+void ThresholdOperator::parameterChangedEvent(const BaseParameter* parameter)
 {
 
 }

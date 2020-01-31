@@ -4,7 +4,7 @@
 #include <QGraphicsItem>
 
 
-class ProjectScopeView;
+class OperatorNetworkView;
 class DataConnector;
 class BaseConnector;
 
@@ -19,7 +19,7 @@ public:
     static constexpr double tension = 0.6;
     static constexpr double flip_distance = 100;
 
-    Cable(ProjectScopeView * program_view, BaseConnector * output, BaseConnector * input);
+    Cable(OperatorNetworkView * program_view, BaseConnector * output, BaseConnector * input);
 
     QRectF boundingRect() const override;
 
@@ -40,7 +40,7 @@ private:
     void build_path();
 
 
-    ProjectScopeView * program_view;
+    OperatorNetworkView * program_view;
     BaseConnector * output_connector;
     BaseConnector * input_connector;
 

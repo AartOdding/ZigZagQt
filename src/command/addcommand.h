@@ -2,7 +2,7 @@
 
 #include <QUndoCommand>
 
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/BaseOperator.hpp"
 
 
@@ -13,7 +13,7 @@ class AddCommand : public QUndoCommand
 
 public:
 
-    AddCommand(ProjectModel& mdl, BaseOperator* op)
+    AddCommand(OperatorNetwork& mdl, BaseOperator* op)
         : model(mdl), operator_ptr(op)
     {
     }
@@ -47,7 +47,7 @@ public:
 
 private:
 
-    ProjectModel& model;
+    OperatorNetwork& model;
 
     BaseOperator* operator_ptr;
 

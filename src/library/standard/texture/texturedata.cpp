@@ -5,8 +5,29 @@
 #include <QOpenGLFunctions>
 
 
-TextureData::TextureData(BaseOperator* parent_op, const char * name, bool has_fbo_)
-    : BaseDataType(parent_op, name, Type), has_fbo(has_fbo_)
+const std::vector<QString> TextureData::pixelFormatStrings
+{
+    QStringLiteral("8 Bit"),
+    QStringLiteral("8 Bit (Signed)"),
+    QStringLiteral("16 Bit"),
+    QStringLiteral("16 Bit (Signed)"),
+    QStringLiteral("16 Bit (Float)"),
+    QStringLiteral("32 Bit (Float)")
+};
+
+const std::vector<QString> TextureData::numChannelsStrings
+{
+    QStringLiteral("1 Channel"),
+    QStringLiteral("2 Channels"),
+    QStringLiteral("3 Channels"),
+    QStringLiteral("4 Channels")
+};
+
+
+
+TextureData::TextureData(BaseOperator* parent, const QString& name, bool createFbo)
+    : BaseDataType(parent, name, description),
+      m_hasFbo(createFbo)
 {
     initializeOpenGLFunctions();
 }
@@ -14,20 +35,23 @@ TextureData::TextureData(BaseOperator* parent_op, const char * name, bool has_fb
 
 TextureData::~TextureData()
 {
-    Q_ASSERT(!currently_allocated);
+    if (m_isAllocated)
+    {
+        releaseResources();
+    }
 }
 
 
-void TextureData::parameterChangeEvent(const BaseParameter*)
+void TextureData::parameterChangedEvent(const BaseParameter*)
 {
-    needs_reallocation = true;
+    m_needsReallocation = true;
 }
 
 
 void TextureData::acquireResources()
 {
-    glGenTextures(1, &texture_handle);
-    currently_allocated = true;
+    glGenTextures(1, &m_textureHandle);
+    m_isAllocated = true;
     reallocate();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -35,73 +59,68 @@ void TextureData::acquireResources()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    if (has_fbo)
+    if (m_hasFbo)
     {
-        glGenFramebuffers(1, &fbo_handle);
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_handle, 0);
+        glGenFramebuffers(1, &m_fboHandle);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_fboHandle);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureHandle, 0);
     }
 }
 
 
 void TextureData::releaseResources()
 {
-    if (has_fbo)
+    if (m_hasFbo)
     {
-        glDeleteFramebuffers(1, &fbo_handle);
+        glDeleteFramebuffers(1, &m_fboHandle);
     }
-    glDeleteTextures(1, &texture_handle);
+    glDeleteTextures(1, &m_textureHandle);
 
-    currently_allocated = false;
+    m_isAllocated = false;
 }
 
 
-void TextureData::upload_data(PixelNumChannelsEnum num_channels, PixelDataFormatEnum format, const void * pixel_data)
+void TextureData::uploadPixels(NumChannels numChannels, PixelFormat format, const void * pixel_data)
 {
-    Q_ASSERT(!has_fbo);
+    Q_ASSERT(!m_hasFbo);
 
     static constexpr std::array channel_types{ GL_RED, GL_RG, GL_RGB, GL_RGBA };
-    static constexpr std::array format_types{ 0, 0, GL_UNSIGNED_BYTE, GL_BYTE,
-                                              0, 0, GL_UNSIGNED_SHORT, GL_SHORT,
-                                              GL_UNSIGNED_INT, GL_INT, 0, GL_FLOAT };
+    static constexpr std::array format_types{ GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, 0, GL_FLOAT };
 
-    auto channel_type = channel_types[static_cast<int>(num_channels)];
-    auto format_type = format_types[static_cast<int>(format)];
+    auto channelType = channel_types[numChannels];
+    auto formatType = format_types[format];
 
-    //Q_ASSERT(channel_type == GL_RED);
-    //Q_ASSERT(format_type == GL_UNSIGNED_SHORT);
-
-    if (format_type != 0)
+    if (formatType != 0)
     {
-        glBindTexture(GL_TEXTURE_2D, texture_handle);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, resolution.x(), resolution.y(), channel_type, format_type, pixel_data);
+        glBindTexture(GL_TEXTURE_2D, m_textureHandle);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_resolution.x(), m_resolution.y(), channelType, formatType, pixel_data);
     }
 }
 
 
-void TextureData::bind_as_framebuffer()
+void TextureData::bindFramebuffer()
 {
-    Q_ASSERT(has_fbo);
-    if (currently_allocated)
+    Q_ASSERT(m_hasFbo);
+    if (m_isAllocated)
     {
-        if (needs_reallocation)
+        if (m_needsReallocation)
         {
             reallocate();
-            needs_reallocation = false;
+            m_needsReallocation = false;
         }
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo_handle);
-        glViewport(0, 0, resolution.x(), resolution.y());
+        glBindFramebuffer(GL_FRAMEBUFFER, m_fboHandle);
+        glViewport(0, 0, m_resolution.x(), m_resolution.y());
     }
 }
 
 
-void TextureData::bind_as_texture(int texture_index) const
+void TextureData::bindTexture(int texture_index) const
 {
     auto this2 = const_cast<TextureData*>(this);
-    if (currently_allocated)
+    if (m_isAllocated)
     {
         this2->glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + texture_index));
-        this2->glBindTexture(GL_TEXTURE_2D, texture_handle);
+        this2->glBindTexture(GL_TEXTURE_2D, m_textureHandle);
     }
 }
 
@@ -129,206 +148,115 @@ void TextureData::bind_empty_texture(int texture_index)
 }
 
 
-void TextureData::set_resolution(int x, int y)
+void TextureData::setResolution(int x, int y)
 {
-    resolution.set(x, y);
+    m_resolution.set(x, y);
 }
 
 
-void TextureData::set_num_channels(PixelNumChannelsEnum num)
+void TextureData::setNumChannels(NumChannels num)
 {
-    pixel_channels.setIndex(static_cast<int>(num));
+    m_numChannels.set(static_cast<int>(num));
 }
 
 
-void TextureData::set_format(PixelDataFormatEnum format)
+void TextureData::setPixelFormat(PixelFormat format)
 {
-    pixel_format.setIndex(static_cast<int>(format));
+    m_pixelFormat.set(static_cast<int>(format));
 }
 
 
-int TextureData::get_resolution_x() const
+int TextureData::getWidth() const
 {
-    return resolution.x();
+    return m_resolution.x();
 }
 
 
-int TextureData::get_resolution_y() const
+int TextureData::getHeight() const
 {
-    return resolution.y();
+    return m_resolution.y();
 }
 
 
-PixelNumChannelsEnum TextureData::get_num_channels() const
+TextureData::NumChannels TextureData::getNumChannels() const
 {
-    return static_cast<PixelNumChannelsEnum>(pixel_channels.getIndex());
+    return static_cast<NumChannels>(m_numChannels.getIndex());
 }
 
 
-PixelDataFormatEnum TextureData::get_format() const
+TextureData::PixelFormat TextureData::getPixelFormat() const
 {
-    return static_cast<PixelDataFormatEnum>(pixel_format.getIndex());
+    return static_cast<PixelFormat>(m_pixelFormat.getIndex());
 }
 
 
 void TextureData::reallocate()
 {
-    if (currently_allocated)
+    if (m_isAllocated)
     {
-        glBindTexture(GL_TEXTURE_2D, texture_handle);
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_format_for(pixel_format, pixel_channels), resolution.x(), resolution.y(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glBindTexture(GL_TEXTURE_2D, m_textureHandle);
+        glTexImage2D(GL_TEXTURE_2D, 0, openGLPixelFormat(), m_resolution.x(), m_resolution.y(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     }
 }
 
 
-GLenum TextureData::gl_format_for(const EnumParameter& format, const EnumParameter& num_channels)
+GLenum TextureData::openGLPixelFormat() const
 {
-    switch (format.getIndex())
+    switch (m_pixelFormat.getIndex())
     {
-    case 0:
-        switch (num_channels.getIndex()) // 8 Bit Unsigned Norm
-        {
-        case 0:
-            return GL_R8; // 1 Channel
-        case 1:
-            return GL_RG8; // 2 Channels
-        case 2:
-            return GL_RGB8; // 3 Channels
-        case 3:
-            return GL_RGBA8; // 4 Channels
-        }
-    case 1:
-        switch (num_channels.getIndex()) // 8 Bit Signed Norm
-        {
-        case 0:
-            return GL_R8_SNORM; // 1 Channel
-        case 1:
-            return GL_RG8_SNORM; // 2 Channels
-        case 2:
-            return GL_RGB8_SNORM; // 3 Channels
-        case 3:
-            return GL_RGBA8_SNORM; // 4 Channels
-        }
-    case 2:
-        switch (num_channels.getIndex()) // 8 Bit Unsigned Int
-        {
-        case 0:
-            return GL_R8UI; // 1 Channel
-        case 1:
-            return GL_RG8UI; // 2 Channels
-        case 2:
-            return GL_RGB8UI; // 3 Channels
-        case 3:
-            return GL_RGBA8UI; // 4 Channels
-        }
-    case 3:
-        switch (num_channels.getIndex()) // 8 Bit Signed Int
-        {
-        case 0:
-            return GL_R8I; // 1 Channel
-        case 1:
-            return GL_RG8I; // 2 Channels
-        case 2:
-            return GL_RGB8I; // 3 Channels
-        case 3:
-            return GL_RGBA8I; // 4 Channels
-        }
-    case 4:
-        switch (num_channels.getIndex()) // 16 Bit Unsigned Norm
-        {
-        case 0:
-            return GL_R16; // 1 Channel
-        case 1:
-            return GL_RG16; // 2 Channels
-        case 2:
-            return GL_RGB16; // 3 Channels
-        case 3:
-            return GL_RGBA16; // 4 Channels
-        }
-    case 5:
-        switch (num_channels.getIndex()) // 16 Bit Signed Norm
-        {
-        case 0:
-            return GL_R16_SNORM; // 1 Channel
-        case 1:
-            return GL_RG16_SNORM; // 2 Channels
-        case 2:
-            return GL_RGB16_SNORM; // 3 Channels
-        case 3:
-            return GL_RGBA16_SNORM; // 4 Channels
-        }
-    case 6:
-        switch (num_channels.getIndex()) // 16 Bit Unsigned Int
-        {
-        case 0:
-            return GL_R16UI; // 1 Channel
-        case 1:
-            return GL_RG16UI; // 2 Channels
-        case 2:
-            return GL_RGB16UI; // 3 Channels
-        case 3:
-            return GL_RGBA16UI; // 4 Channels
-        }
-    case 7:
-        switch (num_channels.getIndex()) // 16 Bit Signed Int
-        {
-        case 0:
-            return GL_R16I; // 1 Channel
-        case 1:
-            return GL_RG16I; // 2 Channels
-        case 2:
-            return GL_RGB16I; // 3 Channels
-        case 3:
-            return GL_RGBA16I; // 4 Channels
-        }
-    case 8:
-        switch (num_channels.getIndex()) // 32 Bit Unsigned Int
-        {
-        case 0:
-            return GL_R32UI; // 1 Channel
-        case 1:
-            return GL_RG32UI; // 2 Channels
-        case 2:
-            return GL_RGB32UI; // 3 Channels
-        case 3:
-            return GL_RGBA32UI; // 4 Channels
-        }
-    case 9:
-        switch (num_channels.getIndex()) // 32 Bit Signed Int
-        {
-        case 0:
-            return GL_R32I; // 1 Channel
-        case 1:
-            return GL_RG32I; // 2 Channels
-        case 2:
-            return GL_RGB32I; // 3 Channels
-        case 3:
-            return GL_RGBA32I; // 4 Channels
-        }
-    case 10:
-        switch (num_channels.getIndex()) // 16 Bit Float
-        {
-        case 0:
-            return GL_R16F ; // 1 Channel
-        case 1:
-            return GL_RG16F; // 2 Channels
-        case 2:
-            return GL_RGB16F; // 3 Channels
-        case 3:
-            return GL_RGBA16F; // 4 Channels
-        }
-    case 11:
-        switch (num_channels.getIndex()) // 32 Bit Float
-        {
-        case 0:
-            return GL_R32F; // 1 Channel
-        case 1:
-            return GL_RG32F; // 2 Channels
-        case 2:
-            return GL_RGB32F; // 3 Channels
-        case 3:
-            return GL_RGBA32F; // 4 Channels
-        }
+        case Normalized8Bit:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R8;
+                case TwoChannels:   return GL_RG8;
+                case ThreeChannels: return GL_RGB8;
+                case FourChannels:  return GL_RGBA8;
+            }
+
+        case Normalized8BitSigned:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R8_SNORM;
+                case TwoChannels:   return GL_RG8_SNORM;
+                case ThreeChannels: return GL_RGB8_SNORM;
+                case FourChannels:  return GL_RGBA8_SNORM;
+            }
+
+        case Normalized16Bit:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R16;
+                case TwoChannels:   return GL_RG16;
+                case ThreeChannels: return GL_RGB16;
+                case FourChannels:  return GL_RGBA16;
+            }
+
+        case Normalized16BitSigned:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R16_SNORM;
+                case TwoChannels:   return GL_RG16_SNORM;
+                case ThreeChannels: return GL_RGB16_SNORM;
+                case FourChannels:  return GL_RGBA16_SNORM;
+            }
+
+        case Float16Bit:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R16F;
+                case TwoChannels:   return GL_RG16F;
+                case ThreeChannels: return GL_RGB16F;
+                case FourChannels:  return GL_RGBA16F;
+            }
+
+        case Float32Bit:
+            switch (m_numChannels.getIndex())
+            {
+                case OneChannel:    return GL_R32F;
+                case TwoChannels:   return GL_RG32F;
+                case ThreeChannels: return GL_RGB32F;
+                case FourChannels:  return GL_RGBA32F;
+            }
     }
-    return GL_RGBA8; // In case something went wrong return common type.
+    return GL_RGBA8; // Default
 }

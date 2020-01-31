@@ -15,11 +15,11 @@ class DataInput : public BaseZigZagObject
 
 public:
 
-    DataInput(BaseOperator* parent_operator, const char * name, const DataTypeDescription& type_info);
+    DataInput(BaseOperator* parent_operator, const QString& name, const DataTypeDescription& type_info);
 
     virtual ~DataInput();
 
-    virtual bool compatible_with(const BaseDataType* data_block) const;
+    virtual bool compatible_with(const BaseDataType* data) const;
 
     bool is_connected() const;
     bool is_connected_to(const BaseDataType* data_block) const;

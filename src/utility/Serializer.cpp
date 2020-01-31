@@ -1,5 +1,5 @@
 #include "Serializer.hpp"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "model/BaseZigZagObject.hpp"
 #include "model/BaseOperator.hpp"
 #include "model/parameter/BaseParameter.hpp"
@@ -113,7 +113,7 @@ void Serializer::serialize(const QObject* object)
         xml.writeAttribute(PACKAGE, op->description()->package);
         xml.writeAttribute(TYPE, op->description()->name);
     }
-    else if (qobject_cast<const ProjectModel*>(object))
+    else if (qobject_cast<const OperatorNetwork*>(object))
     {
         xml.writeAttribute(CATEGORY, QStringLiteral("network"));
     }

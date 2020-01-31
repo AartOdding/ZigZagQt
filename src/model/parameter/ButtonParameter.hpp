@@ -13,6 +13,7 @@ public:
 
     ButtonParameter(BaseZigZagObject * parent, const char * name);
 
+    TriggerComponent* getTriggerComponent();
 
 private:
 

@@ -1,37 +1,20 @@
 #pragma once
 
 #include <array>
-#include <vector>
 #include <bitset>
+#include <vector>
 #include <QMap>
 #include <QObject>
 #include <QVariant>
 
 #include "model/BaseZigZagObject.hpp"
+#include "model/parameter/ParameterFlags.hpp"
 
 class BaseParameter;
 
 class XmlSerializer;
 class QXmlStreamReader;
 
-
-
-enum class ParameterFlags
-{
-    CanImport      =  0,
-    CanExport      =  1,
-    IsEditable     =  2, // When false The widget will appear in the gui but not be user editable.
-    IsVisible      =  3, // When false The widget will not appear in the gui at all.
-    MinimalUpdates =  4  // When true only receive one update when the widget is deselected, when false update a often as possible.
-};
-
-static constexpr std::array<ParameterFlags, 4> defaultParameterFlags
-{
-    ParameterFlags::CanImport,
-    ParameterFlags::CanExport,
-    ParameterFlags::IsEditable,
-    ParameterFlags::IsVisible
-};
 
 
 
@@ -64,8 +47,10 @@ public:
     const std::vector<BaseComponent *>& getExports() const;
 
 
-    bool hasFlag(ParameterFlags flag) const;
-    void setFlag(ParameterFlags flag, bool value);
+    ParameterFlags getFlags() const;
+
+    bool getFlag(ParameterFlag flag) const;
+    void setFlag(ParameterFlag flag, bool value = true);
 
 
     BaseParameter * getParameter() const;
@@ -84,17 +69,17 @@ public slots:
      * is empty and does nothing, deriving classes can choose which update methods to implement.
      * This means a component can choose to ignore updates from certain types, but listen to others.
      */
-    virtual void change()               { }
-    virtual void change(int64_t)        { }
-    virtual void change(double)         { }
-    virtual void change(const QString&) { }
+    virtual void importChange()               { }
+    virtual void importChange(int64_t)        { }
+    virtual void importChange(double)         { }
+    virtual void importChange(const QString&) { }
 
 signals:
 
     /*
      * Send out when the components flags have been changed.
      */
-    void flagChanged(ParameterFlags flag, bool value);
+    void flagsChanged(ParameterFlags newFlags);
 
     /*
      * Signals send out when import/ export connections are made/ destroyed.
@@ -108,10 +93,10 @@ signals:
      * Can be used by deriving classes to signal that the components value has changed.
      * When importing exporting components these signals are connected to the store slots.
      */
-    void valueChanged();
-    void valueChanged(int64_t value);
-    void valueChanged(double value);
-    void valueChanged(const QString& value);
+    void exportChange();
+    void exportChange(int64_t value);
+    void exportChange(double value);
+    void exportChange(const QString& value);
 
 private:
 
@@ -123,7 +108,7 @@ private:
     BaseComponent * m_import = nullptr;
     std::vector<BaseComponent *> m_exports;
 
-    std::bitset<32> m_flags;
+    ParameterFlags m_flags;
 
 };
 

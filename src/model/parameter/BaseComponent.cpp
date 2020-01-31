@@ -2,7 +2,7 @@
 #include "BaseParameter.hpp"
 #include "model/BaseZigZagObject.hpp"
 #include "application.h"
-#include "model/projectmodel.h"
+#include "model/OperatorNetwork.hpp"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
 
@@ -11,14 +11,11 @@
 
 
 
+
 BaseComponent::BaseComponent(BaseParameter * parentParameter, const QString& name)
     : BaseZigZagObject(parentParameter, name),
       m_parameter(parentParameter)
 {
-    for (ParameterFlags flag : defaultParameterFlags)
-    {
-        m_flags.set(static_cast<int>(flag), true);
-    }
 }
 
 
@@ -100,19 +97,26 @@ const std::vector<BaseComponent *>& BaseComponent::getExports() const
 
 
 
-bool BaseComponent::hasFlag(ParameterFlags flag) const
+ParameterFlags BaseComponent::getFlags() const
 {
-    return m_flags.test(static_cast<int>(flag));
+    return m_flags;
 }
 
 
 
-void BaseComponent::setFlag(ParameterFlags flag, bool value)
+bool BaseComponent::getFlag(ParameterFlag flag) const
 {
-    if (m_flags.test(static_cast<int>(flag)) != value)
+    return m_flags.getFlag(flag);
+}
+
+
+
+void BaseComponent::setFlag(ParameterFlag flag, bool value)
+{
+    if (m_flags.getFlag(flag) != value)
     {
-        m_flags.set(static_cast<int>(flag), value);
-        emit flagChanged(flag, value);
+        m_flags.setFlag(flag, value);
+        emit flagsChanged(m_flags);
     }
 }
 
@@ -133,7 +137,7 @@ void BaseComponent::loadState(const QVariantMap& map)
 
     if (flags != map.end())
     {
-        m_flags = flags->value<quint64>();
+        m_flags = flags->value<quint32>();
     }
     if (import != map.end())
     {
@@ -160,7 +164,7 @@ QVariantMap BaseComponent::storeState() const
 {
     QVariantMap state;
 
-    state.insert(QStringLiteral("flags"), m_flags.to_ullong());
+    state.insert(QStringLiteral("flags"), static_cast<quint32>(m_flags));
 
     if (m_import)
     {

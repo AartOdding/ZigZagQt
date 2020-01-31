@@ -1,8 +1,11 @@
 #pragma once
 
+#include <QMutex>
 #include <QObject>
 
 #include <vector>
+#include <memory>
+#include <mutex>
 #include <functional>
 
 #include "model/parameter/IntParameter.hpp"
@@ -10,6 +13,7 @@
 #include "model/parameter/EnumParameter.hpp"
 #include "model/parameter/ButtonParameter.hpp"
 #include "model/parameter/ColorParameter.hpp"
+#include "model/parameter/Transform2DParameter.hpp"
 
 
 struct DataTypeDescription;
@@ -60,7 +64,7 @@ class BaseOperator : public BaseZigZagObject
     Q_OBJECT
 
     friend class MoveCommand;
-    friend class ProjectModel;
+    friend class OperatorNetwork;
 
 public:
 
@@ -71,8 +75,9 @@ public:
     virtual void prepare() { }
     virtual void run() = 0;
 
-    void update_view();
-
+    void lock();
+    void unlock();
+    std::shared_ptr<QMutex> getLock();
 
     int positionX() const;
     int positionY() const;
@@ -90,6 +95,9 @@ public:
     bool hasActiveDataOutputs() const;
 
 
+    /*
+     * Used for serialization
+     */
     virtual void loadState(const QVariantMap& state) override;
     virtual QVariantMap storeState() const override;
 
@@ -114,6 +122,9 @@ signals:
 
 
 protected:
+
+
+    void updateView();
 
     // Should be overriden to acquire resources.
     // Never call this function directly, this is done for you.

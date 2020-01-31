@@ -32,8 +32,6 @@ public slots:
 
 private:
 
-    QGraphicsScene * m_model = nullptr;
-
     QVBoxLayout m_mainLayout{ this };
 
     QHBoxLayout m_buttonsLayout;

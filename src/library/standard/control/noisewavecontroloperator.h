@@ -20,21 +20,24 @@ public:
 
     static const OperatorDescription description;
 
-    static const EnumDefinition NoiseType;
-
 private:
-
-    EnumDefinition UseTime { "Use Time as Position", { "True", "False" } };
 
     void recalculate();
 
+    FloatParameter m_outputValue{ this, QStringLiteral("Output") };
 
-    FloatParameter output   { this, "Output",    0 };
-    EnumParameter noise_type { this, "Noise Type", NoiseType };
-    EnumParameter use_time   { this, "Use time as Input", UseTime, 0 };
-    FloatParameter amplitude{ this, "Amplitude", 1 };
-    FloatParameter offset   { this, "Offset",    0 };
-    Float4Parameter position{ this, "Position",  {} };
-    FloatParameter slow_down{ this, "Slow Down X", 3 };
+    EnumParameter m_noiseType{ this, QStringLiteral("Noise Type"),
+        {QStringLiteral("Simplex Noise"), QStringLiteral("Perlin Noise")}, 0 };
+
+    EnumParameter m_timeIsInput{ this, QStringLiteral("Time is Input"),
+        {QStringLiteral("True"), QStringLiteral("False")}, 0 };
+
+    FloatParameter m_timeSpeed{ this, QStringLiteral("Time Speed"), 0.2 };
+
+    FloatParameter m_amplitude{ this, QStringLiteral("Amplitude"), 1 };
+
+    FloatParameter m_offset{ this, QStringLiteral("Offset"), 0 };
+
+    Float4Parameter m_position{ this, QStringLiteral("Position"),  {} };
 
 };

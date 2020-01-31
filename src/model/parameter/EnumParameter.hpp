@@ -3,7 +3,6 @@
 #include <QObject>
 #include "BaseParameter.hpp"
 #include "Int64Component.hpp"
-#include "model/enumdefinition.h"
 
 
 
@@ -13,26 +12,41 @@ class EnumParameter : public BaseParameter
 
 public:
 
-    EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, int m_enumValue = 0);
-    EnumParameter(BaseZigZagObject * parent, const QString& name, const EnumDefinition& m_enum, const QString& value);
+    EnumParameter(BaseZigZagObject * parent, const QString& name, const std::vector<QString>& values, int value = 0);
+    EnumParameter(BaseZigZagObject * parent, const QString& name, const std::vector<QString>& values, const QString& value);
+    //EnumParameter(BaseZigZagObject * parent, const QString& name, std::initializer_list<QString> values, int value = 0);
+    //EnumParameter(BaseZigZagObject * parent, const QString& name, std::initializer_list<QString> values, const QString& value);
 
     int getIndex() const;
-    const QString& getText() const;
+    const QString& getValue() const;
+    const std::vector<QString>& getPossibleValues() const;
 
-    void setIndex(int index);
-    void setText(const QString& value);
+    int indexOf(const QString& value) const;
 
-    void operator=(int m_enumValue);
-    void operator=(const QString& value);
+    const QString& operator[](int index) const;
 
-    const EnumDefinition * getEnum() const;
+    std::vector<QString>::const_iterator begin() const;
+    std::vector<QString>::const_iterator end() const;
 
+public slots:
+
+    void set(int index);
+    void set(const QString& value);
+
+    void addValue(const QString& value, int index = -1);
+
+    bool removeValue(int index);
+    bool removeValue(const QString& value);
+
+signals:
+
+    void enumValueAdded(const QString& addedValue, int index);
+    void enumValueRemoved(const QString removedValue, int index);
+    void enumValuesChanged(const std::vector<QString>& newValues);
 
 private:
 
-    const EnumDefinition * m_enum;
-
-    Int64Component m_enumValue;
+    Int64Component m_enumComponent;
+    std::vector<QString> m_possibleValues;
 
 };
-
