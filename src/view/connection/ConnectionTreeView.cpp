@@ -18,7 +18,7 @@
 static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem)
 {
     auto parameter = qobject_cast<BaseParameter*>(object);
-    auto children = object->findChildren<BaseZigZagObject*>(QString(), Qt::FindDirectChildrenOnly);
+    auto childParameters = object->findChildren<BaseParameter*>(QString(), Qt::FindDirectChildrenOnly);
     QList<BaseComponent*> components;
 
     if (parameter)
@@ -28,7 +28,7 @@ static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem
 
     QTreeWidgetItem * thisTreeItem = nullptr;
 
-    if (parameter && children.size() == 0 && components.size() == 1)
+    if (parameter && childParameters.size() == 0 && components.size() == 1)
     {
         // If there is only one component and no other children add the component directly
         // instead of first adding the paramter and then the component.
@@ -36,7 +36,7 @@ static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem
         newItem->setData(0, 201, QVariant::fromValue<BaseComponent*>(components.at(0)));
         currentTreeItem->addChild(newItem);
     }
-    else if ((components.size() > 1) || children.size() > 0)
+    else if ((components.size() > 1) || childParameters.size() > 0)
     {
         thisTreeItem = new QTreeWidgetItem(currentTreeItem, { object->objectName() });
         thisTreeItem->setExpanded(true);
@@ -54,7 +54,7 @@ static void addToTree(BaseZigZagObject* object, QTreeWidgetItem* currentTreeItem
         }
     }
 
-    for (auto child : children)
+    for (auto child : childParameters)
     {
         addToTree(child, thisTreeItem);
     }
