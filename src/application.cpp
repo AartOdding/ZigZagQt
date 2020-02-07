@@ -4,6 +4,7 @@
 
 #include "model/clock.h"
 #include "model/OperatorNetwork.hpp"
+#include "model/BaseOperator.hpp"
 #include "view/OperatorNetworkView.hpp"
 
 #include <QStyle>
@@ -60,6 +61,8 @@ namespace application
 Application::Application(int &argc, char **argv)
     : QApplication (argc, argv)
 {
+    qRegisterMetaType<QList<BaseOperator*>>("QList<BaseOperator*>");
+
     setAttribute(Qt::AA_ShareOpenGLContexts);
 
     int oxygen = QFontDatabase::addApplicationFont(":/font/OxygenMono-Regular.ttf");
@@ -84,17 +87,14 @@ Application::Application(int &argc, char **argv)
     project_model = std::make_unique<OperatorNetwork>("project");
 
     project_view_model = std::make_unique<OperatorNetworkView>();
-    project_view_model->set_model(project_model.get());
+    project_view_model->setNetwork(project_model.get());
 
-
-    //gl_widget = ;
-    //gl_widget->setGeometry(100, 100, 1000, 720);
-    //viewport.setParent(&gl_widget);
-    //auto gl = new QOpenGLWidget();
 
     main_opengl_widget = new QOpenGLWidget();
     viewport = std::make_unique<Viewport>(main_opengl_widget);
     viewport->setScene(project_view_model.get());
+    viewport->addActions(project_view_model->getActions());
+
     auto context = main_opengl_widget->context();
     main_opengl_widget->doneCurrent();
 

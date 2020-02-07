@@ -74,7 +74,7 @@ void Renderer::render_frame()
     std::deque<BaseOperator*> open_list;
     std::unordered_set<const BaseOperator*> closed_list;
 
-    for (auto o : model->all_operators())
+    for (auto o : model->getOperators())
     {
         if (o->hasActiveDataInputs() == 0)
         {

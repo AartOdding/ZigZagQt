@@ -3,8 +3,8 @@
 #include "application.h"
 
 #include "command/movecommand.h"
-#include "command/removecommand.h"
 #include "model/OperatorNetwork.hpp"
+#include "model/OperatorLibrary.hpp"
 #include "model/datainput.h"
 
 #include <QPointer>
@@ -75,11 +75,11 @@ const OperatorDescription * BaseOperator::description() const
 }
 
 
-
+/*
 void BaseOperator::remove()
 {
-    application::project_model()->remove_operator(this);
-}
+    application::project_model()->removeOperator(this);
+}*/
 
 
 

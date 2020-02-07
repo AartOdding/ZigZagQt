@@ -11,34 +11,108 @@
 #include "model/parameter/BaseComponent.hpp"
 #include "view/OperatorSelectorDialog.hpp"
 
+#include <QMetaObject>
 #include <QPointer>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 
-
+#include <iostream>
 
 OperatorNetworkView::OperatorNetworkView(QObject *parent)
     : QGraphicsScene(-20000, -20000, 40000, 40000)
 {
     setBackgroundBrush(QBrush(QColor(55, 55, 55)));
+
+    m_deleteAction.setAutoRepeat(false);
+    m_selectAllAction.setAutoRepeat(false);
+    m_undoAction.setAutoRepeat(false);
+    m_redoAction.setAutoRepeat(false);
+
+    m_deleteAction.setShortcuts(   { QKeySequence(Qt::Key_Delete),
+                                     QKeySequence(Qt::Key_Backspace)                });
+    m_selectAllAction.setShortcuts({ QKeySequence(Qt::Key_A | Qt::CTRL)             });
+    m_undoAction.setShortcuts(     { QKeySequence(Qt::Key_Z | Qt::CTRL)             });
+    m_redoAction.setShortcuts(     { QKeySequence(Qt::Key_Y | Qt::CTRL),
+                                     QKeySequence(Qt::Key_Z | Qt::CTRL | Qt::SHIFT) });
 }
 
 
-void OperatorNetworkView::set_model(OperatorNetwork *model)
+QList<QAction*> OperatorNetworkView::getActions()
 {
-    data_model = model;
-
-    connect(this, &OperatorNetworkView::redo_signal, data_model, &OperatorNetwork::redo);
-    connect(this, &OperatorNetworkView::undo_signal, data_model, &OperatorNetwork::undo);
-
-    connect(data_model, &OperatorNetwork::operator_added, this, &OperatorNetworkView::on_operator_added);
-    connect(data_model, &OperatorNetwork::operator_removed, this, &OperatorNetworkView::on_operator_deleted);
+    return
+    {
+        &m_deleteAction,
+        &m_selectAllAction,
+        &m_undoAction,
+        &m_redoAction
+    };
 }
 
 
-void OperatorNetworkView::bring_to_front(OperatorView* op)
+void OperatorNetworkView::setNetwork(OperatorNetwork *model)
 {
-    for (auto o : operator_views)
+    m_network = model;
+
+    connect(&m_redoAction,      SIGNAL(triggered()), m_network, SLOT(redo()),                    Qt::QueuedConnection);
+    connect(&m_undoAction,      SIGNAL(triggered()), m_network, SLOT(undo()),                    Qt::QueuedConnection);
+    connect(&m_selectAllAction, SIGNAL(triggered()), this,      SLOT(selectAllOperators()),      Qt::DirectConnection);
+    connect(&m_deleteAction,    SIGNAL(triggered()), this,      SLOT(deleteSelectedOperators()), Qt::DirectConnection);
+
+    connect(m_network, &OperatorNetwork::operatorAdded, this, &OperatorNetworkView::onOperatorAdded, Qt::QueuedConnection);
+}
+
+
+void OperatorNetworkView::selectAllOperators()
+{
+    for (auto op : m_operatorViews)
+    {
+        op->setSelected(true);
+    }
+}
+
+
+void OperatorNetworkView::deleteSelectedOperators()
+{
+    std::cout << "delete" <<std::endl;
+    auto selected = selectedItems();
+    QList<BaseOperator*> selectedOperators;
+    selectedOperators.reserve(selected.size());
+
+    for (auto item : selected)
+    {
+        auto operatorView = dynamic_cast<OperatorView*>(item);
+        auto operatorModel = &operatorView->operator_model;
+
+        if (operatorModel)
+        {
+            selectedOperators.push_back(operatorModel);
+        }
+
+        if (operatorView && operatorModel && m_operatorViews.contains(operatorModel))
+        {
+            for (auto input : operatorModel->dataInputs())
+            {
+                if (input)
+                {
+                    disconnect(input, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
+                    disconnect(input, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
+                }
+            }
+            disconnect(operatorModel, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
+            disconnect(operatorModel, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
+
+            m_operatorViews.remove(operatorModel);
+            removeItem(operatorView);
+            delete operatorView;
+        }
+    }
+    QMetaObject::invokeMethod(m_network, "removeOperators", Qt::QueuedConnection, Q_ARG(QList<BaseOperator*>, selectedOperators));
+}
+
+
+void OperatorNetworkView::bringToFront(OperatorView* op)
+{
+    for (auto o : m_operatorViews)
     {
         if (o != op)
         {
@@ -49,80 +123,35 @@ void OperatorNetworkView::bring_to_front(OperatorView* op)
 }
 
 
-void OperatorNetworkView::keyPressEvent(QKeyEvent *keyEvent)
-{
-    keyEvent->setAccepted(false);
-    QGraphicsScene::keyPressEvent(keyEvent);
-
-    if (!keyEvent->isAccepted())
-    {
-        if (keyEvent->matches(QKeySequence::Undo))
-        {
-            emit undo_signal();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::Redo))
-        {
-            emit redo_signal();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::Delete) || keyEvent->key() == Qt::Key_Backspace)
-        {
-            application::project_model()->get_undo_stack()->beginMacro("Remove selected operators.");
-
-            for (auto obj : selectedItems())
-            {
-                auto op = dynamic_cast<OperatorView*>(obj);
-
-                if (op)
-                {
-                    op->operator_model.remove();
-                }
-            }
-            application::project_model()->get_undo_stack()->endMacro();
-            keyEvent->setAccepted(true);
-        }
-        else if (keyEvent->matches(QKeySequence::SelectAll))
-        {
-            for (auto op : operator_views)
-            {
-                op->setSelected(true);
-            }
-            keyEvent->setAccepted(true);
-        }
-    }
-}
-
-
-void OperatorNetworkView::keyReleaseEvent(QKeyEvent *keyEvent)
-{
-    QGraphicsScene::keyReleaseEvent(keyEvent);
-}
-
-
 void OperatorNetworkView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     auto dialog = new OperatorSelectorDialog(nullptr, event->scenePos().x(), event->scenePos().y());
-     connect(dialog, &OperatorSelectorDialog::operatorRequested,
-             data_model, &OperatorNetwork::add_operator, Qt::QueuedConnection);
 
-     auto x = event->screenPos().x() - dialog->size().width() / 2;
-     auto y = event->screenPos().y() - 100;
-     auto screen = QGuiApplication::screenAt(event->screenPos());
+    connect(dialog, SIGNAL(operatorRequested(const OperatorDescription*, int, int)), m_network, SLOT(addOperator(const OperatorDescription*, int, int)), Qt::QueuedConnection);
 
-     if (screen)
-     {
-         // make sure always fits in screen
-     }
-     dialog->move(x, y);
-     dialog->show();
+    auto x = event->screenPos().x() - dialog->size().width() / 2;
+    auto y = event->screenPos().y() - 100;
+    auto screen = QGuiApplication::screenAt(event->screenPos());
+
+    if (screen)
+    {
+        // make sure always fits in screen
+    }
+    dialog->move(x, y);
+    dialog->show();
 }
 
 
-void OperatorNetworkView::on_operator_added(BaseOperator* operator_ptr)
+void OperatorNetworkView::onOperatorAdded(QPointer<BaseOperator> operatorPtr, std::shared_ptr<std::mutex> mutex)
 {
+    if (mutex)
+    {
+        std::lock_guard<std::mutex> lock(*mutex);
+
+
+    }
     OperatorView* op_view = new OperatorView(*operator_ptr);
-    operator_views.insert(operator_ptr, op_view);
+    m_operatorViews.insert(operator_ptr, op_view);
 
     for (auto i : operator_ptr->dataInputs())
     {
@@ -139,33 +168,10 @@ void OperatorNetworkView::on_operator_added(BaseOperator* operator_ptr)
 }
 
 
-void OperatorNetworkView::on_operator_deleted(BaseOperator* operator_ptr)
-{
-    if (operator_views.contains(operator_ptr))
-    {
-        for (auto i : operator_ptr->dataInputs())
-        {
-            if (i)
-            {
-                disconnect(i, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
-                disconnect(i, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
-            }
-        }
-        disconnect(operator_ptr, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
-        disconnect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
-
-        OperatorView* op_view = operator_views[operator_ptr];
-        operator_views.remove(operator_ptr);
-        removeItem(op_view);
-        delete op_view;
-    }
-}
-
-
 void OperatorNetworkView::on_input_connected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->get_operator()];
-    auto output_op = operator_views[output->getOperator()];
+    auto input_op = m_operatorViews[input->get_operator()];
+    auto output_op = m_operatorViews[output->getOperator()];
 
     if (input_op && output_op)
     {
@@ -175,7 +181,7 @@ void OperatorNetworkView::on_input_connected(BaseDataType* output, DataInput* in
         if (input_view && output_view)
         {
             auto cable = new Cable(this, output_view, input_view);
-            data_cables.insert(input_view, cable);
+            m_dataCables.insert(input_view, cable);
             addItem(cable);
         }
     }
@@ -184,7 +190,7 @@ void OperatorNetworkView::on_input_connected(BaseDataType* output, DataInput* in
 
 void OperatorNetworkView::on_input_disconnected(BaseDataType* output, DataInput* input)
 {
-    auto input_op = operator_views[input->get_operator()];
+    auto input_op = m_operatorViews[input->get_operator()];
 
     if (input_op)
     {
@@ -192,8 +198,8 @@ void OperatorNetworkView::on_input_disconnected(BaseDataType* output, DataInput*
 
         if (input_view)
         {
-            auto cable = data_cables[input_view];
-            data_cables.remove(input_view);
+            auto cable = m_dataCables[input_view];
+            m_dataCables.remove(input_view);
             removeItem(cable);
             delete cable;
         }
@@ -203,8 +209,8 @@ void OperatorNetworkView::on_input_disconnected(BaseDataType* output, DataInput*
 
 void OperatorNetworkView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
-    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* export_op = m_operatorViews[exporter->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* import_op = m_operatorViews[importer->getParameter()->findParent<BaseOperator*>()];
 
     if (export_op && import_op)
     {
@@ -213,15 +219,15 @@ void OperatorNetworkView::on_parameters_connected(BaseComponent * exporter, Base
 
         if (export_connector && import_connector)
         {
-            if (!parameter_cables.contains({ export_connector, import_connector }))
+            if (!m_parameterCables.contains({ export_connector, import_connector }))
             {
                 auto cable = new Cable(this, export_connector, import_connector);
-                parameter_cables.insert({ export_connector, import_connector }, { cable, 1} );
+                m_parameterCables.insert({ export_connector, import_connector }, { cable, 1} );
                 addItem(cable);
             }
             else
             {
-                parameter_cables[{export_connector, import_connector}].second += 1;
+                m_parameterCables[{export_connector, import_connector}].second += 1;
             }
         }
     }
@@ -230,8 +236,8 @@ void OperatorNetworkView::on_parameters_connected(BaseComponent * exporter, Base
 
 void OperatorNetworkView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
 {
-    OperatorView* export_op = operator_views[exporter->getParameter()->findParent<BaseOperator*>()];
-    OperatorView* import_op = operator_views[importer->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* export_op = m_operatorViews[exporter->getParameter()->findParent<BaseOperator*>()];
+    OperatorView* import_op = m_operatorViews[importer->getParameter()->findParent<BaseOperator*>()];
 
     if (export_op && import_op)
     {
@@ -241,14 +247,14 @@ void OperatorNetworkView::on_parameter_disconnected(BaseComponent * exporter, Ba
         if (export_connector && import_connector)
         {
             auto key = std::pair(export_connector, import_connector);
-            Q_ASSERT(parameter_cables.contains(key));
+            Q_ASSERT(m_parameterCables.contains(key));
 
-            parameter_cables[key].second -= 1;
-            if (parameter_cables[key].second < 1)
+            m_parameterCables[key].second -= 1;
+            if (m_parameterCables[key].second < 1)
             {
-                removeItem(parameter_cables[key].first);
-                delete parameter_cables[key].first;
-                parameter_cables.remove(key);
+                removeItem(m_parameterCables[key].first);
+                delete m_parameterCables[key].first;
+                m_parameterCables.remove(key);
             }
         }
     }

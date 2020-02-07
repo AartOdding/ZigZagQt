@@ -1,16 +1,17 @@
 #pragma once
 
-#include <QMap>
-#include <QObject>
-#include <QUndoStack>
+#include <vector>
+
+#include <QList>
+#include <QString>
+#include <QUndoCommand>
+#include <QUndoStack> // TODO: remove
 
 #include "BaseZigZagObject.hpp"
 
-#include "model/OperatorLibrary.hpp"
 
-
-class OperatorNetwork;
 class BaseOperator;
+class OperatorDescription;
 
 
 
@@ -18,16 +19,15 @@ class OperatorNetwork : public BaseZigZagObject
 {
     Q_OBJECT
 
-    friend class AddCommand;
-    friend class RemoveCommand;
-
 public:
 
     OperatorNetwork(const QString& name);
 
-    QUndoStack* get_undo_stack();
 
-    const std::vector<BaseOperator*>& all_operators() const;
+    const std::vector<BaseOperator*>& getOperators() const;
+
+
+    QUndoStack* get_undo_stack(); // TODO: move elsewhere
 
 
     virtual void loadState(const QVariantMap&) override;
@@ -37,44 +37,74 @@ public:
     virtual void createChild(const QXmlStreamAttributes&) override;
 
 
-public slots:
+signals:
+
+    void operatorAdded(BaseOperator* operatorPtr);
+
+    void operatorRemoved(BaseOperator* operatorPtr);
+
+
+private slots:
 
     void redo();
 
     void undo();
 
-    // Undoable action
-    void add_operator(const OperatorDescription* op_type, int x, int y);
 
-    // Undoable action
-    void remove_operator(BaseOperator* operator_ptr);
+    void addOperator(const OperatorDescription* operatorDescription, int xPos, int yPos);
 
+    void removeOperator(BaseOperator* operatorPtr);
 
-
-
-    //void move_operator_undoable(BaseOperator* operator_ptr, int x, int y);
-    //void connect_data_undoable(BaseDataBlock* output, DataBlockInput* input);
-    //void disconnect_data_undoable(BaseDataBlock* output, DataBlockInput* input);
-
-
-signals:
-
-    void operator_added(BaseOperator* operator_ptr);
-
-    void operator_removed(BaseOperator* operator_ptr);
-
-
+    void removeOperators(QList<BaseOperator*> operatorPtrs);
 
 private:
 
-    void add_operator_to_model(BaseOperator * operator_ptr);
 
-    void remove_operator_from_model(BaseOperator * operator_ptr);
+    class AddOperatorCommand : public QUndoCommand
+    {
+    public:
+
+        AddOperatorCommand(OperatorNetwork* network, BaseOperator* op);
+        ~AddOperatorCommand() override;
+
+        void redo() override;
+        void undo() override;
+
+    private:
+
+        OperatorNetwork* m_network;
+        BaseOperator* m_operator;
+        bool m_hasOwnership;
+
+    };
 
 
-    QUndoStack undo_stack;
+    class RemoveOperatorCommand : public QUndoCommand
+    {
+    public:
 
-    std::vector<BaseOperator*> operators;
+        RemoveOperatorCommand(OperatorNetwork* network, BaseOperator* op);
+        ~RemoveOperatorCommand() override;
 
+        void redo() override;
+        void undo() override;
+
+    private:
+
+        OperatorNetwork* m_network;
+        BaseOperator* m_operator;
+        bool m_hasOwnership;
+
+    };
+
+
+    void addOperatorImplementation(BaseOperator * operator_ptr);
+
+    void removeOperatorImplementation(BaseOperator * operator_ptr);
+
+
+    QUndoStack undo_stack; // TODO: move elsewhere
+
+    std::vector<BaseOperator*> m_operators;
 
 };

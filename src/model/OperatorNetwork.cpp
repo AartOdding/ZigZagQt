@@ -6,14 +6,12 @@
 #include "model/BaseDataType.hpp"
 #include "model/datainput.h"
 
-#include "command/addcommand.h"
-#include "command/removecommand.h"
-
 #include <QFile>
 #include <QString>
 #include <QPointer>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QMetaMethod>
 
 #include <iostream>
 
@@ -21,12 +19,87 @@
 
 OperatorNetwork::OperatorNetwork(const QString& name)
     : BaseZigZagObject(nullptr, name)
-{ }
+{
+
+}
 
 
+const std::vector<BaseOperator*>& OperatorNetwork::getOperators() const
+{
+    return m_operators;
+}
+
+
+// TODO: move elsewhere
 QUndoStack* OperatorNetwork::get_undo_stack()
 {
     return &undo_stack;
+}
+
+
+void OperatorNetwork::loadState(const QVariantMap&)
+{
+
+}
+
+
+QVariantMap OperatorNetwork::storeState() const
+{
+    return QVariantMap();
+}
+
+
+
+void OperatorNetwork::createChild(const QXmlStreamAttributes&)
+{
+
+}
+
+
+void OperatorNetwork::addOperator(const OperatorDescription* operatorDescription, int xPos, int yPos)
+{
+    if (operatorDescription)
+    {
+        BaseOperator* op = operatorDescription->construct(this);
+        op->set_position(xPos, yPos);
+        undo_stack.push(new AddOperatorCommand(this, op));
+    }
+}
+
+
+void OperatorNetwork::removeOperator(BaseOperator * operatorPtr)
+{
+    if (operatorPtr)
+    {
+        undo_stack.beginMacro("Remove Operator");
+
+        operatorPtr->disconnectParameters();
+
+        for (auto& input : operatorPtr->dataInputs())
+        {
+            //input->remove_imports_exports();
+            input->disconnect();
+        }
+        for (auto& output : operatorPtr->dataOutputs())
+        {
+            //output->remove_imports_exports();
+            output->disconnectFromAll();
+        }
+        undo_stack.push(new RemoveOperatorCommand(this, operatorPtr));
+        undo_stack.endMacro();
+    }
+}
+
+
+void OperatorNetwork::removeOperators(QList<BaseOperator*> operatorPtrs)
+{
+    undo_stack.beginMacro("Remove Operators");
+
+    for (auto op : operatorPtrs)
+    {
+        removeOperator(op);
+    }
+    undo_stack.endMacro();
 }
 
 
@@ -42,42 +115,7 @@ void OperatorNetwork::undo()
 }
 
 
-void OperatorNetwork::add_operator(const OperatorDescription* op_type, int x, int y)
-{
-    if (op_type)
-    {
-        auto op = op_type->construct(this);
-        op->set_position(x, y);
-        undo_stack.push(new AddCommand(*this, op));
-    }
-}
-
-
-void OperatorNetwork::remove_operator(BaseOperator * operator_ptr)
-{
-    if (operator_ptr)
-    {
-        undo_stack.beginMacro("Remove Operator");
-
-        operator_ptr->disconnectParameters();
-
-        for (auto& input : operator_ptr->dataInputs())
-        {
-            //input->remove_imports_exports();
-            input->disconnect();
-        }
-        for (auto& output : operator_ptr->dataOutputs())
-        {
-            //output->remove_imports_exports();
-            output->disconnectFromAll();
-        }
-        undo_stack.push(new RemoveCommand(*this, operator_ptr));
-        undo_stack.endMacro();
-    }
-}
-
-
-void OperatorNetwork::add_operator_to_model(BaseOperator * operator_ptr)
+void OperatorNetwork::addOperatorImplementation(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -96,12 +134,12 @@ void OperatorNetwork::add_operator_to_model(BaseOperator * operator_ptr)
         }
         operator_ptr->acquire_resources();
 
-        operators.push_back(operator_ptr);
+        m_operators.push_back(operator_ptr);
 
         context->functions()->glBindFramebuffer(GL_FRAMEBUFFER, old_fbo);
         //context->functions()->glFlush();
 
-        emit operator_added(operator_ptr);
+        emit operatorAdded(operator_ptr);
 
         // To avoid cables being drawn to the wrong until the operator is moved, i suspect, it is because
         // layout has not yet been applied when cable is being made.
@@ -119,7 +157,7 @@ void OperatorNetwork::add_operator_to_model(BaseOperator * operator_ptr)
 }
 
 
-void OperatorNetwork::remove_operator_from_model(BaseOperator * operator_ptr)
+void OperatorNetwork::removeOperatorImplementation(BaseOperator * operator_ptr)
 {
     if (operator_ptr)
     {
@@ -135,48 +173,83 @@ void OperatorNetwork::remove_operator_from_model(BaseOperator * operator_ptr)
             }
         }
 
-        operators.erase(std::remove(operators.begin(), operators.end(), operator_ptr), operators.end());
-        emit operator_removed(operator_ptr);
+        m_operators.erase(std::remove(m_operators.begin(), m_operators.end(), operator_ptr), m_operators.end());
+        emit operatorRemoved(operator_ptr);
     }
 }
 
 
-const std::vector<BaseOperator*>& OperatorNetwork::all_operators() const
-{
-    return operators;
-}
-
-
-void OperatorNetwork::loadState(const QVariantMap&)
+OperatorNetwork::AddOperatorCommand::AddOperatorCommand(OperatorNetwork* network, BaseOperator* op)
+    : m_network(network),
+      m_operator(op),
+      m_hasOwnership(true)
 {
 
 }
 
 
-
-QVariantMap OperatorNetwork::storeState() const
+OperatorNetwork::AddOperatorCommand::~AddOperatorCommand()
 {
-    return QVariantMap();
+    if (m_network && m_operator && m_hasOwnership)
+    {
+        delete m_operator;
+    }
 }
 
 
+void OperatorNetwork::AddOperatorCommand::redo()
+{
+    if (m_network && m_operator)
+    {
+        m_network->addOperatorImplementation(m_operator);
+        m_hasOwnership = false;
+    }
+}
 
-void OperatorNetwork::createChild(const QXmlStreamAttributes&)
+
+void OperatorNetwork::AddOperatorCommand::undo()
+{
+    if (m_network && m_operator)
+    {
+        m_network->removeOperatorImplementation(m_operator);
+        m_hasOwnership = true;
+    }
+}
+
+
+OperatorNetwork::RemoveOperatorCommand::RemoveOperatorCommand(OperatorNetwork* network, BaseOperator* op)
+    : m_network(network),
+      m_operator(op),
+      m_hasOwnership(true)
 {
 
 }
 
 
-/*
-void ProjectModel::saveModel(const QString& path)
+OperatorNetwork::RemoveOperatorCommand::~RemoveOperatorCommand()
 {
-    QFile file(path);
-    file.open(QFile::WriteOnly | QFile::Truncate);
-    std::cout << "SAVEEEE\n";
+    if (m_network && m_operator && m_hasOwnership)
+    {
+        delete m_operator;
+    }
 }
 
 
-void ProjectModel::loadModel(const QString& path)
+void OperatorNetwork::RemoveOperatorCommand::redo()
 {
+    if (m_network && m_operator)
+    {
+        m_network->removeOperatorImplementation(m_operator);
+        m_hasOwnership = true;
+    }
+}
 
-}*/
+
+void OperatorNetwork::RemoveOperatorCommand::undo()
+{
+    if (m_network && m_operator)
+    {
+        m_network->addOperatorImplementation(m_operator);
+        m_hasOwnership = false;
+    }
+}

@@ -104,7 +104,7 @@ public:
 public slots:
 
     // Undoable action.
-    void remove();
+    //void remove();
 
     // Undoable action.
     void move_to(int x, int y);
@@ -150,3 +150,8 @@ private:
     const OperatorDescription * m_description;
 
 };
+
+Q_DECLARE_METATYPE(BaseOperator*)
+Q_DECLARE_METATYPE(QList<BaseOperator*>)
+Q_DECLARE_METATYPE(std::vector<BaseOperator*>)
+

@@ -95,13 +95,11 @@ SOURCES += \
 
 HEADERS += \
     src/application.h \
-    src/command/addcommand.h \
     src/command/connectcommand.h \
     src/command/connectparameterscommand.h \
     src/command/disconnectcommand.h \
     src/command/disconnectparameterscommand.h \
     src/command/movecommand.h \
-    src/command/removecommand.h \
     src/library/standard/control/clockoperator.h \
     src/library/standard/control/increasingvalueoperator.h \
     src/library/standard/control/noisewavecontroloperator.h \

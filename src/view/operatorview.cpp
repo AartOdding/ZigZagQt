@@ -138,7 +138,7 @@ ParameterConnector* OperatorView::parameter_connector_out() const
 
 void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    scope_view()->bring_to_front(this);
+    scope_view()->bringToFront(this);
     QGraphicsWidget::mousePressEvent(event);
 }
 

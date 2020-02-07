@@ -1,6 +1,7 @@
 #include "application.h"
 #include "phantomstyle.h"
 
+#include <QFile>
 #include <QTextStream>
 
 
