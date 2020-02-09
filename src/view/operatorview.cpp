@@ -84,11 +84,12 @@ OperatorView::OperatorView(BaseOperator* op)
 
 OperatorView::~OperatorView()
 {
+    /*
     for (auto view : dataViews)
     {
         view->setParentItem(nullptr);
         scene()->removeItem(view);
-    }
+    }*/
 }
 
 

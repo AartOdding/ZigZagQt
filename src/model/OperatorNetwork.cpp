@@ -90,6 +90,7 @@ void OperatorNetwork::removeOperator(BaseOperator * operatorPtr)
     }
 }
 
+
 // TODO: list might contain dangling pointers
 void OperatorNetwork::removeOperators(QList<BaseOperator*> operatorPtrs)
 {

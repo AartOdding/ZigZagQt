@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QGraphicsScene>
 
 
 BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo *type)
@@ -11,6 +12,13 @@ BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInf
       type_info(type)
 {
     //setFlag(QGraphicsItem::ItemIgnoresTransformations);
+}
+
+
+BaseDataView::~BaseDataView()
+{
+    setParentItem(nullptr);
+    scene()->removeItem(this);
 }
 
 

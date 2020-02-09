@@ -51,6 +51,7 @@ public:
 
     BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info);
 
+    virtual ~BaseDataView();
 
     QRectF boundingRect() const final;
 
