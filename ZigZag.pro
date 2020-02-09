@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets multimedia
+QT       += core gui widgets opengl multimedia
 
 TARGET = ZigZag
 TEMPLATE = app
@@ -71,6 +71,7 @@ SOURCES += \
     src/view/BaseConnector.cpp \
     src/view/ConnectionManager.cpp \
     src/view/DataConnector.cpp \
+    src/view/ExecutionEngineWindow.cpp \
     src/view/OperatorNetworkView.cpp \
     src/view/OperatorSelectorDialog.cpp \
     src/view/ParameterConnector.cpp \
@@ -149,6 +150,7 @@ HEADERS += \
     src/view/BaseConnector.hpp \
     src/view/ConnectionManager.hpp \
     src/view/DataConnector.hpp \
+    src/view/ExecutionEngineWindow.hpp \
     src/view/OperatorNetworkView.hpp \
     src/view/OperatorSelectorDialog.hpp \
     src/view/ParameterConnector.hpp \

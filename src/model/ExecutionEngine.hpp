@@ -3,22 +3,27 @@
 #include <memory>
 #include <QObject>
 #include <QTimer>
+#include <QGLWidget>
+#include <QOpenGLFunctions_3_3_Core>
+#include "utility/FrameRateMonitor.hpp"
 
 
 class Deserializer;
 class Serializer;
 class QSemaphore;
 class OperatorNetwork;
+class ExecutionEngineWindow;
 
 
-class ExecutionEngine : public QObject
+class ExecutionEngine : public QObject,
+                        public QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 
 public:
 
     // Will take ownership of the OperatorNetwork.
-    ExecutionEngine(OperatorNetwork* network);
+    ExecutionEngine(OperatorNetwork* network, ExecutionEngineWindow* window);
 
     ~ExecutionEngine();
 
@@ -50,5 +55,7 @@ private:
 
     QTimer m_timer;
     OperatorNetwork* m_network;
+    ExecutionEngineWindow* m_glWindow;
+    FrameRateMonitor m_frameRateMonitor;
 
 };

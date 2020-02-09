@@ -32,7 +32,7 @@ private:
     DataInput texture_in{ this, "Input", TextureData::description };
 
     TextureData output_texture{ this, "Output Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

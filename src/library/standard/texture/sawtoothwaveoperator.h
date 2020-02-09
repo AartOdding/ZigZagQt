@@ -51,7 +51,7 @@ private:
     Float2Parameter scale{ this, "Scale", { 1, 1 } };
 
     TextureData output_texture{ this, "Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

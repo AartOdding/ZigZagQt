@@ -50,7 +50,7 @@ private:
     Transform2DParameter transformation{ this, "Transformation" };
 
     TextureData output_texture{ this, "Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

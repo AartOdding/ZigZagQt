@@ -17,6 +17,7 @@ class OperatorNetwork;
 class OperatorNetworkView;
 class ParameterEditor;
 class ExecutionEngine;
+class ExecutionEngineWindow;
 
 class QMainWindow;
 class QOpenGLContext;
@@ -27,12 +28,12 @@ namespace application
 {
     Application *      instance();
     Clock *            clock();
-    Renderer*          renderer();
+    //Renderer*          renderer();
     OperatorNetwork *     project_model();
     OperatorNetworkView * project_view_model();
     ParameterEditor* parameterEditor();
 
-    QOpenGLContext *   main_opengl_context();
+    //QOpenGLContext *   main_opengl_context();
 }
 
 
@@ -46,10 +47,10 @@ public:
     Application(int &argc, char **argv);
 
     Clock *            get_clock();
-    Renderer*          get_renderer();
+    //Renderer*          get_renderer();
     OperatorNetwork *     get_project_model();
     OperatorNetworkView * get_project_view_model();
-    QOpenGLContext *   get_main_opengl_context();
+    //QOpenGLContext *   get_main_opengl_context();
     ParameterEditor* getParameterEditor();
 
 public slots:
@@ -59,15 +60,16 @@ public slots:
 private:
 
     std::unique_ptr<Clock>            clock;
-    std::unique_ptr<Renderer>         renderer;
+    //std::unique_ptr<Renderer>         renderer;
     std::unique_ptr<OperatorNetwork>     project_model;
     std::unique_ptr<OperatorNetworkView> project_view_model;
     std::unique_ptr<ParameterEditor>     parameterEditor;
     ExecutionEngine *                 m_executionEngine;
+    ExecutionEngineWindow*            m_executionEngineWindow;
     QThread                           m_executionThread;
 
     std::unique_ptr<Viewport> viewport;
-    QOpenGLWidget * main_opengl_widget;
+    //QOpenGLWidget * main_opengl_widget;
 
     std::unique_ptr<QWidget> main_window;
 };

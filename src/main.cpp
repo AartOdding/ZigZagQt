@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 
     QSurfaceFormat::setDefaultFormat(format);
 
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     QPalette palette;
     palette.setColor(QPalette::Window, QColor(53, 53, 53));
@@ -44,6 +43,7 @@ int main(int argc, char *argv[])
 
     auto style = new PhantomStyle();
 
+    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     Application app(argc, argv);
     app.setStyle(style);
     app.setPalette(palette);

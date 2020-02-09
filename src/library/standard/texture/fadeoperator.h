@@ -42,7 +42,7 @@ private:
     std::array<DataInput*, 5> textures = { &texture_0, &texture_1, &texture_2, &texture_3, &texture_4 };
 
     TextureData output_texture{ this, "Result" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

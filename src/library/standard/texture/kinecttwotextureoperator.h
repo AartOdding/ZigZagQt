@@ -35,7 +35,7 @@ public:
 private:
 
     TextureData output_texture{ this, "Depth Texture", false };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
 
 #ifdef Q_OS_WIN

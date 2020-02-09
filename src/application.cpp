@@ -1,5 +1,6 @@
 #include "application.h"
 #include "model/ExecutionEngine.hpp"
+#include "view/ExecutionEngineWindow.hpp"
 #include "renderer.h"
 
 #include "model/clock.h"
@@ -31,10 +32,10 @@ namespace application
         return instance()->get_clock();
     }
 
-    Renderer * renderer()
+    /*Renderer * renderer()
     {
         return instance()->get_renderer();
-    }
+    }*/
 
     OperatorNetwork * project_model()
     {
@@ -51,10 +52,10 @@ namespace application
         return instance()->get_project_view_model();
     }
 
-    QOpenGLContext * main_opengl_context()
+    /*QOpenGLContext * main_opengl_context()
     {
         return instance()->get_main_opengl_context();
-    }
+    }*/
 }
 
 
@@ -65,26 +66,7 @@ Application::Application(int &argc, char **argv)
     qRegisterMetaType<QPointer<BaseOperator>>("QPointer<BaseOperator>");
     qRegisterMetaType<std::shared_ptr<std::mutex>>("std::shared_ptr<std::mutex>");
 
-    setAttribute(Qt::AA_ShareOpenGLContexts);
-
-    int oxygen = QFontDatabase::addApplicationFont(":/font/OxygenMono-Regular.ttf");
-    int open_sans_reg = QFontDatabase::addApplicationFont(":/font/OpenSans-Regular.ttf");
-    int open_sans_semi = QFontDatabase::addApplicationFont(":/font/OpenSans-SemiBold.ttf");
-    int montserrat = QFontDatabase::addApplicationFont(":/font/Montserrat-Regular.ttf");
-
-    QFontDatabase::addApplicationFont(":/font/Roboto-Regular.ttf");
-
-    std::cout << oxygen << '\t' << open_sans_reg << '\t' << open_sans_semi << '\t' << montserrat << '\n';
-
-    std::cout << QFontDatabase::applicationFontFamilies(oxygen).at(0).toStdString() << "\n";
-    std::cout << QFontDatabase::applicationFontFamilies(open_sans_reg).at(0).toStdString() << "\n";
-    std::cout << QFontDatabase::applicationFontFamilies(open_sans_semi).at(0).toStdString() << "\n";
-    std::cout << QFontDatabase::applicationFontFamilies(montserrat).at(0).toStdString() << "\n";
-
-    connect(this, &QCoreApplication::aboutToQuit, this, &Application::onShutdown);
-
     clock = std::make_unique<Clock>();
-
 
     project_model = std::make_unique<OperatorNetwork>("project");
 
@@ -92,20 +74,20 @@ Application::Application(int &argc, char **argv)
     project_view_model->setNetwork(project_model.get());
 
 
-    main_opengl_widget = new QOpenGLWidget();
-    viewport = std::make_unique<Viewport>(main_opengl_widget);
+    //main_opengl_widget = new QOpenGLWidget();
+    viewport = std::make_unique<Viewport>();
     viewport->setScene(project_view_model.get());
     viewport->addActions(project_view_model->getActions());
 
-    auto context = main_opengl_widget->context();
-    main_opengl_widget->doneCurrent();
+    //auto context = main_opengl_widget->context();
+    //main_opengl_widget->doneCurrent();
 
-    renderer = std::make_unique<Renderer>(main_opengl_widget);
+    //renderer = std::make_unique<Renderer>(main_opengl_widget);
 
     //viewport->
 
-    renderer->set_model(project_model.get());
-    std::cout << "renderer" << renderer << "\n";
+    //renderer->set_model(project_model.get());
+    //std::cout << "renderer" << renderer << "\n";
 
 
     QMenuBar* menu_bar = new QMenuBar(viewport.get());
@@ -135,15 +117,22 @@ Application::Application(int &argc, char **argv)
     main_window = std::make_unique<QWidget>();
     main_window->setLayout(layout);
 
-    m_executionEngine = new ExecutionEngine(project_model.get());
-    //m_executionEngine->moveToThread(&m_executionThread);
+    m_executionEngineWindow = new ExecutionEngineWindow();
+    m_executionEngineWindow->show();
+    m_executionEngineWindow->doneCurrent();
+    m_executionEngineWindow->context()->moveToThread(&m_executionThread);
+
+    m_executionEngine = new ExecutionEngine(project_model.get(), m_executionEngineWindow);
+    m_executionEngine->moveToThread(&m_executionThread);
     connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
-    //m_executionThread.start(QThread::TimeCriticalPriority);
+    m_executionThread.start(QThread::TimeCriticalPriority);
 
     parameterEditor = std::make_unique<ParameterEditor>();
     parameterEditor->setScene(project_view_model.get());
 
-    connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
+    //connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
+
+    connect(this, &QCoreApplication::aboutToQuit, this, &Application::onShutdown);
     std::cout << "GUI: " << thread() << std::endl;
 }
 
@@ -160,11 +149,11 @@ Clock * Application::get_clock()
     return clock.get();
 }
 
-
+/*
 Renderer * Application::get_renderer()
 {
     return renderer.get();
-}
+}*/
 
 ParameterEditor * Application::getParameterEditor()
 {
@@ -182,9 +171,9 @@ OperatorNetworkView * Application::get_project_view_model()
     return project_view_model.get();
 }
 
-
+/*
 QOpenGLContext * Application::get_main_opengl_context()
 {
     // TODO: maybe change to static cast later
     return main_opengl_widget->context();
-}
+}*/

@@ -40,6 +40,6 @@ private:
     //parameter::Float test3{ this, "tets"};
 
     TextureData output_texture{ this, "Output Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
 };

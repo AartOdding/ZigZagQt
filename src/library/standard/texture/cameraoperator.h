@@ -39,7 +39,7 @@ public slots:
 private:
 
     TextureData output_texture{ this, "Camera Image", false };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     QCamera camera;
     QCameraImageCapture capture{ &camera };

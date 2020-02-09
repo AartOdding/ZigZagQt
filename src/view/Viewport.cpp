@@ -8,11 +8,9 @@
 
 
 
-Viewport::Viewport(QOpenGLWidget* gl, QWidget* parent)
+Viewport::Viewport(QWidget* parent)
     : QGraphicsView(parent)
 {
-    setViewport(gl);
-
     setDragMode(QGraphicsView::ScrollHandDrag);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
