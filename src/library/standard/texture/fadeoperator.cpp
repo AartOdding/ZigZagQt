@@ -81,8 +81,8 @@ void FadeOperator::run()
     float fract = modf(position.get(), &whole);
 
 
-    const TextureData* tex_a = static_cast<const TextureData*>(textures[index_a]->get_connection());
-    const TextureData* tex_b = static_cast<const TextureData*>(textures[index_b]->get_connection());
+    const TextureData* tex_a = static_cast<const TextureData*>(textures[index_a]->getConnectedData());
+    const TextureData* tex_b = static_cast<const TextureData*>(textures[index_b]->getConnectedData());
 
     output_texture.bindFramebuffer();
     glUseProgram(shader.programId());
@@ -112,7 +112,7 @@ void FadeOperator::run()
 }
 
 
-void FadeOperator::parameterChangedEvent(const BaseParameter* parameter)
+void FadeOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

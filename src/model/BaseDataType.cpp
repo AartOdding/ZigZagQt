@@ -49,12 +49,12 @@ const std::vector<DataInput*>& BaseDataType::getConnections() const
 }
 
 
-void BaseDataType::connectTo(DataInput* data_input)
+// Undoable action
+void BaseDataType::connectTo(DataInput* dataInput)
 {
-    if (data_input && data_input->get_connection() != this && data_input->compatible_with(this))
+    if (dataInput && dataInput->getConnectedData() != this && dataInput->compatible_with(this))
     {
-        auto undo = network()->get_undo_stack();
-        undo->push(new ConnectCommand(this, data_input));
+        network()->getUndoStack()->push(new ConnectCommand(this, dataInput));
     }
 }
 
@@ -64,7 +64,7 @@ void BaseDataType::disconnectFrom(DataInput* data_input)
 {
     if (isConnectedTo(data_input))
     {
-        application::project_model()->get_undo_stack()->push(new DisconnectCommand(this, data_input));
+        network()->getUndoStack()->push(new DisconnectCommand(this, data_input));
     }
 }
 
@@ -74,25 +74,25 @@ void BaseDataType::disconnectFromAll()
 {
     if (!m_connections.empty())
     {
-        application::project_model()->get_undo_stack()->beginMacro("Disconnect All");
+        network()->getUndoStack()->beginMacro("Disconnect All");
 
         while (!m_connections.empty())
         {
             disconnectFrom(m_connections.back());
         }
 
-        application::project_model()->get_undo_stack()->endMacro();
+        network()->getUndoStack()->endMacro();
     }
 }
 
 
 // Non action version of connect_to
-bool BaseDataType::addConnection(DataInput* data_input)
+bool BaseDataType::addConnection(DataInput* dataInput)
 {
-    if (data_input && data_input->compatible_with(this) && !isConnectedTo(data_input))
+    if (dataInput && dataInput->compatible_with(this) && !isConnectedTo(dataInput))
     {
-        m_connections.push_back(data_input);
-        emit m_parentOperator->dataConnected(m_parentOperator, this, data_input->get_operator(), data_input);
+        m_connections.push_back(dataInput);
+        emit dataInput->getOperator()->dataConnected(m_parentOperator, this, dataInput->getOperator(), dataInput);
         return true;
     }
     return false;
@@ -100,15 +100,15 @@ bool BaseDataType::addConnection(DataInput* data_input)
 
 
 // Non action version of connect_to
-bool BaseDataType::removeConnection(DataInput* data_input)
+bool BaseDataType::removeConnection(DataInput* dataInput)
 {
-    auto location = std::find(m_connections.begin(), m_connections.end(), data_input);
+    auto location = std::find(m_connections.begin(), m_connections.end(), dataInput);
 
     if (location != m_connections.end())
     {
         std::swap(*location, m_connections.back());
         m_connections.pop_back();
-        emit m_parentOperator->dataDisconnected(m_parentOperator, this, data_input->get_operator(), data_input);
+        emit dataInput->getOperator()->dataDisconnected(m_parentOperator, this, dataInput->getOperator(), dataInput);
         return true;
     }
     return false;

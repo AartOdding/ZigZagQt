@@ -94,7 +94,7 @@ protected:
      * has been changed as a result of calling updateParameters(). The default implementation
      * will check if there is a parent, and if so forward the event to them.
      */
-    virtual void parameterChangedEvent(const BaseParameter* parameter);
+    virtual void parameterChangeEvent(const BaseParameter* parameter);
 
 };
 

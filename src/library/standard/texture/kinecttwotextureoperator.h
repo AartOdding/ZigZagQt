@@ -24,7 +24,7 @@ public:
 
     void run() override;
 
-    void parameterChangedEvent(const BaseParameter* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);

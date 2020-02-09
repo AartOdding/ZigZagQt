@@ -13,7 +13,7 @@
 
 
 class BaseOperator;
-class OperatorDescription;
+struct OperatorDescription;
 
 
 
@@ -29,7 +29,7 @@ public:
     const std::vector<BaseOperator*>& getOperators() const;
 
 
-    QUndoStack* get_undo_stack(); // TODO: move elsewhere
+    QUndoStack* getUndoStack(); // TODO: move elsewhere
 
 
     virtual void loadState(const QVariantMap&) override;

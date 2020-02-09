@@ -140,12 +140,12 @@ protected:
 
     // Should be overriden to acquire resources.
     // Never call this function directly, this is done for you.
-    virtual void acquire_resources() { }
+    virtual void acquireResources() { }
 
 
     // Should be overriden to release resources.
     // Never call this function directly, this is done for you.
-    virtual void release_resources() { }
+    virtual void releaseResources() { }
 
 
 private:

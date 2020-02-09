@@ -63,7 +63,7 @@ protected:
     void acquireResources() override;
     void releaseResources() override;
 
-    void parameterChangedEvent(const BaseParameter*) override;
+    void parameterChangeEvent(const BaseParameter*) override;
 
 private:
 

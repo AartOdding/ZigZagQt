@@ -47,7 +47,7 @@ bool has_turn(const BaseOperator* op, const std::unordered_set<const BaseOperato
 
     for (auto& input : op->activeDataInputs())
     {
-        auto connected_op = input->get_connection()->getOperator();
+        auto connected_op = input->getConnectedData()->getOperator();
 
         // If a connected operator has not yet been processed that one has to process first,
         // thus return false: this operator does not yet have its turn.
@@ -99,9 +99,9 @@ void Renderer::render_frame()
             {
                 for (auto connected_input : output->getConnections())
                 {
-                    if (!contains(open_list, connected_input->get_operator()))
+                    if (!contains(open_list, connected_input->getOperator()))
                     {
-                        open_list.push_back(connected_input->get_operator());
+                        open_list.push_back(connected_input->getOperator());
                     }
                 }
             }

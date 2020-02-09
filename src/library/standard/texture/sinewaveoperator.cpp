@@ -7,15 +7,6 @@
 #include <iostream>
 
 
-bool SineWaveOperator::gpu_resources_initialized = false;
-QOpenGLShaderProgram SineWaveOperator::flat_shader;
-QOpenGLShaderProgram SineWaveOperator::radial_shader;
-QOpenGLShaderProgram SineWaveOperator::concentric_shader;
-std::array<QOpenGLShaderProgram*, 3> SineWaveOperator::shaders { &flat_shader, &radial_shader, &concentric_shader };
-GLuint SineWaveOperator::vao;
-GLuint SineWaveOperator::vbo;
-
-
 // Draws the whole screen with GL_TRIANGLE_STRIP
 static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
@@ -44,65 +35,59 @@ SineWaveOperator::SineWaveOperator(BaseZigZagObject* parent)
 {
     initializeOpenGLFunctions();
     should_update = true;
+
+    // Flat Sine wave shader
+    flat_shader.create();
+    flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+    flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveFlat.frag");
+    auto success = flat_shader.link();
+    Q_ASSERT(success);
+
+    glUseProgram(flat_shader.programId());
+    flat_shader.setUniformValue(flat_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
+    flat_shader.setUniformValue(flat_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
+
+    // Radial sine wave shader
+    radial_shader.create();
+    radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+    radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveRadial.frag");
+    success = radial_shader.link();
+    Q_ASSERT(success);
+
+    glUseProgram(radial_shader.programId());
+    radial_shader.setUniformValue(radial_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
+    radial_shader.setUniformValue(radial_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
+
+    // Concentric sine wave shader
+    concentric_shader.create();
+    concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
+    concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveConcentric.frag");
+    success = concentric_shader.link();
+    Q_ASSERT(success);
+
+    glUseProgram(concentric_shader.programId());
+    concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
+    concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
+
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    //unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 
 void SineWaveOperator::run()
 {
-    if (!gpu_resources_initialized)
-    {
-        gpu_resources_initialized = true;
-
-        // Flat Sine wave shader
-        flat_shader.create();
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
-        flat_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveFlat.frag");
-        auto success = flat_shader.link();
-        Q_ASSERT(success);
-
-        glUseProgram(flat_shader.programId());
-        flat_shader.setUniformValue(flat_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
-        flat_shader.setUniformValue(flat_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
-
-        // Radial sine wave shader
-        radial_shader.create();
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
-        radial_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveRadial.frag");
-        success = radial_shader.link();
-        Q_ASSERT(success);
-
-        glUseProgram(radial_shader.programId());
-        radial_shader.setUniformValue(radial_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
-        radial_shader.setUniformValue(radial_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
-
-        // Concentric sine wave shader
-        concentric_shader.create();
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
-        concentric_shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/sineWaveConcentric.frag");
-        success = concentric_shader.link();
-        Q_ASSERT(success);
-
-        glUseProgram(concentric_shader.programId());
-        concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_x"), -10.0f, 10.0f);
-        concentric_shader.setUniformValue(concentric_shader.uniformLocation("output_range_y"), -10.0f, 10.0f);
-
-
-
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-        glEnableVertexAttribArray(0);
-
-        //unbind
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
-
     if (should_update)
     {
         auto shader = shaders[wave_type.getIndex()];
@@ -136,7 +121,7 @@ void SineWaveOperator::run()
 }
 
 
-void SineWaveOperator::parameterChangedEvent(const BaseParameter* parameter)
+void SineWaveOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
     should_update = true;
 }

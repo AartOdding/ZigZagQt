@@ -20,7 +20,7 @@ public:
 
 protected:
 
-    void parameterChangedEvent(const BaseParameter * parameter) override;
+    void parameterChangeEvent(const BaseParameter * parameter) override;
 
 
 private:

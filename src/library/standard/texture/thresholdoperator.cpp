@@ -42,7 +42,7 @@ void ThresholdOperator::run()
 }
 
 
-void ThresholdOperator::parameterChangedEvent(const BaseParameter* parameter)
+void ThresholdOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

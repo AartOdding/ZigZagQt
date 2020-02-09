@@ -105,7 +105,7 @@ void BaseOperator::move_to(int pos_x, int pos_y)
 {
     if (m_positionX != pos_x || m_positionY != pos_y)
     {
-        application::project_model()->get_undo_stack()->push(new MoveCommand(*this, pos_x, pos_y));
+        application::project_model()->getUndoStack()->push(new MoveCommand(*this, pos_x, pos_y));
     }
 }
 

@@ -92,7 +92,7 @@ void TextureView::update_view()
 }
 
 
-void TextureView::parameterChangedEvent(const BaseParameter* parameter)
+void TextureView::parameterChangeEvent(const BaseParameter* parameter)
 {
     if (parameter == &open_window_button)
     {
