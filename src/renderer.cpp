@@ -7,7 +7,7 @@
 #include "model/BaseOperator.hpp"
 #include "model/datainput.h"
 #include "model/BaseDataType.hpp"
-#include "utility/std_containers_helpers.h"
+#include "utility/stdLibraryHelpers.hpp"
 
 #include <QThread>
 #include <QApplication>
@@ -112,9 +112,9 @@ void Renderer::render_frame()
         }
     }
 
-    if (fps_monitor.frame_count() % 500 == 0)
+    if (fps_monitor.getFrameCount() % 500 == 0)
     {
-        std::cout << fps_monitor.fps() << " fps in renderer.\n";
+        std::cout << fps_monitor.getFrameRate() << " fps in renderer.\n";
     }
     glFlush();
 }

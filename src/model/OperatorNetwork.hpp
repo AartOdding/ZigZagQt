@@ -1,11 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <mutex>
 #include <vector>
 
 #include <QList>
 #include <QString>
 #include <QUndoCommand>
-#include <QUndoStack> // TODO: remove
+#include <QUndoStack>
 
 #include "BaseZigZagObject.hpp"
 
@@ -39,7 +41,7 @@ public:
 
 signals:
 
-    void operatorAdded(BaseOperator* operatorPtr);
+    void operatorAdded(QPointer<BaseOperator> operatorPtr, std::shared_ptr<std::mutex> mutex);
 
     void operatorRemoved(BaseOperator* operatorPtr);
 
@@ -98,12 +100,12 @@ private:
     };
 
 
-    void addOperatorImplementation(BaseOperator * operator_ptr);
+    void addOperatorImplementation(BaseOperator * operatorPtr);
 
-    void removeOperatorImplementation(BaseOperator * operator_ptr);
+    void removeOperatorImplementation(BaseOperator * operatorPtr);
 
 
-    QUndoStack undo_stack; // TODO: move elsewhere
+    QUndoStack m_undoStack; // TODO: move elsewhere
 
     std::vector<BaseOperator*> m_operators;
 

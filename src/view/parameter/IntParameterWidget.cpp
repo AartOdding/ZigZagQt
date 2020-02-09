@@ -1,5 +1,5 @@
 #include "model/parameter/Int64Component.hpp"
-#include "utility/numeric.h"
+#include "utility/numericHelpers.hpp"
 #include "view/parameter/IntParameterWidget.hpp"
 
 #include <numeric>

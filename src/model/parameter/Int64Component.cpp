@@ -1,5 +1,5 @@
 #include "Int64Component.hpp"
-#include "utility/numeric.h"
+#include "utility/numericHelpers.hpp"
 
 #include <numeric>
 

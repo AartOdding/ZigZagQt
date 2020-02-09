@@ -39,13 +39,6 @@ public slots:
     void disconnect();
 
 
-signals:
-
-    void has_connected(BaseDataType* output, DataInput* input);
-
-    void has_disconnected(BaseDataType* output, DataInput* input);
-
-
 private:
 
     friend class BaseOperator;

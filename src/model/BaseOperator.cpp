@@ -34,6 +34,7 @@ OperatorDescription::OperatorDescription(const QString& name_,
 
 BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorDescription& type_)
     : BaseZigZagObject(parent, type_.name),
+      m_mutex(std::make_shared<std::mutex>()),
       m_description(&type_)
 {
 
@@ -46,6 +47,23 @@ BaseOperator::~BaseOperator()
 
 }
 
+
+void BaseOperator::lock()
+{
+    m_mutex->lock();
+}
+
+
+void BaseOperator::unlock()
+{
+    m_mutex->unlock();
+}
+
+
+std::shared_ptr<std::mutex> BaseOperator::getLock()
+{
+    return m_mutex;
+}
 
 
 void BaseOperator::updateView()

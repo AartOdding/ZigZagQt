@@ -92,7 +92,7 @@ bool BaseDataType::addConnection(DataInput* data_input)
     if (data_input && data_input->compatible_with(this) && !isConnectedTo(data_input))
     {
         m_connections.push_back(data_input);
-        emit hasConnected(this, data_input);
+        emit m_parentOperator->dataConnected(m_parentOperator, this, data_input->get_operator(), data_input);
         return true;
     }
     return false;
@@ -108,7 +108,7 @@ bool BaseDataType::removeConnection(DataInput* data_input)
     {
         std::swap(*location, m_connections.back());
         m_connections.pop_back();
-        emit hasDisconnected(this, data_input);
+        emit m_parentOperator->dataDisconnected(m_parentOperator, this, data_input->get_operator(), data_input);
         return true;
     }
     return false;

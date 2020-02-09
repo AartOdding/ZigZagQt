@@ -62,6 +62,8 @@ Application::Application(int &argc, char **argv)
     : QApplication (argc, argv)
 {
     qRegisterMetaType<QList<BaseOperator*>>("QList<BaseOperator*>");
+    qRegisterMetaType<QPointer<BaseOperator>>("QPointer<BaseOperator>");
+    qRegisterMetaType<std::shared_ptr<std::mutex>>("std::shared_ptr<std::mutex>");
 
     setAttribute(Qt::AA_ShareOpenGLContexts);
 

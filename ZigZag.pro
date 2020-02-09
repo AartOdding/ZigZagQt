@@ -141,12 +141,11 @@ HEADERS += \
     src/model/parameter/Transform2DParameter.hpp \
     src/model/parameter/TriggerComponent.hpp \
     src/utility/Deserializer.hpp \
+    src/utility/FrameRateMonitor.hpp \
     src/utility/Serializer.hpp \
-    src/utility/fpsmonitor.h \
     src/utility/frameratecontroller.h \
-    src/utility/numeric.h \
-    src/utility/stb_image_write.h \
-    src/utility/std_containers_helpers.h \
+    src/utility/numericHelpers.hpp \
+    src/utility/stdLibraryHelpers.hpp \
     src/view/BaseConnector.hpp \
     src/view/ConnectionManager.hpp \
     src/view/DataConnector.hpp \
@@ -182,6 +181,8 @@ RESOURCES += \
 
 
 INCLUDEPATH += third_party/glm
+
+INCLUDEPATH += third_party/stb
 
 
 # kinect for xbox one

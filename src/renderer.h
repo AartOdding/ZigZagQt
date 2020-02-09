@@ -8,7 +8,7 @@
 #include <QOpenGLWidget>
 
 
-#include "utility/fpsmonitor.h"
+#include "utility/FrameRateMonitor.hpp"
 
 
 class OperatorNetwork;
@@ -42,7 +42,7 @@ private:
     QOffscreenSurface opengl_surface;
     QOpenGLContext opengl_context;
 
-    FpsMonitor fps_monitor{ 500ms };
+    FrameRateMonitor fps_monitor{ 500ms };
 
 };
 

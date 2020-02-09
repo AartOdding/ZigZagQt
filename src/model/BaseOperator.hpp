@@ -77,7 +77,7 @@ public:
 
     void lock();
     void unlock();
-    std::shared_ptr<QMutex> getLock();
+    std::shared_ptr<std::mutex> getLock();
 
     int positionX() const;
     int positionY() const;
@@ -116,9 +116,21 @@ signals:
 
     void position_changed(int pos_x, int pos_y);
 
+    // Only emitted for the operator that acts as the input!
+    void dataConnected(BaseOperator* outputOperator, BaseDataType* outputData,
+                       BaseOperator* inputOperator, DataInput* dataInput);
 
-    void parameter_started_importing(BaseComponent* exporter, BaseComponent* importer);
-    void parameter_stopped_importing(BaseComponent* exporter, BaseComponent* importer);
+    // Only emitted for the operator that acts as the input!
+    void dataDisconnected(BaseOperator* outputOperator, BaseDataType* outputData,
+                          BaseOperator* inputOperator, DataInput* dataInput);
+
+    // Only emitted for the operator that acts as the input!
+    void parameterConnected(BaseOperator* exportingOperator, BaseComponent * exporter,
+                            BaseOperator* importingOperator, BaseComponent * importer);
+
+    // Only emitted for the operator that acts as the input!
+    void parameterDisconnected(BaseOperator* exportingOperator, BaseComponent * exporter,
+                               BaseOperator* importingOperator, BaseComponent * importer);
 
 
 protected:
@@ -146,6 +158,8 @@ private:
 
     int m_positionX = 0;
     int m_positionY = 0;
+
+    std::shared_ptr<std::mutex> m_mutex;
 
     const OperatorDescription * m_description;
 

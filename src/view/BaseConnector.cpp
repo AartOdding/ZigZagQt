@@ -30,7 +30,7 @@ BaseOperator * BaseConnector::getOperatorModel() const
 {
     if (m_operatorView)
     {
-        return &m_operatorView->operator_model;
+        return m_operatorView->getOperatorModel();
     }
     return nullptr;
 }

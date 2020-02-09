@@ -93,7 +93,7 @@ bool DataInput::set_connection(BaseDataType *new_connection)
             {
                 auto old_connection = connection;
                 connection = nullptr;
-                emit has_disconnected(old_connection, this);
+                emit m_parent_operator->dataDisconnected(old_connection->getOperator(), old_connection, m_parent_operator, this);
             }
 
             Q_ASSERT(connection == nullptr); // Just for good measure.
@@ -101,7 +101,7 @@ bool DataInput::set_connection(BaseDataType *new_connection)
             if (new_connection)
             {
                 connection = new_connection;
-                emit has_connected(new_connection, this);
+                emit m_parent_operator->dataConnected(new_connection->getOperator(), new_connection, m_parent_operator, this);
             }
 
             return true;

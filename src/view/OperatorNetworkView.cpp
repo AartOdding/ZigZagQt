@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+
+
 OperatorNetworkView::OperatorNetworkView(QObject *parent)
     : QGraphicsScene(-20000, -20000, 40000, 40000)
 {
@@ -34,6 +36,15 @@ OperatorNetworkView::OperatorNetworkView(QObject *parent)
     m_undoAction.setShortcuts(     { QKeySequence(Qt::Key_Z | Qt::CTRL)             });
     m_redoAction.setShortcuts(     { QKeySequence(Qt::Key_Y | Qt::CTRL),
                                      QKeySequence(Qt::Key_Z | Qt::CTRL | Qt::SHIFT) });
+}
+
+
+OperatorNetworkView::~OperatorNetworkView()
+{
+    for (auto v : m_operatorViews)
+    {
+        delete v;
+    }
 }
 
 
@@ -58,22 +69,35 @@ void OperatorNetworkView::setNetwork(OperatorNetwork *model)
     connect(&m_selectAllAction, SIGNAL(triggered()), this,      SLOT(selectAllOperators()),      Qt::DirectConnection);
     connect(&m_deleteAction,    SIGNAL(triggered()), this,      SLOT(deleteSelectedOperators()), Qt::DirectConnection);
 
-    connect(m_network, &OperatorNetwork::operatorAdded, this, &OperatorNetworkView::onOperatorAdded, Qt::QueuedConnection);
+    connect(m_network, &OperatorNetwork::operatorAdded,   this, &OperatorNetworkView::onOperatorAdded,   Qt::QueuedConnection);
+    connect(m_network, &OperatorNetwork::operatorRemoved, this, &OperatorNetworkView::onOperatorRemoved, Qt::QueuedConnection);
+}
+
+
+void OperatorNetworkView::bringToFront(OperatorView* operatorView)
+{
+    for (auto& op : m_operatorViews)
+    {
+        if (op->operatorView != operatorView)
+        {
+            op->operatorView->setZValue(0.1);
+        }
+    }
+    operatorView->setZValue(1);
 }
 
 
 void OperatorNetworkView::selectAllOperators()
 {
-    for (auto op : m_operatorViews)
+    for (auto& op : m_operatorViews)
     {
-        op->setSelected(true);
+        op->operatorView->setSelected(true);
     }
 }
 
 
 void OperatorNetworkView::deleteSelectedOperators()
 {
-    std::cout << "delete" <<std::endl;
     auto selected = selectedItems();
     QList<BaseOperator*> selectedOperators;
     selectedOperators.reserve(selected.size());
@@ -81,45 +105,18 @@ void OperatorNetworkView::deleteSelectedOperators()
     for (auto item : selected)
     {
         auto operatorView = dynamic_cast<OperatorView*>(item);
-        auto operatorModel = &operatorView->operator_model;
 
-        if (operatorModel)
+        if (operatorView)
         {
+            auto operatorModel = operatorView->getOperatorModel();
+
             selectedOperators.push_back(operatorModel);
         }
-
-        if (operatorView && operatorModel && m_operatorViews.contains(operatorModel))
-        {
-            for (auto input : operatorModel->dataInputs())
-            {
-                if (input)
-                {
-                    disconnect(input, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
-                    disconnect(input, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
-                }
-            }
-            disconnect(operatorModel, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
-            disconnect(operatorModel, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
-
-            m_operatorViews.remove(operatorModel);
-            removeItem(operatorView);
-            delete operatorView;
-        }
     }
-    QMetaObject::invokeMethod(m_network, "removeOperators", Qt::QueuedConnection, Q_ARG(QList<BaseOperator*>, selectedOperators));
-}
-
-
-void OperatorNetworkView::bringToFront(OperatorView* op)
-{
-    for (auto o : m_operatorViews)
+    if (!selected.empty())
     {
-        if (o != op)
-        {
-            o->setZValue(0.1);
-        }
+        QMetaObject::invokeMethod(m_network, "removeOperators", Qt::QueuedConnection, Q_ARG(QList<BaseOperator*>, selectedOperators));
     }
-    op->setZValue(1);
 }
 
 
@@ -142,119 +139,135 @@ void OperatorNetworkView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-void OperatorNetworkView::onOperatorAdded(QPointer<BaseOperator> operatorPtr, std::shared_ptr<std::mutex> mutex)
+void OperatorNetworkView::onOperatorAdded(QPointer<BaseOperator> operatorPtr, std::shared_ptr<std::mutex> operatorMutex)
 {
-    if (mutex)
+    if (operatorMutex)
     {
-        std::lock_guard<std::mutex> lock(*mutex);
+        std::lock_guard<std::mutex> mutexLock(*operatorMutex);
 
-
-    }
-    OperatorView* op_view = new OperatorView(*operator_ptr);
-    m_operatorViews.insert(operator_ptr, op_view);
-
-    for (auto i : operator_ptr->dataInputs())
-    {
-        if (i)
+        if (operatorPtr)
         {
-            connect(i, &DataInput::has_connected, this, &OperatorNetworkView::on_input_connected);
-            connect(i, &DataInput::has_disconnected, this, &OperatorNetworkView::on_input_disconnected);
+            OperatorView* operatorView = new OperatorView(operatorPtr);
+            ViewedOperator * viewedOperator = new ViewedOperator();
+            viewedOperator->mutex = operatorMutex;
+            viewedOperator->operatorPtr = operatorPtr;
+            viewedOperator->operatorView = operatorView;
+
+            m_operatorViews.insert(operatorPtr, viewedOperator);
+
+            connect(operatorPtr, &BaseOperator::dataConnected, this, &OperatorNetworkView::onOperatorsConnected);
+            connect(operatorPtr, &BaseOperator::dataDisconnected, this, &OperatorNetworkView::onOperatorsDisconnected);
+            connect(operatorPtr, &BaseOperator::parameterConnected, this, &OperatorNetworkView::onParametersConnected);
+            connect(operatorPtr, &BaseOperator::parameterDisconnected, this, &OperatorNetworkView::onParametersDisconnected);
+
+            addItem(operatorView);
         }
     }
-    connect(operator_ptr, &BaseOperator::parameter_started_importing, this, &OperatorNetworkView::on_parameters_connected);
-    connect(operator_ptr, &BaseOperator::parameter_stopped_importing, this, &OperatorNetworkView::on_parameter_disconnected);
-
-    addItem(op_view);
 }
 
 
-void OperatorNetworkView::on_input_connected(BaseDataType* output, DataInput* input)
+void OperatorNetworkView::onOperatorRemoved(BaseOperator* operatorPtr)
 {
-    auto input_op = m_operatorViews[input->get_operator()];
-    auto output_op = m_operatorViews[output->getOperator()];
-
-    if (input_op && output_op)
+    if (m_operatorViews.contains(operatorPtr))
     {
-        auto input_view = input_op->data_connector_in(input);
-        auto output_view = output_op->data_connector_out(output);
+        ViewedOperator* viewedOperator = m_operatorViews[operatorPtr];
+        std::shared_ptr<std::mutex> mutex = viewedOperator->mutex;
 
-        if (input_view && output_view)
+        { // start new scope so mutex will only be destroyed after it is released.
+            std::lock_guard<std::mutex> mutexLock(*mutex);
+
+            removeItem(m_operatorViews[operatorPtr]->operatorView);
+            delete m_operatorViews[operatorPtr]->operatorView;
+            delete m_operatorViews[operatorPtr];
+            m_operatorViews.remove(operatorPtr);
+        }
+    }
+}
+
+
+void OperatorNetworkView::onOperatorsConnected(BaseOperator* outputOperator, BaseDataType* outputData, BaseOperator* inputOperator, DataInput* dataInput)
+{
+    if (m_operatorViews.contains(outputOperator) && m_operatorViews.contains(inputOperator))
+    {
+        auto outputConnector = m_operatorViews[outputOperator]->operatorView->getDataOutput(outputData);
+        auto inputConnector = m_operatorViews[inputOperator]->operatorView->getDataInput(dataInput);
+
+        if (outputConnector && inputConnector)
         {
-            auto cable = new Cable(this, output_view, input_view);
-            m_dataCables.insert(input_view, cable);
+            auto cable = new Cable(this, outputConnector, inputConnector);
+            m_dataCables.insert(inputConnector, cable);
             addItem(cable);
         }
     }
 }
 
 
-void OperatorNetworkView::on_input_disconnected(BaseDataType* output, DataInput* input)
+void OperatorNetworkView::onOperatorsDisconnected(BaseOperator* /*outputOperator*/, BaseDataType* /*outputData*/, BaseOperator* inputOperator, DataInput* dataInput)
 {
-    auto input_op = m_operatorViews[input->get_operator()];
-
-    if (input_op)
+    if (m_operatorViews.contains(inputOperator))
     {
-        auto input_view = input_op->data_connector_in(input);
+        auto inputConnector = m_operatorViews[inputOperator]->operatorView->getDataInput(dataInput);
 
-        if (input_view)
+        if (inputConnector)
         {
-            auto cable = m_dataCables[input_view];
-            m_dataCables.remove(input_view);
-            removeItem(cable);
-            delete cable;
+            auto cable = m_dataCables[inputConnector];
+
+            if (cable)
+            {
+                m_dataCables.remove(inputConnector);
+                removeItem(cable);
+                delete cable;
+            }
         }
     }
 }
 
 
-void OperatorNetworkView::on_parameters_connected(BaseComponent * exporter, BaseComponent * importer)
+void OperatorNetworkView::onParametersConnected(BaseOperator* exportingOperator, BaseComponent * /*exporter*/, BaseOperator* importingOperator, BaseComponent * /*importer*/)
 {
-    OperatorView* export_op = m_operatorViews[exporter->getParameter()->findParent<BaseOperator*>()];
-    OperatorView* import_op = m_operatorViews[importer->getParameter()->findParent<BaseOperator*>()];
-
-    if (export_op && import_op)
+    if (m_operatorViews.contains(exportingOperator) && m_operatorViews.contains(importingOperator))
     {
-        auto export_connector = export_op->parameter_connector_out();
-        auto import_connector = import_op->parameter_connector_in();
+        auto exportConnector = m_operatorViews[exportingOperator]->operatorView->getParameterOutput();
+        auto importConnector = m_operatorViews[importingOperator]->operatorView->getParameterInput();
 
-        if (export_connector && import_connector)
+        if (exportConnector && importConnector)
         {
-            if (!m_parameterCables.contains({ export_connector, import_connector }))
+            if (!m_parameterCables.contains( { exportingOperator, importingOperator } ))
             {
-                auto cable = new Cable(this, export_connector, import_connector);
-                m_parameterCables.insert({ export_connector, import_connector }, { cable, 1} );
+                auto cable = new Cable(this, exportConnector, importConnector);
+                m_parameterCables.insert( { exportingOperator, importingOperator } , { cable, 1} );
                 addItem(cable);
             }
             else
             {
-                m_parameterCables[{export_connector, import_connector}].second += 1;
+                m_parameterCables[ { exportingOperator, importingOperator } ].second += 1;
             }
         }
     }
 }
 
 
-void OperatorNetworkView::on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer)
+void OperatorNetworkView::onParametersDisconnected(BaseOperator* exportingOperator, BaseComponent * /*exporter*/, BaseOperator* importingOperator, BaseComponent * /*importer*/)
 {
-    OperatorView* export_op = m_operatorViews[exporter->getParameter()->findParent<BaseOperator*>()];
-    OperatorView* import_op = m_operatorViews[importer->getParameter()->findParent<BaseOperator*>()];
-
-    if (export_op && import_op)
+    if (m_operatorViews.contains(exportingOperator) && m_operatorViews.contains(importingOperator))
     {
-        auto export_connector = export_op->parameter_connector_out();
-        auto import_connector = import_op->parameter_connector_in();
+        auto exportConnector = m_operatorViews[exportingOperator]->operatorView->getParameterOutput();
+        auto importConnector = m_operatorViews[importingOperator]->operatorView->getParameterInput();
 
-        if (export_connector && import_connector)
+        if (exportConnector && importConnector)
         {
-            auto key = std::pair(export_connector, import_connector);
-            Q_ASSERT(m_parameterCables.contains(key));
+            auto cable = m_parameterCables.find( { exportingOperator, importingOperator } );
 
-            m_parameterCables[key].second -= 1;
-            if (m_parameterCables[key].second < 1)
+            if (cable != m_parameterCables.end())
             {
-                removeItem(m_parameterCables[key].first);
-                delete m_parameterCables[key].first;
-                m_parameterCables.remove(key);
+                cable->second -= 1;
+
+                if (cable->second < 1)
+                {
+                    removeItem(cable->first);
+                    delete cable->first;
+                    m_parameterCables.erase(cable);
+                }
             }
         }
     }

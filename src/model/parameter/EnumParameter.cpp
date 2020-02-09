@@ -1,5 +1,5 @@
 #include "EnumParameter.hpp"
-#include "utility/numeric.h"
+#include "utility/numericHelpers.hpp"
 
 
 

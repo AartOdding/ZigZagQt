@@ -26,23 +26,22 @@ class OperatorView : public QGraphicsWidget
 
 public:
 
-    OperatorView(BaseOperator& operator_model);
+    OperatorView(BaseOperator* operatorModel);
 
     virtual ~OperatorView() override;
 
     //QRectF boundingRect() const override;
 
-    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
+    void paint(QPainter * painter, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
 
 
-    BaseOperator& operator_model;
+    DataConnector* getDataInput(const DataInput* input);
+    DataConnector* getDataOutput(const BaseDataType* output);
+    ParameterConnector* getParameterInput() const;
+    ParameterConnector* getParameterOutput() const;
 
-    OperatorNetworkView * scope_view();
-
-    DataConnector* data_connector_in(const DataInput* input);
-    DataConnector* data_connector_out(const BaseDataType* output);
-    ParameterConnector* parameter_connector_in() const;
-    ParameterConnector* parameter_connector_out() const;
+    BaseOperator* getOperatorModel();
+    OperatorNetworkView * getNetworkView();
 
 
 public slots:
@@ -69,6 +68,8 @@ private:
 
     static constexpr int width = 200;
     static constexpr int height = 160;
+
+    BaseOperator* m_operatorModel;
 
     int m_posX;
     int m_posY;

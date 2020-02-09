@@ -7,7 +7,7 @@
 #include "model/parameter/BaseComponent.hpp"
 #include "model/parameter/TextComponent.hpp"
 
-#include "utility/std_containers_helpers.h"
+#include "utility/stdLibraryHelpers.hpp"
 
 
 
@@ -93,7 +93,10 @@ private:
             importer_->importChange(static_cast<TextComponent*>(exporter_)->getText());
         }
 
-        emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_started_importing(exporter_, importer_);
+        auto importingOperator = importer_->findParent<BaseOperator*>();
+        auto exportingOperator = exporter_->findParent<BaseOperator*>();
+
+        emit importingOperator->parameterConnected(exportingOperator, exporter_, importingOperator, importer_);
         emit importer_->startedImportingFrom(exporter_);
         emit exporter_->startedExportingTo(importer_);
     }
@@ -129,7 +132,10 @@ private:
                                 importer_, qOverload<const QString&>(&BaseComponent::importChange));
         }
 
-        emit importer_->getParameter()->findParent<BaseOperator*>()->parameter_stopped_importing(exporter_, importer_);
+        auto importingOperator = importer_->findParent<BaseOperator*>();
+        auto exportingOperator = exporter_->findParent<BaseOperator*>();
+
+        emit importingOperator->parameterDisconnected(exportingOperator, exporter_, importingOperator, importer_);
         emit importer_->stoppedImportingFrom(exporter_);
         emit exporter_->stoppedExportingTo(importer_);
     }

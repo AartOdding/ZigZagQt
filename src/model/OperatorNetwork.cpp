@@ -33,7 +33,7 @@ const std::vector<BaseOperator*>& OperatorNetwork::getOperators() const
 // TODO: move elsewhere
 QUndoStack* OperatorNetwork::get_undo_stack()
 {
-    return &undo_stack;
+    return &m_undoStack;
 }
 
 
@@ -62,7 +62,7 @@ void OperatorNetwork::addOperator(const OperatorDescription* operatorDescription
     {
         BaseOperator* op = operatorDescription->construct(this);
         op->set_position(xPos, yPos);
-        undo_stack.push(new AddOperatorCommand(this, op));
+        m_undoStack.push(new AddOperatorCommand(this, op));
     }
 }
 
@@ -71,7 +71,7 @@ void OperatorNetwork::removeOperator(BaseOperator * operatorPtr)
 {
     if (operatorPtr)
     {
-        undo_stack.beginMacro("Remove Operator");
+        m_undoStack.beginMacro("Remove Operator");
 
         operatorPtr->disconnectParameters();
 
@@ -85,45 +85,45 @@ void OperatorNetwork::removeOperator(BaseOperator * operatorPtr)
             //output->remove_imports_exports();
             output->disconnectFromAll();
         }
-        undo_stack.push(new RemoveOperatorCommand(this, operatorPtr));
-        undo_stack.endMacro();
+        m_undoStack.push(new RemoveOperatorCommand(this, operatorPtr));
+        m_undoStack.endMacro();
     }
 }
 
-
+// TODO: list might contain dangling pointers
 void OperatorNetwork::removeOperators(QList<BaseOperator*> operatorPtrs)
 {
-    undo_stack.beginMacro("Remove Operators");
+    m_undoStack.beginMacro("Remove Operators");
 
     for (auto op : operatorPtrs)
     {
         removeOperator(op);
     }
-    undo_stack.endMacro();
+    m_undoStack.endMacro();
 }
 
 
 void OperatorNetwork::redo()
 {
-    undo_stack.redo();
+    m_undoStack.redo();
 }
 
 
 void OperatorNetwork::undo()
 {
-    undo_stack.undo();
+    m_undoStack.undo();
 }
 
 
-void OperatorNetwork::addOperatorImplementation(BaseOperator * operator_ptr)
+void OperatorNetwork::addOperatorImplementation(BaseOperator * operatorPtr)
 {
-    if (operator_ptr)
+    if (operatorPtr)
     {
         auto context = QOpenGLContext::currentContext();
         GLint old_fbo;
         context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
 
-        auto blocks = operator_ptr->dataOutputs();
+        auto blocks = operatorPtr->dataOutputs();
 
         for (auto& block : blocks)
         {
@@ -132,38 +132,38 @@ void OperatorNetwork::addOperatorImplementation(BaseOperator * operator_ptr)
                 block->acquireResources();
             }
         }
-        operator_ptr->acquire_resources();
+        operatorPtr->acquire_resources();
 
-        m_operators.push_back(operator_ptr);
+        m_operators.push_back(operatorPtr);
 
         context->functions()->glBindFramebuffer(GL_FRAMEBUFFER, old_fbo);
         //context->functions()->glFlush();
 
-        emit operatorAdded(operator_ptr);
+        emit operatorAdded(QPointer(operatorPtr), operatorPtr->getLock());
 
         // To avoid cables being drawn to the wrong until the operator is moved, i suspect, it is because
         // layout has not yet been applied when cable is being made.
-        auto x = operator_ptr->positionX();
-        auto y = operator_ptr->positionY();
-        operator_ptr->set_position(0, 0);
-        operator_ptr->set_position(x, y);
+        auto x = operatorPtr->positionX();
+        auto y = operatorPtr->positionY();
+        operatorPtr->set_position(0, 0);
+        operatorPtr->set_position(x, y);
         //emit operator_ptr->position_changed();
         //emit operator_ptr->position_changed(operator_ptr->get_position_x(), operator_ptr->get_position_y()+1);
 
         Serializer serializer;
-        serializer.serialize(operator_ptr);
+        serializer.serialize(operatorPtr);
         std::cout << serializer.text.toStdString() << std::endl;
     }
 }
 
 
-void OperatorNetwork::removeOperatorImplementation(BaseOperator * operator_ptr)
+void OperatorNetwork::removeOperatorImplementation(BaseOperator * operatorPtr)
 {
-    if (operator_ptr)
+    if (operatorPtr)
     {
-        operator_ptr->release_resources();
+        operatorPtr->release_resources();
 
-        auto blocks = operator_ptr->dataOutputs();
+        auto blocks = operatorPtr->dataOutputs();
 
         for (auto& block : blocks)
         {
@@ -173,11 +173,13 @@ void OperatorNetwork::removeOperatorImplementation(BaseOperator * operator_ptr)
             }
         }
 
-        m_operators.erase(std::remove(m_operators.begin(), m_operators.end(), operator_ptr), m_operators.end());
-        emit operatorRemoved(operator_ptr);
+        m_operators.erase(std::remove(m_operators.begin(), m_operators.end(), operatorPtr), m_operators.end());
+        emit operatorRemoved(operatorPtr);
     }
 }
 
+
+//-------------------------------------------------------------------------------------
 
 OperatorNetwork::AddOperatorCommand::AddOperatorCommand(OperatorNetwork* network, BaseOperator* op)
     : m_network(network),
@@ -216,6 +218,8 @@ void OperatorNetwork::AddOperatorCommand::undo()
     }
 }
 
+
+//-------------------------------------------------------------------------------------
 
 OperatorNetwork::RemoveOperatorCommand::RemoveOperatorCommand(OperatorNetwork* network, BaseOperator* op)
     : m_network(network),

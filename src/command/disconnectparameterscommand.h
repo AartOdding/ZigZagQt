@@ -6,7 +6,7 @@
 #include "model/parameter/BaseComponent.hpp"
 #include "model/parameter/TextComponent.hpp"
 
-#include "utility/std_containers_helpers.h"
+#include "utility/stdLibraryHelpers.hpp"
 
 
 
@@ -52,11 +52,10 @@ public:
         }
 
 
-        // Erase the parameters from their parent's list of importing/ exporting parameters.
-        //erase(importer->getParameter()->get_operator()->m_importing_parameters, importer);
-        //erase(exporter->getParameter()->get_operator()->m_exporting_parameters, exporter);
+        auto importingOperator = importer->findParent<BaseOperator*>();
+        auto exportingOperator = exporter->findParent<BaseOperator*>();
 
-        emit importer->getParameter()->findParent<BaseOperator*>()->parameter_stopped_importing(exporter, importer);
+        emit importingOperator->parameterDisconnected(exportingOperator, exporter, importingOperator, importer);
         emit importer->stoppedImportingFrom(exporter);
         emit exporter->stoppedExportingTo(importer);
     }
@@ -96,11 +95,10 @@ public:
             importer->importChange(static_cast<TextComponent*>(exporter)->getText());
         }
 
-        // Add the parameters to their parent's list of importing/ exporting parameters.
-        //importer->getParameter()->get_operator()->m_importing_parameters.push_back(importer);
-        //exporter->getParameter()->get_operator()->m_exporting_parameters.push_back(exporter);
+        auto importingOperator = importer->findParent<BaseOperator*>();
+        auto exportingOperator = exporter->findParent<BaseOperator*>();
 
-        emit importer->getParameter()->findParent<BaseOperator*>()->parameter_started_importing(exporter, importer);
+        emit importingOperator->parameterConnected(exportingOperator, exporter, importingOperator, importer);
         emit importer->startedImportingFrom(exporter);
         emit exporter->startedExportingTo(importer);
     }

@@ -1,7 +1,7 @@
 #include "kinecttwotextureoperator.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "utility/stb_image_write.h"
+#include "stb_image_write.h"
 
 #include <iostream>
 
@@ -63,9 +63,9 @@ void KinectTwoTextureOperator::run()
 
     if (SUCCEEDED(depth_reader->AcquireLatestFrame(&frame)))
     {
-        if (output_texture.get_resolution_x() != 512 || output_texture.get_resolution_y() != 424)
+        if (output_texture.getWidth() != 512 || output_texture.getHeight() != 424)
         {
-            output_texture.set_resolution(512, 424);
+            output_texture.setResolution(512, 424);
         }
         /*
         if (output_texture.get_format() != PixelDataFormatEnum::unsigned_norm_8bit)
@@ -104,11 +104,11 @@ void KinectTwoTextureOperator::run()
 
         if (buffer_size == 512 * 424 && buffer_pointer != nullptr)
         {
-            output_texture.upload_data(PixelNumChannelsEnum::one_channel, PixelDataFormatEnum::unsigned_int_8bit, depth_data_8bit.data());
+            output_texture.uploadPixels(TextureData::OneChannel, TextureData::Normalized8Bit, depth_data_8bit.data());
         }
 
         frame->Release();
-        update_view();
+        updateView();
     }
     else
     {

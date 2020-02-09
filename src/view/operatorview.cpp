@@ -21,19 +21,19 @@
 #include <iostream>
 
 
-OperatorView::OperatorView(BaseOperator& op)
-    : operator_model(op), name_tag(op.description()->name, this)
+OperatorView::OperatorView(BaseOperator* op)
+    : m_operatorModel(op), name_tag(op->description()->name, this)
 {
     setZValue(1);
-    m_posX = op.positionX();
-    m_posY = op.positionY();
+    m_posX = op->positionX();
+    m_posY = op->positionY();
     setPos(m_posX - 0.5 * width, m_posY - 0.5 * height);
     resize(width, height);
 
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    connect(&operator_model, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
+    connect(m_operatorModel, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
 
     name_tag.setPos(0, -33);
 
@@ -55,13 +55,13 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->setSpacing(0);
 
     // add parameter connector first.
-    for (auto i : op.dataInputs())
+    for (auto i : op->dataInputs())
     {
         auto connector = new DataConnector(*this, *i);
         inputs[i] = connector;
         static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(connector);
     }
-    for (auto o : op.dataOutputs())
+    for (auto o : op->dataOutputs())
     {
         auto connector = new DataConnector(*this, *o);
         outputs[o] = connector;
@@ -72,7 +72,7 @@ OperatorView::OperatorView(BaseOperator& op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
 
-    dataViews = operator_model.findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
+    dataViews = m_operatorModel->findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
 
     for (auto view : dataViews)
     {
@@ -92,13 +92,19 @@ OperatorView::~OperatorView()
 }
 
 
-OperatorNetworkView* OperatorView::scope_view()
+BaseOperator* OperatorView::getOperatorModel()
+{
+    return m_operatorModel;
+}
+
+
+OperatorNetworkView* OperatorView::getNetworkView()
 {
     return dynamic_cast<OperatorNetworkView*>(scene());
 }
 
 
-void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
+void OperatorView::paint(QPainter* painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     selection_rect.setVisible(isSelected());
 
@@ -112,25 +118,25 @@ void OperatorView::paint(QPainter * painter, const QStyleOptionGraphicsItem *, Q
 }
 
 
-DataConnector* OperatorView::data_connector_in(const DataInput* input)
+DataConnector* OperatorView::getDataInput(const DataInput* input)
 {
     return inputs[input];
 }
 
 
-DataConnector* OperatorView::data_connector_out(const BaseDataType* output)
+DataConnector* OperatorView::getDataOutput(const BaseDataType* output)
 {
     return outputs[output];
 }
 
 
-ParameterConnector* OperatorView::parameter_connector_in() const
+ParameterConnector* OperatorView::getParameterInput() const
 {
     return static_cast<ParameterConnector*>(inputs_panel.layout()->itemAt(inputs_panel.layout()->count() - 1));
 }
 
 
-ParameterConnector* OperatorView::parameter_connector_out() const
+ParameterConnector* OperatorView::getParameterOutput() const
 {
     return static_cast<ParameterConnector*>(outputs_panel.layout()->itemAt(outputs_panel.layout()->count() - 1));
 }
@@ -138,8 +144,11 @@ ParameterConnector* OperatorView::parameter_connector_out() const
 
 void OperatorView::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    scope_view()->bringToFront(this);
-    QGraphicsWidget::mousePressEvent(event);
+    if (auto network = getNetworkView())
+    {
+        network->bringToFront(this);
+        QGraphicsWidget::mousePressEvent(event);
+    }
 }
 
 
@@ -163,7 +172,7 @@ void OperatorView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (was_dragged)
     {
-        operator_model.move_to(m_posX, m_posY);
+        m_operatorModel->move_to(m_posX, m_posY);
     }
     was_dragged = false;
 

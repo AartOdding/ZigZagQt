@@ -3,7 +3,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 
-#include "utility/fpsmonitor.h"
+#include "utility/FrameRateMonitor.hpp"
 
 
 class TextureView;
@@ -39,7 +39,7 @@ private:
     bool vao_inited = false;
     GLuint vao;
 
-    FpsMonitor fps{ std::chrono::milliseconds(500) };
+    FrameRateMonitor fps{ std::chrono::milliseconds(500) };
 
 };
 

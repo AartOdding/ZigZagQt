@@ -26,6 +26,10 @@ class BaseComponent;
 
 
 
+/*
+ * TODO: add notes on multi threading
+ *  - no calls towards model without locking operator
+ */
 class OperatorNetworkView : public QGraphicsScene,
                             public ConnectionManager
 {
@@ -34,6 +38,8 @@ class OperatorNetworkView : public QGraphicsScene,
 public:
 
     OperatorNetworkView(QObject *parent = nullptr);
+
+    ~OperatorNetworkView();
 
     void setNetwork(OperatorNetwork* netwok);
 
@@ -50,18 +56,26 @@ public:
 public slots:
 
     void selectAllOperators();
+
     void deleteSelectedOperators();
 
+
     void onOperatorAdded(QPointer<BaseOperator> operatorPtr, std::shared_ptr<std::mutex> mutex);
+
     void onOperatorRemoved(BaseOperator* operatorPtr);
 
-    // TODO: look at alternatives
-    void on_input_connected(BaseDataType* output, DataInput* input);
-    void on_input_disconnected(BaseDataType* output, DataInput* input);
 
-    // TODO: look at alternatives
-    void on_parameters_connected(BaseComponent * exporter, BaseComponent * importer);
-    void on_parameter_disconnected(BaseComponent * exporter, BaseComponent * importer);
+    void onOperatorsConnected(BaseOperator* outputOperator, BaseDataType* outputData,
+                              BaseOperator* inputOperator, DataInput* dataInput);
+
+    void onOperatorsDisconnected(BaseOperator* outputOperator, BaseDataType* outputData,
+                                 BaseOperator* inputOperator, DataInput* dataInput);
+
+    void onParametersConnected(BaseOperator* exportingOperator, BaseComponent * exporter,
+                               BaseOperator* importingOperator, BaseComponent * importer);
+
+    void onParametersDisconnected(BaseOperator* exportingOperator, BaseComponent * exporter,
+                                  BaseOperator* importingOperator, BaseComponent * importer);
 
 protected:
 
@@ -77,11 +91,20 @@ private:
 
     OperatorNetwork* m_network;
 
-    QHash<BaseOperator*, OperatorView*> m_operatorViews;
+    struct ViewedOperator
+    {
+        QPointer<BaseOperator> operatorPtr;
+        std::shared_ptr<std::mutex> mutex;
+        OperatorView* operatorView = nullptr;
+    };
 
-    // TODO: look at alternatives
+    QHash<BaseOperator*, ViewedOperator*> m_operatorViews;
+
+    // The data connector is the input connector.
     QHash<DataConnector*, Cable*> m_dataCables;
-    QHash<std::pair<ParameterConnector*, ParameterConnector*>, std::pair<Cable*, int>> m_parameterCables;
+
+    // Stores a cable and a reference count, for each combination of operators
+    QHash<std::pair<BaseOperator*, BaseOperator*>, std::pair<Cable*, int>> m_parameterCables;
 
 };
 

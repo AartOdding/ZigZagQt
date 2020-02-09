@@ -57,9 +57,9 @@ void TextureViewWindow::paintGL()
 
         fps.frame();
 
-        if (fps.frame_count() % 500 == 0)
+        if (fps.getFrameCount() % 500 == 0)
         {
-            std::cout << fps.fps() << " fps in texture view window.\n";
+            std::cout << fps.getFrameRate() << " fps in texture view window.\n";
         }
     }
 }

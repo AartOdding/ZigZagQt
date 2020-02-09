@@ -70,10 +70,10 @@ void ParameterEditor::onSelectionChanged()
                 delete parameters;
                 parameters = nullptr;
             }
-            parameters = new ParameterGroup(this, &selected->operator_model);
+            parameters = new ParameterGroup(this, selected->getOperatorModel());
             inner_layout.insertWidget(0, parameters);
             if (!isVisible()) show();
-            setWindowTitle(selected->operator_model.description()->name);
+            setWindowTitle(selected->getOperatorModel()->description()->name);
             return;
         }
     }

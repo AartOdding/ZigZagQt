@@ -72,13 +72,6 @@ public slots:
     void disconnectFromAll();
 
 
-signals:
-
-    void hasConnected(BaseDataType* output, DataInput* input);
-
-    void hasDisconnected(BaseDataType* output, DataInput* input);
-
-
 private:
 
     friend class ConnectCommand;
