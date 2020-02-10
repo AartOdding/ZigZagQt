@@ -16,6 +16,10 @@
 #include <unordered_set>
 
 
+
+static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
+
+
 static bool hasTurn(const BaseOperator* op, const std::unordered_set<const BaseOperator*>& doneList)
 {
     for (auto& input : op->activeDataInputs())
@@ -59,8 +63,28 @@ void ExecutionEngine::startExecution()
     std::cout << "START: " << thread() << std::endl;
     m_timer.start(20);
 
-    m_glWindow->makeCurrent();
+    m_glWindow->context()->makeCurrent();
     initializeOpenGLFunctions();
+
+    shader.create();
+    shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/minimal.vert");
+    shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/view_texture.frag");
+    auto success = shader.link();
+    Q_ASSERT(success);
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    //unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 
@@ -73,7 +97,7 @@ void ExecutionEngine::pauseExecution()
 
 void ExecutionEngine::executeFrame()
 {
-    m_glWindow->makeCurrent();
+    m_glWindow->context()->makeCurrent();
 
     std::deque<BaseOperator*> openList;
     std::unordered_set<const BaseOperator*> closedList;
@@ -139,14 +163,19 @@ void ExecutionEngine::executeFrame()
 
     if (lastRenderedTexture)
     {
+        glClearColor(QRandomGenerator::global()->bounded(1.0), 0.5, 0.5, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shader.programId());
+        glBindVertexArray(vao);
+        lastRenderedTexture->bindTexture(0);
+        shader.setUniformValue(shader.uniformLocation("framebuffer_resolution"), QPointF(256, 256));
+        shader.setUniformValue(shader.uniformLocation("color"), 0.5f, 0.0f, 0.3f);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glUseProgram(0);
     }
 
-    glClearColor(QRandomGenerator::global()->bounded(1.0), 0.5, 0.5, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-
     m_glWindow->swapBuffers();
-
 
     m_frameRateMonitor.frame();
 

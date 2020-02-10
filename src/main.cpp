@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
     auto style = new PhantomStyle();
 
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+
     Application app(argc, argv);
     app.setStyle(style);
     app.setPalette(palette);

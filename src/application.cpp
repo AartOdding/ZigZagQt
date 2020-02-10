@@ -119,7 +119,7 @@ Application::Application(int &argc, char **argv)
 
     m_executionEngineWindow = new ExecutionEngineWindow();
     m_executionEngineWindow->show();
-    m_executionEngineWindow->doneCurrent();
+    m_executionEngineWindow->context()->doneCurrent();
     m_executionEngineWindow->context()->moveToThread(&m_executionThread);
 
     m_executionEngine = new ExecutionEngine(project_model.get(), m_executionEngineWindow);

@@ -1,10 +1,13 @@
 #pragma once
 
 #include <memory>
+
 #include <QObject>
 #include <QTimer>
 #include <QGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLShaderProgram>
+
 #include "utility/FrameRateMonitor.hpp"
 
 
@@ -57,5 +60,9 @@ private:
     OperatorNetwork* m_network;
     ExecutionEngineWindow* m_glWindow;
     FrameRateMonitor m_frameRateMonitor;
+
+    QOpenGLShaderProgram shader;
+    GLuint vao;
+    GLuint vbo;
 
 };
