@@ -26,7 +26,7 @@ public:
         ++m_currentFrameCount;
         ++m_frameCount;
 
-        if (now > m_lastMeasurement + m_measurementInterval && m_currentFrameCount > 0)
+        if (now > m_lastMeasurement + m_measurementInterval)
         {
             quint64 microSecondsPassed = (now - m_lastMeasurement).count() / 1000;
             double secondsPassed = microSecondsPassed / 1'000'000.0;

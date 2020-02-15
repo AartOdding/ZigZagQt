@@ -31,7 +31,7 @@ const std::vector<BaseOperator*>& OperatorNetwork::getOperators() const
 
 
 // TODO: move elsewhere
-QUndoStack* OperatorNetwork::get_undo_stack()
+QUndoStack* OperatorNetwork::getUndoStack()
 {
     return &m_undoStack;
 }
@@ -133,7 +133,7 @@ void OperatorNetwork::addOperatorImplementation(BaseOperator * operatorPtr)
                 block->acquireResources();
             }
         }
-        operatorPtr->acquire_resources();
+        operatorPtr->acquireResources();
 
         m_operators.push_back(operatorPtr);
 
@@ -162,7 +162,7 @@ void OperatorNetwork::removeOperatorImplementation(BaseOperator * operatorPtr)
 {
     if (operatorPtr)
     {
-        operatorPtr->release_resources();
+        operatorPtr->releaseResources();
 
         auto blocks = operatorPtr->dataOutputs();
 

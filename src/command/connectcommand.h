@@ -1,10 +1,11 @@
 #pragma once
 
 #include <QUndoCommand>
+#include <mutex>
 
+#include "model/BaseOperator.hpp"
 #include "model/BaseDataType.hpp"
 #include "model/datainput.h"
-
 
 
 class ConnectCommand : public QUndoCommand
@@ -12,39 +13,70 @@ class ConnectCommand : public QUndoCommand
 
 public:
 
-    ConnectCommand(BaseDataType* output_, DataInput* input_)
-        : output(output_), input(input_)
+    ConnectCommand(BaseDataType* dataOutput, DataInput* dataInput)
+        : m_dataOutput(dataOutput),
+          m_initialDataOutput(dataInput->connection),
+          m_dataInput(dataInput)
     {
-        initial_output = input->connection;
+
     }
 
     void redo() override
     {
-        if (initial_output)
+        if (m_initialDataOutput)
         {
-            initial_output->removeConnection(input);
+            std::scoped_lock lock
+            {
+                *m_initialDataOutput->getOperator()->getLock(),
+                *m_dataOutput->getOperator()->getLock(),
+                *m_dataInput->getOperator()->getLock()
+            };
+            m_initialDataOutput->removeConnection(m_dataInput);
+            m_dataOutput->addConnection(m_dataInput);
+            m_dataInput->set_connection(m_dataOutput);  // also removes its old connection;
         }
-        output->addConnection(input);
-
-        input->set_connection(output);  // also removes its old connection;
+        else
+        {
+            std::scoped_lock lock
+            {
+                *m_dataOutput->getOperator()->getLock(),
+                *m_dataInput->getOperator()->getLock()
+            };
+            m_dataOutput->addConnection(m_dataInput);
+            m_dataInput->set_connection(m_dataOutput);  // also removes its old connection;
+        }
     }
 
     void undo() override
     {
-        output->removeConnection(input);
-
-        if (initial_output)
+        if (m_initialDataOutput)
         {
-            initial_output->addConnection(input);
+            std::scoped_lock lock
+            {
+                *m_initialDataOutput->getOperator()->getLock(),
+                *m_dataOutput->getOperator()->getLock(),
+                *m_dataInput->getOperator()->getLock()
+            };
+            m_dataOutput->removeConnection(m_dataInput);
+            m_initialDataOutput->addConnection(m_dataInput);
+            m_dataInput->set_connection(m_initialDataOutput);
         }
-
-        input->set_connection(initial_output);
+        else
+        {
+            std::scoped_lock lock
+            {
+                *m_dataOutput->getOperator()->getLock(),
+                *m_dataInput->getOperator()->getLock()
+            };
+            m_dataOutput->removeConnection(m_dataInput);
+            m_dataInput->set_connection(m_initialDataOutput);
+        }
     }
 
 private:
 
-    BaseDataType* output;
-    BaseDataType* initial_output;
-    DataInput* input;
+    BaseDataType* m_dataOutput;
+    BaseDataType* m_initialDataOutput;
+    DataInput* m_dataInput;
 
 };

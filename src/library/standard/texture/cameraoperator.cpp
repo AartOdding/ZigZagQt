@@ -95,7 +95,7 @@ void CameraOperator::on_image_captured(int, const QVideoFrame& buffer)
     has_frame = true;
 }
 
-void CameraOperator::parameterChangedEvent(const BaseParameter* parameter)
+void CameraOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

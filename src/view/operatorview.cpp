@@ -71,14 +71,14 @@ OperatorView::OperatorView(BaseOperator* op)
     static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
-
+    /*
     dataViews = m_operatorModel->findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
 
     for (auto view : dataViews)
     {
         view->setParentItem(this);
         view->set_bounds(7, 7, width - 14, height - 14);
-    }
+    }*/
 }
 
 

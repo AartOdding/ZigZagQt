@@ -159,12 +159,12 @@ void BaseZigZagObject::disconnectParameters()
 }
 
 
-void BaseZigZagObject::parameterChangedEvent(const BaseParameter* parameter)
+void BaseZigZagObject::parameterChangeEvent(const BaseParameter* parameter)
 {
     BaseZigZagObject* parent = findParent<BaseZigZagObject*>();
 
     if (parent)
     {
-        parent->parameterChangedEvent(parameter);
+        parent->parameterChangeEvent(parameter);
     }
 }

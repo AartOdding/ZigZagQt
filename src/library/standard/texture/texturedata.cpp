@@ -42,7 +42,7 @@ TextureData::~TextureData()
 }
 
 
-void TextureData::parameterChangedEvent(const BaseParameter*)
+void TextureData::parameterChangeEvent(const BaseParameter*)
 {
     m_needsReallocation = true;
 }

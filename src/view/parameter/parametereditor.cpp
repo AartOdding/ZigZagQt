@@ -13,15 +13,8 @@
 
 ParameterEditor::ParameterEditor(QWidget* parent)
 {
-
-#ifdef Q_OS_MAC
     setParent(nullptr);
     setWindowFlags(Qt::WindowStaysOnTopHint);
-#else
-    setParent(parent);
-    setWindowFlags(Qt::Window |Qt::CustomizeWindowHint | Qt::WindowTitleHint
-                   /*| Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint*/);
-#endif
 
     outer_layout.setMargin(0);
     outer_layout.setSpacing(0);

@@ -56,7 +56,7 @@ bool BaseComponent::isExportingTo(BaseComponent * importer) const
 
 void BaseComponent::startImporting(BaseComponent * exporting_import)
 {
-    auto undo_stack = application::project_model()->get_undo_stack();
+    auto undo_stack = application::project_model()->getUndoStack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
 }
 
@@ -66,7 +66,7 @@ void BaseComponent::stopImporting()
 {
     if (m_import)
     {
-        auto undo_stack = application::project_model()->get_undo_stack();
+        auto undo_stack = application::project_model()->getUndoStack();
         undo_stack->push(new DisconnectParametersCommand(m_import, this));
     }
 }

@@ -23,12 +23,12 @@ public:
 
     bool is_connected() const;
     bool is_connected_to(const BaseDataType* data_block) const;
-    const BaseDataType* get_connection() const;
+    const BaseDataType* getConnectedData() const;
 
     const DataTypeDescription * type() const;
 
 
-    BaseOperator* get_operator() const;
+    BaseOperator* getOperator() const;
 
 public slots:
 

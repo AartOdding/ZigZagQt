@@ -15,7 +15,7 @@ class Viewport : public QGraphicsView
 
 public:
 
-    Viewport(QOpenGLWidget* gl, QWidget* parent = nullptr);
+    Viewport(QWidget* parent = nullptr);
 
 protected:
 

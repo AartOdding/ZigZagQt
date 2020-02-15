@@ -24,7 +24,7 @@ public:
 
     void run() override;
 
-    void parameterChangedEvent(const BaseParameter* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);
@@ -35,7 +35,7 @@ public:
 private:
 
     TextureData output_texture{ this, "Depth Texture", false };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
 
 #ifdef Q_OS_WIN

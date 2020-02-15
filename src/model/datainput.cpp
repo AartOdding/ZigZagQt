@@ -22,7 +22,7 @@ DataInput::~DataInput()
 
 }
 
-BaseOperator* DataInput::get_operator() const
+BaseOperator* DataInput::getOperator() const
 {
     return m_parent_operator;
 }
@@ -55,7 +55,7 @@ void DataInput::connect_to(BaseDataType* new_connection)
         {
             if (compatible_with(new_connection))
             {
-                application::project_model()->get_undo_stack()->push(new ConnectCommand(new_connection, this));
+                application::project_model()->getUndoStack()->push(new ConnectCommand(new_connection, this));
             }
         }
     }
@@ -66,7 +66,7 @@ void DataInput::disconnect()
 {
     if (connection)
     {
-        application::project_model()->get_undo_stack()->push(new DisconnectCommand(connection, this));
+        application::project_model()->getUndoStack()->push(new DisconnectCommand(connection, this));
     }
 }
 
@@ -123,7 +123,7 @@ bool DataInput::is_connected_to(const BaseDataType* data_block) const
 }
 
 
-const BaseDataType* DataInput::get_connection() const
+const BaseDataType* DataInput::getConnectedData() const
 {
     return connection;
 }

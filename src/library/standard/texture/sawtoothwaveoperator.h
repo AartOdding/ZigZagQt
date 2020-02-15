@@ -21,7 +21,7 @@ public:
 
     void run() override;
 
-    void parameterChangedEvent(const BaseParameter* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);
@@ -51,7 +51,7 @@ private:
     Float2Parameter scale{ this, "Scale", { 1, 1 } };
 
     TextureData output_texture{ this, "Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

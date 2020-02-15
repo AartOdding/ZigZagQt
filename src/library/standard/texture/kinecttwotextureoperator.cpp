@@ -120,7 +120,7 @@ void KinectTwoTextureOperator::run()
 }
 
 
-void KinectTwoTextureOperator::parameterChangedEvent(const BaseParameter* parameter)
+void KinectTwoTextureOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

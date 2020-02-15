@@ -71,8 +71,8 @@ void BlendOperator::run()
         glBindVertexArray(0);
     }
 
-    auto a = static_cast<const TextureData*>(m_textureA.get_connection());
-    auto b = static_cast<const TextureData*>(m_textureB.get_connection());
+    auto a = static_cast<const TextureData*>(m_textureA.getConnectedData());
+    auto b = static_cast<const TextureData*>(m_textureB.getConnectedData());
 
     if (a && b)
     {
@@ -95,7 +95,7 @@ void BlendOperator::run()
 }
 
 
-void BlendOperator::parameterChangedEvent(const BaseParameter* parameter)
+void BlendOperator::parameterChangeEvent(const BaseParameter* parameter)
 {
 
 }

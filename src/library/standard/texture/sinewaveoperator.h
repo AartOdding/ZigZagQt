@@ -22,7 +22,7 @@ public:
 
     void run() override;
 
-    void parameterChangedEvent(const BaseParameter* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator * create(BaseZigZagObject* parent);
@@ -50,16 +50,15 @@ private:
     Transform2DParameter transformation{ this, "Transformation" };
 
     TextureData output_texture{ this, "Texture" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 
-    static bool gpu_resources_initialized;
-    static QOpenGLShaderProgram flat_shader;
-    static QOpenGLShaderProgram radial_shader;
-    static QOpenGLShaderProgram concentric_shader;
-    static std::array<QOpenGLShaderProgram*, 3> shaders;
-    static GLuint vao;
-    static GLuint vbo;
+    QOpenGLShaderProgram flat_shader;
+    QOpenGLShaderProgram radial_shader;
+    QOpenGLShaderProgram concentric_shader;
+    std::array<QOpenGLShaderProgram*, 3> shaders{ &flat_shader, &radial_shader, &concentric_shader };
+    GLuint vao;
+    GLuint vbo;
 
 };

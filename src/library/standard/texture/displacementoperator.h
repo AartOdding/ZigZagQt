@@ -21,7 +21,7 @@ public:
 
     void run() override;
 
-    void parameterChangedEvent(const BaseParameter* parameter) override;
+    void parameterChangeEvent(const BaseParameter* parameter) override;
 
 
     static BaseOperator* create(BaseZigZagObject* parent);
@@ -35,7 +35,7 @@ private:
 
     DataInput input_texture{ this, "Input", TextureData::description };
     TextureData output_texture{ this, "Result" };
-    TextureView outputView{ this, &output_texture };
+    //TextureView outputView{ this, &output_texture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;
