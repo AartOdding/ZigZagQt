@@ -26,7 +26,9 @@ public:
 
     /*
      * Will return the object's unique name. The unique name of an object consists of the
-     * name of the object, preceded by every parent object's name. delimited by points.
+     * name of the object, preceded by the names of all parents, delimited by points.
+     * Beware that a unique name is no longer valid when this object or any parent objects
+     * are reparented.
      */
     QString uniqueName() const;
 
