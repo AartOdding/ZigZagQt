@@ -32,6 +32,7 @@ OperatorView::OperatorView(BaseOperator* op)
 
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsSelectable);
+    setFocusPolicy(Qt::StrongFocus);
 
     connect(m_operatorModel, &BaseOperator::position_changed, this, &OperatorView::on_operator_moved);
 
@@ -40,7 +41,6 @@ OperatorView::OperatorView(BaseOperator* op)
     selection_rect.setRect(0, 0, width + 50, height + 46);
     selection_rect.setPos(-25, -35);
     selection_rect.setPen(QPen(QBrush(QColor(51, 153, 255)), 2));
-    selection_rect.setBrush(QColor(51, 153, 255, 30));
     selection_rect.setFlag(QGraphicsItem::ItemStacksBehindParent);
 
     inputs_panel.setFlag(ItemHasNoContents);
@@ -71,14 +71,14 @@ OperatorView::OperatorView(BaseOperator* op)
     static_cast<QGraphicsLinearLayout*>(inputs_panel.layout())->addItem(new ParameterConnector(*this, true));
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
-    /*
+
     dataViews = m_operatorModel->findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
 
     for (auto view : dataViews)
     {
         view->setParentItem(this);
         view->set_bounds(7, 7, width - 14, height - 14);
-    }*/
+    }
 }
 
 
@@ -190,6 +190,19 @@ void OperatorView::keyPressEvent(QKeyEvent *event)
 void OperatorView::keyReleaseEvent(QKeyEvent *event)
 {
     event->setAccepted(false);
+}
+
+
+void OperatorView::focusInEvent(QFocusEvent * event)
+{
+    std::cout << "focus in" <<std::endl;
+    selection_rect.setBrush(QColor(51, 153, 255, 30));
+}
+
+
+void OperatorView::focusOutEvent(QFocusEvent * event)
+{
+    selection_rect.setBrush(QBrush());
 }
 
 

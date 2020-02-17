@@ -7,6 +7,7 @@
 #include "library/standard/texture/texturedata.h"
 
 #include <QElapsedTimer>
+#include <QOpenGLWidget>
 #include <QSemaphore>
 #include <QRandomGenerator>
 #include <QThread>
@@ -41,7 +42,7 @@ static bool hasTurn(const BaseOperator* op, const std::unordered_set<const BaseO
 
 
 
-ExecutionEngine::ExecutionEngine(OperatorNetwork* network, ExecutionEngineWindow* window)
+ExecutionEngine::ExecutionEngine(OperatorNetwork* network, QOpenGLWidget* window)
     : m_timer(this),
       m_network(network),
       m_glWindow(window),
@@ -61,9 +62,9 @@ ExecutionEngine::~ExecutionEngine()
 void ExecutionEngine::startExecution()
 {
     std::cout << "START: " << thread() << std::endl;
-    m_timer.start(20);
+    m_timer.start(16);
 
-    m_glWindow->context()->makeCurrent();
+    m_glWindow->makeCurrent();
     initializeOpenGLFunctions();
 
     shader.create();
@@ -97,7 +98,7 @@ void ExecutionEngine::pauseExecution()
 
 void ExecutionEngine::executeFrame()
 {
-    m_glWindow->context()->makeCurrent();
+    m_glWindow->makeCurrent();
 
     std::deque<BaseOperator*> openList;
     std::unordered_set<const BaseOperator*> closedList;
@@ -144,6 +145,7 @@ void ExecutionEngine::executeFrame()
         }
     }
 
+    /*
     TextureData* lastRenderedTexture = nullptr;
 
     for (int i = orderedClosedList.size()-1; i >= 0 && !lastRenderedTexture; --i)
@@ -174,8 +176,7 @@ void ExecutionEngine::executeFrame()
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glUseProgram(0);
     }
-
-    m_glWindow->swapBuffers();
+    */
 
     m_frameRateMonitor.frame();
 

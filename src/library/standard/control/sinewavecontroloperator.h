@@ -26,4 +26,6 @@ private:
     FloatParameter offset   { this, "Offset",    0 };
     FloatParameter period   { this, "Period",    5, 0, INT_MAX };
 
+    ParameterView view{ this, output.getComponents()[0] };
+
 };

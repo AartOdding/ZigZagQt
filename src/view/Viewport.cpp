@@ -14,8 +14,8 @@ Viewport::Viewport(QWidget* parent)
     setDragMode(QGraphicsView::ScrollHandDrag);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setResizeAnchor(QGraphicsView::AnchorViewCenter);
     setRenderHint(QPainter::Antialiasing);
+    setFrameStyle(QFrame::NoFrame);
 
     viewport()->setCursor(Qt::ArrowCursor);
 
@@ -37,6 +37,19 @@ Viewport::Viewport(QWidget* parent)
     insertAction(nullptr, &m_zoomInAction);
     insertAction(nullptr, &m_zoomOutAction);
     insertAction(nullptr, &m_resetZoomAction);
+}
+
+
+QWindow* Viewport::getWindow()
+{
+    QWidget* topLevelWidget = this;
+
+    while (topLevelWidget->parentWidget())
+    {
+        topLevelWidget = topLevelWidget->parentWidget();
+    }
+
+    return topLevelWidget->windowHandle();
 }
 
 

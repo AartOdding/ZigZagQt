@@ -17,6 +17,8 @@ public:
 
     Viewport(QWidget* parent = nullptr);
 
+    QWindow* getWindow();
+
 protected:
 
     void mousePressEvent(QMouseEvent *event) override;

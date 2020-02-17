@@ -26,7 +26,7 @@ class ExecutionEngine : public QObject,
 public:
 
     // Will take ownership of the OperatorNetwork.
-    ExecutionEngine(OperatorNetwork* network, ExecutionEngineWindow* window);
+    ExecutionEngine(OperatorNetwork* network, QOpenGLWidget* window);
 
     ~ExecutionEngine();
 
@@ -58,7 +58,7 @@ private:
 
     QTimer m_timer;
     OperatorNetwork* m_network;
-    ExecutionEngineWindow* m_glWindow;
+    QOpenGLWidget* m_glWindow;
     FrameRateMonitor m_frameRateMonitor;
 
     QOpenGLShaderProgram shader;

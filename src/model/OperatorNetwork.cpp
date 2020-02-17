@@ -121,8 +121,13 @@ void OperatorNetwork::addOperatorImplementation(BaseOperator * operatorPtr)
     if (operatorPtr)
     {
         auto context = QOpenGLContext::currentContext();
+
+        std::cout << "default fbo: " << context->defaultFramebufferObject() << std::endl;
+
         GLint old_fbo;
         context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
+
+        std::cout << "was bound fbo: " << old_fbo << std::endl;
 
         auto blocks = operatorPtr->dataOutputs();
 
@@ -151,9 +156,9 @@ void OperatorNetwork::addOperatorImplementation(BaseOperator * operatorPtr)
         //emit operator_ptr->position_changed();
         //emit operator_ptr->position_changed(operator_ptr->get_position_x(), operator_ptr->get_position_y()+1);
 
-        Serializer serializer;
-        serializer.serialize(operatorPtr);
-        std::cout << serializer.text.toStdString() << std::endl;
+        //Serializer serializer;
+        //serializer.serialize(operatorPtr);
+        //std::cout << serializer.text.toStdString() << std::endl;
     }
 }
 

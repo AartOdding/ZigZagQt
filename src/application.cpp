@@ -12,6 +12,7 @@
 #include <QStyleFactory>
 #include <QFontDatabase>
 #include <QSurfaceFormat>
+#include <QSplitter>
 
 #include <QBoxLayout>
 #include <QMenuBar>
@@ -74,23 +75,14 @@ Application::Application(int &argc, char **argv)
     project_view_model->setNetwork(project_model.get());
 
 
-    //main_opengl_widget = new QOpenGLWidget();
-    viewport = std::make_unique<Viewport>();
-    viewport->setScene(project_view_model.get());
-    viewport->addActions(project_view_model->getActions());
-
-    //auto context = main_opengl_widget->context();
-    //main_opengl_widget->doneCurrent();
-
-    //renderer = std::make_unique<Renderer>(main_opengl_widget);
-
-    //viewport->
-
-    //renderer->set_model(project_model.get());
-    //std::cout << "renderer" << renderer << "\n";
+    m_mainWindow = std::make_unique<QOpenGLWidget>();
+    QVBoxLayout* mainWindowLayout = new QVBoxLayout();
+    mainWindowLayout->setSpacing(0);
+    mainWindowLayout->setMargin(0);
+    m_mainWindow->setLayout(mainWindowLayout);
 
 
-    QMenuBar* menu_bar = new QMenuBar(viewport.get());
+    QMenuBar* menu_bar = new QMenuBar(m_mainWindow.get());
 
     QMenu* file_menu = new QMenu("File");
     QMenu* edit_menu = new QMenu("Edit");
@@ -111,24 +103,37 @@ Application::Application(int &argc, char **argv)
     menu_bar->addAction(edit_menu->menuAction());
     menu_bar->addAction(view_menu->menuAction());
 
-    viewport->show();
+#ifndef Q_OS_MACOS
+    mainWindowLayout->addWidget(menu_bar);
+#endif
 
-    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-    main_window = std::make_unique<QWidget>();
-    main_window->setLayout(layout);
+    QSplitter* mainWindowSplitter = new QSplitter(m_mainWindow.get());
+    mainWindowLayout->addWidget(mainWindowSplitter);
 
-    m_executionEngineWindow = new ExecutionEngineWindow();
-    m_executionEngineWindow->show();
-    m_executionEngineWindow->context()->doneCurrent();
-    m_executionEngineWindow->context()->moveToThread(&m_executionThread);
+    viewport = std::make_unique<Viewport>(mainWindowSplitter);
+    viewport->setScene(project_view_model.get());
+    viewport->addActions(project_view_model->getActions());
+    mainWindowSplitter->addWidget(viewport.get());
 
-    m_executionEngine = new ExecutionEngine(project_model.get(), m_executionEngineWindow);
-    m_executionEngine->moveToThread(&m_executionThread);
-    connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
-    m_executionThread.start(QThread::TimeCriticalPriority);
-
-    parameterEditor = std::make_unique<ParameterEditor>();
+    parameterEditor = std::make_unique<ParameterEditor>(mainWindowSplitter);
     parameterEditor->setScene(project_view_model.get());
+    mainWindowSplitter->addWidget(parameterEditor.get());
+
+    m_mainWindow->show();
+
+    //m_executionEngineWindow = new ExecutionEngineWindow();
+    //m_executionEngineWindow->show();
+    //m_executionEngineWindow->context()->doneCurrent();
+    //m_executionEngineWindow->context()->moveToThread(&m_executionThread);
+
+    m_executionEngine = new ExecutionEngine(project_model.get(), m_mainWindow.get());
+    m_executionEngine->startExecution();
+
+    //m_executionEngine->moveToThread(&m_executionThread);
+    //connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
+    //m_executionThread.start(QThread::TimeCriticalPriority);
+
+
 
     //connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);
 

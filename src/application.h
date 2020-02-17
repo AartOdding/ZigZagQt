@@ -69,7 +69,6 @@ private:
     QThread                           m_executionThread;
 
     std::unique_ptr<Viewport> viewport;
-    //QOpenGLWidget * main_opengl_widget;
 
-    std::unique_ptr<QWidget> main_window;
+    std::unique_ptr<QOpenGLWidget> m_mainWindow;
 };

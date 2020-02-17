@@ -12,8 +12,8 @@
 
 
 ParameterEditor::ParameterEditor(QWidget* parent)
+    : QWidget(parent)
 {
-    setParent(nullptr);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     outer_layout.setMargin(0);
