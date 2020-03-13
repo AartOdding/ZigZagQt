@@ -25,7 +25,7 @@ public:
 
     static BaseOperator * create(BaseZigZagObject* parent);
 
-    static const OperatorDescription description;
+    static const OperatorKind description;
 
 private:
 
@@ -42,7 +42,7 @@ private:
     FloatParameter z_value{ this, "Z Value", 0 };
 
     TextureData output_texture{ this, "Texture" };
-    //TextureView outputView{ this, &output_texture };
+    TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

@@ -8,6 +8,7 @@
 #include <mutex>
 #include <functional>
 
+#include "model/OperatorKind.hpp"
 #include "model/parameter/IntParameter.hpp"
 #include "model/parameter/FloatParameter.hpp"
 #include "model/parameter/EnumParameter.hpp"
@@ -17,45 +18,11 @@
 
 
 struct DataTypeDescription;
-struct DataViewTypeInfo;
+struct DataViewDescription;
 class BaseOperator;
 class BaseDataType;
 class DataInput;
 
-
-struct OperatorDescription
-{
-    OperatorDescription() = delete;
-
-    OperatorDescription(const QString& name,
-                        const QString& package,
-                        std::function<BaseOperator*(BaseZigZagObject* parent)> construct,
-                        const std::vector<const DataTypeDescription*>& inputs = {},
-                        const std::vector<const DataTypeDescription*>& outputs = {},
-                        const DataViewTypeInfo * view = nullptr);
-
-    QString name;
-    QString package;
-    std::function<BaseOperator*(BaseZigZagObject* parent)> construct;
-    std::vector<const DataTypeDescription*> inputs;
-    std::vector<const DataTypeDescription*> outputs;
-    const DataViewTypeInfo * view;
-
-    // Use OpenGL
-    // Library
-    // Image
-    // Version
-    // Description
-    // Author
-    // License
-    // Etc
-};
-
-
-inline bool operator<(const OperatorDescription& t1, const OperatorDescription& t2)
-{
-    return t1.name < t2.name;
-}
 
 
 
@@ -68,7 +35,7 @@ class BaseOperator : public BaseZigZagObject
 
 public:
 
-    BaseOperator(BaseZigZagObject* parent, const OperatorDescription& description);
+    BaseOperator(BaseZigZagObject* parent, const OperatorKind& description);
 
     virtual ~BaseOperator() override;
 
@@ -82,7 +49,7 @@ public:
     int positionX() const;
     int positionY() const;
 
-    const OperatorDescription * description() const;
+    const OperatorKind * description() const;
 
 
     QList<DataInput*> dataInputs() const;
@@ -161,7 +128,7 @@ private:
 
     std::shared_ptr<std::mutex> m_mutex;
 
-    const OperatorDescription * m_description;
+    const OperatorKind * m_description;
 
 };
 

@@ -11,7 +11,7 @@
 #include <iostream>
 
 
-OpenGLDataView::OpenGLDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info)
+OpenGLDataView::OpenGLDataView(BaseOperator * parent_operator, const DataViewDescription * type_info)
     : BaseDataView(parent_operator, type_info)
 {
     initializeOpenGLFunctions();
@@ -50,26 +50,24 @@ void OpenGLDataView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, Q
         auto w = scale_factor * (view_bot_right.x() - view_top_left.x());
         auto h = scale_factor * (view_bot_right.y() - view_top_left.y());
 
-        painter->setPen(QColor(100, 0, 0));
-        painter->drawEllipse(QPointF(0, 0), 50, 50);
-        //painter->beginNativePainting();
+        painter->beginNativePainting();
 
-        qDebug() << QOpenGLContext::currentContext();
+        std::cout<< "current context: " << QOpenGLContext::currentContext();
 
-        auto context = QOpenGLContext::currentContext();
-        std::cout << "default fbo: " << context->defaultFramebufferObject() << std::endl;
+        //auto context = QOpenGLContext::currentContext();
+        //std::cout << "default fbo: " << context->defaultFramebufferObject() << std::endl;
 
-        GLint old_fbo;
-        context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
+        //GLint old_fbo;
+        //context->functions()->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &old_fbo);
 
-        std::cout << "was bound fbo: " << old_fbo << std::endl;
+        //std::cout << "was bound fbo: " << old_fbo << std::endl;
 
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-        glClearColor(1, 1, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+//        glClearColor(1, 1, 0, 1);
+//        glClear(GL_COLOR_BUFFER_BIT);
 
-        /*
+
         glEnable(GL_SCISSOR_TEST);
 
         glScissor(x, y, w, h);
@@ -78,7 +76,7 @@ void OpenGLDataView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, Q
         paint_opengl(w, h);
 
         glDisable(GL_SCISSOR_TEST);
-        */
-       // painter->endNativePainting();
+
+        painter->endNativePainting();
     }
 }

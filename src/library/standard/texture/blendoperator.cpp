@@ -14,13 +14,9 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-const OperatorDescription BlendOperator::description {
+const OperatorKind BlendOperator::description {
     "Blend",
-    "Video Edit",
-    &create,
-    { &TextureData::description, &TextureData::description },
-    { &TextureData::description },
-    &TextureView::Type
+    "Video Edit"
 };
 
 

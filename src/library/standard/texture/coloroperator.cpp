@@ -3,14 +3,13 @@
 
 
 
-const OperatorDescription ColorOperator::Type
+const OperatorKind ColorOperator::Type
 {
     "Uniform Fill",
     "Texture",
-    &create,
-    { },
-    { &TextureData::description },
-    &TextureView::Type
+    "Aart Odding",
+    "Creates a texure of uniform color.",
+    "Creates a texure of uniform color."
 };
 
 

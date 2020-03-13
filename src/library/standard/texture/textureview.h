@@ -30,7 +30,7 @@ public:
 
     static BaseDataView* create(BaseOperator* m_parentOperator);
 
-    static const inline DataViewTypeInfo Type { "Texture View", "Texture", DataViewGraphicsApi::OpenGL, &create };
+    static const inline DataViewDescription Type { "Texture View", "Texture", DataViewGraphicsApi::OpenGL, &create };
 
 public slots:
 

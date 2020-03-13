@@ -13,7 +13,7 @@
 
 
 class BaseOperator;
-struct OperatorDescription;
+struct OperatorKind;
 
 
 
@@ -53,7 +53,7 @@ private slots:
     void undo();
 
 
-    void addOperator(const OperatorDescription* operatorDescription, int xPos, int yPos);
+    void addOperator(const OperatorKind* operatorDescription, int xPos, int yPos);
 
     void removeOperator(BaseOperator* operatorPtr);
 

@@ -4,7 +4,7 @@
 #include "application.h"
 
 
-const OperatorDescription ClockOperator::description { "Clock", "Control", &create };
+const OperatorKind ClockOperator::description { "Clock", "Control" };
 
 
 BaseOperator * ClockOperator::create(BaseZigZagObject* parent)

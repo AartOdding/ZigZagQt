@@ -80,7 +80,7 @@ private:
 
     std::unordered_map<const DataInput*, DataConnector*> inputs;
     std::unordered_map<const BaseDataType*, DataConnector*> outputs;
-    QList<BaseDataView*> dataViews;
+    QList<BaseDataView*> m_dataViews;
 
     QGraphicsWidget inputs_panel{ this };
     QGraphicsWidget outputs_panel{ this };

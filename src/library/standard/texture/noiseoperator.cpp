@@ -25,14 +25,10 @@ BaseOperator * NoiseOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription NoiseOperator::description
+const OperatorKind NoiseOperator::description
 {
     "Noise",
-    "Video Synthesis",
-    &create,
-    { },
-    { &TextureData::description },
-    &TextureView::Type,
+    "Video Synthesis"
 };
 
 

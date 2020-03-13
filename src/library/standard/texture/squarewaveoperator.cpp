@@ -26,14 +26,10 @@ BaseOperator * SquareWaveOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription SquareWaveOperator::description
+const OperatorKind SquareWaveOperator::description
 {
     "Square Wave",
-    "Video Synthesis",
-    &create,
-    {  },
-    { &TextureData::description },
-    &TextureView::Type
+    "Video Synthesis"
 };
 
 

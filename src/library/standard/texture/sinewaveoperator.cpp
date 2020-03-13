@@ -19,14 +19,10 @@ BaseOperator * SineWaveOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription SineWaveOperator::description
+const OperatorKind SineWaveOperator::description
 {
     "Sine Wave",
-    "Video Synthesis",
-    &create,
-    { },
-    { &TextureData::description },
-    &TextureView::Type,
+    "Video Synthesis"
 };
 
 

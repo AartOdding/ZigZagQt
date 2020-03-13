@@ -55,12 +55,13 @@ void OperatorNetwork::createChild(const QXmlStreamAttributes&)
 
 }
 
-
-void OperatorNetwork::addOperator(const OperatorDescription* operatorDescription, int xPos, int yPos)
+#include "library/standard/texture/sinewaveoperator.h"
+void OperatorNetwork::addOperator(const OperatorKind* operatorDescription, int xPos, int yPos)
 {
     if (operatorDescription)
     {
-        BaseOperator* op = operatorDescription->construct(this);
+        //BaseOperator* op = operatorDescription->construct(this);
+        BaseOperator* op = SineWaveOperator::create(this);
         op->set_position(xPos, yPos);
         m_undoStack.push(new AddOperatorCommand(this, op));
     }

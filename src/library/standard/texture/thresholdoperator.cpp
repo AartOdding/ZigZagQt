@@ -17,14 +17,10 @@ BaseOperator* ThresholdOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription ThresholdOperator::description
+const OperatorKind ThresholdOperator::description
 {
     "Threshold",
-    "Texture",
-    &create,
-    { &TextureData::description },
-    { &TextureData::description },
-    &TextureView::Type,
+    "Texture"
 };
 
 

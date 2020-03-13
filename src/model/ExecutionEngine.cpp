@@ -98,7 +98,7 @@ void ExecutionEngine::pauseExecution()
 
 void ExecutionEngine::executeFrame()
 {
-    m_glWindow->makeCurrent();
+    m_glWindow->makeCurrent();  // TODO: issues with freezing!
 
     std::deque<BaseOperator*> openList;
     std::unordered_set<const BaseOperator*> closedList;

@@ -26,7 +26,7 @@ public:
 
     static BaseOperator * create(BaseZigZagObject* parent);
 
-    static const OperatorDescription description;
+    static const OperatorKind description;
 
 
     Q_INVOKABLE void storeState(QVariantMap* state) const
@@ -51,7 +51,7 @@ private:
     Float2Parameter scale{ this, "Scale", { 1, 1 } };
 
     TextureData output_texture{ this, "Texture" };
-    //TextureView outputView{ this, &output_texture };
+    TextureView outputView{ this, &output_texture };
 
     bool should_update = false;
 

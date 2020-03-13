@@ -70,5 +70,6 @@ private:
 
     std::unique_ptr<Viewport> viewport;
 
-    std::unique_ptr<QOpenGLWidget> m_mainWindow;
+    std::unique_ptr<QWidget> m_mainWindow;
+    //std::unique_ptr<QOpenGLWidget> m_mainWindow;
 };

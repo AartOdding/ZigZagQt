@@ -72,9 +72,9 @@ OperatorView::OperatorView(BaseOperator* op)
     static_cast<QGraphicsLinearLayout*>(outputs_panel.layout())->addItem(new ParameterConnector(*this, false));
 
 
-    dataViews = m_operatorModel->findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
+    m_dataViews = m_operatorModel->findChildren<BaseDataView*>(QString(), Qt::FindDirectChildrenOnly);
 
-    for (auto view : dataViews)
+    for (auto view : m_dataViews)
     {
         view->setParentItem(this);
         view->set_bounds(7, 7, width - 14, height - 14);
@@ -84,12 +84,11 @@ OperatorView::OperatorView(BaseOperator* op)
 
 OperatorView::~OperatorView()
 {
-    /*
-    for (auto view : dataViews)
+    for (auto view : m_dataViews)
     {
         view->setParentItem(nullptr);
-        scene()->removeItem(view);
-    }*/
+        //scene()->removeItem(view);
+    }
 }
 
 

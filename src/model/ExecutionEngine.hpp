@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
 

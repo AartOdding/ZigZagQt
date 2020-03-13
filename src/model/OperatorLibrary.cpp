@@ -6,11 +6,65 @@
 
 
 
+
+OperatorPackage::OperatorPackage(const QString& packageName)
+    : m_packageName(packageName)
+{
+
+}
+
+
+int OperatorPackage::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+    {
+        return 0;
+    }
+    else
+    {
+        return static_cast<int>(m_packageContents.size());
+    }
+}
+
+
+QVariant OperatorPackage::data(const QModelIndex &index, int role) const
+{
+
+}
+
+
+QHash<int, QByteArray> OperatorPackage::roleNames() const
+{
+
+}
+
+
+
+OperatorLibrary* activeOperatorLibrary(OperatorLibrary* resetActiveOperatorLibrary)
+{
+    static OperatorLibrary* activeLibrary = defaultOperatorLibrary();
+
+    if (resetActiveOperatorLibrary)
+    {
+        activeLibrary = resetActiveOperatorLibrary;
+    }
+    return activeLibrary;
+}
+
+
+OperatorLibrary* defaultOperatorLibrary()
+{
+    static OperatorLibrary defaultLibrary;
+
+    return &defaultLibrary;
+}
+
+/*
 OperatorLibrary* OperatorLibrary::instance()
 {
     static OperatorLibrary library;
     return &library;
-}
+}*/
 
 
 OperatorLibrary::OperatorLibrary()
@@ -19,7 +73,7 @@ OperatorLibrary::OperatorLibrary()
 }
 
 
-void OperatorLibrary::add(const OperatorDescription* type)
+void OperatorLibrary::add(const OperatorKind* type)
 {
     if (type)
     {
@@ -28,7 +82,7 @@ void OperatorLibrary::add(const OperatorDescription* type)
 }
 
 
-void OperatorLibrary::add(const OperatorDescription& type)
+void OperatorLibrary::add(const OperatorKind& type)
 {
     add(&type);
 }
@@ -42,9 +96,9 @@ QStringList OperatorLibrary::packages() const
 }
 
 
-QList<const OperatorDescription*> OperatorLibrary::getPackage(const QString& package) const
+QList<const OperatorKind*> OperatorLibrary::getPackage(const QString& package) const
 {
-    QList<const OperatorDescription*> returnValue;
+    QList<const OperatorKind*> returnValue;
 
     if (m_operators.contains(package))
     {
@@ -55,7 +109,7 @@ QList<const OperatorDescription*> OperatorLibrary::getPackage(const QString& pac
 }
 
 
-const OperatorDescription* OperatorLibrary::getOperator(const QString& package, const QString& operatorName)
+const OperatorKind* OperatorLibrary::getOperator(const QString& package, const QString& operatorName)
 {
     if (m_operators.contains(package))
     {

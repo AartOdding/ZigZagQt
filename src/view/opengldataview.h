@@ -14,7 +14,7 @@ class OpenGLDataView : public BaseDataView,
 
 public:
 
-    OpenGLDataView(BaseOperator * parent_operator, const DataViewTypeInfo * type_info);
+    OpenGLDataView(BaseOperator * parent_operator, const DataViewDescription * type_info);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 

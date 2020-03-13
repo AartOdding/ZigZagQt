@@ -47,8 +47,10 @@ SOURCES += \
     src/library/standard/texture/thresholdoperator.cpp \
     src/model/BaseDataType.cpp \
     src/model/BaseOperator.cpp \
+    src/model/BaseSystem.cpp \
     src/model/BaseZigZagObject.cpp \
     src/model/ExecutionEngine.cpp \
+    src/model/OperatorKind.cpp \
     src/model/OperatorLibrary.cpp \
     src/model/OperatorNetwork.cpp \
     src/model/clock.cpp \
@@ -122,8 +124,10 @@ HEADERS += \
     src/library/standard/texture/thresholdoperator.h \
     src/model/BaseDataType.hpp \
     src/model/BaseOperator.hpp \
+    src/model/BaseSystem.hpp \
     src/model/BaseZigZagObject.hpp \
     src/model/ExecutionEngine.hpp \
+    src/model/OperatorKind.hpp \
     src/model/OperatorLibrary.hpp \
     src/model/OperatorNetwork.hpp \
     src/model/clock.h \

@@ -28,7 +28,7 @@ public:
 
     static BaseOperator* create(BaseZigZagObject* parent);
 
-    static const OperatorDescription description;
+    static const OperatorKind description;
 
 private:
 
@@ -41,7 +41,7 @@ private:
     DataInput m_textureB{ this, QStringLiteral("Texture 1"), TextureData::description };
 
     TextureData m_outputTexture{ this, "Output Texture" };
-    //TextureView m_outputView{ this, &m_outputTexture };
+    TextureView m_outputView{ this, &m_outputTexture };
 
     static bool gpu_resources_initialized;
     static QOpenGLShaderProgram shader;

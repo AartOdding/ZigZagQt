@@ -8,7 +8,7 @@
 
 
 struct DataTypeDescription;
-struct OperatorDescription;
+struct OperatorKind;
 
 
 class OperatorSelectorDialog : public QDialog
@@ -22,7 +22,7 @@ public:
 
 signals:
 
-    void operatorRequested(const OperatorDescription* op_type, int x, int y);
+    void operatorRequested(const OperatorKind* op_type, int x, int y);
 
 
 public slots:

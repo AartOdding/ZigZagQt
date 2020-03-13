@@ -22,14 +22,10 @@ BaseOperator* DisplacementOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription DisplacementOperator::Type
+const OperatorKind DisplacementOperator::Type
 {
     "Displace",
-    "Video Edit",
-    &create,
-    { &TextureData::description, &TextureData::description },
-    { &TextureData::description },
-    &TextureView::Type
+    "Video Edit"
 };
 
 

@@ -13,13 +13,13 @@
 
 
 
-
-OperatorDescription::OperatorDescription(const QString& name_,
+/*
+OperatorKind::OperatorKind(const QString& name_,
                                          const QString& package_,
                                          std::function<BaseOperator*(BaseZigZagObject* parent)> construct_,
                                          const std::vector<const DataTypeDescription*>& inputs_,
                                          const std::vector<const DataTypeDescription*>& outputs_,
-                                         const DataViewTypeInfo * view_)
+                                         const DataViewDescription * view_)
     : name(name_),
       package(package_),
       construct(construct_),
@@ -27,12 +27,12 @@ OperatorDescription::OperatorDescription(const QString& name_,
       outputs(outputs_),
       view(view_)
 {
-    OperatorLibrary::instance()->add(this);
-}
+    activeOperatorLibrary()->add(this);
+}*/
 
 
 
-BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorDescription& type_)
+BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorKind& type_)
     : BaseZigZagObject(parent, type_.name),
       m_mutex(std::make_shared<std::mutex>()),
       m_description(&type_)
@@ -87,7 +87,7 @@ int BaseOperator::positionY() const
 
 
 
-const OperatorDescription * BaseOperator::description() const
+const OperatorKind * BaseOperator::description() const
 {
     return m_description;
 }

@@ -21,8 +21,7 @@ OperatorSelectorDialog::OperatorSelectorDialog(QWidget* parent, int x, int y)
     ui.setupUi(this);
     ui.accept_button->setDefault(true);
 
-    auto library = OperatorLibrary::instance();
-
+    auto library = activeOperatorLibrary();
     auto packages = library->packages();
 
     for (auto packageName : packages)
@@ -53,7 +52,7 @@ void OperatorSelectorDialog::onPackageChanged(const QString& newPackage)
 {
     ui.operator_list->clear();
 
-    for (auto op : OperatorLibrary::instance()->getPackage(newPackage))
+    for (auto op : activeOperatorLibrary()->getPackage(newPackage))
     {
         ui.operator_list->addItem(op->name);
     }
@@ -64,7 +63,7 @@ void OperatorSelectorDialog::onAccept()
 {
     if (ui.operator_list->currentItem())
     {
-        auto op = OperatorLibrary::instance()->getOperator(
+        auto op = activeOperatorLibrary()->getOperator(
                     ui.filter->currentText(),
                     ui.operator_list->currentItem()->text());
         if (op)

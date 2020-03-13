@@ -75,7 +75,10 @@ Application::Application(int &argc, char **argv)
     project_view_model->setNetwork(project_model.get());
 
 
-    m_mainWindow = std::make_unique<QOpenGLWidget>();
+    m_mainWindow = std::make_unique<QWidget>();
+    //m_mainWindow = std::make_unique<QOpenGLWidget>();
+    QOpenGLWidget* OpenGl = new QOpenGLWidget();
+
     QVBoxLayout* mainWindowLayout = new QVBoxLayout();
     mainWindowLayout->setSpacing(0);
     mainWindowLayout->setMargin(0);
@@ -111,6 +114,7 @@ Application::Application(int &argc, char **argv)
     mainWindowLayout->addWidget(mainWindowSplitter);
 
     viewport = std::make_unique<Viewport>(mainWindowSplitter);
+    viewport->setViewport(OpenGl);
     viewport->setScene(project_view_model.get());
     viewport->addActions(project_view_model->getActions());
     mainWindowSplitter->addWidget(viewport.get());
@@ -126,7 +130,7 @@ Application::Application(int &argc, char **argv)
     //m_executionEngineWindow->context()->doneCurrent();
     //m_executionEngineWindow->context()->moveToThread(&m_executionThread);
 
-    m_executionEngine = new ExecutionEngine(project_model.get(), m_mainWindow.get());
+    m_executionEngine = new ExecutionEngine(project_model.get(), OpenGl);
     m_executionEngine->startExecution();
 
     //m_executionEngine->moveToThread(&m_executionThread);
@@ -139,6 +143,7 @@ Application::Application(int &argc, char **argv)
 
     connect(this, &QCoreApplication::aboutToQuit, this, &Application::onShutdown);
     std::cout << "GUI: " << thread() << std::endl;
+    std::cout << "threaded gl: " << QOpenGLContext::supportsThreadedOpenGL() << std::endl;
 }
 
 

@@ -18,7 +18,7 @@ public:
 
     static BaseDataView* create(BaseOperator* parent_operator) { return new ParameterView(parent_operator, nullptr); }
 
-    static const inline DataViewTypeInfo Type { "Parameter Preview", "Control", DataViewGraphicsApi::QPainter, &create };
+    static const inline DataViewDescription Type { "Parameter Preview", "Control", DataViewGraphicsApi::QPainter, &create };
 
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;

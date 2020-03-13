@@ -10,14 +10,10 @@ BaseOperator * NoiseWaveControlOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription NoiseWaveControlOperator::description
+const OperatorKind NoiseWaveControlOperator::description
 {
     "Noise Wave",
-    "Control",
-    &create,
-    { },
-    { },
-    &ParameterView::Type
+    "Control"
 };
 
 

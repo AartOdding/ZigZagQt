@@ -12,14 +12,10 @@ BaseOperator * KinectTwoTextureOperator::create(BaseZigZagObject* parent)
     return new KinectTwoTextureOperator(parent);
 }
 
-const OperatorDescription KinectTwoTextureOperator::description
+const OperatorKind KinectTwoTextureOperator::description
 {
     "Kinect 2",
-    "Texture",
-    &create,
-    {  },
-    { &TextureData::description },
-    &TextureView::Type,
+    "Texture"
 };
 
 

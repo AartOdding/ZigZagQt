@@ -11,14 +11,10 @@ BaseOperator * SineWaveControlOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription SineWaveControlOperator::description
+const OperatorKind SineWaveControlOperator::description
 {
     "Sine Wave",
     "Control",
-    &create,
-    { },
-    { },
-    &ParameterView::Type
 };
 
 

@@ -27,7 +27,7 @@ public:
 
     static BaseOperator * create(BaseZigZagObject* parent);
 
-    static const OperatorDescription description;
+    static const OperatorKind description;
 
 
     virtual QVariantMap storeState() const override;

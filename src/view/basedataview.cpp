@@ -7,7 +7,7 @@
 #include <QGraphicsScene>
 
 
-BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewTypeInfo *type)
+BaseDataView::BaseDataView(BaseOperator * parent_operator, const DataViewDescription *type)
     : BaseZigZagObject(parent_operator, type->name.c_str()),
       type_info(type)
 {

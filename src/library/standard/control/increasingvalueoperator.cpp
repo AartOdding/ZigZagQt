@@ -9,14 +9,10 @@ BaseOperator * IncreasingValueOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription IncreasingValueOperator::description
+const OperatorKind IncreasingValueOperator::description
 {
     "Increasing Value",
     "Control",
-    &create,
-    { },
-    { },
-    &ParameterView::Type
 };
 
 

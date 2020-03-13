@@ -23,14 +23,10 @@ BaseOperator* FadeOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorDescription FadeOperator::description
+const OperatorKind FadeOperator::description
 {
     "Fade",
-    "Video Edit",
-    &create,
-    { &TextureData::description, &TextureData::description },
-    { &TextureData::description },
-    &TextureView::Type
+    "Video Edit"
 };
 
 
