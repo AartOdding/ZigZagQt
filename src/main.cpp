@@ -5,10 +5,14 @@
 #include <QTextStream>
 #include <QSurfaceFormat>
 #include <QQuickWindow>
+#include <QQmlEngine>
+#include "model/OperatorPackage.hpp"
 
 
 int main(int argc, char *argv[])
 {
+    qmlRegisterUncreatableType<OperatorPackage>("ZigZag", 0, 1, "OperatorPackagePtr", "");
+
     QSurfaceFormat format;
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
@@ -19,8 +23,9 @@ int main(int argc, char *argv[])
     format.setSamples(8);
 
     QSurfaceFormat::setDefaultFormat(format);
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGLRhi);
-
+    //QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGLRhi);
+    //QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling, true);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     Application app(argc, argv);
 
     return app.exec();

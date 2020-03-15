@@ -2,6 +2,9 @@
 
 #include <model/BaseSystem.hpp>
 
+#include <memory>
+#include <QQuickView>
+
 
 class WindowSystem : public BaseSystem
 {
@@ -19,6 +22,7 @@ protected:
 
 private:
 
+    std::unique_ptr<QQuickView> m_window;
 
 };
 

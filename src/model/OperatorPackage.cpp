@@ -1,5 +1,6 @@
 #include "OperatorPackage.hpp"
 
+#include <QQmlEngine>
 
 
 
@@ -22,6 +23,7 @@ OperatorPackage::OperatorPackage(const QString& packageName)
     {
         // TODO: log error
     }
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 }
 
 
@@ -37,6 +39,7 @@ OperatorPackage::OperatorPackage(const QString& packageName, std::initializer_li
     {
         // TODO: log error
     }
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 }
 
 

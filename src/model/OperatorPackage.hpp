@@ -12,6 +12,8 @@
 
 class OperatorPackage : public QAbstractListModel
 {
+    Q_OBJECT
+
 public:
 
     using OperatorCreateFn = BaseOperator*(*)(BaseZigZagObject*);

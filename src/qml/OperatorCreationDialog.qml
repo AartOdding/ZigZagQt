@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.14
 import QtQuick.Shapes 1.12
 
 
@@ -7,60 +7,108 @@ Dialog
 {
     modal: true
 
-    background: Rectangle {
+    background: Rectangle
+    {
         anchors.fill: parent
         border.width: 0
         radius: 25
     }
 
+    contentItem: SplitView
+    {
+        anchors.fill: parent
+        anchors.margins: 15
+        orientation: Qt.Horizontal
 
-    ListView {
-        id: list
-        x: 20;
-        y: 100;
-        width: 500;
-        height: 500;
-        clip: true
-        highlightFollowsCurrentItem: true
-        highlightMoveDuration: 0
-        currentIndex: 0
-        focus: true
-        model: availableOperatorPackages
+        ListView
+        {
+            id: packageNames
 
-        delegate: Rectangle {
+            SplitView.preferredWidth: 180;
 
-            height: 45
-            width: parent.width
-            color: "transparent"
+            clip: true
+            highlightFollowsCurrentItem: true
+            highlightMoveDuration: 0
+            currentIndex: 0
+            focus: true
+            model: availableOperatorPackages
 
-            Rectangle {
-                height: 45;
-                width: innerText.contentWidth + 20
-                color: "lightgray"
-                visible: index == list.currentIndex
-                radius: 6
+            delegate: Rectangle {
+
+                height: 28
+                width: parent.width
+                color: "transparent"
+
+                Rectangle {
+                    height: 25
+                    width: innerText.contentWidth + 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: "lightgray"
+                    visible: index == packageNames.currentIndex
+                    radius: 6
+                }
+
+                Text {
+                    id: innerText
+                    text: display;
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 6
+                    font.pixelSize: hoverHandler.hovered  ? 17 : 14
+                    color: "black"
+                    clip: false
+                }
+
+                TapHandler {
+                    onTapped:
+                    {
+                        packageNames.currentIndex = index
+                        packageContents.model = operatorLibrary.getOperatorPackage(display)
+                    }
+                }
+
+                HoverHandler {
+                    id: hoverHandler
+                }
             }
 
-            Text {
-                id: innerText
-                text: display;
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                font.pointSize: hoverHandler.hovered  ? 16 : 12
-                color: index == "black"
-                clip: false
+        }
+
+        ListView
+        {
+            id: packageContents
+            clip: true
+
+            delegate: Rectangle
+            {
+                id: packageDelegate;
+                height: 30
+                width: txt.contentWidth + 12
+                Text
+                {
+                    x: 10
+                    y: 0
+                    id: txt
+                    text: name
+                    font.pixelSize: packageDelegateHoverHandler.hovered  ? 17 : 14
+                }
+
+                TapHandler {
+                    onTapped:
+                    {
+                        console.log(name)
+                    }
+                }
+
+                HoverHandler {
+                    id: packageDelegateHoverHandler
+                }
             }
 
-            TapHandler {
-                onTapped: list.currentIndex = index
-            }
-
-            HoverHandler {
-                id: hoverHandler
-            }
         }
 
     }
+
+
 
 }
