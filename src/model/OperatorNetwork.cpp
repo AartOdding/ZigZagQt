@@ -1,5 +1,5 @@
 #include "OperatorNetwork.hpp"
-#include "application.h"
+#include "app.h"
 #include <utility/Serializer.hpp>
 
 #include "model/BaseOperator.hpp"
@@ -56,7 +56,7 @@ void OperatorNetwork::createChild(const QXmlStreamAttributes&)
 }
 
 #include "library/standard/texture/sinewaveoperator.h"
-void OperatorNetwork::addOperator(const OperatorKind* operatorDescription, int xPos, int yPos)
+void OperatorNetwork::addOperator(const OperatorTypeDetails* operatorDescription, int xPos, int yPos)
 {
     if (operatorDescription)
     {

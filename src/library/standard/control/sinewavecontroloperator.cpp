@@ -1,6 +1,6 @@
 #include "sinewavecontroloperator.h"
 #include <cmath>
-#include "application.h"
+#include "app.h"
 
 
 
@@ -11,7 +11,7 @@ BaseOperator * SineWaveControlOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind SineWaveControlOperator::description
+const OperatorTypeDetails SineWaveControlOperator::description
 {
     "Sine Wave",
     "Control",
@@ -38,7 +38,7 @@ void SineWaveControlOperator::run()
     }
     else
     {
-        val = application::clock()->get_elapsed_seconds();
+        //val = application::clock()->get_elapsed_seconds();
     }
 
     output.set(amplitude.get() * std::sin(val / period.get()) + offset.get());

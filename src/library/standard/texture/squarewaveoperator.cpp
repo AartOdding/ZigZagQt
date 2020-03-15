@@ -26,10 +26,13 @@ BaseOperator * SquareWaveOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind SquareWaveOperator::description
+const OperatorTypeDetails SquareWaveOperator::description
 {
     "Square Wave",
-    "Video Synthesis"
+    "Creates a square wave pattern, on a texture.",
+    { "openGLSystem" },
+    "Aart Odding",
+    "Creates a square wave pattern, on a texture."
 };
 
 

@@ -1,5 +1,5 @@
 #include "ParameterConnector.hpp"
-#include "application.h"
+#include "app.h"
 #include "operatorview.h"
 #include "model/parameter/BaseParameter.hpp"
 #include "model/BaseOperator.hpp"
@@ -9,14 +9,16 @@
 #include "view/PopupWindow.hpp"
 #include "view/connection/ConnectionEditor.hpp"
 
+#include <QApplication>
 #include <QMenu>
+#include <QPainter>
 #include <QGraphicsSceneResizeEvent>
 
 #include <iostream>
 
 
 ParameterConnector::ParameterConnector(OperatorView& operatorView, bool isInput)
-    : BaseConnector(application::project_view_model(), &operatorView), m_isInput(isInput)
+    : BaseConnector(/*application::project_view_model()*/nullptr, &operatorView), m_isInput(isInput)
 {
 }
 

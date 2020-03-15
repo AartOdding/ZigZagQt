@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets opengl multimedia
+QT       += core gui widgets opengl multimedia qml quick
 
 TARGET = ZigZag
 TEMPLATE = app
@@ -25,12 +25,20 @@ CONFIG += c++17 console
 INCLUDEPATH += src
 
 SOURCES += \
-    src/application.cpp \
+    src/Application.cpp \
+    src/app.cpp \
+    src/core/systems/LibrarySystem.cpp \
+    src/core/systems/NetworkEditSystem.cpp \
+    src/core/systems/NetworkSystem.cpp \
+    src/core/systems/WindowSystem.cpp \
+    src/library/standard/OpenGLSystem.cpp \
+    src/library/standard/control/ControlPackage.cpp \
     src/library/standard/control/ParameterView.cpp \
     src/library/standard/control/clockoperator.cpp \
     src/library/standard/control/increasingvalueoperator.cpp \
     src/library/standard/control/noisewavecontroloperator.cpp \
     src/library/standard/control/sinewavecontroloperator.cpp \
+    src/library/standard/texture/OpenGLTexturePackage.cpp \
     src/library/standard/texture/blendoperator.cpp \
     src/library/standard/texture/cameraoperator.cpp \
     src/library/standard/texture/coloroperator.cpp \
@@ -50,9 +58,10 @@ SOURCES += \
     src/model/BaseSystem.cpp \
     src/model/BaseZigZagObject.cpp \
     src/model/ExecutionEngine.cpp \
-    src/model/OperatorKind.cpp \
     src/model/OperatorLibrary.cpp \
     src/model/OperatorNetwork.cpp \
+    src/model/OperatorPackage.cpp \
+    src/model/OperatorTypeDetails.cpp \
     src/model/clock.cpp \
     src/model/datainput.cpp \
     src/model/parameter/BaseComponent.cpp \
@@ -97,17 +106,25 @@ SOURCES += \
     src/renderer.cpp
 
 HEADERS += \
-    src/application.h \
+    src/Application.hpp \
+    src/app.h \
     src/command/connectcommand.h \
     src/command/connectparameterscommand.h \
     src/command/disconnectcommand.h \
     src/command/disconnectparameterscommand.h \
     src/command/movecommand.h \
+    src/core/systems/LibrarySystem.hpp \
+    src/core/systems/NetworkEditSystem.hpp \
+    src/core/systems/NetworkSystem.hpp \
+    src/core/systems/WindowSystem.hpp \
+    src/library/standard/OpenGLSystem.hpp \
+    src/library/standard/control/ControlPackage.hpp \
     src/library/standard/control/clockoperator.h \
     src/library/standard/control/increasingvalueoperator.h \
     src/library/standard/control/noisewavecontroloperator.h \
     src/library/standard/control/parameterview.h \
     src/library/standard/control/sinewavecontroloperator.h \
+    src/library/standard/texture/OpenGLTexturePackage.hpp \
     src/library/standard/texture/blendoperator.h \
     src/library/standard/texture/cameraoperator.h \
     src/library/standard/texture/coloroperator.h \
@@ -127,9 +144,10 @@ HEADERS += \
     src/model/BaseSystem.hpp \
     src/model/BaseZigZagObject.hpp \
     src/model/ExecutionEngine.hpp \
-    src/model/OperatorKind.hpp \
     src/model/OperatorLibrary.hpp \
     src/model/OperatorNetwork.hpp \
+    src/model/OperatorPackage.hpp \
+    src/model/OperatorTypeDetails.hpp \
     src/model/clock.h \
     src/model/datainput.h \
     src/model/parameter/BaseComponent.hpp \
@@ -183,7 +201,8 @@ FORMS += \
     forms/transform2dparameterwidget.ui
 
 RESOURCES += \
-    resources/resources.qrc
+    resources/resources.qrc \
+    src/qml/qml.qrc
 
 
 INCLUDEPATH += third_party/glm

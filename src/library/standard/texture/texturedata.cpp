@@ -1,5 +1,5 @@
 #include "texturedata.h"
-#include "application.h"
+#include "app.h"
 #include <iostream>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>

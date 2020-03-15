@@ -25,7 +25,7 @@ BaseOperator * NoiseOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind NoiseOperator::description
+const OperatorTypeDetails NoiseOperator::description
 {
     "Noise",
     "Video Synthesis"

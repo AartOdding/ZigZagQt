@@ -14,7 +14,7 @@ static GLfloat const vertices[] = { -1, 1, -1, -1, 1, 1, 1, -1 };
 
 
 
-const OperatorKind BlendOperator::description {
+const OperatorTypeDetails BlendOperator::description {
     "Blend",
     "Video Edit"
 };

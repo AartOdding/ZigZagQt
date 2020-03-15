@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Cable.qml</file>
+        <file>Connector.qml</file>
+        <file>main.qml</file>
+        <file>NetworkView.qml</file>
+        <file>OperatorCreationDialog.qml</file>
+        <file>OperatorFrame.qml</file>
+        <file>OperatorLibraryModel.qml</file>
+    </qresource>
+</RCC>

@@ -1,8 +1,10 @@
-#include "application.h"
+#include "Application.hpp"
 #include "phantomstyle.h"
 
 #include <QFile>
 #include <QTextStream>
+#include <QSurfaceFormat>
+#include <QQuickWindow>
 
 
 int main(int argc, char *argv[])
@@ -17,8 +19,15 @@ int main(int argc, char *argv[])
     format.setSamples(8);
 
     QSurfaceFormat::setDefaultFormat(format);
+    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGLRhi);
+
+    Application app(argc, argv);
+
+    return app.exec();
+}
 
 
+/*
     QPalette palette;
     palette.setColor(QPalette::Window, QColor(53, 53, 53));
     palette.setColor(QPalette::WindowText, Qt::white);
@@ -40,19 +49,4 @@ int main(int argc, char *argv[])
     palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(80, 80, 80));
     palette.setColor(QPalette::HighlightedText, Qt::white);
     palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(127, 127, 127));
-
-    auto style = new PhantomStyle();
-
-    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-
-    Application app(argc, argv);
-    app.setStyle(style);
-    app.setPalette(palette);
-
-    auto styleSheet = QFile(":/style/style.qss");
-    styleSheet.open(QFile::ReadOnly | QFile::Text);
-    app.setStyleSheet(QTextStream(&styleSheet).readAll());
-
-    return app.exec();
-}
+*/

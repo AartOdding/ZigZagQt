@@ -22,7 +22,7 @@ BaseOperator* DisplacementOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind DisplacementOperator::Type
+const OperatorTypeDetails DisplacementOperator::Type
 {
     "Displace",
     "Video Edit"

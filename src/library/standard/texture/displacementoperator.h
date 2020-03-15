@@ -26,7 +26,7 @@ public:
 
     static BaseOperator* create(BaseZigZagObject* parent);
 
-    static const OperatorKind Type;
+    static const OperatorTypeDetails Type;
 
 private:
 

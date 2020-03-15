@@ -10,7 +10,7 @@ BaseOperator * CameraOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind CameraOperator::description
+const OperatorTypeDetails CameraOperator::description
 {
     "Camera",
     "Texture"

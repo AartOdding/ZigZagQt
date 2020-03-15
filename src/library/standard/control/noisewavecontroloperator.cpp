@@ -1,6 +1,6 @@
 #include "noisewavecontroloperator.h"
 #include "glm/gtc/noise.hpp"
-#include "application.h"
+#include "app.h"
 
 
 
@@ -10,7 +10,7 @@ BaseOperator * NoiseWaveControlOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind NoiseWaveControlOperator::description
+const OperatorTypeDetails NoiseWaveControlOperator::description
 {
     "Noise Wave",
     "Control"
@@ -36,7 +36,7 @@ void NoiseWaveControlOperator::recalculate()
 
     if (m_timeIsInput.getIndex() == 0)
     {
-        pos = { application::clock()->get_elapsed_seconds() * m_timeSpeed.get(), 0, 0, 0 };
+        //pos = { application::clock()->get_elapsed_seconds() * m_timeSpeed.get(), 0, 0, 0 };
     }
     else
     {

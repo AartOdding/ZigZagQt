@@ -27,7 +27,7 @@ BaseOperator * SawtoothWaveOperator::create(BaseZigZagObject* parent)
     return new SawtoothWaveOperator(parent);
 }
 
-const OperatorKind SawtoothWaveOperator::description
+const OperatorTypeDetails SawtoothWaveOperator::description
 {
     "Sawtooth Wave",
     "Video Synthesis"

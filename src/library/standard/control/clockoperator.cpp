@@ -1,10 +1,10 @@
 #include "clockoperator.h"
 #include <ctime>
 
-#include "application.h"
+#include "app.h"
 
 
-const OperatorKind ClockOperator::description { "Clock", "Control" };
+const OperatorTypeDetails ClockOperator::description { "Clock", "Control" };
 
 
 BaseOperator * ClockOperator::create(BaseZigZagObject* parent)
@@ -28,6 +28,7 @@ ClockOperator::ClockOperator(BaseZigZagObject* parent)
 
 void ClockOperator::run()
 {
+    /*
     frames.set(application::instance()->get_clock()->get_frame_count());
     seconds.set(application::instance()->get_clock()->get_elapsed_seconds());
     minutes.set(application::instance()->get_clock()->get_elapsed_minutes());
@@ -35,4 +36,5 @@ void ClockOperator::run()
     seconds_whole.set(application::instance()->get_clock()->get_elapsed_seconds());
     minutes_whole.set(application::instance()->get_clock()->get_elapsed_minutes());
     hours_whole.set(application::instance()->get_clock()->get_elapsed_hours());
+    */
 }

@@ -17,7 +17,7 @@ BaseOperator* ThresholdOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind ThresholdOperator::description
+const OperatorTypeDetails ThresholdOperator::description
 {
     "Threshold",
     "Texture"

@@ -1,6 +1,6 @@
 #include "datainput.h"
 
-#include "application.h"
+#include "app.h"
 #include "model/BaseOperator.hpp"
 #include "model/OperatorNetwork.hpp"
 #include "command/connectcommand.h"
@@ -55,7 +55,7 @@ void DataInput::connect_to(BaseDataType* new_connection)
         {
             if (compatible_with(new_connection))
             {
-                application::project_model()->getUndoStack()->push(new ConnectCommand(new_connection, this));
+                network()->getUndoStack()->push(new ConnectCommand(new_connection, this));
             }
         }
     }
@@ -66,7 +66,7 @@ void DataInput::disconnect()
 {
     if (connection)
     {
-        application::project_model()->getUndoStack()->push(new DisconnectCommand(connection, this));
+        network()->getUndoStack()->push(new DisconnectCommand(connection, this));
     }
 }
 

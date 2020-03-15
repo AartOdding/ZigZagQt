@@ -7,39 +7,6 @@
 
 
 
-OperatorPackage::OperatorPackage(const QString& packageName)
-    : m_packageName(packageName)
-{
-
-}
-
-
-int OperatorPackage::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-    {
-        return 0;
-    }
-    else
-    {
-        return static_cast<int>(m_packageContents.size());
-    }
-}
-
-
-QVariant OperatorPackage::data(const QModelIndex &index, int role) const
-{
-
-}
-
-
-QHash<int, QByteArray> OperatorPackage::roleNames() const
-{
-
-}
-
-
-
 OperatorLibrary* activeOperatorLibrary(OperatorLibrary* resetActiveOperatorLibrary)
 {
     static OperatorLibrary* activeLibrary = defaultOperatorLibrary();
@@ -73,16 +40,16 @@ OperatorLibrary::OperatorLibrary()
 }
 
 
-void OperatorLibrary::add(const OperatorKind* type)
+void OperatorLibrary::add(const OperatorTypeDetails* type)
 {
     if (type)
     {
-        m_operators[type->package][type->name] = type;
+        //m_operators[type->package][type->name] = type;
     }
 }
 
 
-void OperatorLibrary::add(const OperatorKind& type)
+void OperatorLibrary::add(const OperatorTypeDetails& type)
 {
     add(&type);
 }
@@ -96,9 +63,9 @@ QStringList OperatorLibrary::packages() const
 }
 
 
-QList<const OperatorKind*> OperatorLibrary::getPackage(const QString& package) const
+QList<const OperatorTypeDetails*> OperatorLibrary::getPackage(const QString& package) const
 {
-    QList<const OperatorKind*> returnValue;
+    QList<const OperatorTypeDetails*> returnValue;
 
     if (m_operators.contains(package))
     {
@@ -109,7 +76,7 @@ QList<const OperatorKind*> OperatorLibrary::getPackage(const QString& package) c
 }
 
 
-const OperatorKind* OperatorLibrary::getOperator(const QString& package, const QString& operatorName)
+const OperatorTypeDetails* OperatorLibrary::getOperator(const QString& package, const QString& operatorName)
 {
     if (m_operators.contains(package))
     {

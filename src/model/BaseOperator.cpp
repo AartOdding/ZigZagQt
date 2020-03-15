@@ -1,6 +1,6 @@
 #include "BaseOperator.hpp"
 #include "BaseDataType.hpp"
-#include "application.h"
+#include "app.h"
 
 #include "command/movecommand.h"
 #include "model/OperatorNetwork.hpp"
@@ -32,7 +32,7 @@ OperatorKind::OperatorKind(const QString& name_,
 
 
 
-BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorKind& type_)
+BaseOperator::BaseOperator(BaseZigZagObject* parent, const OperatorTypeDetails& type_)
     : BaseZigZagObject(parent, type_.name),
       m_mutex(std::make_shared<std::mutex>()),
       m_description(&type_)
@@ -87,7 +87,7 @@ int BaseOperator::positionY() const
 
 
 
-const OperatorKind * BaseOperator::description() const
+const OperatorTypeDetails * BaseOperator::description() const
 {
     return m_description;
 }
@@ -105,7 +105,7 @@ void BaseOperator::move_to(int pos_x, int pos_y)
 {
     if (m_positionX != pos_x || m_positionY != pos_y)
     {
-        application::project_model()->getUndoStack()->push(new MoveCommand(*this, pos_x, pos_y));
+        network()->getUndoStack()->push(new MoveCommand(*this, pos_x, pos_y));
     }
 }
 

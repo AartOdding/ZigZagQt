@@ -3,12 +3,12 @@
 
 
 
-const OperatorKind ColorOperator::Type
+const OperatorTypeDetails ColorOperator::Type
 {
     "Uniform Fill",
-    "Texture",
-    "Aart Odding",
     "Creates a texure of uniform color.",
+    { "openGLSystem" },
+    "Aart Odding",
     "Creates a texure of uniform color."
 };
 

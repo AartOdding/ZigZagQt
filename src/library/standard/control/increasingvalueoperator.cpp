@@ -1,5 +1,5 @@
 #include "increasingvalueoperator.h"
-#include "application.h"
+#include "app.h"
 
 
 
@@ -9,7 +9,7 @@ BaseOperator * IncreasingValueOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind IncreasingValueOperator::description
+const OperatorTypeDetails IncreasingValueOperator::description
 {
     "Increasing Value",
     "Control",
@@ -40,7 +40,7 @@ void IncreasingValueOperator::parameterChangeEvent(const BaseParameter * paramet
 
 void IncreasingValueOperator::recalculate()
 {
-    float time_now = application::clock()->get_elapsed_seconds();
+    float time_now;// = application::clock()->get_elapsed_seconds();
     float dt = time_now - last_frame_time;
     double increase = dt * speed.get();
     value.set(value.get() + increase);

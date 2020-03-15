@@ -8,7 +8,7 @@
 #include <mutex>
 #include <functional>
 
-#include "model/OperatorKind.hpp"
+#include "model/OperatorTypeDetails.hpp"
 #include "model/parameter/IntParameter.hpp"
 #include "model/parameter/FloatParameter.hpp"
 #include "model/parameter/EnumParameter.hpp"
@@ -35,7 +35,7 @@ class BaseOperator : public BaseZigZagObject
 
 public:
 
-    BaseOperator(BaseZigZagObject* parent, const OperatorKind& description);
+    BaseOperator(BaseZigZagObject* parent, const OperatorTypeDetails& description);
 
     virtual ~BaseOperator() override;
 
@@ -49,7 +49,7 @@ public:
     int positionX() const;
     int positionY() const;
 
-    const OperatorKind * description() const;
+    const OperatorTypeDetails * description() const;
 
 
     QList<DataInput*> dataInputs() const;
@@ -128,7 +128,7 @@ private:
 
     std::shared_ptr<std::mutex> m_mutex;
 
-    const OperatorKind * m_description;
+    const OperatorTypeDetails * m_description;
 
 };
 

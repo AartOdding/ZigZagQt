@@ -19,10 +19,13 @@ BaseOperator * SineWaveOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind SineWaveOperator::description
+const OperatorTypeDetails SineWaveOperator::description
 {
     "Sine Wave",
-    "Video Synthesis"
+    "Creates a sine wave pattern, on a texture.",
+    { "openGLSystem" },
+    "Aart Odding",
+    "Creates a sine wave pattern, on a texture."
 };
 
 

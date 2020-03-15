@@ -1,7 +1,7 @@
 #include "BaseComponent.hpp"
 #include "BaseParameter.hpp"
 #include "model/BaseZigZagObject.hpp"
-#include "application.h"
+#include "app.h"
 #include "model/OperatorNetwork.hpp"
 #include "command/connectparameterscommand.h"
 #include "command/disconnectparameterscommand.h"
@@ -56,7 +56,7 @@ bool BaseComponent::isExportingTo(BaseComponent * importer) const
 
 void BaseComponent::startImporting(BaseComponent * exporting_import)
 {
-    auto undo_stack = application::project_model()->getUndoStack();
+    auto undo_stack = m_parameter->network()->getUndoStack();
     undo_stack->push(new ConnectParametersCommand(exporting_import, this));
 }
 
@@ -66,7 +66,7 @@ void BaseComponent::stopImporting()
 {
     if (m_import)
     {
-        auto undo_stack = application::project_model()->getUndoStack();
+        auto undo_stack = m_parameter->network()->getUndoStack();
         undo_stack->push(new DisconnectParametersCommand(m_import, this));
     }
 }

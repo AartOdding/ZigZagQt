@@ -6,7 +6,7 @@
 #include "view/OperatorNetworkView.hpp"
 #include "view/operatorview.h"
 
-#include "application.h"
+#include "app.h"
 
 
 #include <QPainter>
@@ -16,7 +16,7 @@
 
 
 DataConnector::DataConnector(OperatorView& operatorView, DataInput& dataInput)
-    : BaseConnector(application::project_view_model(), &operatorView), m_dataInput(&dataInput)
+    : BaseConnector(/*application::project_view_model()*/nullptr, &operatorView), m_dataInput(&dataInput)
 {
     m_color = m_dataInput->type()->gui_color;
 }
@@ -24,7 +24,7 @@ DataConnector::DataConnector(OperatorView& operatorView, DataInput& dataInput)
 
 
 DataConnector::DataConnector(OperatorView& operatorView, BaseDataType& dataOutput)
-    : BaseConnector(application::project_view_model(), &operatorView), m_dataOutput(&dataOutput)
+    : BaseConnector(/*application::project_view_model()*/nullptr, &operatorView), m_dataOutput(&dataOutput)
 {
     m_color = m_dataOutput->getDescription()->gui_color;
 }

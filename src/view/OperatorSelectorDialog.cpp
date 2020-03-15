@@ -2,7 +2,7 @@
 
 #include "view/Viewport.hpp"
 #include "model/OperatorLibrary.hpp"
-#include "application.h"
+#include "app.h"
 #include "model/BaseOperator.hpp"
 
 #include "ui_librarydialogpanel.h"

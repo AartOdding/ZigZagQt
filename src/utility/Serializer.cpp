@@ -110,7 +110,7 @@ void Serializer::serialize(const QObject* object)
     {
         auto op = static_cast<const BaseOperator*>(object);
         xml.writeAttribute(CATEGORY, QStringLiteral("operator"));
-        xml.writeAttribute(PACKAGE, op->description()->package);
+        //xml.writeAttribute(PACKAGE, op->description()->package);
         xml.writeAttribute(TYPE, op->description()->name);
     }
     else if (qobject_cast<const OperatorNetwork*>(object))

@@ -7,25 +7,32 @@
 
 
 /*
- * Systems should be available for the complete duration of the program
+ * Systems should be available for the complete duration of the program.
  *
  */
 class BaseSystem
 {
 public:
 
-    BaseSystem(const QString& systemName, bool tryLoadOnStartup);
+    BaseSystem(const QString& systemName);
 
-    virtual ~BaseSystem() = default;
+    virtual ~BaseSystem();
 
 
-    virtual bool canBeLoaded() = 0;
+    void load();
 
-    const QString& getSystemName() const;
+    void unload();
 
     bool isLoaded() const;
 
-    static const QHash<QString, BaseSystem*>& getAvailableSystems();
+
+    virtual bool canBeLoaded();
+
+    virtual bool canBeUnloaded();
+
+
+    const QString& getSystemName() const;
+
 
 protected:
 
@@ -34,9 +41,10 @@ protected:
     virtual void unloadSystem() = 0;
 
 
-    virtual void beginOfFrame() { }
+    virtual void beginOfFrame();
 
-    virtual void endOfFrame() { }
+    virtual void endOfFrame();
+
 
 private:
 
@@ -44,6 +52,7 @@ private:
 
     bool m_isLoaded;
 
-    static QHash<QString, BaseSystem*> availableSystems;
-
 };
+
+
+QHash<QString, BaseSystem*>* availableSystems();

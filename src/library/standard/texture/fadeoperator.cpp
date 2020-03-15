@@ -23,7 +23,7 @@ BaseOperator* FadeOperator::create(BaseZigZagObject* parent)
 }
 
 
-const OperatorKind FadeOperator::description
+const OperatorTypeDetails FadeOperator::description
 {
     "Fade",
     "Video Edit"

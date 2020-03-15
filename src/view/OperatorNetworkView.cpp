@@ -1,5 +1,5 @@
 #include "OperatorNetworkView.hpp"
-#include "application.h"
+#include "app.h"
 
 #include "view/BaseConnector.hpp"
 #include "view/operatorview.h"
@@ -124,7 +124,7 @@ void OperatorNetworkView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     auto dialog = new OperatorSelectorDialog(nullptr, event->scenePos().x(), event->scenePos().y());
 
-    connect(dialog, SIGNAL(operatorRequested(const OperatorKind*, int, int)), m_network, SLOT(addOperator(const OperatorKind*, int, int)), Qt::QueuedConnection);
+    connect(dialog, SIGNAL(operatorRequested(const OperatorTypeDetails*, int, int)), m_network, SLOT(addOperator(const OperatorTypeDetails*, int, int)), Qt::QueuedConnection);
 
     auto x = event->screenPos().x() - dialog->size().width() / 2;
     auto y = event->screenPos().y() - 100;

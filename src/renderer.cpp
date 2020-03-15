@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "application.h"
+#include "app.h"
 #include "model/OperatorNetwork.hpp"
 #include "model/BaseOperator.hpp"
 #include "model/datainput.h"

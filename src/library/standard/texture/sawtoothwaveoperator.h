@@ -26,7 +26,7 @@ public:
 
     static BaseOperator * create(BaseZigZagObject* parent);
 
-    static const OperatorKind description;
+    static const OperatorTypeDetails description;
 
 
     Q_INVOKABLE void storeState(QVariantMap* state) const
