@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-
+/*
 
 BaseOperator * KinectTwoTextureOperator::create(BaseZigZagObject* parent)
 {
@@ -67,15 +67,15 @@ void KinectTwoTextureOperator::run()
         {
             output_texture.set_resolution(512, 424);
         }
-        /*
-        if (output_texture.get_format() != PixelDataFormatEnum::unsigned_norm_8bit)
-        {
-            output_texture.set_format(PixelDataFormatEnum::unsigned_norm_8bit);
-        }
-        if (output_texture.get_num_channels() != PixelNumChannelsEnum::one_channel)
-        {
-            output_texture.set_num_channels(PixelNumChannelsEnum::one_channel);
-        }*/
+
+//        if (output_texture.get_format() != PixelDataFormatEnum::unsigned_norm_8bit)
+//        {
+//            output_texture.set_format(PixelDataFormatEnum::unsigned_norm_8bit);
+//        }
+//        if (output_texture.get_num_channels() != PixelNumChannelsEnum::one_channel)
+//        {
+//            output_texture.set_num_channels(PixelNumChannelsEnum::one_channel);
+//        }
 
         uint16_t * buffer_pointer = nullptr;
         unsigned buffer_size = 0;
@@ -124,3 +124,4 @@ void KinectTwoTextureOperator::parameterChangedEvent(const BaseParameter* parame
 {
 
 }
+*/

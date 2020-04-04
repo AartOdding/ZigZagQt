@@ -138,7 +138,7 @@ Application::Application(int &argc, char **argv)
     connect(&m_executionThread, &QThread::started, m_executionEngine, &ExecutionEngine::startExecution);
     //m_executionThread.start(QThread::TimeCriticalPriority);
 
-    parameterEditor = std::make_unique<ParameterEditor>();
+    parameterEditor = std::make_unique<ParameterEditor>(viewport.get());
     parameterEditor->setScene(project_view_model.get());
 
     connect(clock.get(), &Clock::begin_new_frame, renderer.get(), &Renderer::render_frame);

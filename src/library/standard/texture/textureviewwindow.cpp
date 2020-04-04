@@ -11,6 +11,7 @@
 TextureViewWindow::TextureViewWindow(TextureView* view)
     : belonging_view(view)
 {
+    setWindowFlag(Qt::WindowStaysOnTopHint, true);
     initializeOpenGLFunctions();
 }
 

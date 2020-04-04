@@ -45,6 +45,7 @@ void DisplacementOperator::run()
     if (!gpu_resources_initialized)
     {
         gpu_resources_initialized = true;
+
         shader.create();
         shader.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/glsl/vert/basic.vert");
         shader.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/glsl/frag/displace.frag");
@@ -54,7 +55,9 @@ void DisplacementOperator::run()
         glUseProgram(shader.programId());
         shader.setUniformValue(shader.uniformLocation("output_range_x"), 0.0f, 1.0f);
         shader.setUniformValue(shader.uniformLocation("output_range_y"), 0.0f, 1.0f);
-        shader.setUniformValue(shader.uniformLocation("input_texture"), 0);
+        shader.setUniformValue(shader.uniformLocation("inputTexture"), 0);
+        shader.setUniformValue(shader.uniformLocation("displaceTexture"), 1);
+
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -71,27 +74,32 @@ void DisplacementOperator::run()
         glBindVertexArray(0);
     }
 
-    /*
-    const TextureData* tex_a = static_cast<const TextureData*>(textures[index_a]->get_connection());
-    const TextureData* tex_b = static_cast<const TextureData*>(textures[index_b]->get_connection());
+    const TextureData* input_tex = dynamic_cast<const TextureData*>(input_texture.get_connection());
+    const TextureData* displace_tex = dynamic_cast<const TextureData*>(displace_texture.get_connection());
 
-    output_texture.bind_as_framebuffer();
+    output_texture.bindFramebuffer();
+
     glUseProgram(shader.programId());
     glBindVertexArray(vao);
-    shader.setUniformValue(shader.uniformLocation("fade_position"), fract);
 
-    if (tex_a)
+    shader.setUniformValue(shader.uniformLocation("strength"),  (float)strength.get() / 100.0f);
+    shader.setUniformValue(shader.uniformLocation("direction"), (float)direction.get());
+    shader.setUniformValue(shader.uniformLocation("offset"),    (float)offset.get());
+    shader.setUniformValue(shader.uniformLocation("channel"),   (int)channel.getIndex());
+
+
+    if (input_tex)
     {
-        tex_a->bind_as_texture(0);
+        input_tex->bindTexture(0);
     }
     else
     {
         TextureData::bind_empty_texture(0);
     }
 
-    if (tex_b)
+    if (displace_tex)
     {
-        tex_b->bind_as_texture(1);
+        displace_tex->bindTexture(1);
     }
     else
     {
@@ -99,9 +107,7 @@ void DisplacementOperator::run()
     }
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    update_view();
-
-    */
+    updateView();
 }
 
 
