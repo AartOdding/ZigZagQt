@@ -1,9 +1,5 @@
 ![ZigZag image](https://raw.githubusercontent.com/AartOdding/ZigZag/master/ZigZag_04-04-2020.gif)
 # ZigZag
-ZigZag is a work in progress tool for creating interactive realtime visual effects and computer graphics, on the graphics card using OpenGL. It allows users to program "operators", that can do specific tasks on different data types. These operators can then be used in a visual block based programming environment, to create visual effects, or other outputs if desired. The program is designed to make maximal usage of the graphics card. This gives very high performance, which allows for more interesting effects/ programs.
+ZigZag is a node based programming language that you can use to create interactive graphics in an intuitive and fun way. You create a network of "operators", that perform different steps on the data flowing through them. Each frame all the operators in the network are executed once, which results in a smooth video as output. Because the rendering happens in realtime on the graphics card, interactivity can be added easily by coupling parameters of the network to external signals such as audio levels or sensor data.
 
-The plan for ZigZag is to allow the user to not only write their own operators using c++ or python, but also to allow the user to define their own data types that operators work on. This gives the user maximum customizability, while also allowing us to give the user many predefined types and operators.
-
-It borrows ideas from TouchDesigner and Vuo, but it is not trying to mimic either.
-At the moment ZigZag is in a very early stage of development, And not yet near a point where it is practically usable.
-Feel free to help in the development of ZigZag!
+ZigZag is designed with customizability and user extensibility in mind. You can create your own operators, data types, and views in C++, and use them from within ZigZag. This allows you to both be very productive, by working in a high level of abstraction, and gives you full customizability where you need by creating new operators and data types in the C++ API.
